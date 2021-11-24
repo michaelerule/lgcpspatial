@@ -10,10 +10,14 @@ from __future__ import print_function
 """
 """
 
+# For progress bar and code timing
 import time
 
 # Load a Matlab-like namespace
 from pylab import *
+
+# For the statistical summary function
+from scipy.stats import pearsonr
 
 ttic = None
 def tic(msg=''):
@@ -85,3 +89,56 @@ def sexp(x,bound = 10):
     Safe exponential function; Avoids under/overflow by clipping
     '''
     return exp(np.clip(x,-bound,bound))
+
+def zgrid(L):
+    '''
+    ----------------------------------------------------------------------------
+    2D grid coordinates as complex numbers
+    '''
+    c = arange(L)-L//2
+    return 1j*c[:,None]+c[None,:]
+
+def pscale(x,q1=0.5,q2=99.5,mask=True):
+    '''
+    ----------------------------------------------------------------------------
+    Plot helper: Scale data by percentiles
+    '''
+    u  = x[mask] if not mask is None else x
+    u  = float32(u)
+    p1 = percentile(u,q1)
+    p2 = percentile(u,q2)
+    x  = clip((x-p1)/(p2-p1),0,1)
+    return x*mask if not mask is None else x
+    
+def showim(x,t='',**kwargs):
+    '''
+    ----------------------------------------------------------------------------
+    Plot helper: Show image with title, no axes
+    '''
+    if len(x.shape)==1: 
+        L = int(round(sqrt(x.shape[0])))
+        x=x.reshape(L,L)
+    imshow(pscale(x,**kwargs));
+    axis('off');
+    title(t);
+
+def showkn(k,t=''):
+    '''
+    ----------------------------------------------------------------------------
+    Plot helper; Shift convolution kernel to plot
+    '''
+    imshow(fftshift(k)); axis('off'); title(t);
+
+def printstats(a,b,message='',mask=None):
+    '''
+    ----------------------------------------------------------------------------
+    Print RMSE and correlation between two rate maps
+    '''
+    a,b = a.ravel(),b.ravel()
+    if not mask is None:
+        a = a[mask.ravel()]
+        b = b[mask.ravel()]
+    NMSE = mean((a-b)**2)/mean(a**2)#sqrt(mean(a**2)*mean(b**2))
+    print(message+':')
+    print('∙ Normalized MSE: %0.1f%%'%(100*NMSE))
+    print('∙ Pearson correlation: %0.2f'%pearsonr(a,b)[0])

@@ -10,9 +10,8 @@ from __future__ import print_function
 """
 --------------------------------------------------------------------------------
 Finding a compact yet expressive parameterization of the posterior covariance
-matrix is one of the main challenges in designing a variational Bayesian 
-implementation for Gaussian process inference. This file explores four 
-approaches:
+matrix is one challenge in designing a variational Bayesian implementation for 
+Gaussian process inference. This file explores four approaches:
 
 1. Parameterization as Σ=ADA' where D is a diagonal matrix and A is a fixed, 
    local Gaussian convolution kernel
@@ -24,4 +23,6 @@ approaches:
    D is a triangular Cholesky factor of a low-rank covariance expressed in this
    reduced frequency space, U=DD'.
 """
+
+
 

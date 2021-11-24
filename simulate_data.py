@@ -21,19 +21,23 @@ from pylab import *
 # the Jax array type. 
 import numpy as np0
 
-def zgrid(L):
-    # 2D grid coordinates as complex numbers
-    c = arange(L)-L//2
-    coords = 1j*c[:,None]+c[None,:]
+# Common helper functions
+from util import *
 
 def ideal_hex_grid(L,P):
-    # Build a hexagonal grid by summing three cosine waves
+    '''
+    ----------------------------------------------------------------------------
+    Build a hexagonal grid by summing three cosine waves
+    '''
     θs = exp(1j*array([0,pi/3,2*pi/3]))
     coords = zgrid(L)
     return sum(array([cos((θ*coords).real*2*pi/P) for θ in θs]),0)
 
 def simulate_data(L=128,P=13,α=0.5,μ=0.09):
     '''
+    ----------------------------------------------------------------------------
+    Simulate spiking observations from a grid cell
+    
     Parameters
     ----------
     L: Grid size
@@ -60,6 +64,7 @@ def simulate_data(L=128,P=13,α=0.5,μ=0.09):
     mask[:-L*4//10,L*3//10:L*4//10] = False
     λ0 = λ0*mask
     # For realism, add some background rate changes
+    coords = zgrid(L)
     λ0_bg = λ0*(1-abs(coords/(L-2*pad)+0.1))
     # Simulated a random number of visits to each location 
     # as well as Poisson spike counts at each location

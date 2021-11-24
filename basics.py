@@ -37,31 +37,13 @@ from scipy.interpolate import interp1d
 # but can be calculated easily as convolution kernels using the FFT. 
 from scipy.sparse.linalg import minres,LinearOperator
 
-def regλ(N,K,ρ=1.3,γ=0.5):
-    ''' 
-    ----------------------------------------------------------------------------
-    Regularized per-bin rate estimate. This simply divides the spike count by 
-    the number of visits, with a small regularization parameter to prevent 
-    division by zero. This estimator is not very good, and you shouldn't use it;
-    It's provided as straw-man to show how much better the other estimators are.
-    
-    Parameters
-    ----------
-    N: 2D array; Number of visits to each location
-    K: 2D array; Number of spikes observed at each location
-    ρ: Regularization: small parameter to add to N to avoid ÷0
-    γ: Bias parameter; defaults to 0.5
-    
-    Returns
-    -------
-    2D array: Regularized (biased) estimate of firing rate in each bin
-    '''
-    return (K+ρ*(sum(K)/sum(N)-γ)+γ)/(N+ρ)
+# Common helper functions
+from util import *
 
 def blurkernel(L,σ,normalize=False):
     '''
     ----------------------------------------------------------------------------
-    Gaussian convolution kernel    
+    1D Gaussian blur convolution kernel    
     
     Parameters
     ----------
@@ -73,6 +55,23 @@ def blurkernel(L,σ,normalize=False):
     if normalize: 
         k /= sum(k)
     return fftshift(k)
+
+def blurkernel2D(L,σ,normalize=False):
+    '''
+    ----------------------------------------------------------------------------
+    2D Gaussian blur convolution kernel    
+    
+    Parameters
+    ----------
+    L: Size of L×L spatial domain
+    σ: kernel radius exp(-x²/σ) (standard deviation in x and y ×⎷2)
+    normalize: boolean; whether to make kernel sum to 1
+    '''
+    k = blurkernel(L,σ)
+    k = outer(k,k)
+    if normalize: 
+        k /= sum(k)
+    return k
 
 def conv(x,K):
     '''
@@ -99,21 +98,6 @@ def blur(x,σ,**kwargs):
     '''
     kern = fft(blurkernel(x.shape[0],σ,**kwargs))
     return conv(x,outer(kern,kern))
-
-def kdeλ(N,K,σ,**kwargs):
-    '''
-    ----------------------------------------------------------------------------
-    Estimate rate using Gaussian KDE smoothing. This is better than estimating
-    the rate using a binned histogram, but worse than a Gaussian-Process 
-    estimator. 
-    
-    Parameters
-    ----------
-    N: 2D array; Number of visits to each location
-    K: 2D array; Number of spikes observed at each location
-    σ: kernel radius exp(-x²/σ) (standard deviation in x and y ×⎷2)
-    '''
-    return regλ(blur(N,σ),blur(K,σ),**kwargs)
 
 def zeromean(x, mask):
     '''
@@ -154,16 +138,18 @@ def radial_average(y):
     ----------------------------------------------------------------------------
     Get radial autocorrelation by averaging 2D autocorrelogram
     '''
+    L = y.shape[0]
+    coords = zgrid(L)
     i = int32(abs(coords)) # Radial distance
     a = array([mean(y[i==j]) for j in range(L//2+1)])
     return concatenate([a[::-1],a[1:-1]])
 
-def radial_acorr(y):
+def radial_acorr(y,mask):
     '''
     ----------------------------------------------------------------------------
     Autocorrelation as a function of distance
     '''
-    return radial_average(fft_acorr(y))
+    return radial_average(fft_acorr(y,mask))
 
 def fft_upsample_1D(x,factor=4):
     '''
@@ -217,19 +203,20 @@ def repair_small_eigenvalues(kern,mineig=1e-6):
     kern = real(ifft2(maximum(υmin,kfft)))
     return kern
 
-def solveGP(kern,y,τe,tol=1e-4,reg=1e-5):
+def solveGP(kern,y,τe,mask,tol=1e-4,reg=1e-5):
     '''
     ----------------------------------------------------------------------------
     Minimum residual solver is fast
     '''
+    L = kern.shape[0]
     kern = repair_small_eigenvalues(kern,reg)
     knft = fft2(kern)
-    τy   = τe*zeromean(y).ravel()
+    τy   = τe*zeromean(y,mask).ravel()
     Στy  = conv(τy,knft).ravel()
     Hv   = lambda v:conv(τe*v,knft).ravel() + v
     ΣτεI = LinearOperator((L**2,L**2),Hv,Hv,dtype=np.float64)
     μ    = minres(ΣτεI,Στy,tol=tol)[0]
-    return μ.reshape(L,L) + mean(y[mask])
+    return μ.reshape(L,L) + mean(y.ravel()[mask.ravel()])
 
 def mirrorpad(y,pad):
     '''
@@ -248,6 +235,8 @@ def radial_kernel(rk):
     ----------------------------------------------------------------------------
     Make radially symmetric 2D kernel from 1D radial kernel
     '''
+    L = rk.shape[0]
+    coords = zgrid(L)
     r    = abs(coords)
     kern = interp1d(arange(L//2),rk[L//2:],fill_value=0,bounds_error=0)(r)
     return fftshift(kern)
@@ -257,6 +246,7 @@ def zerolag(ac,r=3):
     ----------------------------------------------------------------------------
     Estimate true zero-lag variance via quadratic interpolation.
     '''
+    L = ac.shape[0]
     z = array(ac[L//2-r:L//2+r+1])
     v = float32(arange(r*2+1))
     return polyfit(v[v!=r],z[v!=r],2)@array([r**2,r,1])
@@ -278,15 +268,44 @@ def cop(k):
     '''
     ----------------------------------------------------------------------------
     Construct a convolution operator
+    
+    Parameters
+    ----------
+    k: array; convolution kernel Fourier transform. 
     '''
-    return op(lambda v:conv(v,k).ravel())
+    M = prod(k.shape)
+    return op(M, lambda v:conv(v,k).ravel())
 
-def newton_raphson(lλh,J,H,tol=1e-3,mtol=1e-5):
+def diagop(d):
     '''
     ----------------------------------------------------------------------------
+    Construct a diagonal operator
+    
+    Parameters
+    ----------
+    d: vector; diagonal of matrix operator
     '''
-    u = lλh.ravel()
-    for i in range(50):
+    d = d.ravel()
+    M = d.shape[0]
+    return op(M, lambda v:v.ravel()*d)
+
+def newton_raphson(u0,J,H,M=None,maxiter=50,tol=1e-4,mtol=1e-5):
+    '''
+    ----------------------------------------------------------------------------
+    Newton-Raphson method using minres with optional preconditioner
+    
+    Parameters
+    ----------
+    u0: array; Initial guess
+    J: f:u→u; Function to compute the gradient at a point
+    H: g:h→L; L is a linear operator L:u→u; Function to construct hessian operator
+    M: h∈L, linear operator precondition
+    maxiter: positive integer, default is 50
+    tol:     small positive number, default is 1e-4; tolderance for convergence
+    mtol:    small positive number, default is 1e-5; tolerance for minres
+    '''
+    u = u0.ravel()
+    for i in range(maxiter):
         Δ = -minres(H(u),J(u),tol=mtol,M=M)[0]
         u += Δ
         if max(abs(Δ))<tol: return u
