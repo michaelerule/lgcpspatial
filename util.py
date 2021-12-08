@@ -19,6 +19,9 @@ from pylab import *
 # For the statistical summary function
 from scipy.stats import pearsonr
 
+# used by the cinv function
+import scipy.linalg.lapack
+
 ttic = None
 def tic(msg=''):
     '''
@@ -27,10 +30,15 @@ def tic(msg=''):
     '''
     global ttic
     t = time.time()*1000
+    if ttic:
+        elapsed = t-ttic
+    else:
+        elapsed = None
     if ttic and msg: 
-        print(('Δt = %d ms'%(t-ttic)).ljust(14)\
+        print(('Δt = %d ms'%elapsed).ljust(14)\
               +'elapsed for '+msg)
     ttic = t
+    return elapsed
 
 def progress_bar(x,N=None):
     '''
@@ -142,3 +150,33 @@ def printstats(a,b,message='',mask=None):
     print(message+':')
     print('∙ Normalized MSE: %0.1f%%'%(100*NMSE))
     print('∙ Pearson correlation: %0.2f'%pearsonr(a,b)[0])
+    
+def cinv(X,repair=False):
+    '''
+    Invert positive matrix $X$ using cholesky factorization. The function
+    `numpy.linalg.cholesky` is aliased as `chol` in this library, in 
+    analogy to matlab. `chol` returns a upper-triangular matrix such
+    that $L = \operatorname{chol}(X)$ and $X = L^T L$. The inverse of
+    $X$ is $X^{-1} = (L^T L)^{-1} = L^{-1} L^{-T}$. 
+    
+    Parameters
+    ----------
+    X : np.array
+        Square, real-valued, symmetric positive definite matirx
+        
+    Returns
+    -------
+    matrix :
+        The inverse of $X$ computed using Cholesky factorization
+    '''
+    ch = chol(X)
+    # Should have lower-triangular factor ch
+    # X = ch.T.dot(ch)
+    # X^-1 = ch^-1 ch^-T
+    ich,info = scipy.linalg.lapack.dtrtri(ch)
+    if info!=0:
+        if info<0:
+            raise ValueError('lapack.dtrtri encountered illegal argument in position %d'%-info)
+        else:
+            raise ValueError('lapack.dtrtri encountered zero diagonal element at %d'%info)
+    return ich.dot(ich.T)

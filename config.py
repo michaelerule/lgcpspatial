@@ -49,7 +49,7 @@ def configure_pylab():
     mpl.rcParams['ytick.minor.size'] = tl
 
     numpy.seterr(all='ignore')
-    numpy.set_printoptions(precision=3)
+    numpy.set_printoptions(precision=10)
     numpy.seterr(divide='ignore', invalid='ignore');
     
 configure_pylab();

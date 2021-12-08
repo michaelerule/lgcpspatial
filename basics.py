@@ -289,6 +289,17 @@ def diagop(d):
     M = d.shape[0]
     return op(M, lambda v:v.ravel()*d)
 
+def I(k):
+    '''
+    ----------------------------------------------------------------------------
+    Construct an identity operator
+    
+    Parameters
+    ----------
+    k: positive integer: size of identity matrix
+    '''
+    return op(k, lambda v:v.ravel())
+
 def newton_raphson(u0,J,H,M=None,maxiter=50,tol=1e-4,mtol=1e-5):
     '''
     ----------------------------------------------------------------------------
