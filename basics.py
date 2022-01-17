@@ -7,11 +7,17 @@ from __future__ import nested_scopes
 from __future__ import generators
 from __future__ import unicode_literals
 from __future__ import print_function
+
 """
+----------------------------------------------------------------------------
+Routines for Gaussian blurs, FFT-based convolutions and autocorrelation, 
+constructing radially-symmetric kernels, and common types of linear operators.
 """
 
 # Load a Matlab-like namespace
 from pylab import *
+#import numpy as np
+#import pylab as pl
 
 # We keep a separate handle specifically to numpy. This allows us to (if
 # desired) replace numpy/pylab with the Jax namespace, but retain access to some
@@ -84,7 +90,7 @@ def conv(x,K):
     x: 2D array
     K: Fourier-transformed convolution kernel
     '''
-    return real(ifft2(fft2(x.reshape(K.shape))*K))
+    return ifft2(fft2(x.reshape(K.shape))*K).real
 
 def blur(x,σ,**kwargs):
     '''
@@ -129,7 +135,7 @@ def fft_acorr(x,mask):
     win = outer(win,win)
     # Calculate autocorrelation using FFT
     psd = (abs(fft2(x*win))/L)**2
-    acr = fftshift(real(ifft2(psd)))
+    acr = fftshift(ifft2(psd).real)
     # Adjust peak for effects of mask, window
     return acr*var(x[mask])/acr[L//2,L//2]
 
@@ -170,7 +176,7 @@ def acorr_peak(r,F=6):
     sinc upsample at ×F resolution to get distance to first peak
     '''
     r2 = fft_upsample_1D(r,F)
-    return min(find_peaks(r2[len(r2)//2:])[0])/F-1,r2
+    return min(find_peaks(r2[len(r2)//2:])[0])/F,r2
 
 def kernel_to_covariance(kern):
     '''
@@ -289,36 +295,3 @@ def diagop(d):
     M = d.shape[0]
     return op(M, lambda v:v.ravel()*d)
 
-def I(k):
-    '''
-    ----------------------------------------------------------------------------
-    Construct an identity operator
-    
-    Parameters
-    ----------
-    k: positive integer: size of identity matrix
-    '''
-    return op(k, lambda v:v.ravel())
-
-def newton_raphson(u0,J,H,M=None,maxiter=50,tol=1e-4,mtol=1e-5):
-    '''
-    ----------------------------------------------------------------------------
-    Newton-Raphson method using minres with optional preconditioner
-    
-    Parameters
-    ----------
-    u0: array; Initial guess
-    J: f:u→u; Function to compute the gradient at a point
-    H: g:h→L; L is a linear operator L:u→u; Function to construct hessian operator
-    M: h∈L, linear operator precondition
-    maxiter: positive integer, default is 50
-    tol:     small positive number, default is 1e-4; tolderance for convergence
-    mtol:    small positive number, default is 1e-5; tolerance for minres
-    '''
-    u = u0.ravel()
-    for i in range(maxiter):
-        Δ = -minres(H(u),J(u),tol=mtol,M=M)[0]
-        u += Δ
-        if max(abs(Δ))<tol: return u
-    print('Iteration did not converge')
-    return u

@@ -8,6 +8,7 @@ from __future__ import generators
 from __future__ import unicode_literals
 from __future__ import print_function
 """
+posterior.py: Subroutines for further analysis of the posterior rate map returned from Gaussian process inference. 
 """
 
 # Load a Matlab-like namespace
@@ -25,7 +26,7 @@ def findpeaks(q,th=-inf,r=1):
     q0 = q[r:-r,r:-r,...]
     p  = q0>th
     for i,j in {(i,j) for i in Δ for j in Δ if i!=r or j!=r}:
-        p &= q0>=q[i:L+i-D,j:L+j-D,...]
+        p &= q0>q[i:L+i-D,j:L+j-D,...]
     p2 = zeros(q.shape,bool)
     p2[r:-r,r:-r,...] = p
     return p2
@@ -33,6 +34,9 @@ def findpeaks(q,th=-inf,r=1):
 def dx_op(L):
     '''
     ----------------------------------------------------------------------------
+    
+    Parameters
+    ----------
     '''
     # 2D difference operator in the 1st coordinate
     dx = zeros((L,L))
@@ -44,6 +48,9 @@ def hessian_2D(q):
     '''
     ----------------------------------------------------------------------------
     Get Hessian at all points
+    
+    Parameters
+    ----------
     '''
     dx  = dx_op(q.shape[0])
     f1  = fft2(dx)
@@ -57,6 +64,9 @@ def circle_mask(nr,nc):
     '''
     ----------------------------------------------------------------------------
     Zeros out corner frequencies
+    
+    Parameters
+    ----------
     '''
     r = (arange(nr)-(nr-1)/2)/nr
     c = (arange(nc)-(nc-1)/2)/nc
@@ -67,6 +77,9 @@ def fft_upsample_2D(x,factor=4):
     '''
     ----------------------------------------------------------------------------
     Upsample 2D array using the FFT
+    
+    Parameters
+    ----------
     '''
     if len(x.shape)==2:
         x = x.reshape((1,)+x.shape)

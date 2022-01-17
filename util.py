@@ -7,7 +7,9 @@ from __future__ import nested_scopes
 from __future__ import generators
 from __future__ import unicode_literals
 from __future__ import print_function
+
 """
+`util.py`: Miscellaneous utility functions used in the notebooks
 """
 
 # For progress bar and code timing
@@ -21,6 +23,11 @@ from scipy.stats import pearsonr
 
 # used by the cinv function
 import scipy.linalg.lapack
+
+# Jax's fft is slow
+# Numpy's fft pathologically casts to float64
+# Scipy's seems ok
+from scipy.fft import *
 
 ttic = None
 def tic(msg=''):
@@ -61,42 +68,6 @@ def progress_bar(x,N=None):
             wait_til_ms = time_ms+250
         yield x
     print('\r'+' '*70+'\r',end='',flush=True)
-    
-def pscale(x,q1=0.5,q2=99.5,domask=True):
-    '''
-    ----------------------------------------------------------------------------
-    Plot helper: Scale data by percentiles
-    '''
-    u  = x[mask] if domask else x
-    u = float32(u)
-    p1 = percentile(u,q1)
-    p2 = percentile(u,q2)
-    x  = clip((x-p1)/(p2-p1),0,1)
-    return x*mask if domask else x
-    
-def showim(x,t='',**kwargs):
-    '''
-    ----------------------------------------------------------------------------
-    Plot helper: Show image with title, no axes
-    '''
-    if len(x.shape)==1: x=x.reshape(L,L)
-    imshow(pscale(x,**kwargs));
-    axis('off');
-    title(t);
-    
-def slog(x,minrate = 1e-10):
-    '''
-    ----------------------------------------------------------------------------
-    Safe log function; Avoids numeric overflow by clipping
-    '''
-    return log(maximum(minrate,x))
-
-def sexp(x,bound = 10):
-    '''
-    ----------------------------------------------------------------------------
-    Safe exponential function; Avoids under/overflow by clipping
-    '''
-    return exp(np.clip(x,-bound,bound))
 
 def zgrid(L):
     '''
@@ -105,37 +76,6 @@ def zgrid(L):
     '''
     c = arange(L)-L//2
     return 1j*c[:,None]+c[None,:]
-
-def pscale(x,q1=0.5,q2=99.5,mask=True):
-    '''
-    ----------------------------------------------------------------------------
-    Plot helper: Scale data by percentiles
-    '''
-    u  = x[mask] if not mask is None else x
-    u  = float32(u)
-    p1 = percentile(u,q1)
-    p2 = percentile(u,q2)
-    x  = clip((x-p1)/(p2-p1),0,1)
-    return x*mask if not mask is None else x
-    
-def showim(x,t='',**kwargs):
-    '''
-    ----------------------------------------------------------------------------
-    Plot helper: Show image with title, no axes
-    '''
-    if len(x.shape)==1: 
-        L = int(round(sqrt(x.shape[0])))
-        x=x.reshape(L,L)
-    imshow(pscale(x,**kwargs));
-    axis('off');
-    title(t);
-
-def showkn(k,t=''):
-    '''
-    ----------------------------------------------------------------------------
-    Plot helper; Shift convolution kernel to plot
-    '''
-    imshow(fftshift(k)); axis('off'); title(t);
 
 def printstats(a,b,message='',mask=None):
     '''
@@ -150,33 +90,44 @@ def printstats(a,b,message='',mask=None):
     print(message+':')
     print('∙ Normalized MSE: %0.1f%%'%(100*NMSE))
     print('∙ Pearson correlation: %0.2f'%pearsonr(a,b)[0])
-    
-def cinv(X,repair=False):
+
+def find(a):
     '''
-    Invert positive matrix $X$ using cholesky factorization. The function
-    `numpy.linalg.cholesky` is aliased as `chol` in this library, in 
-    analogy to matlab. `chol` returns a upper-triangular matrix such
-    that $L = \operatorname{chol}(X)$ and $X = L^T L$. The inverse of
-    $X$ is $X^{-1} = (L^T L)^{-1} = L^{-1} L^{-T}$. 
+    ----------------------------------------------------------------------------
+    The old "find" syntax is cleaner!
     
     Parameters
     ----------
-    X : np.array
-        Square, real-valued, symmetric positive definite matirx
-        
-    Returns
-    -------
-    matrix :
-        The inverse of $X$ computed using Cholesky factorization
     '''
-    ch = chol(X)
-    # Should have lower-triangular factor ch
-    # X = ch.T.dot(ch)
-    # X^-1 = ch^-1 ch^-T
-    ich,info = scipy.linalg.lapack.dtrtri(ch)
-    if info!=0:
-        if info<0:
-            raise ValueError('lapack.dtrtri encountered illegal argument in position %d'%-info)
-        else:
-            raise ValueError('lapack.dtrtri encountered zero diagonal element at %d'%info)
-    return ich.dot(ich.T)
+    return np.where(np.array(a).ravel())[0]
+
+# For jupyter notebooks: trigger browser to notify when done
+def speak(text):
+    '''
+    ----------------------------------------------------------------------------
+    
+    Parameters
+    ----------
+    '''
+    from IPython.display import Javascript as js, clear_output
+    # Escape single quotes
+    text = text.replace("'", r"\'")
+    display(js('''
+    if(window.speechSynthesis) {{
+        var synth = window.speechSynthesis;
+        synth.speak(new window.SpeechSynthesisUtterance('{text}'));
+    }}
+    '''.format(text=text)))
+    # Clear the JS so that the notebook doesn't speak again when reopened/refreshed
+    # clear_output(False)
+    
+def notify(what='attention'):
+    '''
+    ----------------------------------------------------------------------------
+    
+    Parameters
+    ----------
+    '''
+    #os.system("echo -n '\a'")
+    speak(what+'!')
+

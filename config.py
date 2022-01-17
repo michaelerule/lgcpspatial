@@ -11,7 +11,11 @@ from __future__ import print_function
 Matplotlib and numpy configuration
 """
 
-from pylab import *
+#from pylab import *
+import numpy as np
+import pylab as pl
+import matplotlib as mpl
+
 import numpy
 
 def configure_pylab():

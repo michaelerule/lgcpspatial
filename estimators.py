@@ -8,7 +8,7 @@ from __future__ import generators
 from __future__ import unicode_literals
 from __future__ import print_function
 """
-Basic rate-map estimators
+estimators.py: Histogram and Kernel density estimators. These provide a comparison for Gaussian process methods as well as heuristic initializers
 """
 
 # Load matlab-like namespace and helper routines

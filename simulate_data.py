@@ -7,7 +7,9 @@ from __future__ import nested_scopes
 from __future__ import generators
 from __future__ import unicode_literals
 from __future__ import print_function
+
 """
+simulate_data.py: Routines to simulate spiking observations from grid fields. Used for ground-truth benchmarking of inference routines.
 """
 
 # Load a Matlab-like namespace
