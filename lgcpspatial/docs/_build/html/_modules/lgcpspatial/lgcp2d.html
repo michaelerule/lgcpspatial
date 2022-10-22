@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lgcpspatial.lgcp2d &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
+            <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.plot.html">plot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>lgcpspatial.lgcp2d</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for lgcpspatial.lgcp2d</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># -*- coding: UTF-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>             <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>        <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span>   <span class="nn">numpy</span>  <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span>   <span class="nn">lgcpspatial.util</span>   <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">scipy.linalg</span>
+<span class="kn">from</span>   <span class="nn">scipy.sparse.linalg</span> <span class="kn">import</span> <span class="n">LinearOperator</span>
+<span class="kn">from</span>   <span class="nn">scipy.sparse.linalg</span> <span class="kn">import</span> <span class="n">minres</span>
+<span class="kn">from</span>   <span class="nn">scipy.special</span>       <span class="kn">import</span> <span class="n">j0</span><span class="p">,</span><span class="n">jn_zeros</span>
+<span class="kn">from</span>   <span class="nn">scipy.linalg</span>        <span class="kn">import</span> <span class="n">solve_triangular</span> <span class="k">as</span> <span class="n">stri</span> 
+
+
+<div class="viewcode-block" id="coordinate_descent"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.coordinate_descent">[docs]</a><span class="k">def</span> <span class="nf">coordinate_descent</span><span class="p">(</span><span class="n">gp</span><span class="p">,</span>
+    <span class="n">initialmean</span>  <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">initialcov</span>   <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">maxiter</span>      <span class="o">=</span> <span class="mi">40</span><span class="p">,</span>
+    <span class="n">maxmeaniter</span>  <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">maxvariter</span>   <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">tol</span>          <span class="o">=</span> <span class="mf">1e-5</span><span class="p">,</span>
+    <span class="n">showprogress</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Abstract mean/variance coordinate descent subroutine</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    gp: Model</span>
+<span class="sd">        Gaussian-Process model instance. </span>
+<span class="sd">        </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    initialmean: np.float32</span>
+<span class="sd">        Initial guess for mean, in whatever format</span>
+<span class="sd">        gp expects for calculating derivatives.</span>
+<span class="sd">        if None, `coordiante_descent` will initialize this</span>
+<span class="sd">        by calling `gp.initialmean()`</span>
+<span class="sd">    initialcov: np.float32</span>
+<span class="sd">        Intial guess for covariance, in whatever format</span>
+<span class="sd">        gp expects for calculating derivatives.</span>
+<span class="sd">        if None, `coordiante_descent` will initialize this</span>
+<span class="sd">        by calling `gp.initialcov()`</span>
+<span class="sd">    maxiter: int</span>
+<span class="sd">        Maximum number of iterations for the mean and</span>
+<span class="sd">        covariance combined. Decault if 40.</span>
+<span class="sd">    maxmeaniter: int</span>
+<span class="sd">        Maximum number of mean Newton-Raphson updates</span>
+<span class="sd">        per iteration. Default is 10.</span>
+<span class="sd">    maxvariter: int</span>
+<span class="sd">        Maximum number of (co)variance update steps</span>
+<span class="sd">        per iteration. Devault is 1.</span>
+<span class="sd">    tol: float</span>
+<span class="sd">        Convergence tolerance. Iteration will exit when</span>
+<span class="sd">        the absolute change of all components in the mean </span>
+<span class="sd">        and variance is less than this.</span>
+<span class="sd">    showprogress: bool</span>
+<span class="sd">        Whether to print information about optimization</span>
+<span class="sd">        progress.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    μ: np.float32</span>
+<span class="sd">        Posterior mean, in whatever format is used by `gp`.</span>
+<span class="sd">    Σ: np.float32</span>
+<span class="sd">        Posterior covariance, in format used by `gp`</span>
+<span class="sd">    loss: float</span>
+<span class="sd">        Loss evaluated at posterior mean, `gp.loss(μ,Σ)`,</span>
+<span class="sd">        or infinity if optimization failed.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">try</span><span class="p">:</span> 
+        <span class="n">report</span> <span class="o">=</span> <span class="nb">print</span> <span class="k">if</span> <span class="n">showprogress</span> <span class="k">else</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:()</span>
+        <span class="n">report</span><span class="p">(</span><span class="s1">&#39;(checking arguments)&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">initialmean</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+            <span class="n">initialmean</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">initialmean</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">initialcov</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+            <span class="n">initialcov</span>  <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">initialcov</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">initialmean</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;initialmean contains&#39;</span>
+                <span class="s1">&#39; non-finite values.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">initialcov</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;initialcov contains&#39;</span>
+                <span class="s1">&#39; non-finite values.&#39;</span><span class="p">)</span>
+        
+        <span class="n">μ</span> <span class="o">=</span> <span class="n">_precision</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">initialmean</span><span class="p">))</span>
+        <span class="n">Σ</span> <span class="o">=</span> <span class="n">_precision</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">initialcov</span><span class="p">))</span>
+        <span class="n">report</span><span class="p">(</span><span class="s1">&#39;(optimizing)&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxiter</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxmeaniter</span><span class="p">):</span>
+                <span class="n">Δμ</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">mean_update</span><span class="p">(</span><span class="n">μ</span><span class="p">,</span><span class="n">Σ</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">Δμ</span><span class="p">)):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Coordinate descent &#39;</span>
+                        <span class="s1">&#39;encountered non-finite values for &#39;</span>
+                        <span class="s1">&#39;the mean update Δμ&#39;</span><span class="p">)</span>
+                <span class="n">εμ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Δμ</span><span class="p">))</span>
+                <span class="n">report</span><span class="p">(</span><span class="s1">&#39;εμ&#39;</span><span class="p">,</span><span class="n">εμ</span><span class="p">,</span><span class="s1">&#39;iteration&#39;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">μ</span> <span class="o">+=</span> <span class="n">Δμ</span>
+                <span class="k">if</span> <span class="n">εμ</span><span class="o">&lt;</span><span class="n">tol</span><span class="p">:</span> <span class="k">break</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">maxvariter</span><span class="p">):</span>
+                <span class="n">ΔΣ</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">variance_update</span><span class="p">(</span><span class="n">μ</span><span class="p">,</span><span class="n">Σ</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">Δμ</span><span class="p">)):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Coordinate descent &#39;</span>
+                        <span class="s1">&#39;encountered non-finite values for &#39;</span>
+                        <span class="s1">&#39;the covariance update ΔΣ&#39;</span><span class="p">)</span>
+                <span class="n">εΣ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">ΔΣ</span><span class="p">))</span>
+                <span class="n">report</span><span class="p">(</span><span class="s1">&#39;εΣ&#39;</span><span class="p">,</span><span class="n">εΣ</span><span class="p">,</span><span class="s1">&#39;iteration&#39;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">Σ</span> <span class="o">+=</span> <span class="n">ΔΣ</span>
+                <span class="k">if</span> <span class="n">εΣ</span><span class="o">&lt;</span><span class="n">tol</span><span class="p">:</span> <span class="k">break</span>
+            <span class="k">if</span> <span class="n">εΣ</span><span class="o">&lt;</span><span class="n">tol</span> <span class="ow">and</span> <span class="n">εμ</span><span class="o">&lt;</span><span class="n">tol</span><span class="p">:</span> <span class="k">break</span>
+        <span class="k">return</span> <span class="n">μ</span><span class="p">,</span><span class="n">Σ</span><span class="p">,</span><span class="n">gp</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">μ</span><span class="p">,</span><span class="n">Σ</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">LinAlgError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s1">&#39;LinAlgError encountered; Singular matrix? &#39;</span>
+            <span class="s1">&#39;Increasing grid resolution or lowering the &#39;</span>
+            <span class="s1">&#39;kernel variance may help.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">μ</span><span class="p">,</span><span class="n">Σ</span><span class="p">,</span><span class="n">inf</span></div>
+
+
+<div class="viewcode-block" id="make_kernel_ft"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.make_kernel_ft">[docs]</a><span class="k">def</span> <span class="nf">make_kernel_ft</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">P</span><span class="p">,</span>
+                   <span class="n">dc</span><span class="o">=</span><span class="mf">1e12</span><span class="p">,</span> <span class="c1"># DC variance to add </span>
+                   <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>     <span class="c1"># Bessel zero to truncate kernel</span>
+                   <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generate grid kernel and return its Fourier transform.</span>
+<span class="sd">    </span>
+<span class="sd">    Scaling the height of this kernel and selecting which </span>
+<span class="sd">    frequency components to retain is handled in </span>
+<span class="sd">    `diagonal_fourier_lowrank`.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    L: int&gt;1</span>
+<span class="sd">        This should be an integer describing the number of </span>
+<span class="sd">        spatial bins used to prepare n, y, lograte_guess,</span>
+<span class="sd">        and initialmean. I&#39;ve found 128² to be a good </span>
+<span class="sd">        compromise between speed, resolution, and numerical</span>
+<span class="sd">        stability.</span>
+<span class="sd">    P: float&gt;0</span>
+<span class="sd">        A kernel hyperparameter: The grid cell&#39;s period in</span>
+<span class="sd">        units of bins on the L×L grid. </span>
+<span class="sd">        </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    dc: float&gt;0</span>
+<span class="sd">        Amount of DC variance to add. This corresponds to</span>
+<span class="sd">        uncertainty about the average firing rate. If your</span>
+<span class="sd">        prior is good, this variance can be small. Setting</span>
+<span class="sd">        it too large slows down inference. </span>
+<span class="sd">    k: int&gt;0</span>
+<span class="sd">        Which Bessel function zero to truncate the kernel at. </span>
+<span class="sd">        1: central lobe only, no periodicity</span>
+<span class="sd">        2: central lobe and inhibitory surround</span>
+<span class="sd">        3: central lobe and nearest neighbor grid field</span>
+<span class="sd">        4. + second-nearest inhibitory surround, etc</span>
+<span class="sd">        The default is (3), which corresponds to an</span>
+<span class="sd">        assumption of reasonable local grid order, but</span>
+<span class="sd">        limits long-range order. </span>
+<span class="sd">    eps: float&gt;0</span>
+<span class="sd">        Zero eigenvalues in the kernel can make the </span>
+<span class="sd">        inference problem ill-conditioned, since these mean </span>
+<span class="sd">        that both the prior and posterior covariance will </span>
+<span class="sd">        not have an inverse. The simplest way to fix this is</span>
+<span class="sd">        to clamp zero (or near zero) eigenvalues to some</span>
+<span class="sd">        small but finite number. The default is eps = 1e-5.</span>
+<span class="sd">        Using a low-rank subspace to discard components with</span>
+<span class="sd">        negligeble variance is another option.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">coords</span>  <span class="o">=</span> <span class="n">zgrid</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">window</span>  <span class="o">=</span> <span class="n">hanning</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">window</span>  <span class="o">=</span> <span class="n">fftshift</span><span class="p">(</span><span class="n">outer</span><span class="p">(</span><span class="n">window</span><span class="p">,</span><span class="n">window</span><span class="p">))</span>
+    <span class="n">kern</span>    <span class="o">=</span> <span class="n">j0</span><span class="p">(</span><span class="n">fftshift</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">coords</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="n">P</span><span class="p">)))</span><span class="o">*</span><span class="n">window</span>
+    <span class="n">clip</span>    <span class="o">=</span> <span class="n">fftshift</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span><span class="o">&lt;</span><span class="n">P</span><span class="o">*</span><span class="n">jn_zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">))</span>
+    <span class="n">kern</span>    <span class="o">=</span> <span class="n">kern</span><span class="o">*</span><span class="n">clip</span>
+    <span class="n">kern</span>    <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">kern</span><span class="p">,</span><span class="n">P</span><span class="o">/</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">kern</span>    <span class="o">=</span> <span class="n">repair_small_eigenvalues</span><span class="p">(</span><span class="n">kern</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">kern</span><span class="p">),</span><span class="n">eps</span><span class="p">)</span>
+    <span class="n">Kf</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">fft2</span><span class="p">(</span><span class="n">kern</span><span class="p">)))</span>
+    <span class="n">Kf</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">+=</span> <span class="n">dc</span>
+    <span class="k">return</span> <span class="n">rtype</span><span class="p">(</span><span class="n">Kf</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DiagonalFourierLowrank"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank">[docs]</a><span class="k">class</span> <span class="nc">DiagonalFourierLowrank</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Class representing variational GP inference with </span>
+<span class="sd">    posterior covariance Σ = [ Λ + diag[p] ]¯¹. A low-rank </span>
+<span class="sd">    Fourier-space representation is used to approximately </span>
+<span class="sd">    compute this inverse.   </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="n">kv</span><span class="p">,</span> <span class="c1"># Prior variance</span>
+        <span class="n">P</span><span class="p">,</span>  <span class="c1"># Kernel period</span>
+        <span class="n">dataset</span>       <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="c1"># Dataset object;</span>
+        <span class="n">L</span>             <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">n</span>             <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">y</span>             <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">prior_mean</span>    <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">lograte_guess</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">γ</span>             <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="c1"># Dispersion correction</span>
+        <span class="n">whitenoise</span>    <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="c1"># White noise kernel </span>
+        <span class="n">dc</span>            <span class="o">=</span> <span class="mf">1e3</span><span class="p">,</span>  <span class="c1"># DC kernel variance</span>
+        <span class="n">mintol</span>        <span class="o">=</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="c1"># tolerance</span>
+        <span class="n">use2d</span>         <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">component_threshold_percent</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
+        <span class="n">kclip</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>    <span class="c1"># J0 zero to truncate kernel</span>
+        <span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        kv: float</span>
+<span class="sd">            A kernel hyperparameter: The overall height of </span>
+<span class="sd">            the prior covariance kernel. Related (albeit </span>
+<span class="sd">            indirectly) to the height of the grid as well as</span>
+<span class="sd">            the overall confidence in our measurements.</span>
+<span class="sd">        P: float&gt;0</span>
+<span class="sd">            A kernel hyperparameter: The grid cell&#39;s period </span>
+<span class="sd">            in units of bins on the L×L grid. </span>
+<span class="sd">        </span>
+<span class="sd">        Other Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        dataset: object</span>
+<span class="sd">            This can be any object with the attributes:</span>
+<span class="sd">                L: int</span>
+<span class="sd">                    Size of LxL grid for binned data.</span>
+<span class="sd">                n: np.float32</span>
+<span class="sd">                    Length L² array of visits to each bin.</span>
+<span class="sd">                y: np.float32</span>
+<span class="sd">                    Length L² array of spikes at each bin.</span>
+<span class="sd">                prior_mean: np.float32</span>
+<span class="sd">                    Shape L×L or L² array with the prior </span>
+<span class="sd">                    mean-log-rate. This should reflect </span>
+<span class="sd">                    background rate variations unrelated to</span>
+<span class="sd">                    the grid structure</span>
+<span class="sd">                lograte_guess: float32 array</span>
+<span class="sd">                    Shape L×L or L² array with an initial </span>
+<span class="sd">                    guess of the log rate above/below</span>
+<span class="sd">                    `prior_mean`</span>
+<span class="sd">            You can also omit the dataset argument and pass</span>
+<span class="sd">            these values as keyword arguments.</span>
+<span class="sd">        L: int</span>
+<span class="sd">            Size of LxL spatial grid for binned data.</span>
+<span class="sd">            This keyword argument can also be provided as an</span>
+<span class="sd">            attribute to the `dataset` keyword argumet </span>
+<span class="sd">            object. </span>
+<span class="sd">        n: np.float32</span>
+<span class="sd">            Length L² array of visits to each bin.</span>
+<span class="sd">            This keyword argument can also be provided as an</span>
+<span class="sd">            attribute to the `dataset` keyword argumet </span>
+<span class="sd">            object. </span>
+<span class="sd">        y: np.float32</span>
+<span class="sd">            Length L² array of spikes at each bin.</span>
+<span class="sd">            This keyword argument can also be provided as an</span>
+<span class="sd">            attribute to the `dataset` keyword argumet </span>
+<span class="sd">            object. </span>
+<span class="sd">        prior_mean: np.float32</span>
+<span class="sd">            Shape L×L or L² array with the prior </span>
+<span class="sd">            mean-log-rate. This should reflect </span>
+<span class="sd">            background rate variations unrelated to</span>
+<span class="sd">            the grid structure</span>
+<span class="sd">            This keyword argument can also be provided as an</span>
+<span class="sd">            attribute to the `dataset` keyword argumet </span>
+<span class="sd">            object. </span>
+<span class="sd">        lograte_guess: float32 array</span>
+<span class="sd">            Shape L×L or L² array with an initial </span>
+<span class="sd">            guess of the log rate above/below</span>
+<span class="sd">            `prior_mean`. This keyword argument can also be</span>
+<span class="sd">            provided as an attribute to the `dataset`</span>
+<span class="sd">            keyword argumet object. </span>
+<span class="sd">        γ: float&gt;0</span>
+<span class="sd">            A dispersion correction. The default is 1.0,</span>
+<span class="sd">            corresponding to Poisson observations---you </span>
+<span class="sd">            should probably leave it at 1.0. Values &lt;1 </span>
+<span class="sd">            correspond to over-dispersion, and values &gt;1 </span>
+<span class="sd">            correspond to under-dispersed observations.</span>
+<span class="sd">        whitenoise: default 0</span>
+<span class="sd">            A white-noise kernel hyperparameter. This </span>
+<span class="sd">            corresponds to a constant extra variance in </span>
+<span class="sd">            frequency space, and to locally (Dirac delta) </span>
+<span class="sd">            zero-lag variance in the spatial domain. White </span>
+<span class="sd">            noise contains powers at all frequencies, so is</span>
+<span class="sd">            generally incompatable with the approach of</span>
+<span class="sd">            using a low-rank subspace in the frequency</span>
+<span class="sd">            domain to speed things up. We apply white noise</span>
+<span class="sd">            AFTER selecting the low -rank subspace. This is</span>
+<span class="sd">            a bit wrong, but still might have its uses. </span>
+<span class="sd">        dc: float&gt;0</span>
+<span class="sd">            A kernel hyperparameter: Amount of DC variance</span>
+<span class="sd">            to add. This corresponds to uncertainty about</span>
+<span class="sd">            the average firing rate. If your prior is good,</span>
+<span class="sd">            this variance can be small. Setting it to</span>
+<span class="sd">            something large slows inference slightly. </span>
+<span class="sd">        mintol: float&gt;0</span>
+<span class="sd">            The tolerance used in the minimum residual</span>
+<span class="sd">            algorithm. The default is 1e-6</span>
+<span class="sd">        use2d:</span>
+<span class="sd">            A boolean array indicating which spatial</span>
+<span class="sd">            frequency components to use. If this is none,</span>
+<span class="sd">            use2d is calculated using</span>
+<span class="sd">            `component_threshold_percent`</span>
+<span class="sd">        component_threshold_percent: float &gt;0 &lt;100</span>
+<span class="sd">            We determine which frequency components to keep</span>
+<span class="sd">            by finding the NONZERO frequency with the</span>
+<span class="sd">            highest variance. We keep all frequency</span>
+<span class="sd">            components with at least </span>
+<span class="sd">            component_threshold_percent % of this.</span>
+<span class="sd">        kclip: int&gt;0</span>
+<span class="sd">            Bessel function zero to truncate the kernel at. </span>
+<span class="sd">            1: central lobe only, no periodicity</span>
+<span class="sd">            2: central lobe and inhibitory surround</span>
+<span class="sd">            3: central lobe and nearest neighbor grid field</span>
+<span class="sd">            4. + second-nearest inhibitory surround, etc</span>
+<span class="sd">            The default is (3), which corresponds to an</span>
+<span class="sd">            assumption of reasonable local grid order, but</span>
+<span class="sd">            no particular long-range order.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">if</span> <span class="n">γ</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValueErrror</span><span class="p">(</span>
+            <span class="s1">&#39;Dispersion correction γ should be positive&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">P</span><span class="p">)</span> <span class="ow">or</span> <span class="n">P</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Period `P` should be a &#39;</span>
+            <span class="s1">&#39;positive, real floating-point number; &#39;</span>
+            <span class="s1">&#39;Got P=</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">P</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="s1">&#39;L&#39;</span><span class="p">):</span> <span class="n">L</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">L</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="s1">&#39;n&#39;</span><span class="p">):</span> <span class="n">n</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">n</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">):</span> <span class="n">y</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">y</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="s1">&#39;prior_mean&#39;</span><span class="p">):</span> 
+                <span class="n">prior_mean</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">prior_mean</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="s1">&#39;lograte_guess&#39;</span><span class="p">):</span> 
+                <span class="n">lograte_guess</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">lograte_guess</span>
+                
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">prior_mean</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;prior_mean contained non-finite values&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">lograte_guess</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;lograte_guess contained non-finite values&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">n</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;n contained non-finite values&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;y contained non-finite values&#39;</span><span class="p">)</span>
+        
+        <span class="n">bg</span> <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">prior_mean</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">μ</span>  <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">lograte_guess</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">n</span>  <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">γn</span> <span class="o">=</span> <span class="n">γ</span><span class="o">*</span><span class="n">n</span>
+        <span class="n">y</span>  <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bg</span>     <span class="o">=</span> <span class="n">bg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mintol</span> <span class="o">=</span> <span class="n">mintol</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span>      <span class="o">=</span> <span class="n">L</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kv</span>     <span class="o">=</span> <span class="n">kv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P</span>      <span class="o">=</span> <span class="n">P</span>
+        
+        <span class="c1"># Prepare kernel</span>
+        <span class="n">Kf</span> <span class="o">=</span> <span class="n">make_kernel_ft</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="n">kclip</span><span class="p">,</span><span class="n">eps</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="n">dc</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="o">*</span><span class="n">kv</span>
+        
+        <span class="c1"># Define low-rank Fourier space projection </span>
+        <span class="c1"># - Threshold components &lt; component_threshold_percent</span>
+        <span class="c1">#   of max (default 10%)</span>
+        <span class="c1"># └ Add transpose to ensure this is symmetric</span>
+        <span class="c1"># - Store the number of components retained &#39;R&#39;</span>
+        <span class="c1"># - Define operator F for converting to/from low-rank space</span>
+        <span class="n">thr</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Kf</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+                   <span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">component_threshold_percent</span> 
+        <span class="k">if</span> <span class="n">use2d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">use2d</span>  <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Kf</span><span class="p">)</span><span class="o">&gt;</span><span class="n">thr</span>
+            <span class="n">use2d</span>  <span class="o">=</span> <span class="n">use2d</span> <span class="o">|</span> <span class="n">use2d</span><span class="o">.</span><span class="n">T</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use2d</span> <span class="o">=</span> <span class="n">use2d</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">use2d</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="n">LinearOperator</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span><span class="n">L</span><span class="o">*</span><span class="n">L</span><span class="p">),</span>
+                                <span class="n">matvec</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fu</span><span class="p">,</span>
+                                <span class="n">rmatvec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ftu</span><span class="p">,</span>
+                                <span class="n">rmatmat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ftu</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Dimension of low-rank &#39;</span>
+                <span class="s1">&#39;subspace is R=0; This should never happen &#39;</span>
+                <span class="s1">&#39;most likely, this is not a grid cell, or &#39;</span>
+                <span class="s1">&#39;the heuristically-identified grid &#39;</span>
+                <span class="s1">&#39;period `P` is off by a wide margin. &#39;</span>
+                <span class="s1">&#39;Please check both of these things.&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># - The FFT is separable, and can be computed using</span>
+        <span class="c1"># two 1D FFTs in each direction. It is sligthly</span>
+        <span class="c1"># faster to discard empty rows/columns of the kernel</span>
+        <span class="c1"># in frequency space after applying the first of</span>
+        <span class="c1"># these 1D convolutions. The following lines find</span>
+        <span class="c1"># the nonempty rows, which we retain after the first</span>
+        <span class="c1"># 1D FFT. </span>
+        <span class="n">use</span>   <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">use2d</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span> <span class="c1"># Used idxs in LxL array</span>
+        <span class="n">use1d</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">use2d</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>   <span class="c1"># Indecies to use along L</span>
+        <span class="n">R1d</span>   <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">use1d</span><span class="p">)</span>          <span class="c1"># Number of 1D components</span>
+        <span class="c1"># figure out which components in the retained rows/columns </span>
+        <span class="c1"># are actually used</span>
+        <span class="n">usecut</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">use2d</span><span class="p">[:,</span><span class="n">use1d</span><span class="p">][</span><span class="n">use1d</span><span class="p">,:])</span> 
+        <span class="c1"># Indecies into cropped 2D</span>
+        
+        <span class="c1"># - Finally, we build the reduced-rank semi-</span>
+        <span class="c1"># orthogonal operators to convert to/from our </span>
+        <span class="c1"># truncated Fourier space representation. It turns</span>
+        <span class="c1"># out it&#39;s not faster to use the FFT in all cases.</span>
+        <span class="c1"># If we have a diagonal matrix in the origal space,</span>
+        <span class="c1"># rather than use the 2D FFT on the left and right,</span>
+        <span class="c1"># we can multiply the cached 2D fourier components </span>
+        <span class="c1"># by the diagonal  elements (see </span>
+        <span class="c1"># low_rank_covariance and </span>
+        <span class="c1"># covariance_diagonal)</span>
+        <span class="n">f1e</span> <span class="o">=</span> <span class="n">ctype</span><span class="p">(</span><span class="n">fft</span><span class="p">(</span><span class="n">eye</span><span class="p">(</span><span class="n">L</span><span class="p">),</span><span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span><span class="p">)[</span><span class="n">use1d</span><span class="p">,:])</span>
+        
+        <span class="c1"># Cached diagonal 2D fourier components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">h2e</span> <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">RI</span><span class="p">(</span><span class="n">f1e</span><span class="p">[:,</span><span class="kc">None</span><span class="p">,:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">f1e</span><span class="p">[</span><span class="kc">None</span><span class="p">,:,</span><span class="kc">None</span><span class="p">,:]</span>
+                           <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">R1d</span><span class="o">*</span><span class="n">R1d</span><span class="p">,</span><span class="n">L</span><span class="o">*</span><span class="n">L</span><span class="p">)[</span><span class="n">usecut</span><span class="p">])</span>
+        
+        <span class="c1"># Add white noise here so it doesn&#39;t affect subspace</span>
+        <span class="c1"># selection</span>
+        <span class="n">Kf</span> <span class="o">=</span> <span class="n">Kf</span> <span class="o">+</span> <span class="n">whitenoise</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Kf</span> <span class="o">=</span> <span class="n">Kf</span>
+        
+        <span class="c1"># Convolutions and preconditioner in low-rank space</span>
+        <span class="n">K</span>  <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">Kf</span><span class="p">[</span><span class="n">use2d</span><span class="p">])</span>
+        <span class="n">Λ</span>  <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">Kf</span><span class="p">[</span><span class="n">use2d</span><span class="p">])</span>
+        <span class="n">M</span>  <span class="o">=</span> <span class="n">op</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">M_helper</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">K</span> <span class="o">=</span> <span class="n">K</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Λ</span> <span class="o">=</span> <span class="n">Λ</span>
+        
+        <span class="c1"># Provide some OK initial conditions, if requested</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">μ_0</span> <span class="o">=</span> <span class="n">μ</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">μh0</span> <span class="o">=</span> <span class="n">_precision</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="nd">@μ</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v0</span>  <span class="o">=</span> <span class="n">_precision</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">μ</span><span class="o">*</span><span class="mi">0</span><span class="p">))</span>
+        
+        <span class="c1"># Math is hard to read if &quot;self.&quot; is scattered</span>
+        <span class="c1"># everywhere but, copying every variable as </span>
+        <span class="c1"># var = self.var per method would add clutter.</span>
+        <span class="c1"># Workaround: stash in tuple.   </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cached</span> <span class="o">=</span> <span class="p">(</span><span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">bg</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>    
+
+<div class="viewcode-block" id="DiagonalFourierLowrank.Fu"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.Fu">[docs]</a>    <span class="k">def</span> <span class="nf">Fu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Operator to convert from full- to low-rank subspace;</span>
+<span class="sd">        This must be semi-orthogonal and the Hermitian </span>
+<span class="sd">        transpose of Ftu (below).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">L</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span>
+        <span class="n">use2d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">use2d</span>
+        <span class="k">return</span> <span class="n">RI</span><span class="p">(</span><span class="n">fft2</span><span class="p">(</span><span class="n">rtype</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">),</span>
+                       <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span><span class="p">)[</span><span class="n">use2d</span><span class="p">])</span></div>
+    
+<div class="viewcode-block" id="DiagonalFourierLowrank.Ftu"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.Ftu">[docs]</a>    <span class="k">def</span> <span class="nf">Ftu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Operator to convert from low-rank to full space.</span>
+<span class="sd">        This must be semi-orthogonal and Hermitian transpose</span>
+<span class="sd">        of Fu(u).</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">L</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span>
+        <span class="n">use2d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">use2d</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">+</span><span class="n">u</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">use2d</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
+        <span class="k">return</span> <span class="n">RI</span><span class="p">(</span><span class="n">fft2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span>
+                       <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span><span class="p">,</span>
+                       <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+                 <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">L</span><span class="p">,</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span></div>
+
+    
+    <span class="c1"># (moved out of __init__ to make class serializable)</span>
+    <span class="c1"># - Initial conditions for the mean model</span>
+    <span class="c1"># - Initial conditions for the covariance model</span>
+    <span class="c1"># - Matrix-vector operator for the preconditioner M</span>
+<div class="viewcode-block" id="DiagonalFourierLowrank.initialmean"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.initialmean">[docs]</a>    <span class="k">def</span> <span class="nf">initialmean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">μh0</span></div>
+<div class="viewcode-block" id="DiagonalFourierLowrank.initialcov"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.initialcov">[docs]</a>    <span class="k">def</span> <span class="nf">initialcov</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">v0</span></div>
+<div class="viewcode-block" id="DiagonalFourierLowrank.M_helper"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.M_helper">[docs]</a>    <span class="k">def</span> <span class="nf">M_helper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>  <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">K</span><span class="o">*</span><span class="n">u</span></div>
+
+
+<div class="viewcode-block" id="DiagonalFourierLowrank.check_arguments"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.check_arguments">[docs]</a>    <span class="k">def</span> <span class="nf">check_arguments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Argument verifiation helper</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">μh</span> <span class="o">=</span> <span class="n">_precision</span><span class="p">(</span><span class="n">μh</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">v</span>  <span class="o">=</span> <span class="n">_precision</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">μh</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The posterior mean in low-&#39;</span>
+                <span class="s1">&#39;rank frequency space μh contains non-&#39;</span>
+                <span class="s1">&#39;finite values&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">v</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The posterior marginal &#39;</span>
+                <span class="s1">&#39;spatial variances contain non-finite &#39;</span>
+                <span class="s1">&#39;values&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">μh</span><span class="p">)</span><span class="o">!=</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s1">&#39;Expected log-rank mean μh &#39;</span>
+                <span class="s1">&#39;to have the same shape as the low-rank &#39;</span>
+                <span class="s1">&#39;subspace, which is rank R=</span><span class="si">%d</span><span class="s1">, but got &#39;</span>
+                <span class="s1">&#39;shape </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">μh</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s1">&#39;This model stores covariance&#39;</span>
+                <span class="s1">&#39; information in terms of the spatial &#39;</span>
+                <span class="s1">&#39;marginal variances; Expected `v` to have &#39;</span>
+                <span class="s1">&#39;shape </span><span class="si">%s</span><span class="s1"> but had shape </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span>
+                 <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">μh</span><span class="p">,</span><span class="n">v</span></div>
+    
+
+<div class="viewcode-block" id="DiagonalFourierLowrank.rates_from_lowrank"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.rates_from_lowrank">[docs]</a>    <span class="k">def</span> <span class="nf">rates_from_lowrank</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+        <span class="n">posterior_marginal_variances</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Compute the posterior mean in spatial coordinates</span>
+<span class="sd">        as well as the expected firing rate. Note: the prior</span>
+<span class="sd">        `initialmean` is added for calculating the firing-</span>
+<span class="sd">        rate λ, as well as a variance correction ½v. </span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lowrank_posterior_mean: np.array</span>
+<span class="sd">            Posterior mean in low-rank spatial-frequency </span>
+<span class="sd">            space. Size model.R float32 or float64</span>
+<span class="sd">        posterior_marginal_variances: np.array</span>
+<span class="sd">            Posterior marginal variance in the spatial </span>
+<span class="sd">            domain. Size L² float32 or float64</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        μ: np.array, shape L²</span>
+<span class="sd">            The posterior mean in spatial coordinates (not</span>
+<span class="sd">            in the low-rank subspace). This is only the </span>
+<span class="sd">            deviations of the posterior mean from the prior</span>
+<span class="sd">            μ₀; The full posterior mean is μ+initialmean</span>
+<span class="sd">        λ: np.array, shape L²</span>
+<span class="sd">            The posterior mean-rate assuming a log-Gaussian</span>
+<span class="sd">            model. λ = exp(μ+ μ₀ + ½σ2)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
+            <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+            <span class="n">posterior_marginal_variances</span><span class="p">)</span>
+        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
+        <span class="n">μ</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@μh</span>
+        <span class="k">return</span> <span class="n">μ</span><span class="p">,</span> <span class="n">_exp</span><span class="p">(</span><span class="n">μ</span><span class="o">+</span> <span class="n">initialmean</span> <span class="o">+</span> <span class="n">v</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span></div>
+        
+        
+<div class="viewcode-block" id="DiagonalFourierLowrank.low_rank_cholesky"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.low_rank_cholesky">[docs]</a>    <span class="k">def</span> <span class="nf">low_rank_cholesky</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+        <span class="n">posterior_marginal_variances</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">         1. project ⎷q into the low-d frequency space</span>
+<span class="sd">         2. add this projection to the prior precision</span>
+<span class="sd">         3. use cholesky factor to get posterior low-rank Σ</span>
+<span class="sd">        </span>
+<span class="sd">         - This assumes self-consistency q=nγλ</span>
+<span class="sd">         - This uses the fact that convolutional priors are </span>
+<span class="sd">           diagonal in frequency space.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        lowrank_posterior_mean: np.array</span>
+<span class="sd">            Posterior mean in low-rank spatial-frequency </span>
+<span class="sd">            space. Size model.R float32 or float64</span>
+<span class="sd">        posterior_marginal_variances: np.array</span>
+<span class="sd">            Posterior marginal variance in the spatial </span>
+<span class="sd">            domain. Size L² float32 or float64</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        C: np.array</span>
+<span class="sd">            Cholesky factor such that the low-rank</span>
+<span class="sd">            covariance Σh can be reconstructed as Σh=C&#39;C.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
+            <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+            <span class="n">posterior_marginal_variances</span><span class="p">)</span>
+        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
+        <span class="n">μ</span><span class="p">,</span><span class="n">λ</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rates_from_lowrank</span><span class="p">(</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">q</span>  <span class="o">=</span> <span class="n">γn</span><span class="o">*</span><span class="n">λ</span>
+        <span class="n">x</span>  <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">h2e</span>
+        <span class="n">C</span>  <span class="o">=</span> <span class="n">chinv</span><span class="p">(</span><span class="n">diag</span><span class="p">(</span><span class="n">Λ</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span><span class="nd">@x</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">C</span></div>
+        
+        
+<div class="viewcode-block" id="DiagonalFourierLowrank.low_rank_covariance"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.low_rank_covariance">[docs]</a>    <span class="k">def</span> <span class="nf">low_rank_covariance</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+        <span class="n">posterior_marginal_variances</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">         1. project ⎷q into the low-d frequency space</span>
+<span class="sd">         2. add this projection to the prior precision</span>
+<span class="sd">         3. use cholesky factorization to get low-rank Σ</span>
+<span class="sd">        </span>
+<span class="sd">         - Assumes the self-consistency condition q = nγλ</span>
+<span class="sd">         - Uses the fact that convolutional priors are </span>
+<span class="sd">           diagonal in frequency space.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        lowrank_posterior_mean: np.array</span>
+<span class="sd">            Posterior mean in low-rank spatial-frequency </span>
+<span class="sd">            space. Size model.R float32 or float64</span>
+<span class="sd">        posterior_marginal_variances: np.array</span>
+<span class="sd">            Posterior marginal variance in the spatial </span>
+<span class="sd">            domain. Size L² float32 or float64</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        Σh: np.array</span>
+<span class="sd">            Full covariance in truncated frequency domain</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
+            <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+            <span class="n">posterior_marginal_variances</span><span class="p">)</span>
+        <span class="n">C</span>  <span class="o">=</span> <span class="n">low_rank_cholesky</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">C</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">C</span></div>
+
+    
+<div class="viewcode-block" id="DiagonalFourierLowrank.covariance_diagonal"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.covariance_diagonal">[docs]</a>    <span class="k">def</span> <span class="nf">covariance_diagonal</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+        <span class="n">posterior_marginal_variances</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Similar to `low_rank_covariance`, but converts </span>
+<span class="sd">        low-rank posterior Σ back to the spatial domain, </span>
+<span class="sd">        returning only the marginal variances at each </span>
+<span class="sd">        location to avoid having to construct the full </span>
+<span class="sd">        posterior covariance. </span>
+<span class="sd">        </span>
+<span class="sd">         - Assumes the self-consistency condition q=nγλ</span>
+<span class="sd">         - Uses the fact that convolutional priors are  </span>
+<span class="sd">           diagonal in frequency space.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        lowrank_posterior_mean: np.array</span>
+<span class="sd">            Posterior mean in low-rank spatial-frequency </span>
+<span class="sd">            space. Size model.R float32 or float64</span>
+<span class="sd">        posterior_marginal_variances: np.array</span>
+<span class="sd">            Posterior marginal variance in the spatial </span>
+<span class="sd">            domain. Size L² float32 or float64</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        v: posterior marginal variances at each location</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
+            <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+            <span class="n">posterior_marginal_variances</span><span class="p">)</span>
+        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
+        <span class="n">μ</span><span class="p">,</span><span class="n">λ</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rates_from_lowrank</span><span class="p">(</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">q</span>  <span class="o">=</span> <span class="n">γn</span><span class="o">*</span><span class="n">λ</span>
+        <span class="n">x</span>  <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">h2e</span>
+        <span class="n">A</span>  <span class="o">=</span> <span class="n">chinv</span><span class="p">(</span><span class="n">diag</span><span class="p">(</span><span class="n">Λ</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span><span class="nd">@x</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">X</span>  <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)</span>
+        <span class="n">X</span><span class="p">[</span><span class="n">use2d</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">DF</span> <span class="o">=</span> <span class="n">RI</span><span class="p">(</span><span class="n">fft2</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+                     <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">R</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">DF</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="DiagonalFourierLowrank.loss"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.loss">[docs]</a>    <span class="k">def</span> <span class="nf">loss</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+        <span class="n">posterior_marginal_variances</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Calculate the (negative) evidence lower bound</span>
+<span class="sd">        </span>
+<span class="sd">         - This assumes the self-consistency condition q=nγλ</span>
+<span class="sd">        </span>
+<span class="sd">        Notes on scaling/comparison of this quantity: </span>
+<span class="sd">        </span>
+<span class="sd">         - This is computed in the low-rank subspace.</span>
+<span class="sd">         - Assume posterior = prior outside this subspace.</span>
+<span class="sd">         - Within the discarded subspace, we have ΛΣ=I</span>
+<span class="sd">         - Let D=L²-R be dimension of discarded subspace.</span>
+<span class="sd">         - This should contribute D from the trace.</span>
+<span class="sd">         - The log-determinant is zero.</span>
+<span class="sd">         - Confirm R = L²-D is the correct normalization.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        lowrank_posterior_mean: np.array</span>
+<span class="sd">            Posterior mean in low-rank spatial-frequency </span>
+<span class="sd">            space. Size model.R float32 or float64</span>
+<span class="sd">        posterior_marginal_variances: np.array</span>
+<span class="sd">            Posterior marginal variance in the spatial </span>
+<span class="sd">            domain. Size L² float32 or float64</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
+            <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+            <span class="n">posterior_marginal_variances</span><span class="p">)</span>
+        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
+        <span class="n">μ</span><span class="p">,</span><span class="n">λ</span>  <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">rates_from_lowrank</span><span class="p">(</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">q</span>    <span class="o">=</span>  <span class="n">γn</span><span class="o">*</span><span class="n">λ</span>
+        <span class="n">x</span>    <span class="o">=</span>  <span class="n">sqrt</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">h2e</span>
+        <span class="n">C</span>    <span class="o">=</span>  <span class="n">chinv</span><span class="p">(</span><span class="n">diag</span><span class="p">(</span><span class="n">Λ</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span><span class="nd">@x</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">nyλ</span>  <span class="o">=</span>  <span class="n">γn</span><span class="o">@</span><span class="p">(</span><span class="n">λ</span><span class="o">-</span><span class="n">y</span><span class="o">*</span><span class="n">μ</span><span class="p">)</span>          <span class="c1">#  n&#39;(λ-y∘μ)</span>
+        <span class="n">μΛμ</span>  <span class="o">=</span>  <span class="nb">sum</span><span class="p">(</span><span class="n">μh</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">Λ</span><span class="p">)</span>        <span class="c1">#  μ&#39;Λ₀μ</span>
+        <span class="n">trΛΣ</span> <span class="o">=</span>  <span class="nb">sum</span><span class="p">(</span><span class="n">C</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">Λ</span><span class="p">)</span>         <span class="c1">#  tr[Λ₀Σ]</span>
+        <span class="n">ldΣz</span> <span class="o">=</span> <span class="o">-</span><span class="nb">sum</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">Λ</span><span class="p">))</span>         <span class="c1">#  ln|Σ₀|</span>
+        <span class="n">ldΣq</span> <span class="o">=</span>  <span class="mi">2</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">diag</span><span class="p">(</span><span class="n">C</span><span class="p">)))</span> <span class="c1"># -ln|Σ|</span>
+        <span class="k">return</span> <span class="n">nyλ</span> <span class="o">+</span> <span class="mf">.5</span><span class="o">*</span><span class="p">(</span><span class="n">μΛμ</span> <span class="o">+</span> <span class="n">trΛΣ</span> <span class="o">+</span> <span class="n">ldΣz</span> <span class="o">-</span> <span class="n">ldΣq</span> <span class="o">-</span> <span class="n">R</span><span class="p">)</span></div>
+        
+        
+<div class="viewcode-block" id="DiagonalFourierLowrank.JHvM"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.JHvM">[docs]</a>    <span class="k">def</span> <span class="nf">JHvM</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+        <span class="n">posterior_marginal_variances</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Prepare gradient (Jacobian) `J`; </span>
+<span class="sd">        Hessian `H`; </span>
+<span class="sd">        and preconditioner `M`.</span>
+<span class="sd">        </span>
+<span class="sd">          - This is used to run minres for Newton-Raphson</span>
+<span class="sd">            - Operators are computed for a fixed μh and v</span>
+<span class="sd">            - The problem being solved is u = H⁻¹J</span>
+<span class="sd">            - Minres is solving this by minimizing ||Hu-J||</span>
+<span class="sd">          - J Doesn&#39;t change, so this is computed as vector</span>
+<span class="sd">          - H is returned as an operator to compute Hu</span>
+<span class="sd">          - M is computed from the prior and is constant</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        lowrank_posterior_mean: np.array</span>
+<span class="sd">            Posterior mean in low-rank spatial-frequency </span>
+<span class="sd">            space. Size model.R float32 or float64</span>
+<span class="sd">        posterior_marginal_variances: np.array</span>
+<span class="sd">            Posterior marginal variance in the spatial </span>
+<span class="sd">            domain. Size L² float32 or float64</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        J: np.array</span>
+<span class="sd">            Jacobian</span>
+<span class="sd">        Hv: function</span>
+<span class="sd">            Function that computes Hessian-vector product</span>
+<span class="sd">        M: linear operator</span>
+<span class="sd">            preconditioner linear operator</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
+            <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+            <span class="n">posterior_marginal_variances</span><span class="p">)</span>
+        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
+        <span class="n">μ</span><span class="p">,</span><span class="n">λ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rates_from_lowrank</span><span class="p">(</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">γnλ</span> <span class="o">=</span> <span class="n">γn</span><span class="o">*</span><span class="n">λ</span>
+        <span class="n">J</span>   <span class="o">=</span> <span class="n">Λ</span><span class="o">*</span><span class="n">μh</span> <span class="o">+</span> <span class="n">F</span><span class="o">@</span><span class="p">(</span><span class="n">γnλ</span><span class="o">-</span><span class="n">γn</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">Hv</span>  <span class="o">=</span> <span class="n">op</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span><span class="n">Λ</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">F</span><span class="o">@</span><span class="p">(</span><span class="n">γnλ</span><span class="o">*</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@u</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">J</span><span class="p">,</span><span class="n">Hv</span><span class="p">,</span><span class="n">M</span></div>
+
+    
+<div class="viewcode-block" id="DiagonalFourierLowrank.mean_update"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.mean_update">[docs]</a>    <span class="k">def</span> <span class="nf">mean_update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+        <span class="n">posterior_marginal_variances</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update posterior mean using Newton-Raphson</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        lowrank_posterior_mean: np.array</span>
+<span class="sd">            Posterior mean in low-rank spatial-frequency </span>
+<span class="sd">            space. Size model.R float32 or float64</span>
+<span class="sd">        posterior_marginal_variances: np.array</span>
+<span class="sd">            Posterior marginal variance in the spatial </span>
+<span class="sd">            domain. Size L² float32 or float64</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        Δμ: np.array</span>
+<span class="sd">            Newton-Raphson update to the posterior mean</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
+            <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+            <span class="n">posterior_marginal_variances</span><span class="p">)</span>
+        <span class="n">J</span><span class="p">,</span><span class="n">Hv</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">JHvM</span><span class="p">(</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="o">-</span><span class="n">minres</span><span class="p">(</span><span class="n">Hv</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mintol</span><span class="p">,</span><span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">result</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Encountered non-finite values&#39;</span>
+                <span class="s1">&#39; in the result of mean_update&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_precision</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="DiagonalFourierLowrank.variance_update"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.variance_update">[docs]</a>    <span class="k">def</span> <span class="nf">variance_update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>   
+        <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+        <span class="n">posterior_marginal_variances</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update posterior marginal variances via fixed-</span>
+<span class="sd">        point iteration</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        lowrank_posterior_mean: np.array</span>
+<span class="sd">            Posterior mean in low-rank spatial-frequency </span>
+<span class="sd">            space. Size model.R float32 or float64</span>
+<span class="sd">        posterior_marginal_variances: np.array</span>
+<span class="sd">            Posterior marginal variance in the spatial </span>
+<span class="sd">            domain. Size L² float32 or float64</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        Δv: np.array</span>
+<span class="sd">            Fixed-point iteration update to the marginal </span>
+<span class="sd">            variances</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
+            <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
+            <span class="n">posterior_marginal_variances</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariance_diagonal</span><span class="p">(</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">)</span><span class="o">-</span><span class="n">v</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">result</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Encountered non-finite values&#39;</span>
+                <span class="s1">&#39; in the result of variance_update&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div></div>
+        
+        
+        
+        
+  
+
+<span class="k">def</span> <span class="nf">_chol</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Wrapper for scipy.linalg.cholesky</span>
+<span class="sd">    Inputs/outputs coerced to float32 to counteract</span>
+<span class="sd">    numpy&#39;s aggressive promotion of all return types to </span>
+<span class="sd">    float64.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_ltinv</span><span class="p">(</span><span class="n">ch</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Wrapper for scipy.linalg.lapack.dtrtri</span>
+<span class="sd">    Inputs/outputs coerced to float32 to counteract</span>
+<span class="sd">    numpy&#39;s aggressive promotion of all return types to </span>
+<span class="sd">    float64.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">ch</span> <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+    <span class="n">q</span><span class="p">,</span><span class="n">info</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lapack</span><span class="o">.</span><span class="n">dtrtri</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span><span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">info</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;lapack.dtrtri: &#39;</span><span class="o">+</span><span class="p">(</span>
+            <span class="s1">&#39;argument </span><span class="si">%d</span><span class="s1"> invalid&#39;</span><span class="o">%-</span><span class="n">info</span> <span class="k">if</span> <span class="n">info</span><span class="o">&lt;</span><span class="mi">0</span> 
+            <span class="k">else</span> <span class="s1">&#39;diagonal element </span><span class="si">%d</span><span class="s1"> is 0&#39;</span><span class="o">%</span><span class="n">info</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">q</span>
+
+
+<div class="viewcode-block" id="chinv"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.chinv">[docs]</a><span class="k">def</span> <span class="nf">chinv</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate the inverse of the lower-triangular Cholesky </span>
+<span class="sd">    factorization of a positive definite matrix, &quot;C&quot;. The </span>
+<span class="sd">    inverse of the original matrix is then inv(X) = C&#39;C.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    X: np.array</span>
+<span class="sd">        Square, positive-definite matrix</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    inv(X): np.array</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">X</span><span class="p">,</span><span class="n">info</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lapack</span><span class="o">.</span><span class="n">dtrtri</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">info</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span> 
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;lapack.dtrtri: &#39;</span><span class="o">+</span><span class="p">(</span>
+            <span class="s1">&#39;argument </span><span class="si">%d</span><span class="s1"> invalid&#39;</span><span class="o">%-</span><span class="n">info</span> <span class="k">if</span> <span class="n">info</span><span class="o">&lt;</span><span class="mi">0</span> 
+            <span class="k">else</span> <span class="s1">&#39;diagonal element </span><span class="si">%d</span><span class="s1"> is 0&#39;</span><span class="o">%</span><span class="n">info</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">rtype</span><span class="p">(</span><span class="n">X</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="chsolve"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.chsolve">[docs]</a><span class="k">def</span> <span class="nf">chsolve</span><span class="p">(</span><span class="n">H</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Solve PSD linear system x = H^{-1}v </span>
+<span class="sd">    via Cholesky factorization</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    H: PSD matrix as np.array</span>
+<span class="sd">    v: 1D np.array with the same dimension as H</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    np.array: H^{-1}v</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">H</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">H</span><span class="p">),</span><span class="n">rtype</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rtype</span><span class="p">(</span><span class="n">stri</span><span class="p">(</span><span class="n">C</span><span class="p">,</span><span class="n">stri</span><span class="p">(</span><span class="n">C</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_exp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">bound</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Safe exponential function: Clip to avoid under/overflow</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    x: np.float32</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    np.float32</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="o">-</span><span class="n">bound</span><span class="p">,</span><span class="n">bound</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="logdet"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.logdet">[docs]</a><span class="k">def</span> <span class="nf">logdet</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate log-determinant of positive-definite matrix </span>
+<span class="sd">    via Choleskey factorization. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    A: np.array</span>
+<span class="sd">        Square, positive-definite matrix</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ln(|A|): np.array</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">diag</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
+                   <span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">),</span>
+               <span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="RI"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.RI">[docs]</a><span class="k">def</span> <span class="nf">RI</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Sum the real and imaginary components of a </span>
+<span class="sd">    complex-valued array</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    x: np.complex64</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    np.float32</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">rtype</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="o">+</span><span class="n">x</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_tril</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Pack N*(N-1) elements into the lower triangle of an NxN</span>
+<span class="sd">    Matrix or: Return the N*(N-1) elements from the lower</span>
+<span class="sd">    triangle as NxN matrix</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    M: np.array</span>
+<span class="sd">    k: int</span>
+<span class="sd">        Row dimension of the array for which the returned </span>
+<span class="sd">        indices will be valid. (See `numpy.tril_indices`)</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    np.array</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">M</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">8</span><span class="o">*</span><span class="n">K</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># Jax style</span>
+        <span class="c1"># return np.zeros((N,N),dtype=rtype).at[</span>
+        <span class="c1">#    np.tril_indices(N)].set(M)</span>
+        <span class="c1"># Numpy style</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">tril_indices</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span> <span class="o">=</span> <span class="n">M</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must be 2D matrix or 1D vector&quot;</span><span class="p">)</span>
+
+    
+<span class="n">_tdivl</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">:</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve_triangular</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)</span>
+<span class="n">_tdivu</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">:</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve_triangular</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">lower</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)</span>
+
+<div class="viewcode-block" id="npdf"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.npdf">[docs]</a><span class="k">def</span> <span class="nf">npdf</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Univariate Gaussian probability density</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    mu : float, scalar or array-like </span>
+<span class="sd">        Mean(s) of distribution(s)</span>
+<span class="sd">    sigma : float, scalar or array-like </span>
+<span class="sd">        Standard deviation(s) of distribution(s)</span>
+<span class="sd">    x : float, scalar or array-like </span>
+<span class="sd">        Points at which to evaluate distribution(s)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">mu</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">x</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">invsigma</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">sigma</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">mu</span><span class="p">)</span><span class="o">*</span><span class="n">invsigma</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mf">0.398942280401432678</span><span class="o">*</span><span class="n">invsigma</span><span class="p">)</span><span class="o">*</span><span class="n">_exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
+    
+    
+    
+    
+    
+    
+    
+    
+          
+        
+        
+
+<span class="c1"># It&#39;s useful to be able to control precision: float32 is</span>
+<span class="c1"># much faster, but sometimes doesn&#39;t work. Jax supports </span>
+<span class="c1"># controlling the precision system-wide, Numpy doesn&#39;t.</span>
+<span class="c1"># Jax&#39;s FFT routines are a bit slow, so we need to use </span>
+<span class="c1"># Scipy&#39;s. This means we need to control precision manually</span>
+<span class="n">typesizes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;32&#39;</span> <span class="p">:(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span>   <span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">complex64</span><span class="p">),</span>
+    <span class="s1">&#39;64&#39;</span> <span class="p">:(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span>   <span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">),</span>
+    <span class="s1">&#39;128&#39;</span><span class="p">:(</span><span class="n">np</span><span class="o">.</span><span class="n">longdouble</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">longcomplex</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">nbits</span> <span class="o">=</span> <span class="s1">&#39;32&#39;</span>
+<span class="n">rtype</span> <span class="o">=</span> <span class="n">float32</span>
+<span class="n">ctype</span> <span class="o">=</span> <span class="n">complex64</span>
+<span class="k">def</span> <span class="nf">_set_precision</span><span class="p">(</span><span class="n">bits</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">nbits</span><span class="p">,</span> <span class="n">rtype</span><span class="p">,</span> <span class="n">ctype</span>
+    <span class="n">bits</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">bits</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">bits</span> <span class="ow">in</span> <span class="n">typesizes</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;# bits should be 32, 64, or 128&#39;</span><span class="p">)</span>
+    <span class="n">nbits</span> <span class="o">=</span> <span class="n">bits</span>
+    <span class="n">rtype</span><span class="p">,</span><span class="n">ctype</span> <span class="o">=</span> <span class="n">typesizes</span><span class="p">[</span><span class="n">nbits</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_precision</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Recursively cast to float32/complex64 or </span>
+<span class="sd">    float64/complex128. This compensates for numpy&#39;s </span>
+<span class="sd">    aggressive promotion from 32→64 bit.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">global</span> <span class="n">nbits</span><span class="p">,</span> <span class="n">rtype</span><span class="p">,</span> <span class="n">ctype</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isrealobj</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>    
+            <span class="k">return</span> <span class="n">rtype</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">if</span> <span class="n">copy</span> \
+                <span class="ow">or</span> <span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="o">!=</span><span class="n">rtype</span> <span class="k">else</span> <span class="n">x</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">iscomplexobj</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> 
+            <span class="k">return</span> <span class="n">ctype</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">if</span> <span class="n">copy</span> \
+                <span class="ow">or</span> <span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="o">!=</span><span class="n">ctype</span> <span class="k">else</span> <span class="n">x</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isrealobj</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>    <span class="k">return</span> <span class="n">rtype</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">iscomplexobj</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">ctype</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="n">_precision</span><span class="p">,</span><span class="n">x</span><span class="p">),)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

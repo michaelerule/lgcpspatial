@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lgcpspatial.savitskygolay module &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
+            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>lgcpspatial.savitskygolay module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/lgcpspatial.savitskygolay.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="module-lgcpspatial.savitskygolay">
+<span id="lgcpspatial-savitskygolay-module"></span><h1>lgcpspatial.savitskygolay module<a class="headerlink" href="#module-lgcpspatial.savitskygolay" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGOrd">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGOrd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGOrd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGOrd" title="Permalink to this definition"></a></dt>
+<dd><p>Compute polynomial order for Savitsky-Golay filter</p>
+<p>Fc = (N+1)/(3.2M-4.6)
+For fixed M, Fc
+N = Fc*(3.2M-4.6)-1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> (<em>length</em><em> of </em><em>filter in samples</em>) – </p></li>
+<li><p><strong>fc</strong> (<em>low frequency cutoff</em>) – </p></li>
+<li><p><strong>fs</strong> (<em>sample rate</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGKern">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGKern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGKern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGKern" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGKernV">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGKernV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGKernV"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGKernV" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGKernA">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGKernA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGKernA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGKernA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGKernJ">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGKernJ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGKernJ"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGKernJ" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGfilt">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGfilt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGfilt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGfilt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGfiltV">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGfiltV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGfiltV"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGfiltV" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGfiltA">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGfiltA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGfiltA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGfiltA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGfiltJ">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGfiltJ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGfiltJ"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGfiltJ" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGaccelerate">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGaccelerate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGaccelerate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGaccelerate" title="Permalink to this definition"></a></dt>
+<dd><p>Smoothed second derivative using a Savitsky-Golay filter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>signal to smooth + differentiate</em>) – </p></li>
+<li><p><strong>m</strong> (<em>length</em><em> of </em><em>filter in samples</em>) – </p></li>
+<li><p><strong>fc</strong> (<em>low frequency cutoff</em>) – </p></li>
+<li><p><strong>fs</strong> (<em>sample rate</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGjerk">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGjerk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGjerk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGjerk" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGdifferentiate">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGdifferentiate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGdifferentiate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGdifferentiate" title="Permalink to this definition"></a></dt>
+<dd><p>Differentiate and smooth using a Savitsky-Golay filter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>signal to smooth + differentiate</em>) – </p></li>
+<li><p><strong>m</strong> (<em>length</em><em> of </em><em>filter in samples</em>) – </p></li>
+<li><p><strong>fc</strong> (<em>low frequency cutoff</em>) – </p></li>
+<li><p><strong>fs</strong> (<em>sample rate</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.savitskygolay.SGsmooth">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGsmooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGsmooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGsmooth" title="Permalink to this definition"></a></dt>
+<dd><p>Smooth using a Savitsky-Golay filter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>signal to smooth</em>) – </p></li>
+<li><p><strong>m</strong> (<em>length</em><em> of </em><em>filter in samples</em>) – </p></li>
+<li><p><strong>fc</strong> (<em>low frequency cutoff</em>) – </p></li>
+<li><p><strong>fs</strong> (<em>sample rate</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

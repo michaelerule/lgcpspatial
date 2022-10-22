@@ -1,0 +1,1047 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+import numpy             as np
+import matplotlib        as mpl
+import matplotlib.pyplot as plt
+from   numpy  import *
+from   lgcpspatial.util   import *
+import traceback
+import scipy.linalg
+from   scipy.sparse.linalg import LinearOperator
+from   scipy.sparse.linalg import minres
+from   scipy.special       import j0,jn_zeros
+from   scipy.linalg        import solve_triangular as stri 
+
+
+def coordinate_descent(gp,
+    initialmean  = None,
+    initialcov   = None,
+    maxiter      = 40,
+    maxmeaniter  = 10,
+    maxvariter   = 1,
+    tol          = 1e-5,
+    showprogress = False):
+    '''
+    Abstract mean/variance coordinate descent subroutine
+    
+    Parameters
+    --------------------------------------------------------
+    gp: Model
+        Gaussian-Process model instance. 
+        
+    Other Parameters
+    --------------------------------------------------------
+    initialmean: np.float32
+        Initial guess for mean, in whatever format
+        gp expects for calculating derivatives.
+        if None, `coordiante_descent` will initialize this
+        by calling `gp.initialmean()`
+    initialcov: np.float32
+        Intial guess for covariance, in whatever format
+        gp expects for calculating derivatives.
+        if None, `coordiante_descent` will initialize this
+        by calling `gp.initialcov()`
+    maxiter: int
+        Maximum number of iterations for the mean and
+        covariance combined. Decault if 40.
+    maxmeaniter: int
+        Maximum number of mean Newton-Raphson updates
+        per iteration. Default is 10.
+    maxvariter: int
+        Maximum number of (co)variance update steps
+        per iteration. Devault is 1.
+    tol: float
+        Convergence tolerance. Iteration will exit when
+        the absolute change of all components in the mean 
+        and variance is less than this.
+    showprogress: bool
+        Whether to print information about optimization
+        progress.
+        
+    Returns
+    --------------------------------------------------------
+    μ: np.float32
+        Posterior mean, in whatever format is used by `gp`.
+    Σ: np.float32
+        Posterior covariance, in format used by `gp`
+    loss: float
+        Loss evaluated at posterior mean, `gp.loss(μ,Σ)`,
+        or infinity if optimization failed.
+    '''
+    try: 
+        report = print if showprogress else lambda *x:()
+        report('(checking arguments)')
+        
+        if initialmean is None: 
+            initialmean = gp.initialmean()
+        if initialcov is None: 
+            initialcov  = gp.initialcov()
+        if not all(isfinite(initialmean)):
+            raise ValueError('initialmean contains'
+                ' non-finite values.')
+        if not all(isfinite(initialcov)):
+            raise ValueError('initialcov contains'
+                ' non-finite values.')
+        
+        μ = _precision(array(initialmean))
+        Σ = _precision(array(initialcov))
+        report('(optimizing)')
+        for i in range(maxiter):
+            for j in range(maxmeaniter):
+                Δμ = gp.mean_update(μ,Σ)
+                if not all(isfinite(Δμ)):
+                    raise ValueError('Coordinate descent '
+                        'encountered non-finite values for '
+                        'the mean update Δμ')
+                εμ = np.nanmax(abs(Δμ))
+                report('εμ',εμ,'iteration',i,j)
+                μ += Δμ
+                if εμ<tol: break
+            for j in range(maxvariter):
+                ΔΣ = gp.variance_update(μ,Σ)
+                if not all(isfinite(Δμ)):
+                    raise ValueError('Coordinate descent '
+                        'encountered non-finite values for '
+                        'the covariance update ΔΣ')
+                εΣ = np.max(abs(ΔΣ))
+                report('εΣ',εΣ,'iteration',i,j)
+                Σ += ΔΣ
+                if εΣ<tol: break
+            if εΣ<tol and εμ<tol: break
+        return μ,Σ,gp.loss(μ,Σ)
+    except LinAlgError as err:
+        sys.stderr.write(
+            'LinAlgError encountered; Singular matrix? '
+            'Increasing grid resolution or lowering the '
+            'kernel variance may help.\n')
+        traceback.print_exc()
+        return μ,Σ,inf
+
+
+def make_kernel_ft(L,P,
+                   dc=1e12, # DC variance to add 
+                   k=3,     # Bessel zero to truncate kernel
+                   eps=1e-5):
+    '''
+    Generate grid kernel and return its Fourier transform.
+    
+    Scaling the height of this kernel and selecting which 
+    frequency components to retain is handled in 
+    `diagonal_fourier_lowrank`.
+    
+    Parameters
+    --------------------------------------------------------
+    L: int>1
+        This should be an integer describing the number of 
+        spatial bins used to prepare n, y, lograte_guess,
+        and initialmean. I've found 128² to be a good 
+        compromise between speed, resolution, and numerical
+        stability.
+    P: float>0
+        A kernel hyperparameter: The grid cell's period in
+        units of bins on the L×L grid. 
+        
+    Other Parameters
+    --------------------------------------------------------
+    dc: float>0
+        Amount of DC variance to add. This corresponds to
+        uncertainty about the average firing rate. If your
+        prior is good, this variance can be small. Setting
+        it too large slows down inference. 
+    k: int>0
+        Which Bessel function zero to truncate the kernel at. 
+        1: central lobe only, no periodicity
+        2: central lobe and inhibitory surround
+        3: central lobe and nearest neighbor grid field
+        4. + second-nearest inhibitory surround, etc
+        The default is (3), which corresponds to an
+        assumption of reasonable local grid order, but
+        limits long-range order. 
+    eps: float>0
+        Zero eigenvalues in the kernel can make the 
+        inference problem ill-conditioned, since these mean 
+        that both the prior and posterior covariance will 
+        not have an inverse. The simplest way to fix this is
+        to clamp zero (or near zero) eigenvalues to some
+        small but finite number. The default is eps = 1e-5.
+        Using a low-rank subspace to discard components with
+        negligeble variance is another option.
+    '''
+    coords  = zgrid(L)
+    window  = hanning(L)
+    window  = fftshift(outer(window,window))
+    kern    = j0(fftshift(abs(coords*2*pi/P)))*window
+    clip    = fftshift(abs(coords)<P*jn_zeros(0,k)[-1]/(2*pi))
+    kern    = kern*clip
+    kern    = blur(kern,P/pi)
+    kern    = repair_small_eigenvalues(kern/np.max(kern),eps)
+    Kf      = np.array(real(fft2(kern)))
+    Kf[0,0]+= dc
+    return rtype(Kf)
+
+
+class DiagonalFourierLowrank:
+    '''
+    Class representing variational GP inference with 
+    posterior covariance Σ = [ Λ + diag[p] ]¯¹. A low-rank 
+    Fourier-space representation is used to approximately 
+    compute this inverse.   
+    '''
+    def __init__(self,
+        kv, # Prior variance
+        P,  # Kernel period
+        dataset       = None, # Dataset object;
+        L             = None,
+        n             = None,
+        y             = None,
+        prior_mean    = None,
+        lograte_guess = None,
+        γ             = 1.0, # Dispersion correction
+        whitenoise    = 0.0,  # White noise kernel 
+        dc            = 1e3,  # DC kernel variance
+        mintol        = 1e-6, # tolerance
+        use2d         = None,
+        component_threshold_percent = 10.0,
+        kclip=3,    # J0 zero to truncate kernel
+        ):
+        '''
+        Parameters
+        ----------------------------------------------------
+        kv: float
+            A kernel hyperparameter: The overall height of 
+            the prior covariance kernel. Related (albeit 
+            indirectly) to the height of the grid as well as
+            the overall confidence in our measurements.
+        P: float>0
+            A kernel hyperparameter: The grid cell's period 
+            in units of bins on the L×L grid. 
+        
+        Other Parameters
+        ----------------------------------------------------
+        dataset: object
+            This can be any object with the attributes:
+                L: int
+                    Size of LxL grid for binned data.
+                n: np.float32
+                    Length L² array of visits to each bin.
+                y: np.float32
+                    Length L² array of spikes at each bin.
+                prior_mean: np.float32
+                    Shape L×L or L² array with the prior 
+                    mean-log-rate. This should reflect 
+                    background rate variations unrelated to
+                    the grid structure
+                lograte_guess: float32 array
+                    Shape L×L or L² array with an initial 
+                    guess of the log rate above/below
+                    `prior_mean`
+            You can also omit the dataset argument and pass
+            these values as keyword arguments.
+        L: int
+            Size of LxL spatial grid for binned data.
+            This keyword argument can also be provided as an
+            attribute to the `dataset` keyword argumet 
+            object. 
+        n: np.float32
+            Length L² array of visits to each bin.
+            This keyword argument can also be provided as an
+            attribute to the `dataset` keyword argumet 
+            object. 
+        y: np.float32
+            Length L² array of spikes at each bin.
+            This keyword argument can also be provided as an
+            attribute to the `dataset` keyword argumet 
+            object. 
+        prior_mean: np.float32
+            Shape L×L or L² array with the prior 
+            mean-log-rate. This should reflect 
+            background rate variations unrelated to
+            the grid structure
+            This keyword argument can also be provided as an
+            attribute to the `dataset` keyword argumet 
+            object. 
+        lograte_guess: float32 array
+            Shape L×L or L² array with an initial 
+            guess of the log rate above/below
+            `prior_mean`. This keyword argument can also be
+            provided as an attribute to the `dataset`
+            keyword argumet object. 
+        γ: float>0
+            A dispersion correction. The default is 1.0,
+            corresponding to Poisson observations---you 
+            should probably leave it at 1.0. Values <1 
+            correspond to over-dispersion, and values >1 
+            correspond to under-dispersed observations.
+        whitenoise: default 0
+            A white-noise kernel hyperparameter. This 
+            corresponds to a constant extra variance in 
+            frequency space, and to locally (Dirac delta) 
+            zero-lag variance in the spatial domain. White 
+            noise contains powers at all frequencies, so is
+            generally incompatable with the approach of
+            using a low-rank subspace in the frequency
+            domain to speed things up. We apply white noise
+            AFTER selecting the low -rank subspace. This is
+            a bit wrong, but still might have its uses. 
+        dc: float>0
+            A kernel hyperparameter: Amount of DC variance
+            to add. This corresponds to uncertainty about
+            the average firing rate. If your prior is good,
+            this variance can be small. Setting it to
+            something large slows inference slightly. 
+        mintol: float>0
+            The tolerance used in the minimum residual
+            algorithm. The default is 1e-6
+        use2d:
+            A boolean array indicating which spatial
+            frequency components to use. If this is none,
+            use2d is calculated using
+            `component_threshold_percent`
+        component_threshold_percent: float >0 <100
+            We determine which frequency components to keep
+            by finding the NONZERO frequency with the
+            highest variance. We keep all frequency
+            components with at least 
+            component_threshold_percent % of this.
+        kclip: int>0
+            Bessel function zero to truncate the kernel at. 
+            1: central lobe only, no periodicity
+            2: central lobe and inhibitory surround
+            3: central lobe and nearest neighbor grid field
+            4. + second-nearest inhibitory surround, etc
+            The default is (3), which corresponds to an
+            assumption of reasonable local grid order, but
+            no particular long-range order.
+        '''
+        
+        if γ<=0:
+            raise ValueErrror(
+            'Dispersion correction γ should be positive')
+        if not isfinite(P) or P<=0:
+            raise ValueError('Period `P` should be a '
+            'positive, real floating-point number; '
+            'Got P=%s'%P)
+        
+        if not dataset is None:
+            if hasattr(dataset,'L'): L = dataset.L
+            if hasattr(dataset,'n'): n = dataset.n
+            if hasattr(dataset,'y'): y = dataset.y
+            if hasattr(dataset,'prior_mean'): 
+                prior_mean = dataset.prior_mean
+            if hasattr(dataset,'lograte_guess'): 
+                lograte_guess = dataset.lograte_guess
+                
+        if not all(isfinite(prior_mean)):
+            raise ValueError(
+            'prior_mean contained non-finite values')
+        if not all(isfinite(lograte_guess)):
+            raise ValueError(
+            'lograte_guess contained non-finite values')
+        if not all(isfinite(n)):
+            raise ValueError(
+            'n contained non-finite values')
+        if not all(isfinite(y)):
+            raise ValueError(
+            'y contained non-finite values')
+        
+        bg = rtype(prior_mean).ravel()
+        μ  = rtype(lograte_guess).ravel()
+        n  = rtype(n).ravel()
+        γn = γ*n
+        y  = rtype(y).ravel()
+        self.bg     = bg
+        self.mintol = mintol
+        self.L      = L
+        self.kv     = kv
+        self.P      = P
+        
+        # Prepare kernel
+        Kf = make_kernel_ft(L,P,k=kclip,eps=1e-7,dc=dc).real*kv
+        
+        # Define low-rank Fourier space projection 
+        # - Threshold components < component_threshold_percent
+        #   of max (default 10%)
+        # └ Add transpose to ensure this is symmetric
+        # - Store the number of components retained 'R'
+        # - Define operator F for converting to/from low-rank space
+        thr = array(sorted(abs(Kf).ravel())
+                   )[-2]/component_threshold_percent 
+        if use2d is None:
+            use2d  = abs(Kf)>thr
+            use2d  = use2d | use2d.T
+        self.use2d = use2d
+        self.R = sum(use2d)
+        self.F = LinearOperator((self.R,L*L),
+                                matvec  = self.Fu,
+                                rmatvec = self.Ftu,
+                                rmatmat = self.Ftu)
+        if self.R==0:
+            raise ValueError('Dimension of low-rank '
+                'subspace is R=0; This should never happen '
+                'most likely, this is not a grid cell, or '
+                'the heuristically-identified grid '
+                'period `P` is off by a wide margin. '
+                'Please check both of these things.')
+        
+        # - The FFT is separable, and can be computed using
+        # two 1D FFTs in each direction. It is sligthly
+        # faster to discard empty rows/columns of the kernel
+        # in frequency space after applying the first of
+        # these 1D convolutions. The following lines find
+        # the nonempty rows, which we retain after the first
+        # 1D FFT. 
+        use   = find(use2d.ravel()) # Used idxs in LxL array
+        use1d = any(use2d,axis=0)   # Indecies to use along L
+        R1d   = sum(use1d)          # Number of 1D components
+        # figure out which components in the retained rows/columns 
+        # are actually used
+        usecut = find(use2d[:,use1d][use1d,:]) 
+        # Indecies into cropped 2D
+        
+        # - Finally, we build the reduced-rank semi-
+        # orthogonal operators to convert to/from our 
+        # truncated Fourier space representation. It turns
+        # out it's not faster to use the FFT in all cases.
+        # If we have a diagonal matrix in the origal space,
+        # rather than use the 2D FFT on the left and right,
+        # we can multiply the cached 2D fourier components 
+        # by the diagonal  elements (see 
+        # low_rank_covariance and 
+        # covariance_diagonal)
+        f1e = ctype(fft(eye(L),norm='ortho')[use1d,:])
+        
+        # Cached diagonal 2D fourier components
+        self.h2e = rtype(RI(f1e[:,None,:,None]*f1e[None,:,None,:]
+                           ).reshape(R1d*R1d,L*L)[usecut])
+        
+        # Add white noise here so it doesn't affect subspace
+        # selection
+        Kf = Kf + whitenoise
+        self.Kf = Kf
+        
+        # Convolutions and preconditioner in low-rank space
+        K  = rtype(Kf[use2d])
+        Λ  = rtype(1/Kf[use2d])
+        M  = op(self.R,self.M_helper)
+        self.K = K
+        self.Λ = Λ
+        
+        # Provide some OK initial conditions, if requested
+        self.μ_0 = μ
+        self.μh0 = _precision(array(self.F@μ))
+        self.v0  = _precision(array(μ*0))
+        
+        # Math is hard to read if "self." is scattered
+        # everywhere but, copying every variable as 
+        # var = self.var per method would add clutter.
+        # Workaround: stash in tuple.   
+        self.cached = (γn,y,bg,L,self.R,use2d,
+                       self.F,Λ,self.h2e,M)    
+
+    def Fu(self,u):
+        '''
+        Operator to convert from full- to low-rank subspace;
+        This must be semi-orthogonal and the Hermitian 
+        transpose of Ftu (below).
+        '''
+        L     = self.L
+        use2d = self.use2d
+        return RI(fft2(rtype(u).reshape(L,L),
+                       norm='ortho')[use2d])
+    
+    def Ftu(self,u):
+        '''
+        Operator to convert from low-rank to full space.
+        This must be semi-orthogonal and Hermitian transpose
+        of Fu(u).
+        '''
+        L     = self.L
+        use2d = self.use2d
+        x = zeros((L,L)+u.shape[1:],dtype=rtype)
+        x[use2d,...] = u
+        return RI(fft2(x,
+                       norm='ortho',
+                       axes=(0,1))
+                 ).reshape(L*L,*u.shape[1:])
+
+    
+    # (moved out of __init__ to make class serializable)
+    # - Initial conditions for the mean model
+    # - Initial conditions for the covariance model
+    # - Matrix-vector operator for the preconditioner M
+    def initialmean(self): return self.μh0
+    def initialcov(self):  return self.v0
+    def M_helper(self,u):  return self.K*u
+
+
+    def check_arguments(self,μh,v):
+        '''
+        Argument verifiation helper
+        '''
+        μh = _precision(μh).ravel()
+        v  = _precision(v).ravel()
+        if not np.all(np.isfinite(μh)):
+            raise ValueError('The posterior mean in low-'
+                'rank frequency space μh contains non-'
+                'finite values')
+        if not np.all(np.isfinite(v)):
+            raise ValueError('The posterior marginal '
+                'spatial variances contain non-finite '
+                'values')
+        if len(μh)!=self.R:
+            raise ValueError(('Expected log-rank mean μh '
+                'to have the same shape as the low-rank '
+                'subspace, which is rank R=%d, but got '
+                'shape %s')%(self.R,np.shape(μh)))
+        if v.shape[0]!=self.L**2:
+            raise ValueError(('This model stores covariance'
+                ' information in terms of the spatial '
+                'marginal variances; Expected `v` to have '
+                'shape %s but had shape %s')%(L**2,
+                 np.shape(v)))
+        return μh,v
+    
+
+    def rates_from_lowrank(
+        self,
+        lowrank_posterior_mean,
+        posterior_marginal_variances):
+        '''
+        Compute the posterior mean in spatial coordinates
+        as well as the expected firing rate. Note: the prior
+        `initialmean` is added for calculating the firing-
+        rate λ, as well as a variance correction ½v. 
+        
+        Parameters
+        ----------
+        lowrank_posterior_mean: np.array
+            Posterior mean in low-rank spatial-frequency 
+            space. Size model.R float32 or float64
+        posterior_marginal_variances: np.array
+            Posterior marginal variance in the spatial 
+            domain. Size L² float32 or float64
+        
+        Returns
+        -------
+        μ: np.array, shape L²
+            The posterior mean in spatial coordinates (not
+            in the low-rank subspace). This is only the 
+            deviations of the posterior mean from the prior
+            μ₀; The full posterior mean is μ+initialmean
+        λ: np.array, shape L²
+            The posterior mean-rate assuming a log-Gaussian
+            model. λ = exp(μ+ μ₀ + ½σ2)
+        '''
+        μh,v = self.check_arguments(
+            lowrank_posterior_mean,
+            posterior_marginal_variances)
+        γn,y,initialmean,L,R,use2d,F,Λ,h2e,M = self.cached
+        μ = F.T@μh
+        return μ, _exp(μ+ initialmean + v/2)
+        
+        
+    def low_rank_cholesky(
+        self,
+        lowrank_posterior_mean,
+        posterior_marginal_variances):
+        '''
+         1. project ⎷q into the low-d frequency space
+         2. add this projection to the prior precision
+         3. use cholesky factor to get posterior low-rank Σ
+        
+         - This assumes self-consistency q=nγλ
+         - This uses the fact that convolutional priors are 
+           diagonal in frequency space.
+        
+        Parameters
+        ----------------------------------------------------
+        lowrank_posterior_mean: np.array
+            Posterior mean in low-rank spatial-frequency 
+            space. Size model.R float32 or float64
+        posterior_marginal_variances: np.array
+            Posterior marginal variance in the spatial 
+            domain. Size L² float32 or float64
+        
+        Returns
+        ----------------------------------------------------
+        C: np.array
+            Cholesky factor such that the low-rank
+            covariance Σh can be reconstructed as Σh=C'C.
+        '''
+        μh,v = self.check_arguments(
+            lowrank_posterior_mean,
+            posterior_marginal_variances)
+        γn,y,initialmean,L,R,use2d,F,Λ,h2e,M = self.cached
+        μ,λ= self.rates_from_lowrank(μh,v)
+        q  = γn*λ
+        x  = sqrt(q, dtype=rtype)[None,:]*h2e
+        C  = chinv(diag(Λ) + x@x.T)
+        return C
+        
+        
+    def low_rank_covariance(
+        self,
+        lowrank_posterior_mean,
+        posterior_marginal_variances):
+        '''
+         1. project ⎷q into the low-d frequency space
+         2. add this projection to the prior precision
+         3. use cholesky factorization to get low-rank Σ
+        
+         - Assumes the self-consistency condition q = nγλ
+         - Uses the fact that convolutional priors are 
+           diagonal in frequency space.
+        
+        Parameters
+        ----------------------------------------------------
+        lowrank_posterior_mean: np.array
+            Posterior mean in low-rank spatial-frequency 
+            space. Size model.R float32 or float64
+        posterior_marginal_variances: np.array
+            Posterior marginal variance in the spatial 
+            domain. Size L² float32 or float64
+        
+        Returns
+        ----------------------------------------------------
+        Σh: np.array
+            Full covariance in truncated frequency domain
+        '''
+        μh,v = self.check_arguments(
+            lowrank_posterior_mean,
+            posterior_marginal_variances)
+        C  = low_rank_cholesky(self,μh,v)
+        return C.T @ C
+
+    
+    def covariance_diagonal(
+        self,
+        lowrank_posterior_mean,
+        posterior_marginal_variances):
+        '''
+        Similar to `low_rank_covariance`, but converts 
+        low-rank posterior Σ back to the spatial domain, 
+        returning only the marginal variances at each 
+        location to avoid having to construct the full 
+        posterior covariance. 
+        
+         - Assumes the self-consistency condition q=nγλ
+         - Uses the fact that convolutional priors are  
+           diagonal in frequency space.
+        
+        Parameters
+        ----------------------------------------------------
+        lowrank_posterior_mean: np.array
+            Posterior mean in low-rank spatial-frequency 
+            space. Size model.R float32 or float64
+        posterior_marginal_variances: np.array
+            Posterior marginal variance in the spatial 
+            domain. Size L² float32 or float64
+        
+        Returns
+        ----------------------------------------------------
+        v: posterior marginal variances at each location
+        '''
+        μh,v = self.check_arguments(
+            lowrank_posterior_mean,
+            posterior_marginal_variances)
+        γn,y,initialmean,L,R,use2d,F,Λ,h2e,M = self.cached
+        μ,λ= self.rates_from_lowrank(μh,v)
+        q  = γn*λ
+        x  = sqrt(q, dtype=rtype)[None,:]*h2e
+        A  = chinv(diag(Λ) + x@x.T)
+        X  = zeros((L,L,R),dtype=rtype)
+        X[use2d] = A.T
+        DF = RI(fft2(X,axes=(0,1),
+                     norm='ortho')).reshape(L**2,R).T
+        return sum(DF**2,0,dtype=rtype)
+
+    
+    def loss(
+        self,
+        lowrank_posterior_mean,
+        posterior_marginal_variances):
+        '''
+        Calculate the (negative) evidence lower bound
+        
+         - This assumes the self-consistency condition q=nγλ
+        
+        Notes on scaling/comparison of this quantity: 
+        
+         - This is computed in the low-rank subspace.
+         - Assume posterior = prior outside this subspace.
+         - Within the discarded subspace, we have ΛΣ=I
+         - Let D=L²-R be dimension of discarded subspace.
+         - This should contribute D from the trace.
+         - The log-determinant is zero.
+         - Confirm R = L²-D is the correct normalization.
+        
+        Parameters
+        ----------------------------------------------------
+        lowrank_posterior_mean: np.array
+            Posterior mean in low-rank spatial-frequency 
+            space. Size model.R float32 or float64
+        posterior_marginal_variances: np.array
+            Posterior marginal variance in the spatial 
+            domain. Size L² float32 or float64
+        '''
+        μh,v = self.check_arguments(
+            lowrank_posterior_mean,
+            posterior_marginal_variances)
+        γn,y,initialmean,L,R,use2d,F,Λ,h2e,M = self.cached
+        μ,λ  =  self.rates_from_lowrank(μh,v)
+        q    =  γn*λ
+        x    =  sqrt(q, dtype=rtype)[None,:]*h2e
+        C    =  chinv(diag(Λ) + x@x.T)
+        nyλ  =  γn@(λ-y*μ)          #  n'(λ-y∘μ)
+        μΛμ  =  sum(μh**2*Λ)        #  μ'Λ₀μ
+        trΛΣ =  sum(C**2*Λ)         #  tr[Λ₀Σ]
+        ldΣz = -sum(log(Λ))         #  ln|Σ₀|
+        ldΣq =  2*sum(log(diag(C))) # -ln|Σ|
+        return nyλ + .5*(μΛμ + trΛΣ + ldΣz - ldΣq - R)
+        
+        
+    def JHvM(
+        self,
+        lowrank_posterior_mean,
+        posterior_marginal_variances):
+        '''
+        Prepare gradient (Jacobian) `J`; 
+        Hessian `H`; 
+        and preconditioner `M`.
+        
+          - This is used to run minres for Newton-Raphson
+            - Operators are computed for a fixed μh and v
+            - The problem being solved is u = H⁻¹J
+            - Minres is solving this by minimizing ||Hu-J||
+          - J Doesn't change, so this is computed as vector
+          - H is returned as an operator to compute Hu
+          - M is computed from the prior and is constant
+        
+        Parameters
+        ----------------------------------------------------
+        lowrank_posterior_mean: np.array
+            Posterior mean in low-rank spatial-frequency 
+            space. Size model.R float32 or float64
+        posterior_marginal_variances: np.array
+            Posterior marginal variance in the spatial 
+            domain. Size L² float32 or float64
+        
+        Returns
+        ----------------------------------------------------
+        J: np.array
+            Jacobian
+        Hv: function
+            Function that computes Hessian-vector product
+        M: linear operator
+            preconditioner linear operator
+        '''
+        μh,v = self.check_arguments(
+            lowrank_posterior_mean,
+            posterior_marginal_variances)
+        γn,y,initialmean,L,R,use2d,F,Λ,h2e,M = self.cached
+        μ,λ = self.rates_from_lowrank(μh,v)
+        γnλ = γn*λ
+        J   = Λ*μh + F@(γnλ-γn*y)
+        Hv  = op(R,lambda u:Λ*u + F@(γnλ*(F.T@u)))
+        return J,Hv,M
+
+    
+    def mean_update(
+        self,
+        lowrank_posterior_mean,
+        posterior_marginal_variances):
+        '''
+        Update posterior mean using Newton-Raphson
+        
+        Parameters
+        ----------------------------------------------------
+        lowrank_posterior_mean: np.array
+            Posterior mean in low-rank spatial-frequency 
+            space. Size model.R float32 or float64
+        posterior_marginal_variances: np.array
+            Posterior marginal variance in the spatial 
+            domain. Size L² float32 or float64
+        
+        Returns
+        ----------------------------------------------------
+        Δμ: np.array
+            Newton-Raphson update to the posterior mean
+        '''
+        μh,v = self.check_arguments(
+            lowrank_posterior_mean,
+            posterior_marginal_variances)
+        J,Hv,M = self.JHvM(μh,v)
+        result = -minres(Hv,J,tol=self.mintol,M=M)[0]
+        if not np.all(np.isfinite(result)):
+            raise ValueError('Encountered non-finite values'
+                ' in the result of mean_update')
+        return _precision(result)
+
+    
+    def variance_update(
+        self,   
+        lowrank_posterior_mean,
+        posterior_marginal_variances):
+        '''
+        Update posterior marginal variances via fixed-
+        point iteration
+        
+        Parameters
+        ----------------------------------------------------
+        lowrank_posterior_mean: np.array
+            Posterior mean in low-rank spatial-frequency 
+            space. Size model.R float32 or float64
+        posterior_marginal_variances: np.array
+            Posterior marginal variance in the spatial 
+            domain. Size L² float32 or float64
+        
+        Returns
+        ----------------------------------------------------
+        Δv: np.array
+            Fixed-point iteration update to the marginal 
+            variances
+        '''
+        μh,v = self.check_arguments(
+            lowrank_posterior_mean,
+            posterior_marginal_variances)
+        result = self.covariance_diagonal(μh,v)-v
+        if not np.all(np.isfinite(result)):
+            raise ValueError('Encountered non-finite values'
+                ' in the result of variance_update')
+        return result
+        
+        
+        
+        
+  
+
+def _chol(x):
+    '''
+    Wrapper for scipy.linalg.cholesky
+    Inputs/outputs coerced to float32 to counteract
+    numpy's aggressive promotion of all return types to 
+    float64.
+    '''
+    x = rtype(x)
+    return scipy.linalg.cholesky(x,lower=True)
+
+
+def _ltinv(ch):
+    '''
+    Wrapper for scipy.linalg.lapack.dtrtri
+    Inputs/outputs coerced to float32 to counteract
+    numpy's aggressive promotion of all return types to 
+    float64.
+    '''
+    ch = rtype(ch)
+    q,info = scipy.linalg.lapack.dtrtri(ch,lower=True)
+    if info!=0: raise ValueError('lapack.dtrtri: '+(
+            'argument %d invalid'%-info if info<0 
+            else 'diagonal element %d is 0'%info))
+    return q
+
+
+def chinv(X):
+    '''
+    Calculate the inverse of the lower-triangular Cholesky 
+    factorization of a positive definite matrix, "C". The 
+    inverse of the original matrix is then inv(X) = C'C.
+    
+    Parameters
+    --------------------------------------------------------
+    X: np.array
+        Square, positive-definite matrix
+        
+    Returns
+    --------------------------------------------------------
+    inv(X): np.array
+    '''
+    X = rtype(X)
+    X = scipy.linalg.cholesky(X,lower=True)
+    X,info = scipy.linalg.lapack.dtrtri(X,lower=True)
+    if info!=0: 
+        raise ValueError('lapack.dtrtri: '+(
+            'argument %d invalid'%-info if info<0 
+            else 'diagonal element %d is 0'%info))
+    return rtype(X)
+
+
+def chsolve(H,v):
+    '''
+    Solve PSD linear system x = H^{-1}v 
+    via Cholesky factorization
+    
+    Parameters
+    --------------------------------------------------------
+    H: PSD matrix as np.array
+    v: 1D np.array with the same dimension as H
+        
+    Returns
+    --------------------------------------------------------
+    np.array: H^{-1}v
+    '''
+    H,v = rtype(H),rtype(v)
+    C = scipy.linalg.cholesky(H)
+    return rtype(stri(C,stri(C.T,v,lower=True)))
+
+
+def _exp(x,bound = 10):
+    '''
+    Safe exponential function: Clip to avoid under/overflow
+    
+    Parameters
+    --------------------------------------------------------
+    x: np.float32
+    
+    Returns
+    --------------------------------------------------------
+    np.float32
+    '''
+    return exp(np.clip(x,-bound,bound), dtype=rtype)
+
+
+def logdet(A):
+    '''
+    Calculate log-determinant of positive-definite matrix 
+    via Choleskey factorization. 
+    
+    Parameters
+    --------------------------------------------------------
+    A: np.array
+        Square, positive-definite matrix
+        
+    Returns
+    --------------------------------------------------------
+    ln(|A|): np.array
+    '''
+    A = rtype(A)
+    return sum(log(diag(scipy.linalg.cholesky(A,lower=True)),
+                   dtype=rtype),
+               dtype=rtype)*2
+
+
+def RI(x):
+    '''
+    Sum the real and imaginary components of a 
+    complex-valued array
+    
+    Parameters
+    --------------------------------------------------------
+    x: np.complex64
+        
+    Returns
+    --------------------------------------------------------
+    np.float32
+    '''
+    return rtype(x.real+x.imag)
+
+
+def _tril(M,k=0):
+    '''
+    Pack N*(N-1) elements into the lower triangle of an NxN
+    Matrix or: Return the N*(N-1) elements from the lower
+    triangle as NxN matrix
+    
+    Parameters
+    --------------------------------------------------------
+    M: np.array
+    k: int
+        Row dimension of the array for which the returned 
+        indices will be valid. (See `numpy.tril_indices`)
+        
+    Returns
+    --------------------------------------------------------
+    np.array
+    '''
+    if len(M.shape)==2:
+        return M[np.tril_indices(M.shape[0],k=k)]
+    if len(M.shape)==1:
+        K = M.shape[0]
+        N = int((np.sqrt(1+8*K)-1)/2)
+        # Jax style
+        # return np.zeros((N,N),dtype=rtype).at[
+        #    np.tril_indices(N)].set(M)
+        # Numpy style
+        result = np.zeros((N,N),dtype=rtype)
+        result[np.tril_indices(N)] = M
+        return result
+    raise ValueError("Must be 2D matrix or 1D vector")
+
+    
+_tdivl = lambda A,B: scipy.linalg.solve_triangular(A,B,lower=True,dtype=rtype)
+_tdivu = lambda A,B: scipy.linalg.solve_triangular(A,B,lower=False,dtype=rtype)
+
+def npdf(mu,sigma,x):
+    '''
+    Univariate Gaussian probability density
+    
+    Parameters
+    --------------------------------------------------------
+    mu : float, scalar or array-like 
+        Mean(s) of distribution(s)
+    sigma : float, scalar or array-like 
+        Standard deviation(s) of distribution(s)
+    x : float, scalar or array-like 
+        Points at which to evaluate distribution(s)
+    '''
+    mu    = np.array(mu).ravel()
+    sigma = np.array(sigma).ravel()
+    x     = np.array(x).ravel()
+    invsigma = 1.0/sigma
+    x = (x-mu)*invsigma
+    return (0.398942280401432678*invsigma)*_exp(-0.5*x**2)
+    
+    
+    
+    
+    
+    
+    
+    
+          
+        
+        
+
+# It's useful to be able to control precision: float32 is
+# much faster, but sometimes doesn't work. Jax supports 
+# controlling the precision system-wide, Numpy doesn't.
+# Jax's FFT routines are a bit slow, so we need to use 
+# Scipy's. This means we need to control precision manually
+typesizes = {
+    '32' :(np.float32   ,np.complex64),
+    '64' :(np.float64   ,np.complex128),
+    '128':(np.longdouble,np.longcomplex),
+}
+nbits = '32'
+rtype = float32
+ctype = complex64
+def _set_precision(bits):
+    global nbits, rtype, ctype
+    bits = '%d'%bits
+    if not bits in typesizes:
+        raise ValueError('# bits should be 32, 64, or 128')
+    nbits = bits
+    rtype,ctype = typesizes[nbits]
+
+
+def _precision(x,copy=False):
+    '''
+    Recursively cast to float32/complex64 or 
+    float64/complex128. This compensates for numpy's 
+    aggressive promotion from 32→64 bit.
+    '''
+    global nbits, rtype, ctype
+    if isinstance(x,np.ndarray):
+        if np.isrealobj(x):    
+            return rtype(array(x)) if copy \
+                or x.dtype!=rtype else x
+        if np.iscomplexobj(x): 
+            return ctype(array(x)) if copy \
+                or x.dtype!=ctype else x
+    try:
+        if np.isrealobj(x):    return rtype(array(x))
+        if np.iscomplexobj(x): return ctype(array(x))
+    except ValueError:
+        pass
+    return (*map(_precision,x),)

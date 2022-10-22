@@ -1,0 +1,991 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+"""
+posterior.py: Subroutines for further analysis of the posterior rate map returned from Gaussian process inference. 
+"""
+
+# Load a Matlab-like namespace
+from numpy         import *
+from scipy.spatial import ConvexHull
+from numpy.linalg  import norm,LinAlgError
+
+from lgcpspatial.load_data import bin_spikes, Arena
+from lgcpspatial.lgcp2d    import chinv,chsolve,RI
+from lgcpspatial.plot      import *
+from lgcpspatial.util      import *
+
+def findpeaks(q,height_threshold=-inf,r=1):
+    '''
+    Find points higher than height_threshold, that are also 
+    higher than all other points in a radius r circular
+    neighborhood.
+    
+    Parameters
+    --------------------------------------------------------
+    q: np.float32
+        2D array of potential values
+        
+    Other Parameters
+    --------------------------------------------------------
+    height_threshold: float
+        Peaks must be higher than this to cound.
+    r: int
+        Peaks must be larger than all other pixels in radius
+        `r` to count.
+        
+    Returns
+    --------------------------------------------------------
+    np.bool
+        2D boolean array of the same sape as q, indicating
+        which pixels are local maxima within radius `r`.
+    '''
+    L  = q.shape[0]
+    D  = 2*r
+    
+    # Add padding
+    Lpad = L+D;
+    qpad = zeros((Lpad,Lpad)+q.shape[2:],dtype=q.dtype)
+    qpad[r:-r,r:-r,...] = q[:,:,...]
+
+    # Points to search
+    Δ = range(-r,r+1)
+    limit = r*r
+    search = {(i,j) 
+              for i in Δ 
+              for j in Δ 
+              if (i!=0 or j!=0) and (i*i+j*j)<=limit}
+    
+    # Only points above the threshold are candidate peaks
+    p = q>height_threshold
+    
+    # Mask away points that have a taller neighbor
+    for i,j in search:
+        p &= q>qpad[i+r:L+i+r,j+r:L+j+r,...]
+    
+    return p
+
+def dx_op(L):
+    '''
+    Parameters
+    --------------------------------------------------------
+    L: int
+        Size of L×L spatial grid
+    '''
+    # 2D difference operator in the 1st coordinate
+    dx = zeros((L,L))
+    dx[0, 1]=-.5
+    dx[0,-1]= .5
+    return dx
+
+def hessian_2D(q):
+    '''
+    Get Hessian of discrete 2D function at all points
+    
+    Parameters
+    --------------------------------------------------------
+    q: np.complex64
+        List of peak locations encoded as x+iy complex
+    '''
+    dx  = dx_op(q.shape[0])
+    f1  = fft2(dx)
+    f2  = fft2(dx.T)
+    d11 = conv(q,f1*f1)
+    d12 = conv(q,f2*f1)
+    d22 = conv(q,f2*f2)
+    return array([[d11,d12],[d12,d22]]).transpose(2,3,0,1)
+
+
+def circle_mask(nr,nc):
+    '''
+    Zeros out corner frequencies
+    
+    Parameters
+    --------------------------------------------------------
+    nr: int
+        number of rows in mask
+    nc: int
+        number of columns in mask
+    '''
+    r = (arange(nr)-(nr-1)/2)/nr
+    c = (arange(nc)-(nc-1)/2)/nc
+    z = r[:,None]+c[None,:]*1j
+    return abs(z)<.5
+
+
+def fft_upsample_2D(x,factor=4):
+    '''
+    Upsample 2D array using the FFT
+    
+    Parameters
+    --------------------------------------------------------
+    x: 2D np.float32
+    '''
+    if len(x.shape)==2:
+        x = x.reshape((1,)+x.shape)
+    nl,nr,nc = x.shape
+    f = fftshift(fft2(x),axes=(-1,-2))
+    f = f*circle_mask(nr,nc)
+    nr2,nc2 = nr*factor,nc*factor
+    f2 = complex128(zeros((nl,nr2,nc2)))
+    r0 = (nr2+1)//2-(nr+0)//2
+    c0 = (nc2+1)//2-(nc+0)//2
+    f2[:,r0:r0+nr,c0:c0+nc] = f
+    x2 = real(ifft2(fftshift(f2,axes=(-1,-2))))
+    return squeeze(x2)*factor**2
+
+
+def interpolate_peaks(z,r=1,height_threshold=None):
+    '''
+    Obtain peak locations by quadratic interpolation
+    
+    Parameters
+    --------------------------------------------------------
+    z: ndarray, L×L×NSAMPLES
+        A 3D array of sampled 2D grid-fields,
+        where the LAST axis is the sample numer. 
+        
+    Other Parameters
+    --------------------------------------------------------
+    r: integer
+        Radius over which point must be local maximum to include. 
+        Defaults to 1 (nearest neighbors)
+    height_threshold: float
+        Threshold (in height) for peak inclusion. 
+        Defaults to the 25th percentil of z
+        
+    Returns
+    --------------------------------------------------------
+    ix: interpolated x location of peaks
+    iy: interpolated y location of peaks
+    rz: indecies of which sample each peak comes from
+    '''
+    z = np.array(z)
+    L = z.shape[0]
+    is3d = True
+    if len(z.shape)==2:
+        z = z.reshape(L,L,1)
+        is3d = False
+    if height_threshold is None:
+        height_threshold=nanpercentile(z,25)
+    
+    # Peaks are defined as local maxima that are larger than all other
+    # points within radius `r`, and also higher than the bottom 25% of
+    # log-rate values. 
+    peaks = findpeaks(z,height_threshold,r)
+    # Local indecies of local maxima
+    rx,ry,rz = where(peaks)
+    # Use quadratic interpolation to localize peaks
+    clip = lambda i:np.clip(i,0,L-1)
+    rx0 = clip(rx-1)
+    rx2 = clip(rx+1)
+    ry0 = clip(ry-1)
+    ry2 = clip(ry+1)
+    s00 = z[rx0,ry0,rz]
+    s01 = z[rx0,ry ,rz]
+    s02 = z[rx0,ry2,rz]
+    s10 = z[rx ,ry0,rz]
+    s11 = z[rx ,ry ,rz]
+    s12 = z[rx ,ry2,rz]
+    s20 = z[rx2,ry0,rz]
+    s21 = z[rx2,ry ,rz]
+    s22 = z[rx2,ry2,rz]
+    dx  = (s21 - s01)/2
+    dy  = (s12 - s10)/2
+    dxx = s21+s01-2*s11
+    dyy = s12+s10-2*s11
+    dxy = (s22+s00-s20-s02)/4
+    det = 1/(dxx*dyy-dxy*dxy)
+    ix  = (rx-( dx*dyy-dy*dxy)*det + 0.5)/L
+    iy  = (ry-(-dx*dxy+dy*dxx)*det + 0.5)/L
+    # Rarely, ill-conditioning leads to inappropriate interpolation
+    # We remove these cases. 
+    bad = (ix<0) | (ix>1-1/L) | (iy<0) | (iy>1-1/L)
+    ix  = ix[~bad]
+    iy  = iy[~bad]
+    return float32((iy,ix,rz[~bad]) if is3d else (iy,ix))
+
+
+def get_peak_density(z,resolution,r=1,height_threshold=None):
+    '''
+    Obtain peaks by quadratic interpolation, then bin
+    the results to a spatial grid with linear interpolation.
+    
+    Parameters
+    --------------------------------------------------------
+    z: ndarray, L×L×NSAMPLES
+        A 3D array of 2D grid field samples,
+        where the LAST axis is the sample numer. 
+    resolution: int>1
+        Upsampling factor for binned peal locations
+        
+    Other Parameters
+    --------------------------------------------------------
+    r: int (default 1)
+        Radius over which point must be local maximum to include. 
+    height_threshold: float
+        Threshold (in height) for peak inclusion. 
+        Defaults to the 25th percentile of z
+    '''
+    L = z.shape[0]
+    # Get list of peak locations
+    iy,ix = interpolate_peaks(z,
+        r=r,
+        height_threshold=height_threshold)[:2]
+    # Bin peaks on a (possibly finer) spatial grid with
+    # linear interpolation. 
+    return bin_spikes(iy,ix,0*iy,L*resolution)[0]
+
+
+def sample_posterior_lograte(model,posterior_mean,v,nsamples=200):
+    '''
+    Sample from the Gaussian log-rate posterior. 
+    
+    Parameters
+    --------------------------------------------------------
+    model: 
+        a `diagonal_fourier_lowrank` model object 
+    posterior_mean: float32
+        low-rank posterior mean returned by 
+        `coordinate_descent(model)`
+    v: float32
+        marginal variances returned by 
+        `coordinate_descent(model)`
+        
+    Other Parameters
+    --------------------------------------------------------
+    nsamples: int>1
+        Number of samples to draw; 
+        Default is 200
+        
+    Returns
+    --------------------------------------------------------
+    z: L×L×nsamples float32 array
+    '''
+    
+    # Get saved state from the model then 
+    # Retrieve the posterior mean log-rate and mean-rate
+    n,y,μ0,L,R,use2d,F,Λ,h2e,M = model.cached
+    μ,λ = model.rates_from_lowrank(posterior_mean,v)
+
+    # Get Cholesky factor of low-rank posterior covariance
+    # Σq = inv(Λq) = Cq' Cq and Λq = CΛq CΛq'
+    x = sqrt(n*λ,dtype='f')[None,:]*h2e # ⎷ of precisions
+    C = chinv(float32(diag(Λ) + x@x.T)) # Σ Cholesky
+    
+    # Draw samples from Gaussian posterior
+    Δ  = C@float32(np.random.randn(R,nsamples)) # Δ from low-d mean 
+    zh = Δ + posterior_mean[:,None]      # low-d samples
+    
+    # Convert log-rate samples to position space and return
+    return (h2e.T@zh).reshape(L,L,nsamples)
+
+
+class PosteriorSample:
+    def __init__(self,
+        model,
+        posterior_mean,
+        posterior_variance,
+        arena     = None,
+        nsamples  = 200,
+        resolution= 2,
+        radius    = 0.5,
+        height_threshold=0,
+        prpeak_threshold=0):
+        '''
+        Sample the distribution of grid-field peaks from 
+        a log-Gaussian posterior distribution.
+
+         1. Draw samples in the low-rank space
+         2. Convert them to spatial coordinates
+         3. Get probable location of each grid field peak
+         
+        (Treat this class simply as a function with named
+        return values)
+
+        Attributes
+        ----------
+        density:
+            Counts of total number of times a field peak
+            appeared at each location for all samples.
+        pfield:
+            Normalized (sum to 1) density of peak locations
+            for each grid field. Grid fields are defined as 
+            a local region around each local maximum in the 
+            peak `density` map.
+        peaks: np.float32
+            2xNPEAKS array of grid-field-peak (x,y) coordinates
+        totals:
+            Number of samples within each peak basin that
+            actually contained a peak.
+        means: np.float32
+            Center of mass of each peak
+        sigmas: np.float32
+            2D sampled covariance of each peak
+        nearest: np.float32
+            (L*resolution)x(L*resolution) map of Voronoi regions
+            for each peak
+        kde: np.float32
+            (L*resolution)x(L*resolution) smoothed peak density
+            map.
+
+        Parameters
+        ----------
+        model: 
+            a `diagonal_fourier_lowrank` model object 
+        posterior_mean: 
+            low-rank posterior mean returned by 
+            `coordinate_descent(model)`
+        posterior_variance: 
+            marginal variances returned by 
+            `coordinate_descent(model)`
+
+        Other Parameters
+        ----------------
+        Arena: object
+            An object with an atrribute
+            hull: scipy.spatial._qhull.ConvexHull
+                Convex Hull object describing the arena 
+                perimeter. Points will be clipped to this if
+                it is not None. Ensure this convex hull has 
+                been scaled up by the same factor if 
+                `resolution` is >1.
+        nsamples: int>1
+            Number of samples to draw; 
+            Default is 200
+        resolution: int>0
+            Upsampling factor compared to the bin-grid 
+            resolution; Default is 2
+        radius: float
+            I suggest P/2.5
+        height_threshold: float
+            Peak height threshold
+        prpeak_threshold: float
+            Probability threshold for including a peak,
+            in [0,1], based on the fractions of samples
+            that contain a given peak.
+        '''
+        # Get log-rate samples
+        z = sample_posterior_lograte(
+            model,
+            posterior_mean,
+            posterior_variance,
+            nsamples)
+        L = model.L
+
+        # Count peaks at each location with linear interpolation
+        density = get_peak_density(z,resolution,
+            height_threshold=percentile(
+                z,100*height_threshold))/nsamples
+
+        # Normalize the region around each of the identified 
+        # grid-field centers
+        # Focus on a local radius of r=P/2.5
+        # Gaussian blur (σ=r/8) density to find fields
+        pfield  = zeros(shape(density))
+        #radius *= resolution
+
+        # Get density-peak centroids with interpolation
+        # Peak locations are returned in [0,1] coordinates
+        kde    = blur(density,radius/6)
+        peaks  = interpolate_peaks(kde,
+            r=int(radius*resolution))
+        keep   = is_in_hull(peaks.T,arena.hull)
+
+        # Calculate Voronoi region around each peak.
+        rz      = [1,1j]@peaks
+        lr      = L*resolution
+        grid    = zgrid(lr)/lr+.5*(1+1j)
+        D       = abs(grid[:,:,None]-rz[None,None,:])
+        nearest = float32(argmin(D,axis=2))
+        nearest[nanmin(D,axis=2)>radius/L]=NaN
+
+        field_ids = unique(nearest)
+        field_ids = int32(field_ids[isfinite(field_ids)])
+
+        # Iterate over all grid fields
+        # Normalize density within each field
+        npeaks = sum(keep)
+        totals = full(npeaks,NaN,'f')
+        means  = full((npeaks,2),NaN,'f')
+        sigmas = full((npeaks,2,2),NaN,'f')
+
+        peaks = peaks[:,keep]
+        for i,id in enumerate(find(keep)):
+            match         = nearest==id
+            regional      = kde[match]
+            totals[i]     = sum(regional)
+            if totals[i] <= 0.0: continue
+            pr            = regional/totals[i]
+            pfield[match] = pr
+            # Calculate moments
+            mu        = sum(grid[match]*pr)
+            delta     = c2p(grid[match]-mu)
+            sigmas[i] = einsum('zN,ZN,N->zZ',delta,delta,pr)
+            means[i]  = c2p(mu)
+        
+        keep   = (totals > prpeak_threshold) & is_in_hull(means,arena.hull)
+        peaks  = peaks[:,keep]
+        totals = totals[keep]
+        means  = means[keep]
+        sigmas = sigmas[keep]
+        
+        self.density = density
+        self.pfield  = pfield
+        self.peaks   = peaks
+        self.totals  = totals
+        self.means   = means
+        self.sigmas  = sigmas
+        self.nearest = nearest
+        self.kde     = kde
+
+
+class SampledConfidence:
+    def __init__(self,data,model,fit,radius,
+        resolution=2,
+        nsamples=4000,
+        height_threshold=0.,
+        pct=95,
+        prpeak_threshold=0.,
+        doplot=False,
+        cmap='bone_r',
+        **kwargs):
+        '''
+        Construct confidence intervals for grid-field peaks
+        using sampling, and (optionally) plot them.
+        
+        Attributes
+        ----------
+        samples: PosteriorSample
+            A PosteriorSample object.
+        ellipses: 
+            NaN-delimeted (x,y) coordinates for plotting 
+            confidence ellipses; 
+        gaussians: List
+            (μ,Σ) 2D confidence Gaussians for all peaks.
+
+        Parameters
+        ----------
+        data : 
+            Object containing the following attributes:
+        model: diagonal_fourier_lowrank
+            Model built from this data of type 
+            lgcp2d.diagonal_fourier_lowrank
+        fit: 
+            Fit posterior calculated by 
+            lgcp2d.coordinate_descent
+        radius: 
+            Region in which peak must be a local maximum to 
+            be considered a grid field. 
+            This is in units of "bins" on the L×L grid.
+
+        Other Parameters
+        ----------------
+        resolution: positive integer
+            Grid upsampling factor, defaults to 2
+        nsamples: positive integer
+            Number of samples to draw, defaults to 4000
+        height_threshold: float in (0,1)
+            Inclusion threshold for peak height in each 
+            sample and probability peak over all samples,
+            default:0
+        prpeak_threshold: float
+            Probability threshold for including a peak,
+            in [0,1], based on the fractions of samples
+            that contain a given peak. Default is 0
+        pct: float in (0,100)
+            Percentile to use for confidence bounds,
+            default is 95%.
+        doplot: boolean
+            Plot resulting grid map? Default is False.
+        cmap: matplotlib.colormap
+            Forwarded to `imshow()` if `doplot=True`
+        **kwargs:
+            Forwarded to `plot()` if `doplot` is True
+            
+        Returns
+        -------
+        SampledConfidence object with these attributes:
+            samples: PosteriorSample
+                A PosteriorSample object.
+            ellipses: 
+                (x,y) coordinates for confidence ellipses,
+                NaN delimeted.
+            gaussians: 
+                List of (μ,Σ) 2D confidence Gaussians.
+            arena: 
+                An Arena object representing the experiment
+                arena at the upsampled resolution.
+
+        '''
+        _,_,_,L,R,use2d,F,_,h2e,_ = model.cached
+
+        arena = Arena(data.px,data.py,data.L,resolution)
+
+        # Retrieve the posterior mode (in low-D frequency)
+        # and variance (in space)
+        posterior_mean,posterior_variance = fit[:2]
+        
+        # Sample from the GP posterior (see posterior.py)
+        result = PosteriorSample(
+            model,
+            posterior_mean,
+            posterior_variance,
+            arena      = arena,
+            nsamples   = nsamples,
+            resolution = resolution,
+            radius     = radius,
+            height_threshold = height_threshold,
+            prpeak_threshold = prpeak_threshold)
+        
+        # peaks: 2 × NPEAKS (x,y) peak locations
+        # prpeak: fractions of samples with peak here
+        # pfield:
+        #     normalized distribution of peak location for
+        #     each Voronoi-segmented grid field
+        # means: estimated centroid of each field
+        # sigmas: 2x2 covariance ellipse of each field
+        peaks  = result.peaks
+        prpeak = result.density
+        pfield = float32(result.pfield)
+        means  = result.means
+        sigmas = result.sigmas
+        
+        # Convert scale
+        m1 = data.scale*(L+1)*resolution
+        dx = (100/m1)**2 # (cm/pixel)²
+        pfield /= dx
+
+        nfields = peaks.shape[1]    
+
+        # Collect all ellipses to plot 
+        ellipses,gaussians = [],[]
+        for i,(mu,sigma) in enumerate(zip(means,sigmas)):
+            if all(isfinite(sigma)) and all(isfinite(mu)):
+                # Prepare covariance ellipse for plotting
+                z = covariance_crosshairs(
+                    sigma,
+                    p=.95,
+                    draw_cross=False) + mu[:,None]
+                ellipses +=[*z.T]+[(NaN,NaN)]
+                gaussians+=[(mu,sigma)]
+        ellipses = array(ellipses).T
+
+        # Create a plot of sampled confidence intervals
+        if doplot:
+            # Plot peak densities
+            vmax = ceil(percentile(
+                result.kde[arena.mask],99.9)*100)/100
+            imshow(result.kde*arena.nanmask,
+                extent=(0,1)*2,
+                cmap=cmap,
+                vmin=0,
+                vmax=vmax,
+                origin='lower')
+            plot(*arena.perimeter.T,lw=3,color='w')
+
+            truepct = r'\%' if \
+                plt.rcParams['text.usetex'] else '%'
+            title('Probable centers of each grid field'\
+                  '\n Ellipses: 95'\
+                  +truepct+' confidence')
+
+            # Add a scale bar
+            y0 = where(any(arena.mask,axis=1)
+                )[0][-1]/(L*resolution)
+            y1 = y0 - m1/(L*resolution)
+            x0 = (where(any(arena.mask,axis=0)
+                )[0][0]-L/20*resolution)/(L*resolution)
+            yscalebar((y0+y1)/2,y1-y0,'1 m',x=x0,fontsize=8)
+
+            # Add color bar
+            hcolorbar(0,vmax,
+                cmap,'$\\Pr($peak$)$ / cm²',
+                fontsize=7,sideways=1,shrink=0.7)
+            plot(*ellipses,**{'lw':0.5,'color':OCHRE,**kwargs})
+            axis('off')
+            ylim(1,0)
+
+        self.arena     = arena
+        self.samples   = result
+        self.ellipses  = ellipses
+        self.gaussians = gaussians
+
+
+class QuadraticConfidence:
+    def __init__(
+        self,
+        data,
+        model,
+        fit,
+        radius,
+        localization_radius,
+        height_threshold=0.5,
+        pct=95,
+        doplot=False,
+        **kwargs):
+        '''
+        Locally-quadratic approximation of peak-location
+        confidence intervals. 
+    
+        Attributes
+        ----------------------------------------------------
+        ellipses: list
+            List of x,y coordinates for plotting confidence 
+            ellipses; NaN delimeted.
+        gaussians: list 
+            List of (μ,Σ) 2D confidence Gaussians for 
+            all peaks.
+
+        Parameters
+        ----------------------------------------------------
+        data: Dataset 
+        model: 
+            Model built from this data of type 
+            lgcp2d.diagonal_fourier_lowrank
+        fit: 
+            Posterior fitted by lgcp2d.coordinate_descent
+        radius: float
+            Region in which a peak must be a local maximum 
+            to count as a grid field. This is in units of 
+            "bins" on the L×L grid.
+        localization_radius: float
+            Drop peaks with confidence outside this radius
+
+        Other Parameters
+        ----------------------------------------------------
+        height_threshold: float in (0,1)
+            Inclusion threshold for peak height in each 
+            sample and probability peak over all samples,
+            default:.5
+        prpeak_threshold: float
+            Probability threshold for including a peak,
+            iinterpolate_peaksn [0,1], based on the 
+            fractions of samples that contain a given peak.
+        pct: float in (0,100)
+            percentile to use for confidence bounds,
+            default:95
+        doplot: boolean
+            Render a plot of the grid map? Default:False. 
+        '''
+
+        _,_,_,L,R,use2d,F,_,h2e,_ = model.cached
+        P = model.P
+
+        # Retrieve the posterior mode (in low-D space) and 
+        # variance (in regular space)
+        # Sample from the GP posterior (see posterior.py)
+        posterior_mean,v = fit[:2]
+        μ ,λ = model.rates_from_lowrank(posterior_mean,v)
+        μ    = μ.reshape(L,L)
+
+        # Get peaks in arena
+        peaks = interpolate_peaks(μ,
+            r = int(round(radius)),
+            height_threshold=
+            percentile(μ,100*height_threshold))[:2]
+        peaks = peaks[:,is_in_hull(peaks.T,data.arena.hull)]
+        print(shape(peaks))
+
+        # Get negative of 2×2 Hessians at all points
+        pidx = (*int32(peaks[::-1]*L+0.5),)
+        H    = -hessian_2D(μ)[pidx]
+
+        # Get post.r mean Hessian and covariance gradients
+        # - Get low-rank Cholesky factor of covariance
+        # - Construct discrete d/dx in low-D Hartley space
+        # - Obtain low-rank derivatives (left-multiply)
+        # - Project back to spatial domain only at peaks
+        #   by keeping only those columns in the inverse  
+        #   transform model.h2e that correspond to a peak 
+        #   location.
+        Q   = model.low_rank_cholesky(posterior_mean,v).T
+        dx  = dx_op(L)
+        fx  = fft2(dx  ,norm='ortho')[use2d]
+        fy  = fft2(dx.T,norm='ortho')[use2d]
+        fQ  = h2f_2d_truncated(Q,L,use2d)
+        dxQ = RI((fx.T*fQ.T).T)
+        dyQ = RI((fy.T*fQ.T).T)
+
+        # At this point, dxQ and dyQ are the x and y
+        # derivatives applied on the left to the Cholesky
+        # factor of the posterior covariance. Together, they
+        # describe the derivatives of the posterior 
+        # covariance at all locations. In lgcp2d, h2e is 
+        # defined as the R×L² matrix of 2D fourier
+        # components. Cutting out only the [pidx] locations
+        # from this operator corresponds to inverting the
+        # Hartley transform only at the locations where
+        # peaks exist (saves time). 
+        ispk = h2e.reshape(R,L,L).T[pidx]
+        J    = array([ispk@dxQ,ispk@dyQ]).transpose(1,0,2)
+
+        # Calculate covariances, prepare crosshairs 
+        # - Get the expected peak shift covariance Σx0
+        # - If peak is localized, plot confidence ellipse
+        # - Collect all ellipse to plot at once (faster)
+        ellipses,gaussians,bad,good = [],[],[],[]
+        for (mx,h,j) in zip(peaks.T,H,J):
+            try:
+                ΣxJD = chsolve(h,j)
+                Σx0  = ΣxJD@ΣxJD.T
+            except LinAlgError:
+                bad.append(mx)
+                continue
+            cxy = covariance_crosshairs(
+                Σx0,
+                p=pct/100,
+                draw_cross=False).T
+            # Plot if peak is acceptably localized
+            if np.max(norm(cxy,axis=1))<localization_radius/L:
+                ellipses.extend(cxy + mx)
+                ellipses += [(nan,)*2]
+                good.append(mx)
+            else:
+                bad.append(mx)
+            gaussians.append((mx,Σx0))
+        ellipses = array(ellipses).T
+
+        if doplot:
+            plot(*data.arena.perimeter.T,lw=3,color='k')
+            plot(*data.arena.perimeter.T,lw=1,color='w')
+            if plt.rcParams['text.usetex']:
+                title('Ellipses: %d'%(pct)+
+                      r'\% confidence',pad=0)
+            else:
+                title('Ellipses: %d'%(pct)+
+                      r'% confidence',pad=0)
+            plot(*ellipses,
+                 label='Quadratic',
+                 **{**{'lw':.6,'color':MAUVE},**kwargs})
+            if len(bad):
+                scatter(*array(bad).T,color=RUST,
+                        marker='x',lw=.5,s=6,zorder=6)
+            axis('off')
+            axis('square')
+            ylim(1,0)
+
+        self.ellipses=ellipses
+        self.gaussians=gaussians
+
+
+class QuadraticConfidenceJoint:
+    def __init__(self,
+        data,
+        model,
+        fit, 
+        radius=None,
+        localization_radius=None,
+        height_threshold=0.8,
+        pct=95,
+        regularization=1e-5,
+        doplot=False,
+        **kwargs):
+        '''
+        Similar to QuadraticConfidence, but modified to 
+        return the joint covariance to address correlations 
+        between fields in the posterior introduced by the 
+        GP prior. 
+
+        Parameters
+        ----------------------------------------------------
+        data : 
+            Object containing the following fields:
+                TODO
+        model: 
+            model built from this data of type 
+            lgcp2d.diagonal_fourier_lowrank
+        fit: 
+            fit posterior calculated by 
+            lgcp2d.coordinate_descent
+        radius: float
+            Region in which a peak must be a local maximum 
+            to count as a grid field. This is in units of 
+            "bins" on the L×L grid.
+        localization_radius: float
+            Drop peaks with confidence outside this radius.
+
+        Other Parameters
+        ----------------------------------------------------
+        height_threshold: float in (0,1), default:.8
+            Inclusion threshold for peak height in each 
+            sample  and probability peak over all samples, 
+            
+        pct: float in (0,100), default:95
+            percentile to use for confidence bounds
+        doplot: boolean, default:False. 
+            Plot resulting the grid map? 
+        **kwargs:
+            Forwarded to plot()
+
+        Returns
+        ----------------------------------------------------
+        (rx,ry):
+            Field locations
+        ellipses: 
+            NaN-delimeted x,y coordinates for plotting 
+            confidence ellipses; 
+        gaussians: List
+            (μ,Σ) 2D confidence Gaussians for all peaks.
+        ok: list of ints
+            Which of the (rx,ry) points were included in Σx0
+        Σx0: 
+            Joint covariance of all included points, packed
+            as (x,y)
+        '''
+        _,_,_,L,R,use2d,F,_,h2e,_ = model.cached
+        P = model.P
+
+        # Retrieve the posterior mode (in low-D space) and 
+        # variance (in regular space)
+        # Sample from the GP posterior (see posterior.py)
+        posterior_mean,v = fit[:2]
+        μ ,λ = model.rates_from_lowrank(posterior_mean,v)
+        μ    = μ.reshape(L,L)
+
+        # Get peaks in arena
+        peaks = interpolate_peaks(μ,
+            height_threshold=percentile(
+                μ,100*height_threshold))[:2]
+        peaks = peaks[:,is_in_hull(peaks.T,data.arena.hull)]
+
+        # Get negative of 2×2 Hessians at all points
+        pidx = (*int64(peaks[::-1]*L+0.5),)
+        H    = -hessian_2D(μ)[pidx]
+
+        # Obtain posterior mean Hessian and covariance gradients
+        # - Get low-rank Cholesky factor of covariance
+        # - Construct discrete derivatives in low-D Hartley space
+        # - Obtain low-rank derivatives (left-multiply)
+        # - Project back to spatial domain only at peaks
+        #   by keeping only those columns in the inverse transform 
+        #   model.h2e that correspond to a peak location.
+        Q   = model.low_rank_cholesky(posterior_mean,v).T
+        dx  = dx_op(L)
+        fx  = fft2(dx  ,norm='ortho')[use2d]
+        fy  = fft2(dx.T,norm='ortho')[use2d]
+        fQ  = h2f_2d_truncated(Q,L,use2d)
+        dxQ = RI((fx.T*fQ.T).T)
+        dyQ = RI((fy.T*fQ.T).T)
+
+        # At this point, dxQ and dyQ are the x and y derivatives
+        # Applied on the left to the Cholesky factor of the posterior
+        # covariance. Together, they describe the derivatives
+        # of the posterior covariance at all locations. 
+        # In lgcp2d, h2e is defined as the R×L² matrix of 2D fourier
+        # components. Cutting out only the [pidx] locations from this
+        # operator corresponds to inverting the Hartley transform
+        # only at the locations where peaks exist (saves time). 
+        ispk = h2e.reshape(R,L,L).T[pidx]
+        J    = array([ispk@dxQ,ispk@dyQ]).transpose(1,0,2)
+
+        # Calculate covariances and prepare covariance crosshairs 
+        # - Calculated the expected peak shift covariance Σx0
+        # - If the peak is localized, plot 95% confidence ellipse
+        # - Collect all ellipse to plot at once (faster)
+        bad = []
+        for ii,(mx,h,j) in enumerate(zip(peaks.T,H,J)):
+            try:
+                ΣxJD = chsolve(h,j)
+                Σx0  = ΣxJD@ΣxJD.T
+            except LinAlgError:
+                bad.append(ii)
+                continue
+            # Use if peak is acceptably localized
+            cxy  = covariance_crosshairs(Σx0,p=pct/100,draw_cross=False).T
+            if np.max(norm(cxy,axis=1))>localization_radius/L:
+                bad.append(ii)
+
+        # Reapeat on the good fields jointly
+        nfields,_,R = J.shape
+        ok    = int32(sorted([*({*arange(nfields)}-{*bad})]))
+        nkeep = len(ok)
+        JJ    = J[ok].transpose(1,0,2).reshape(2*nkeep,R)
+        HH    = scipy.linalg.block_diag(*H[ok])
+        ΣxJD  = chsolve(float64(HH),float64(JJ))
+        Σx0   = ΣxJD@ΣxJD.T
+        Σx0  += regularization*eye(Σx0.shape[0])
+        
+        # Overwrite with updated confidence intervals
+        gaussians = [(peaks[:,iok],Σx0[i*2:i*2+2,i*2:i*2+2]) 
+            for i,iok in enumerate(ok)]
+        
+        ellipses = []
+        for mx,S in gaussians:
+            try:
+                cxy  = covariance_crosshairs(
+                    S,p=pct/100,draw_cross=False).T
+                ellipses.extend(cxy + mx)
+                ellipses += [(nan,)*2]
+            except:
+                pass
+        ellipses = array(ellipses).T
+
+        if doplot:
+            plot(*data.arena.perimeter.T,lw=3,color='k')
+            plot(*data.arena.perimeter.T,lw=1,color='w')
+            if plt.rcParams['text.usetex']:
+                title('Ellipses: %d'%(pct)+\
+                      r'\% confidence',pad=0)
+            else:
+                title('Ellipses: %d'%(pct)+\
+                      r'% confidence',pad=0)
+            plot(*ellipses,
+                 label='Quadratic',
+                 **{**{'lw':.6,'color':MAUVE},**kwargs})
+            if len(bad):
+                scatter(
+                    *peaks[:,bad],
+                    color=BLACK,
+                    marker='x',
+                    lw=.5,s=3,zorder=6)
+            axis('off')
+            axis('square')
+            ylim(1,0)
+            '''
+            figure(figsize=(10,10),dpi=120)
+            imshow(Σx0,vmin=-.0001,vmax=.0001,extent=(0.5,nkeep+0.5)*2)
+            xticks(arange(nkeep)+1,map(str,ok));
+            yticks(arange(nkeep)+1,map(str,ok));
+            for i in range(1,nkeep):
+                axvline(i+0.5,color='w',lw=0.3)
+                axhline(i+0.5,color='w',lw=0.3)
+            '''
+            
+        self.ellipses=ellipses
+        self.gaussians=gaussians
+        self.ok=ok
+        self.joint_covariance=Σx0
+        self.peaks=peaks
+
+        
+def fraction_within_arena(data, gaussians, N=1000):
+    '''
+    For a list of 2D Gaussians given as (μ,Σ) tuples, 
+    estimate the fraction of probability mass within 
+    data.arena.hull. 
+    
+    This uses fairly crude numerical integration; It is
+    sufficiently accurate for testing whether fields
+    lie too close to the edge of the arena.
+    
+    Parameters
+    --------------------------------------------------------
+    data: Dataset
+    gaussians list
+        List of (μ,Σ) 2D Gaussians
+    
+    Returns
+    --------------------------------------------------------
+    np.float32:
+        Fraction of each Gaussian within the dataset's
+        arena's convex hull. 
+    '''
+    #zg = zgrid(N*2+1)/N
+    #zg = c2p(zg[abs(zg)<=1])
+    zg = np.random.randn(2,200)
+    results = []
+    for μ,Σ in gaussians:
+        e,v = scipy.linalg.eigh(Σ)
+        zt  = v.T.dot(zg*(e**0.5)[:,None])+μ[:,None]
+        results.append(mean(is_in_hull(zt,data.arena.hull)))
+    return float32(results)

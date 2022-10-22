@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lgcpspatial.estimators module &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="lgcpspatial.grid_search module" href="lgcpspatial.grid_search.html" />
+    <link rel="prev" title="lgcpspatial.load_data module" href="lgcpspatial.load_data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
+            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">estimators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.estimators.estimate_period_via_autocorrelation"><code class="docutils literal notranslate"><span class="pre">estimate_period_via_autocorrelation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.estimators.biased_rate"><code class="docutils literal notranslate"><span class="pre">biased_rate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.estimators.kde"><code class="docutils literal notranslate"><span class="pre">kde()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.estimators.linearGP"><code class="docutils literal notranslate"><span class="pre">linearGP()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.estimators.convolutionalLinearGP"><code class="docutils literal notranslate"><span class="pre">convolutionalLinearGP()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>lgcpspatial.estimators module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/lgcpspatial.estimators.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="module-lgcpspatial.estimators">
+<span id="lgcpspatial-estimators-module"></span><h1>lgcpspatial.estimators module<a class="headerlink" href="#module-lgcpspatial.estimators" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.estimators.estimate_period_via_autocorrelation">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.estimators.</span></span><span class="sig-name descname"><span class="pre">estimate_period_via_autocorrelation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/estimators.html#estimate_period_via_autocorrelation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.estimators.estimate_period_via_autocorrelation" title="Permalink to this definition"></a></dt>
+<dd><p>Estimate grid period using autocorrelation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>2D np.array</em>) – Number of visits to each location</p></li>
+<li><p><strong>K</strong> (<em>2D np.array</em>) – Number of spikes observed at each location</p></li>
+<li><p><strong>mask</strong> (<em>L×L 2D np.array</em>) – boolean mask for “in bounds” regions to analyze</p></li>
+<li><p><strong>res</strong> (<em>int</em>) – small positive integer; Upsampling resolution;
+default is 5x</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>P</strong> (<em>positive float</em>) – Estimated grid period in pixels</p></li>
+<li><p><strong>Δs</strong> (<em>1D np.array</em>) – Bin separations for upsampled radial autocorrelation</p></li>
+<li><p><strong>acup</strong> (<em>1D np.array</em>) – Upsampled radial autocorrelation</p></li>
+<li><p><strong>acorr2</strong> (<em>L×L 2D np.array</em>) – 2D autocorrelogram</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.estimators.biased_rate">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.estimators.</span></span><span class="sig-name descname"><span class="pre">biased_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/estimators.html#biased_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.estimators.biased_rate" title="Permalink to this definition"></a></dt>
+<dd><p>Regularized per-bin rate estimate. This divides the
+spike count by the number of visits, with a small
+regularization parameter to prevent division by zero.</p>
+<p>This estimator is not very good, and you shouldn’t use
+it; It’s provided as a straw-man to show how much better
+the other estimators are.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>2D np.array</em>) – Number of visits to each location</p></li>
+<li><p><strong>K</strong> (<em>2D np.array</em>) – Number of spikes observed at each location</p></li>
+<li><p><strong>rho</strong> (<em>float</em>) – Regularization: small parameter to add to N
+to avoid ÷0</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Bias parameter; defaults to 0.5</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>2D array</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Regularized (biased) estimate of firing rate in each bin</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.estimators.kde">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.estimators.</span></span><span class="sig-name descname"><span class="pre">kde</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/estimators.html#kde"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.estimators.kde" title="Permalink to this definition"></a></dt>
+<dd><p>Estimate rate using Gaussian KDE smoothing. This is
+better than estimating the rate using a binned
+histogram, but worse than a Gaussian-Process estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>2D np.array</em>) – Number of visits to each location</p></li>
+<li><p><strong>K</strong> (<em>2D np.array</em>) – Number of spikes observed at each location</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – kernel radius exp(-x²/sigma) (standard deviation
+in x and y ×⎷2)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>2D array</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>KDE rate estimate of firing rate in each bin</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.estimators.linearGP">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.estimators.</span></span><span class="sig-name descname"><span class="pre">linearGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/estimators.html#linearGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.estimators.linearGP" title="Permalink to this definition"></a></dt>
+<dd><p>Linear Gaussian process rate map. This is a linear (not
+log-linear) model.</p>
+<p>Error are approximated. The average firing rate of the
+cell is calculated, and the per-timepoint measurement
+error is assumed to equal this. Multiple visits to the
+same location improve reduce measurement error
+proportionaly.</p>
+<p>It is not recommended for inferring firing-rate maps,
+but it is a fast example of GP inference on a 2D arena
+which may be instructive.</p>
+<p>This uses the Minimum residual solver, which is fast,
+and only requires a function which can compute Hessian-
+vector products. This can be done quickly with circulant
+(convolutional) covariance priors using the FFT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>2D np.array</em>) – Number of visits to each location</p></li>
+<li><p><strong>K</strong> (<em>2D np.array</em>) – Number of spikes observed at each location</p></li>
+<li><p><strong>sigma</strong> (<em>float</em>) – kernel radius exp(-x²/sigma) (standard deviation
+in x and y ×⎷2)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>rate</strong> (<em>2D np.array</em>) – GP rate estimate of firing rate in each bin</p></li>
+<li><p><strong>kern</strong> (<em>2D np.array</em>) – Prior covariance kernel used for inference</p></li>
+<li><p><strong>y</strong> (<em>2D np.array</em>) – Binned rates (K/N) used as observations</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.estimators.convolutionalLinearGP">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.estimators.</span></span><span class="sig-name descname"><span class="pre">convolutionalLinearGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/estimators.html#convolutionalLinearGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.estimators.convolutionalLinearGP" title="Permalink to this definition"></a></dt>
+<dd><p>Special case of a linear Gaussian process (see
+<cite>linearGP</cite>) which can be calculated extremely quickly.</p>
+<p>This is not recommended for inferring firing rate maps,
+but rather to provide an instructive example of how GP
+inference relates to simpler KDE smoothers.</p>
+<p>This assumes that the measurement error is spatially
+uniform. This is assumption is wrong, but the
+computational simpicity and  connection to the KDE
+estimate are instructive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>np.array</strong><strong>)</strong> (<em>K</em><em> (</em><em>2D</em>) – </p></li>
+<li><p><strong>np.array</strong><strong>)</strong> – </p></li>
+<li><p><strong>(</strong><strong>float</strong><strong>)</strong> (<em>sigma</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>λcnv (2D np.array)</strong> (<em>GP rate estimate of firing rate in each bin</em>)</p></li>
+<li><p><strong>gft (2D np.array)</strong> (<em>Fourier transform of computed convolution kernel</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lgcpspatial.load_data.html" class="btn btn-neutral float-left" title="lgcpspatial.load_data module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lgcpspatial.grid_search.html" class="btn btn-neutral float-right" title="lgcpspatial.grid_search module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

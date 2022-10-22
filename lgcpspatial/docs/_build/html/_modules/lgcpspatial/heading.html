@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lgcpspatial.heading &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
+            <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.plot.html">plot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>lgcpspatial.heading</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for lgcpspatial.heading</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># -*- coding: UTF-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">heading.py: Subroutines used in example 5 heading dependence.ipynb</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>             <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>        <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">collections</span>   <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">from</span> <span class="nn">lgcpspatial.util</span>          <span class="kn">import</span> <span class="n">progress_bar</span><span class="p">,</span><span class="n">is_in_hull</span><span class="p">,</span><span class="n">pdist</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.savitskygolay</span> <span class="kn">import</span> <span class="n">SGdifferentiate</span> <span class="k">as</span> <span class="n">ddt</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.load_data</span>     <span class="kn">import</span> <span class="n">bin_spikes</span><span class="p">,</span> <span class="n">Arena</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>        <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span><span class="p">,</span><span class="n">coordinate_descent</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.posterior</span>     <span class="kn">import</span> <span class="n">interpolate_peaks</span><span class="p">,</span><span class="n">SampledConfidence</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>          <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.grid_search</span>   <span class="kn">import</span> <span class="n">grid_search</span>
+
+
+<div class="viewcode-block" id="smoothed_heading_angle"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.smoothed_heading_angle">[docs]</a><span class="k">def</span> <span class="nf">smoothed_heading_angle</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">Fs</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span><span class="n">Fl</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate smoothed estimate of heading from </span>
+<span class="sd">    position data. </span>
+<span class="sd">    </span>
+<span class="sd">    On a standard Cartesian plane, with the y axis</span>
+<span class="sd">    increasing from bottom to top, and the x axis </span>
+<span class="sd">    increasing from left to right, the heading angles</span>
+<span class="sd">    are as follows: </span>
+
+<span class="sd">      - 0   : rightwards (eastwards)</span>
+<span class="sd">      - ½π  : upwards    (northwards)</span>
+<span class="sd">      - π   : leftwards  (westwards)</span>
+<span class="sd">      - 3π/2: downwards  (southwards)</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    px: float32</span>
+<span class="sd">        List of animal&#39;s location, x-coordinate</span>
+<span class="sd">    py: float32</span>
+<span class="sd">        List of animal&#39;s location, y-coordinate</span>
+<span class="sd">        </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    Fs: float</span>
+<span class="sd">        Sampling rate of (px,py) position data</span>
+<span class="sd">    Fl: float</span>
+<span class="sd">        Low-pass cutoff frequency in Hz</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    ---------------------------------------------------------------------------------------------------------</span>
+<span class="sd">    heading_angle: float32</span>
+<span class="sd">        Heading angle based on the low-pass derivative </span>
+<span class="sd">        of position.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">ddt</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">Fs</span><span class="o">/</span><span class="n">Fl</span><span class="o">*</span><span class="mi">4</span><span class="p">),</span><span class="n">Fl</span><span class="p">,</span><span class="n">Fs</span><span class="p">)</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">ddt</span><span class="p">(</span><span class="n">py</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">Fs</span><span class="o">/</span><span class="n">Fl</span><span class="o">*</span><span class="mi">4</span><span class="p">),</span><span class="n">Fl</span><span class="p">,</span><span class="n">Fs</span><span class="p">)</span>
+    <span class="n">heading_angle</span>  <span class="o">=</span> <span class="n">angle</span><span class="p">(</span><span class="n">dx</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">dy</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">heading_angle</span></div>
+
+    
+<div class="viewcode-block" id="get_peaks_at_heading_angles"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.get_peaks_at_heading_angles">[docs]</a><span class="k">def</span> <span class="nf">get_peaks_at_heading_angles</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">heading_angles</span><span class="p">,</span>
+    <span class="n">threshold</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
+    <span class="n">Fs</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
+    <span class="n">Fl</span><span class="o">=</span><span class="mf">2.0</span>
+    <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Check for location shifts based on heading. Re-weight </span>
+<span class="sd">    data based on cosine similarity to target heading angle.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    data: object</span>
+<span class="sd">        Any object with the following attributes:</span>
+<span class="sd">            L: float</span>
+<span class="sd">                Size of LxL spatial grid for binned data.</span>
+<span class="sd">            n: np.float32</span>
+<span class="sd">                Length L² array of visits to each bin.</span>
+<span class="sd">            y: np.float32</span>
+<span class="sd">                Length L² array of spikes at each bin.</span>
+<span class="sd">            prior_mean: np.float32</span>
+<span class="sd">                Shape L×L or L² array containing the prior </span>
+<span class="sd">                mean-log-rate. This should background rate</span>
+<span class="sd">                variations unrelated to the grid structure</span>
+<span class="sd">            lograte_guess: float32 array</span>
+<span class="sd">                Shape L×L or L² array with an initial guess</span>
+<span class="sd">                for log rate. This should be expressed as a </span>
+<span class="sd">                deviation from `prior_mean`.</span>
+<span class="sd">            arena.hull:</span>
+<span class="sd">                Convex Hull object describing the arena </span>
+<span class="sd">                perimeter</span>
+<span class="sd">    model: lgcpspatial.DiagonalFourierLowrank </span>
+<span class="sd">        parent model instance (fitted model without heading</span>
+<span class="sd">        filtering)</span>
+<span class="sd">    heading_angles: np.float32 array</span>
+<span class="sd">        List of heading angles to check.</span>
+<span class="sd">        Westward is 0 degrees, then rotates counterclockwise </span>
+<span class="sd">        through southward, eastward, northward. </span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    threshold: float</span>
+<span class="sd">        Percentile peaks must be above to be retained.</span>
+<span class="sd">        Should be in [0,100).</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    peaks: list</span>
+<span class="sd">        List of 2×NPEAKS float32 arrays containing (x,y)</span>
+<span class="sd">        locations of peaks at each of the angles specified</span>
+<span class="sd">        by the list `heading_angles`.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">L</span><span class="p">,</span><span class="n">kv</span><span class="p">,</span><span class="n">P</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">kv</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
+    
+    <span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">spikes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">py</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">spikes</span>
+    <span class="n">arena</span> <span class="o">=</span> <span class="n">Arena</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">heading_angle</span> <span class="o">=</span> <span class="n">smoothed_heading_angle</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">Fs</span><span class="p">,</span><span class="n">Fl</span><span class="p">)</span>
+    
+    <span class="n">peaks</span> <span class="o">=</span> <span class="p">[]</span>        
+    <span class="n">μh</span><span class="p">,</span><span class="n">v</span>  <span class="o">=</span> <span class="kc">None</span><span class="p">,</span><span class="kc">None</span> <span class="c1"># propagate initial conditions </span>
+    <span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span> <span class="n">progress_bar</span><span class="p">(</span><span class="n">heading_angles</span><span class="p">):</span> 
+        
+        <span class="c1"># Heading-weighted data binning</span>
+        <span class="n">sw</span>  <span class="o">=</span> <span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cos</span><span class="p">(</span><span class="n">heading_angle</span><span class="o">-</span><span class="n">phi</span><span class="p">))</span>
+        <span class="n">data2</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reweighted</span><span class="p">(</span><span class="n">sw</span><span class="p">)</span>
+        
+        <span class="c1"># Infer and save</span>
+        <span class="n">hmodel</span> <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">kv</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data2</span><span class="p">,</span>
+            <span class="n">prior_mean</span><span class="o">=</span><span class="n">data2</span><span class="o">.</span><span class="n">prior_mean</span><span class="p">,</span>
+            <span class="n">lograte_guess</span><span class="o">=</span><span class="n">data2</span><span class="o">.</span><span class="n">lograte_guess</span><span class="p">)</span>
+        <span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">l</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">hmodel</span><span class="p">,</span>
+            <span class="n">initialmean</span><span class="o">=</span><span class="n">μh</span><span class="p">,</span><span class="n">initialcov</span><span class="o">=</span><span class="n">v</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+        <span class="n">rate</span>   <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">hmodel</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@μh</span><span class="o">+</span><span class="n">v</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">thresh</span> <span class="o">=</span> <span class="n">nanpercentile</span><span class="p">(</span><span class="n">rate</span><span class="p">[</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">],</span><span class="n">threshold</span><span class="p">)</span>
+        <span class="n">hpeaks</span> <span class="o">=</span> <span class="n">interpolate_peaks</span><span class="p">(</span><span class="n">rate</span><span class="p">,</span><span class="n">height_threshold</span><span class="o">=</span><span class="n">thresh</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">ok</span>     <span class="o">=</span> <span class="n">is_in_hull</span><span class="p">(</span><span class="n">hpeaks</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">hull</span><span class="p">)</span>
+        <span class="n">peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hpeaks</span><span class="p">[:,</span><span class="n">ok</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">peaks</span></div>
+
+
+<div class="viewcode-block" id="match_peaks"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.match_peaks">[docs]</a><span class="k">def</span> <span class="nf">match_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">maxd</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Matching algorithm:</span>
+<span class="sd">    </span>
+<span class="sd">     - Assume q come from an array of angles on [0,2pi)</span>
+<span class="sd">     - Get distances between all adjacent angles</span>
+<span class="sd">     - Build directed graph joining fields of adjacent angles</span>
+<span class="sd">     - Greedy approach</span>
+<span class="sd">        - If you&#39;re my closest match, and I&#39;m yours, pair up.</span>
+<span class="sd">        - Repeat until no more edges closer than `maxd`</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    peaks: list</span>
+<span class="sd">        Length NANGLES list of 2×NPEAKS float32 arrays with </span>
+<span class="sd">        (x,y) locations of peaks at each heading angle</span>
+<span class="sd">    maxd: </span>
+<span class="sd">        The maximum distance between peaks allowed when </span>
+<span class="sd">        connecting them</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    edges: list</span>
+<span class="sd">        Length NANGLES list of edge sets for each pair of </span>
+<span class="sd">        headings. Each list entry is a 2×NEDGES int32 array.</span>
+<span class="sd">        This contains pairs of indecies (a,b).</span>
+<span class="sd">        For edge set i, index a is the index into peaks[i]</span>
+<span class="sd">        (edge source) and index b is the index into </span>
+<span class="sd">        peaks[(i+1)%Nφ] (edge target).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">q</span>  <span class="o">=</span> <span class="p">[</span><span class="n">p2c</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
+    <span class="n">Nφ</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+    
+    <span class="c1"># Sets of unused incoming and outgoing nodes</span>
+    <span class="n">osets</span> <span class="o">=</span> <span class="p">[{</span><span class="o">*</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qi</span><span class="p">))}</span> <span class="k">for</span> <span class="n">qi</span> <span class="ow">in</span> <span class="n">q</span><span class="p">]</span>
+    <span class="n">isets</span> <span class="o">=</span> <span class="p">[{</span><span class="o">*</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qi</span><span class="p">))}</span> <span class="k">for</span> <span class="n">qi</span> <span class="ow">in</span> <span class="n">q</span><span class="p">]</span>
+    <span class="c1"># Pairwise distances between all adjacent angles</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">][:,</span><span class="kc">None</span><span class="p">]</span><span class="o">-</span><span class="n">q</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">Nφ</span><span class="p">][</span><span class="kc">None</span><span class="p">,:])</span> 
+         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nφ</span><span class="p">)]</span>
+    <span class="c1"># Sets to hold edges as we build matches</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nφ</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="nb">iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nφ</span><span class="p">):</span>
+            <span class="n">d</span>   <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="c1"># out (source) -&gt; in (target)</span>
+            <span class="k">if</span> <span class="n">prod</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">d</span><span class="p">))</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="k">continue</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># True node indecies of remaining distances</span>
+            <span class="n">oId</span> <span class="o">=</span> <span class="n">int32</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">osets</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span>
+            <span class="n">iId</span> <span class="o">=</span> <span class="n">int32</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">isets</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">Nφ</span><span class="p">])))</span>
+            <span class="c1"># Get best matches from remaining unpaired nodes</span>
+            <span class="n">no</span> <span class="o">=</span> <span class="n">argmin</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># best target per source</span>
+            <span class="n">ni</span> <span class="o">=</span> <span class="n">argmin</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># best source per target</span>
+            <span class="n">r</span>  <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">ok</span> <span class="o">=</span> <span class="p">(</span><span class="n">ni</span><span class="p">[</span><span class="n">no</span><span class="p">]</span><span class="o">==</span><span class="n">r</span><span class="p">)</span> 
+            <span class="n">keep</span> <span class="o">=</span> <span class="n">ok</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">&lt;=</span><span class="n">maxd</span><span class="p">)</span>
+            <span class="c1"># These are new edges</span>
+            <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">oId</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="n">ok</span><span class="p">]],</span><span class="n">iId</span><span class="p">[</span><span class="n">no</span><span class="p">[</span><span class="n">ok</span><span class="p">]]</span>
+            <span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">|=</span> <span class="p">{</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span>
+                <span class="nb">zip</span><span class="p">(</span><span class="n">oId</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="n">keep</span><span class="p">]],</span><span class="n">iId</span><span class="p">[</span><span class="n">no</span><span class="p">[</span><span class="n">keep</span><span class="p">]]))}</span>
+            <span class="c1"># Remove the nodes we&#39;ve used</span>
+            <span class="n">ikeep</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">iId</span><span class="p">)</span><span class="o">-</span><span class="nb">set</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+            <span class="n">okeep</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">oId</span><span class="p">)</span><span class="o">-</span><span class="nb">set</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="c1"># Prune the distance matrix</span>
+            <span class="n">isets</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">Nφ</span><span class="p">]</span> <span class="o">=</span> <span class="n">ikeep</span>
+            <span class="n">osets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>        <span class="o">=</span> <span class="n">okeep</span>
+            <span class="n">D</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[[</span><span class="n">j</span> <span class="ow">in</span> <span class="n">okeep</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">oId</span><span class="p">],:]</span>\
+                    <span class="p">[:,[</span><span class="n">j</span> <span class="ow">in</span> <span class="n">ikeep</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">iId</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">done</span><span class="p">:</span> <span class="k">break</span>
+    
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">int32</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ee</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span> <span class="k">for</span> <span class="n">ee</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">edges</span></div>
+
+<div class="viewcode-block" id="pair_points"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.pair_points">[docs]</a><span class="k">def</span> <span class="nf">pair_points</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">,</span><span class="n">connection_radius</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Greedily associate nearest-neighbors between two</span>
+<span class="sd">    point sets `z1` and `z2`, limiting matches to points closer</span>
+<span class="sd">    than `connection_radius` apart. 2D points are encoded as</span>
+<span class="sd">    complex numbers.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    z1: iterable</span>
+<span class="sd">        iterable of 2D points encoded as complex numbers</span>
+<span class="sd">    z2: iterable</span>
+<span class="sd">        iterable of 2D points encoded as complex numbers</span>
+<span class="sd">    connection_radius: float</span>
+<span class="sd">        Maximum radius at which to allow connections. </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    index1: int32</span>
+<span class="sd">        index into z1 of paired points</span>
+<span class="sd">    index2: int32</span>
+<span class="sd">        index into z2 of paired points</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">z1</span> <span class="o">=</span> <span class="n">c2p</span><span class="p">(</span><span class="n">complex64</span><span class="p">([</span><span class="o">*</span><span class="n">z1</span><span class="p">]))</span>
+    <span class="n">z2</span> <span class="o">=</span> <span class="n">c2p</span><span class="p">(</span><span class="n">complex64</span><span class="p">([</span><span class="o">*</span><span class="n">z2</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">match_peaks</span><span class="p">([</span><span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">],</span><span class="n">connection_radius</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="extract_as_paths"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.extract_as_paths">[docs]</a><span class="k">def</span> <span class="nf">extract_as_paths</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">edges</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Convert tracked (peaks,edges) to a list of 2D paths.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    peaks: list </span>
+<span class="sd">        Length NANGLES list of 2xNPEAKS np.float32 arrays </span>
+<span class="sd">        containing (rx,ry) peak locations at a list of </span>
+<span class="sd">        heading angles, as returned  by </span>
+<span class="sd">        `get_peaks_at_heading_angles()`.</span>
+<span class="sd">    edges: list</span>
+<span class="sd">        Length NANGLES list of edge sets for each pair of </span>
+<span class="sd">        headings, as returned by `match_peaks` or </span>
+<span class="sd">        `link_peaks()`. Each list entry is a 2×NEDGES int32 </span>
+<span class="sd">        array. This contains pairs of indecies (a,b). For </span>
+<span class="sd">        edge set i, index a is the index into peaks[i] (edge </span>
+<span class="sd">        source) and index b is the index into </span>
+<span class="sd">        peaks[(i+1)%Nφ] (edge target).</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    paths: list</span>
+<span class="sd">        List of npoints x 2 path data for each connected</span>
+<span class="sd">        component</span>
+<span class="sd">    chains: list</span>
+<span class="sd">        Chained node-information in format of (iphi,ipeak)</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Get components sharing edges</span>
+    <span class="c1"># Start by finding connected fields at nearby angles</span>
+    <span class="c1"># `cc` stores a list of sets of connected nodes.</span>
+    <span class="c1"># The node ID format is (angle #, point ID @ angle #)</span>
+    <span class="c1"># The point IDs are the same as the outgoing edge info #</span>
+    <span class="c1"># in the edges datastructure.</span>
+    <span class="n">Nphi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i0</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nphi</span><span class="p">):</span>
+        <span class="n">i1</span> <span class="o">=</span> <span class="p">(</span><span class="n">i0</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">Nphi</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">i0</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">i1</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># No peaks for one of the directions</span>
+            <span class="k">continue</span>
+        <span class="p">(</span><span class="n">a0</span><span class="p">,</span><span class="n">b0</span><span class="p">),(</span><span class="n">a1</span><span class="p">,</span><span class="n">b1</span><span class="p">)</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="n">i0</span><span class="p">],</span><span class="n">edges</span><span class="p">[</span><span class="n">i1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">e0</span><span class="p">,</span><span class="n">e1</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">where</span><span class="p">(</span><span class="n">pdist</span><span class="p">(</span><span class="n">b0</span><span class="p">,</span><span class="n">a1</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">)):</span>
+            <span class="n">cc</span><span class="o">.</span><span class="n">append</span><span class="p">({(</span><span class="n">i0</span><span class="p">,</span><span class="n">e0</span><span class="p">),(</span><span class="n">i1</span><span class="p">,</span><span class="n">e1</span><span class="p">)})</span>
+
+    <span class="c1"># Merge components sharing edges until all merged</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="nb">set</span><span class="p">,</span><span class="n">cc</span><span class="p">)))</span><span class="o">!=</span><span class="nb">sum</span><span class="p">([</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span><span class="n">cc</span><span class="p">)]):</span>
+        <span class="n">Nc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cc</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nc</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cc</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span> <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">Nc</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&amp;</span><span class="n">cc</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="n">cc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">|=</span><span class="n">cc</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                    <span class="n">cc</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-=</span><span class="n">cc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">cc</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cc</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)]</span>
+
+    <span class="n">chains</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cc</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">&lt;</span><span class="n">Nphi</span><span class="o">//</span><span class="mi">2</span><span class="p">:</span> <span class="k">continue</span>
+
+        <span class="c1"># Pick up the chain </span>
+        <span class="n">links</span> <span class="o">=</span> <span class="p">{</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([((</span><span class="n">a</span><span class="o">+</span><span class="n">iu</span><span class="p">)</span><span class="o">%</span><span class="n">Nphi</span><span class="p">,</span><span class="n">u</span><span class="p">)</span> 
+                 <span class="k">for</span> <span class="n">iu</span><span class="p">,</span><span class="n">u</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">a</span><span class="p">][:,</span><span class="n">b</span><span class="p">])]))</span> 
+                 <span class="k">for</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="ow">in</span> <span class="n">c</span><span class="p">}</span>
+        <span class="n">pluck</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">links</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">links</span><span class="o">-=</span> <span class="p">{</span><span class="n">pluck</span><span class="p">}</span>
+        <span class="n">chain</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">pluck</span><span class="p">)</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">links</span><span class="p">):</span>
+            <span class="n">remove</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">match</span>  <span class="o">=</span> <span class="p">{</span><span class="n">chain</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]}</span>
+            <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">{</span><span class="o">*</span><span class="n">link</span><span class="p">}</span><span class="o">&amp;</span><span class="n">match</span><span class="p">:</span>
+                    <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">link</span>
+                    <span class="k">if</span>   <span class="n">a</span><span class="o">==</span><span class="n">chain</span><span class="p">[</span><span class="mi">0</span> <span class="p">]:</span> <span class="n">chain</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">+</span><span class="n">chain</span>
+                    <span class="k">elif</span> <span class="n">b</span><span class="o">==</span><span class="n">chain</span><span class="p">[</span> <span class="mi">0</span><span class="p">]:</span> <span class="n">chain</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">+</span><span class="n">chain</span>
+                    <span class="k">elif</span> <span class="n">a</span><span class="o">==</span><span class="n">chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">chain</span> <span class="o">=</span> <span class="n">chain</span><span class="o">+</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="n">b</span><span class="o">==</span><span class="n">chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">chain</span> <span class="o">=</span> <span class="n">chain</span><span class="o">+</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+                    <span class="n">remove</span> <span class="o">=</span> <span class="n">link</span>
+                    <span class="k">break</span>
+            <span class="n">links</span> <span class="o">-=</span> <span class="p">{</span><span class="n">remove</span><span class="p">}</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">float32</span><span class="p">([</span><span class="n">peaks</span><span class="p">[</span><span class="n">iphi</span><span class="p">][:,</span><span class="n">ipeak</span><span class="p">]</span> \
+                        <span class="k">for</span> <span class="n">iphi</span><span class="p">,</span><span class="n">ipeak</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">])</span>
+        <span class="n">paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">chains</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chain</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">paths</span><span class="p">,</span><span class="n">chains</span></div>
+
+
+<div class="viewcode-block" id="link_peaks"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.link_peaks">[docs]</a><span class="k">def</span> <span class="nf">link_peaks</span><span class="p">(</span>
+        <span class="n">peaks</span><span class="p">,</span>
+        <span class="n">maxd</span><span class="p">,</span>
+        <span class="n">max_end_distance</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Cleans up the result from `match_peaks()`, removing any</span>
+<span class="sd">    peaks that aren&#39;t tracked unambiguously over a range of</span>
+<span class="sd">    heading angles. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    peaks: list</span>
+<span class="sd">        List of 2×NPEAKS arrays containing (x,y) locations</span>
+<span class="sd">        of identified peaks over a range of heading angles.</span>
+<span class="sd">    maxd: int</span>
+<span class="sd">        Maximum distance permitted between connected peaks </span>
+<span class="sd">        at adjacent angles.</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    max_end_distance: float</span>
+<span class="sd">        Maximum distance allowed between endpoints</span>
+<span class="sd">        of a tracked peak.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    edges: list</span>
+<span class="sd">        A graph connecting peaks putatively associated with</span>
+<span class="sd">        the same grid field at different heading angles. </span>
+<span class="sd">        This has the same length as the `heading_angles` </span>
+<span class="sd">        argument. The format is the same as the result </span>
+<span class="sd">        returned by `match_peaks`, but edges from peaks that</span>
+<span class="sd">        aren&#39;t tracked unambiguously over a range of heading </span>
+<span class="sd">        angles have been removed.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">match_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">maxd</span><span class="p">)</span>    
+    <span class="n">paths</span><span class="p">,</span><span class="n">chains</span> <span class="o">=</span> <span class="n">extract_as_paths</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">edges</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">max_end_distance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">max_end_distance</span> <span class="o">=</span> <span class="n">maxd</span><span class="o">*</span><span class="mi">2</span>
+        
+    <span class="n">Nphi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+    <span class="n">new_edges</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">chains</span><span class="p">:</span> 
+        
+        <span class="c1"># Trim the distant ends to length</span>
+        <span class="c1"># - Convert to complex to simplify</span>
+        <span class="c1"># - Find centroid</span>
+        <span class="c1"># - Repeat until chain is the right length</span>
+        <span class="c1">#   - Remove whichever endpoint is furthest </span>
+        <span class="c1">#     from the current centroid</span>
+        <span class="n">z</span>  <span class="o">=</span> <span class="n">float32</span><span class="p">([</span><span class="n">peaks</span><span class="p">[</span><span class="n">i</span><span class="p">][:,</span><span class="n">j</span><span class="p">]</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">])</span><span class="o">@</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span>
+        
+        <span class="n">μz</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">chain</span><span class="p">)</span><span class="o">&gt;</span><span class="n">Nphi</span><span class="o">+</span><span class="mi">1</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">&gt;</span><span class="n">max_end_distance</span><span class="p">:</span>
+            <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">peaks</span><span class="p">[</span><span class="n">i</span><span class="p">][:,</span><span class="n">j</span><span class="p">]</span><span class="o">@</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="n">μz</span><span class="p">)</span> \
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="p">[</span><span class="n">chain</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">chain</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]]</span>
+            <span class="n">chain</span><span class="p">,</span><span class="n">z</span> <span class="o">=</span> <span class="p">(</span><span class="n">chain</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">z</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="k">if</span> <span class="n">a</span><span class="o">&gt;</span><span class="n">b</span> \
+                <span class="k">else</span> <span class="p">(</span><span class="n">chain</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">z</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">μz</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        
+        <span class="c1"># Drop short chains</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chain</span><span class="p">)</span><span class="o">&lt;</span><span class="n">Nphi</span><span class="o">//</span><span class="mi">2</span><span class="p">:</span> 
+            <span class="k">continue</span>
+        
+        <span class="c1"># Flip chains if needed so points are in sorted order</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="p">(</span><span class="n">chain</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">chain</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">Nphi</span><span class="p">)</span><span class="o">%</span><span class="n">Nphi</span>
+        <span class="k">if</span> <span class="n">step</span><span class="o">==</span><span class="n">Nphi</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> 
+            <span class="n">chain</span> <span class="o">=</span> <span class="n">chain</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="k">assert</span> <span class="n">step</span><span class="o">==</span><span class="mi">1</span>
+        
+        <span class="n">new_edges</span> <span class="o">|=</span> <span class="p">{</span><span class="o">*</span><span class="nb">zip</span><span class="p">(</span><span class="n">chain</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">chain</span><span class="p">[</span><span class="mi">1</span><span class="p">:])}</span>
+
+    <span class="c1"># Rebuild edge datastructure</span>
+    <span class="n">edges2</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nphi</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">iph0</span><span class="p">,</span><span class="n">px0</span><span class="p">),(</span><span class="n">iph1</span><span class="p">,</span><span class="n">px1</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">([</span><span class="o">*</span><span class="n">new_edges</span><span class="p">]):</span>
+        <span class="n">edges2</span><span class="p">[</span><span class="n">iph0</span><span class="p">]</span><span class="o">+=</span><span class="p">[(</span><span class="n">px0</span><span class="p">,</span><span class="n">px1</span><span class="p">)]</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">int32</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edges2</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">edges</span></div>
+
+
+<div class="viewcode-block" id="plot_tracked_peaks"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.plot_tracked_peaks">[docs]</a><span class="k">def</span> <span class="nf">plot_tracked_peaks</span><span class="p">(</span>
+        <span class="n">peaks</span><span class="p">,</span>
+        <span class="n">edges</span><span class="p">,</span>
+        <span class="n">perim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">compass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">riley</span><span class="o">.</span><span class="n">reversed</span><span class="p">(),</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Plot connected grid fields. Use this with </span>
+<span class="sd">    `get_peaks_at_heading_angles()` and `link_peaks()`.</span>
+<span class="sd">    </span>
+<span class="sd">    Assumptions: Orient Cartesian (x,y) plane in the </span>
+<span class="sd">    standard way, with +y upwards and +x rightwards.</span>
+<span class="sd">    Then heading angles are: </span>
+<span class="sd">    </span>
+<span class="sd">      - 0   : rightwards (eastwards)</span>
+<span class="sd">      - ½π  : upwards    (northwards)</span>
+<span class="sd">      - π   : leftwards  (westwards)</span>
+<span class="sd">      - 3π/2: downwards  (southwards)</span>
+<span class="sd">        </span>
+<span class="sd">    This assumes that peaks and edges are both</span>
+<span class="sd">    taken from angles samples on [0,2π), where the</span>
+<span class="sd">    angles are linspace(0,2*pi,len(peaks)+1)[:-1].</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    peaks: list </span>
+<span class="sd">        Length NANGLES list of 2xNPEAKS np.float32 arrays </span>
+<span class="sd">        containing (rx,ry) peak locations at a list of </span>
+<span class="sd">        heading angles, as returned  by </span>
+<span class="sd">        `get_peaks_at_heading_angles()`.</span>
+<span class="sd">    edges: list</span>
+<span class="sd">        Length NANGLES list of edge sets for each pair of </span>
+<span class="sd">        headings, as returned by `match_peaks` or </span>
+<span class="sd">        `link_peaks()`. Each list entry is a 2×NEDGES int32 </span>
+<span class="sd">        array. This contains pairs of indecies (a,b). For </span>
+<span class="sd">        edge set i, index a is the index into peaks[i] (edge </span>
+<span class="sd">        source) and index b is the index into </span>
+<span class="sd">        peaks[(i+1)%Nφ] (edge target).</span>
+<span class="sd">        </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    perim: np.float32</span>
+<span class="sd">        NPOINTS x 2 Array of (x,y) points of the arena </span>
+<span class="sd">        perimeter to add to plot. Optional, default is None.</span>
+<span class="sd">    compass: bool</span>
+<span class="sd">        Draw colored compass rose if true</span>
+<span class="sd">    color: matplotlib color</span>
+<span class="sd">        Color or colormap to use for heading angles</span>
+<span class="sd">        defaults to the custom `riley` circular color map.</span>
+<span class="sd">    **kwargs:</span>
+<span class="sd">        Forwarded to `plot()`</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">Nphi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@pk</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">perim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">perim</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">perim</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colormaps</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span> <span class="c1"># Assume it&#39;s something like &#39;r&#39; &#39;g&#39; &#39;b&#39;</span>
+    
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">ee</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">edges</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ee</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="k">continue</span>
+        <span class="n">ia</span><span class="p">,</span><span class="n">ib</span> <span class="o">=</span> <span class="n">ee</span>
+        <span class="n">za</span><span class="p">,</span><span class="n">zb</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">ia</span><span class="p">],</span><span class="n">q</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">Nphi</span><span class="p">][</span><span class="n">ib</span><span class="p">]</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">ravel</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="n">za</span><span class="p">,</span><span class="n">zb</span><span class="p">,</span><span class="n">NaN</span><span class="o">*</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">za</span><span class="p">))])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">color</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">Nphi</span><span class="p">)</span>\
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Colormap</span><span class="p">)</span>\
+            <span class="k">else</span> <span class="n">color</span>
+        <span class="n">plot</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span><span class="n">imag</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span>
+             <span class="o">**</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="n">c</span><span class="p">,</span><span class="s1">&#39;lw&#39;</span><span class="p">:</span><span class="mf">.6</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">})</span>
+    
+    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;square&#39;</span><span class="p">);</span>
+    <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Tracked peaks&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">perim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">xyd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">perim</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">perim</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">xy0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">perim</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">xy1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">xy0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">xyd</span> <span class="o">=</span> <span class="n">xy1</span> <span class="o">-</span> <span class="n">xy0</span>
+        <span class="n">xy0</span> <span class="o">=</span> <span class="n">xy1</span>
+    
+    <span class="k">if</span> <span class="n">compass</span><span class="p">:</span>
+        <span class="n">draw_compass</span><span class="p">(</span>
+            <span class="n">xy0</span><span class="o">=</span><span class="n">p2c</span><span class="p">(</span><span class="n">xy0</span><span class="p">)</span><span class="o">+</span><span class="mf">0.2</span><span class="o">*</span><span class="n">xyd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">.3</span><span class="n">j</span><span class="o">*</span><span class="n">xyd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">r</span><span class="o">=</span><span class="n">mean</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">xyd</span><span class="p">))</span><span class="o">*</span><span class="mf">0.05</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="locate_opposites"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.locate_opposites">[docs]</a><span class="k">def</span> <span class="nf">locate_opposites</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">maxd</span><span class="p">,</span><span class="n">starti</span><span class="p">,</span><span class="n">edges</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    To be used on the result of calling match_peaks()</span>
+
+<span class="sd">    ### Algorithm: </span>
+<span class="sd">    </span>
+<span class="sd">     - We have a list of edges between adjacent angles</span>
+<span class="sd">     - Starting from a seed, follow the graph in both </span>
+<span class="sd">       directions half-way around</span>
+<span class="sd">     - Hopefully, we&#39;ll come to a peak from the opposite </span>
+<span class="sd">       heading direction</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    peaks: list</span>
+<span class="sd">        List of 2×NPEAKS float32 arrays containing (x,y)</span>
+<span class="sd">        locations of peaks at each of the angles specified</span>
+<span class="sd">        by the list of heading angles `heading_angles`.</span>
+<span class="sd">    maxd: </span>
+<span class="sd">        The maximum distance between peaks allowed when </span>
+<span class="sd">        connecting them</span>
+<span class="sd">    starti: </span>
+<span class="sd">        The angle (index) to start at as a &quot;seed&quot;.</span>
+<span class="sd">    edges: returned by match_peaks(Nφ,q,maxd)</span>
+<span class="sd">        lenghth Nφ list of 2×NCONNECTED edge sets containing</span>
+<span class="sd">        indecies into the point sets (source) and targets in </span>
+<span class="sd">        the next adjacent direction</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    iop: int</span>
+<span class="sd">        Index between 0 and Nφ-1 into the q list of the </span>
+<span class="sd">        opposite-heading fields</span>
+<span class="sd">    op: int32</span>
+<span class="sd">        Indecies of matching field in direction </span>
+<span class="sd">        `q[iop]` for each field `q[istart]`.</span>
+<span class="sd">        If no match exists, -1</span>
+<span class="sd">    dd: float32</span>
+<span class="sd">        Distance to matched peak, or NaN it not matched.</span>
+<span class="sd">        </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@pk</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
+    <span class="n">Nφ</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">starti</span>
+    <span class="c1"># Search forward and backward for connected peak in </span>
+    <span class="c1"># opposite direction</span>
+    <span class="n">fop</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">bop</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">fop</span><span class="p">)</span>
+    <span class="n">iop</span> <span class="o">=</span> <span class="p">(</span><span class="n">Nφ</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="n">i</span><span class="p">)</span><span class="o">%</span><span class="n">Nφ</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nφ</span><span class="o">//</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">d</span>   <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">edges</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">)</span><span class="o">%</span><span class="n">Nφ</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">fop</span> <span class="o">=</span> <span class="p">[(</span><span class="n">d</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">d</span> <span class="k">else</span> <span class="n">NaN</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">fop</span><span class="p">]</span>
+        <span class="n">d</span>   <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">edges</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="n">Nφ</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">j</span><span class="p">)</span><span class="o">%</span><span class="n">Nφ</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">bop</span> <span class="o">=</span> <span class="p">[(</span><span class="n">d</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">d</span> <span class="k">else</span> <span class="n">NaN</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">bop</span><span class="p">]</span>
+        
+    <span class="c1"># Check distance to opposite match in both directions</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="n">iop</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="k">if</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> \
+                     <span class="k">else</span> <span class="n">NaN</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">fop</span><span class="p">])</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="n">iop</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="k">if</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> \
+                     <span class="k">else</span> <span class="n">NaN</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">bop</span><span class="p">])</span>
+    
+    <span class="c1"># Pick closer opposite</span>
+    <span class="c1"># - Default to the forward search result (may be none)</span>
+    <span class="c1"># - If the backward match is closer, use that instead</span>
+    <span class="c1"># - Update the pair match and distance</span>
+    <span class="n">op</span>          <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">fop</span><span class="p">)</span>
+    <span class="n">replace</span>     <span class="o">=</span> <span class="p">(</span><span class="n">db</span><span class="o">&lt;</span><span class="n">df</span><span class="p">)</span> <span class="o">|</span> <span class="o">~</span><span class="n">isfinite</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+    <span class="n">op</span><span class="p">[</span><span class="n">replace</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">bop</span><span class="p">)[</span><span class="n">replace</span><span class="p">]</span>
+    <span class="n">dd</span>          <span class="o">=</span> <span class="n">nanmin</span><span class="p">([</span><span class="n">df</span><span class="p">,</span><span class="n">db</span><span class="p">,</span><span class="n">full</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">inf</span><span class="p">)],</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="c1"># Make sure opposite is still reasonably nearby</span>
+    <span class="n">bad</span> <span class="o">=</span> <span class="n">dd</span><span class="o">&gt;</span><span class="n">maxd</span>
+    <span class="n">op</span><span class="p">[</span><span class="n">bad</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span>
+    <span class="n">dd</span><span class="p">[</span><span class="n">bad</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span>
+    <span class="c1"># Check uniqueness: each target picks closest source</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">{</span><span class="o">*</span><span class="n">op</span><span class="p">[</span><span class="n">isfinite</span><span class="p">(</span><span class="n">op</span><span class="p">)]}</span>
+    <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+        <span class="n">used</span> <span class="o">=</span> <span class="n">where</span><span class="p">(</span><span class="n">op</span><span class="o">==</span><span class="n">target</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">used</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span> <span class="k">continue</span>
+        <span class="c1">#print(&#39;target&#39;,target,&#39;used by&#39;,used)</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="n">used</span><span class="p">[</span><span class="n">argmax</span><span class="p">(</span><span class="n">dd</span><span class="p">[</span><span class="n">used</span><span class="p">])]</span>
+        <span class="n">pick</span>  <span class="o">=</span> <span class="p">{</span><span class="n">fop</span><span class="p">[</span><span class="n">other</span><span class="p">],</span><span class="n">bop</span><span class="p">[</span><span class="n">other</span><span class="p">]}</span><span class="o">-</span><span class="n">targets</span><span class="o">-</span><span class="p">{</span><span class="n">nan</span><span class="p">}</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pick</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">pick</span>      <span class="o">=</span> <span class="nb">int</span><span class="p">([</span><span class="o">*</span><span class="n">pick</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">op</span><span class="p">[</span><span class="n">other</span><span class="p">]</span> <span class="o">=</span> <span class="n">pick</span>
+            <span class="n">dd</span><span class="p">[</span><span class="n">other</span><span class="p">]</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">other</span><span class="p">]</span><span class="o">-</span><span class="n">q</span><span class="p">[</span><span class="n">iop</span><span class="p">][</span><span class="n">pick</span><span class="p">])</span>
+            <span class="c1">#print(&#39;Remapped&#39;,other,&#39;to&#39;,pick)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">op</span><span class="p">[</span><span class="n">other</span><span class="p">]</span> <span class="o">=</span> <span class="n">dd</span><span class="p">[</span><span class="n">other</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span>
+    <span class="k">return</span> <span class="n">iop</span><span class="p">,</span><span class="n">int32</span><span class="p">(</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">nan</span><span class="o">=-</span><span class="mi">1</span><span class="p">)),</span><span class="n">dd</span></div>
+
+
+<div class="viewcode-block" id="plot_connection_arrow"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.plot_connection_arrow">[docs]</a><span class="k">def</span> <span class="nf">plot_connection_arrow</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Draw arrows connecting related fields from two maps. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    op: for every index in q1, corresponding index in q2</span>
+<span class="sd">        or -1 if no connection</span>
+<span class="sd">    q1: field centers in map 1 (as x+iy complex numbers)</span>
+<span class="sd">    q2: field centers in map 2 (as x+iy complex numbers)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">q1</span> <span class="o">=</span> <span class="n">p2c</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+    <span class="n">q2</span> <span class="o">=</span> <span class="n">p2c</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">0.35</span><span class="n">j</span><span class="o">-</span><span class="mf">.35</span><span class="p">)</span> <span class="c1"># For arrows</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">m1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">q1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">op</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">m2</span> <span class="o">=</span> <span class="n">q2</span><span class="p">[</span><span class="n">op</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">m1</span><span class="o">-</span><span class="n">m2</span>
+            <span class="n">lines</span><span class="o">+=</span><span class="p">[</span><span class="n">m2</span><span class="o">+</span><span class="n">v</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="p">,</span><span class="n">NaN</span><span class="p">,</span><span class="n">m1</span><span class="p">,</span><span class="n">m2</span><span class="o">+</span><span class="n">v</span><span class="o">*</span><span class="n">conj</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="n">NaN</span><span class="p">]</span>
+    <span class="n">plot</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span><span class="n">imag</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="n">RUST</span><span class="p">,</span><span class="s1">&#39;lw&#39;</span><span class="p">:</span><span class="mf">.4</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">})</span></div>
+
+<div class="viewcode-block" id="refit_hyperparameters_heading_weighted"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.refit_hyperparameters_heading_weighted">[docs]</a><span class="k">def</span> <span class="nf">refit_hyperparameters_heading_weighted</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">θ</span><span class="p">,</span><span class="n">NSEW</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    data: Dataset</span>
+<span class="sd">    model: Model</span>
+<span class="sd">    θ: np.float32</span>
+<span class="sd">        Heading angles for every time sample in Dataset</span>
+<span class="sd">    NSEW: np.float32</span>
+<span class="sd">        List of reference heading angles to recompute</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    models: list</span>
+<span class="sd">        A list, the same length as NSEW, containing</span>
+<span class="sd">        the models with optimized hyperparameters for each</span>
+<span class="sd">        heading angle in NSEW</span>
+<span class="sd">    fits: list</span>
+<span class="sd">        A list, the same length as NSEW, containing</span>
+<span class="sd">        the (posterior_mean, posterior_variance, loss)</span>
+<span class="sd">        tuple returned by `coordinate_descent` for </span>
+<span class="sd">        optimizing the model for each heading angle in NSEW.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Prepare hyperparameter grid</span>
+    <span class="n">rβ</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># Range (ratio) to search for optimal kernel height</span>
+    <span class="n">Nβ</span> <span class="o">=</span> <span class="mi">21</span> <span class="c1"># Kernel height search grid resolutions</span>
+    <span class="n">βs</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">rβ</span><span class="p">),</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">*</span><span class="n">rβ</span><span class="p">),</span><span class="n">Nβ</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">pargrid</span> <span class="o">=</span> <span class="p">[</span><span class="n">βs</span><span class="p">]</span>
+
+    <span class="n">models</span><span class="p">,</span> <span class="n">fits</span> <span class="o">=</span> <span class="p">[],[]</span>
+    <span class="k">for</span> <span class="n">iphi</span><span class="p">,</span><span class="n">phi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">NSEW</span><span class="p">):</span> 
+        <span class="c1"># Heading-weighted data binning</span>
+        <span class="n">sw</span>    <span class="o">=</span> <span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cos</span><span class="p">(</span><span class="n">θ</span><span class="o">-</span><span class="n">phi</span><span class="p">))</span>
+        <span class="n">data2</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reweighted</span><span class="p">(</span><span class="n">sw</span><span class="p">)</span>
+        
+        <span class="c1"># Loss function</span>
+        <span class="n">kv0</span>   <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">kv</span>
+        <span class="n">P</span>     <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
+        <span class="k">def</span> <span class="nf">evaluate_ELBO</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span><span class="n">state</span><span class="p">):</span>
+            <span class="n">β</span>       <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">μ</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">μh</span>  <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span><span class="o">*</span><span class="mi">3</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">state</span>
+            <span class="n">model</span>   <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">kv0</span><span class="o">/</span><span class="n">β</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data2</span><span class="p">)</span>
+            <span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">nl</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@μh</span> <span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">μh</span><span class="p">),</span> <span class="o">-</span><span class="n">nl</span><span class="p">,</span> <span class="n">model</span>
+
+        <span class="c1"># Run grid search</span>
+        <span class="n">bestindex</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span> <span class="o">=</span> <span class="n">grid_search</span><span class="p">(</span>
+            <span class="n">pargrid</span><span class="p">,</span><span class="n">evaluate_ELBO</span><span class="p">)</span>
+        <span class="n">kv</span> <span class="o">=</span> <span class="n">kv0</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;σ0   = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">kv0</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;β    = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;σ0/β = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">kv</span><span class="p">)</span>
+
+        <span class="c1"># Infer posterior and save</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">kv</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data2</span><span class="p">)</span>
+        <span class="n">fit</span>   <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+        <span class="n">models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">fits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">models</span><span class="p">,</span> <span class="n">fits</span></div>
+    
+<div class="viewcode-block" id="matched_cardinal_points"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.matched_cardinal_points">[docs]</a><span class="k">def</span> <span class="nf">matched_cardinal_points</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">edges</span><span class="p">,</span><span class="n">indexNSEW</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    For each connected component from tracking peaks over</span>
+<span class="sd">    various heading angles, </span>
+<span class="sd">    return the z+iy location of all NSEW-facing points</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    peaks: length N_HEADING_ANGLES list</span>
+<span class="sd">        List of peak locations from </span>
+<span class="sd">        `get_peaks_at_heading_angles`</span>
+<span class="sd">    edges: length N_HEADING_ANGLES list</span>
+<span class="sd">        List of edges between peaks returned by</span>
+<span class="sd">        `match_peaks` or `link_peaks`</span>
+<span class="sd">    indexNSEW: list</span>
+<span class="sd">        list of indecies into peaks and edges for the</span>
+<span class="sd">        directions of interest (presumed to be N,S,E,W).</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    points: np.array</span>
+<span class="sd">        A N_COMPONENTS x len(indexNSEW) array which </span>
+<span class="sd">        identifies which of the peaks at these heading</span>
+<span class="sd">        indecies are part of the same grid field. </span>
+<span class="sd">        Reach row is a list of integer indecies into </span>
+<span class="sd">        the corresponding list in the `peaks` variable</span>
+<span class="sd">        for the heading-angle-indecies specified by</span>
+<span class="sd">        `indexNSEW`.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Find NSEW pairings from the peak tracking</span>
+    <span class="c1"># List of point locations</span>
+    <span class="n">paths</span><span class="p">,</span><span class="n">chains</span> <span class="o">=</span> <span class="n">extract_as_paths</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">edges</span><span class="p">)</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">p</span><span class="p">,</span><span class="n">c</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">paths</span><span class="p">,</span><span class="n">chains</span><span class="p">)):</span>
+        <span class="n">ix_angle</span><span class="p">,</span> <span class="n">ix_peak</span> <span class="o">=</span> <span class="n">int32</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">exist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">indexNSEW</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">==</span><span class="n">ix_angle</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">which</span> <span class="o">=</span> <span class="n">argmax</span><span class="p">(</span><span class="n">indexNSEW</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">==</span><span class="n">ix_angle</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">points</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="n">NaN</span> <span class="k">if</span> <span class="o">~</span><span class="n">e</span> <span class="k">else</span> <span class="n">p2c</span><span class="p">(</span><span class="n">peaks</span><span class="p">[</span><span class="n">j</span><span class="p">][:,</span><span class="n">ix_peak</span><span class="p">[</span><span class="n">w</span><span class="p">]])</span> \
+             <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">indexNSEW</span><span class="p">,</span><span class="n">which</span><span class="p">,</span><span class="n">exist</span><span class="p">)]</span>
+        <span class="p">]</span>
+    <span class="k">return</span> <span class="n">array</span><span class="p">(</span><span class="n">points</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="sample_posterior_all_heading_angles"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.sample_posterior_all_heading_angles">[docs]</a><span class="k">def</span> <span class="nf">sample_posterior_all_heading_angles</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">models</span><span class="p">,</span>
+    <span class="n">fits</span><span class="p">,</span>
+    <span class="n">angleNSEW</span><span class="p">,</span>
+    <span class="n">colorNSEW</span><span class="p">,</span>
+    <span class="n">exclusion_radius</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">nsamples</span>         <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span>
+    <span class="n">resolution</span>       <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">height_threshold</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+    <span class="n">prpeak_threshold</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+    <span class="n">doplot</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Performed a detailed analysis of a range of heading</span>
+<span class="sd">    angles.</span>
+<span class="sd">    </span>
+<span class="sd">    This routine re-optimizes the kernel parameters </span>
+<span class="sd">    via grid-search for each heading angle, and calculates</span>
+<span class="sd">    posterior confidence intervals via sampling.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    data: Dataset</span>
+<span class="sd">    models: list</span>
+<span class="sd">        List of N Models</span>
+<span class="sd">    fits: list</span>
+<span class="sd">        List of N fits returned by `coordinate_descent`</span>
+<span class="sd">    angleNSEW: list</span>
+<span class="sd">        List of heading directions for each model</span>
+<span class="sd">    colorNSEW:</span>
+<span class="sd">        List of plotting colors for each head direcgiton</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    exclusion_radius: positive float</span>
+<span class="sd">        Region a peak must clear to be a local maximum</span>
+<span class="sd">    nsamples: positive int</span>
+<span class="sd">        Number of posterior samples to use</span>
+<span class="sd">    resolution: positive int</span>
+<span class="sd">        Upsampling factor for posterior sampling</span>
+<span class="sd">    height_threshold: positive float ∈[0,1]</span>
+<span class="sd">        Fraction of locations a peak must be taller than</span>
+<span class="sd">        to be included</span>
+<span class="sd">    prpeak_threshold: positive float ∈[0,1]</span>
+<span class="sd">        Fraction of samples a grid field must be present in</span>
+<span class="sd">        to be included</span>
+<span class="sd">    doplot: boolean</span>
+<span class="sd">        Whether to draw a plot of the resulting samples</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">exclusion_radius</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">exclusion_radius</span> <span class="o">=</span> <span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">P</span><span class="o">/</span><span class="mi">2</span>
+    
+    <span class="k">if</span> <span class="n">doplot</span><span class="p">:</span>
+        <span class="n">figure</span><span class="p">(</span><span class="mi">0</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="mi">200</span><span class="p">)</span>
+        <span class="n">subplots_adjust</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">phi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">angleNSEW</span><span class="p">):</span> 
+        <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">fit</span>   <span class="o">=</span> <span class="n">fits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">doplot</span><span class="p">:</span>
+            <span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SampledConfidence</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">,</span>
+            <span class="n">model</span><span class="p">,</span>
+            <span class="n">fit</span><span class="p">,</span>
+            <span class="n">radius</span>           <span class="o">=</span> <span class="n">exclusion_radius</span><span class="p">,</span>
+            <span class="n">resolution</span>       <span class="o">=</span> <span class="n">resolution</span><span class="p">,</span>
+            <span class="n">nsamples</span>         <span class="o">=</span> <span class="n">nsamples</span><span class="p">,</span>
+            <span class="n">height_threshold</span> <span class="o">=</span> <span class="n">height_threshold</span><span class="p">,</span>
+            <span class="n">prpeak_threshold</span> <span class="o">=</span> <span class="n">prpeak_threshold</span><span class="p">,</span>
+            <span class="n">pct</span>              <span class="o">=</span> <span class="mi">95</span><span class="p">,</span>
+            <span class="n">doplot</span>           <span class="o">=</span> <span class="n">doplot</span><span class="p">,</span>
+            <span class="n">color</span>            <span class="o">=</span> <span class="n">colorNSEW</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="p">))</span>
+        <span class="k">if</span> <span class="n">doplot</span><span class="p">:</span>
+            <span class="n">title</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">samples</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

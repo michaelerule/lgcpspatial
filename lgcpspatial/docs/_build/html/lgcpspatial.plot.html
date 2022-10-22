@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lgcpspatial.plot module &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="lgcpspatial.util module" href="lgcpspatial.util.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
+            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">plot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.simpleaxis"><code class="docutils literal notranslate"><span class="pre">simpleaxis()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.rightaxis"><code class="docutils literal notranslate"><span class="pre">rightaxis()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.simpleraxis"><code class="docutils literal notranslate"><span class="pre">simpleraxis()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.simpleraxis2"><code class="docutils literal notranslate"><span class="pre">simpleraxis2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.noaxis"><code class="docutils literal notranslate"><span class="pre">noaxis()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.axeson"><code class="docutils literal notranslate"><span class="pre">axeson()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.nox"><code class="docutils literal notranslate"><span class="pre">nox()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.noy"><code class="docutils literal notranslate"><span class="pre">noy()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.noxyaxes"><code class="docutils literal notranslate"><span class="pre">noxyaxes()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.figurebox"><code class="docutils literal notranslate"><span class="pre">figurebox()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.pixels_to_xfigureunits"><code class="docutils literal notranslate"><span class="pre">pixels_to_xfigureunits()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.pixels_to_yfigureunits"><code class="docutils literal notranslate"><span class="pre">pixels_to_yfigureunits()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.nudge_axis_left"><code class="docutils literal notranslate"><span class="pre">nudge_axis_left()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.nudge_axis_right"><code class="docutils literal notranslate"><span class="pre">nudge_axis_right()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.nudge_axis_x"><code class="docutils literal notranslate"><span class="pre">nudge_axis_x()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.nudge_axis_y_pixels"><code class="docutils literal notranslate"><span class="pre">nudge_axis_y_pixels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.adjust_axis_height_pixels"><code class="docutils literal notranslate"><span class="pre">adjust_axis_height_pixels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.get_ax_size"><code class="docutils literal notranslate"><span class="pre">get_ax_size()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.yunits_to_pixels"><code class="docutils literal notranslate"><span class="pre">yunits_to_pixels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.xunits_to_pixels"><code class="docutils literal notranslate"><span class="pre">xunits_to_pixels()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.yscalebar"><code class="docutils literal notranslate"><span class="pre">yscalebar()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.xscalebar"><code class="docutils literal notranslate"><span class="pre">xscalebar()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.arrow_between"><code class="docutils literal notranslate"><span class="pre">arrow_between()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.nicey"><code class="docutils literal notranslate"><span class="pre">nicey()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.nicex"><code class="docutils literal notranslate"><span class="pre">nicex()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.nicexy"><code class="docutils literal notranslate"><span class="pre">nicexy()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.hcolorbar"><code class="docutils literal notranslate"><span class="pre">hcolorbar()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.subfigurelabel"><code class="docutils literal notranslate"><span class="pre">subfigurelabel()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.pixels_to_xunits"><code class="docutils literal notranslate"><span class="pre">pixels_to_xunits()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.px2x"><code class="docutils literal notranslate"><span class="pre">px2x()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.pixels_to_yunits"><code class="docutils literal notranslate"><span class="pre">pixels_to_yunits()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.px2y"><code class="docutils literal notranslate"><span class="pre">px2y()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.circular_gaussian_smooth"><code class="docutils literal notranslate"><span class="pre">circular_gaussian_smooth()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.circularly_smooth_colormap"><code class="docutils literal notranslate"><span class="pre">circularly_smooth_colormap()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.force_aspect"><code class="docutils literal notranslate"><span class="pre">force_aspect()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.pscale"><code class="docutils literal notranslate"><span class="pre">pscale()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.showkn"><code class="docutils literal notranslate"><span class="pre">showkn()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.showim"><code class="docutils literal notranslate"><span class="pre">showim()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.inference_summary_plot"><code class="docutils literal notranslate"><span class="pre">inference_summary_plot()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.plot_convex_hull"><code class="docutils literal notranslate"><span class="pre">plot_convex_hull()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.unit_crosshairs"><code class="docutils literal notranslate"><span class="pre">unit_crosshairs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.covellipse_from_points"><code class="docutils literal notranslate"><span class="pre">covellipse_from_points()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.covariance_crosshairs"><code class="docutils literal notranslate"><span class="pre">covariance_crosshairs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.good_colorbar"><code class="docutils literal notranslate"><span class="pre">good_colorbar()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.draw_compass"><code class="docutils literal notranslate"><span class="pre">draw_compass()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>lgcpspatial.plot module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/lgcpspatial.plot.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="module-lgcpspatial.plot">
+<span id="lgcpspatial-plot-module"></span><h1>lgcpspatial.plot module<a class="headerlink" href="#module-lgcpspatial.plot" title="Permalink to this heading"></a></h1>
+<p>plot.py: A subset of plotting helpers copied from
+<cite>neurotools/graphics/plot</cite>, and some new helper routines to reduce
+notebook clutter</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.simpleaxis">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">simpleaxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#simpleaxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.simpleaxis" title="Permalink to this definition"></a></dt>
+<dd><p>Only draw the bottom and left axis lines</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>optional</em><em>, </em><em>defaults to plt.gca</em><em>(</em><em>) </em><em>if None</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.rightaxis">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">rightaxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#rightaxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.rightaxis" title="Permalink to this definition"></a></dt>
+<dd><p>Only draw the bottom and right axis lines.
+Move y axis to the right.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>optional</em><em>, </em><em>defaults to plt.gca</em><em>(</em><em>) </em><em>if None</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.simpleraxis">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">simpleraxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#simpleraxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.simpleraxis" title="Permalink to this definition"></a></dt>
+<dd><p>Only draw the left y axis, nothing else</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>optiona</em><em>, </em><em>defaults to plt.gca</em><em>(</em><em>) </em><em>if None</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.simpleraxis2">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">simpleraxis2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#simpleraxis2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.simpleraxis2" title="Permalink to this definition"></a></dt>
+<dd><p>Only draw the left y axis, nothing else</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>optiona</em><em>, </em><em>defaults to plt.gca</em><em>(</em><em>) </em><em>if None</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.noaxis">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">noaxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#noaxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.noaxis" title="Permalink to this definition"></a></dt>
+<dd><p>Hide all axes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>optiona</em><em>, </em><em>defaults to plt.gca</em><em>(</em><em>) </em><em>if None</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.axeson">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">axeson</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#axeson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.axeson" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.nox">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">nox</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#nox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.nox" title="Permalink to this definition"></a></dt>
+<dd><p>Hide x-axis</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.noy">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">noy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#noy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.noy" title="Permalink to this definition"></a></dt>
+<dd><p>Hide y-axis</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.noxyaxes">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">noxyaxes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#noxyaxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.noxyaxes" title="Permalink to this definition"></a></dt>
+<dd><p>Hide all aspects of x and y axes.
+See <cite>nox</cite>, <cite>noy</cite>, and <cite>noaxis</cite></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.figurebox">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">figurebox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.6,</span> <span class="pre">0.6,</span> <span class="pre">0.6)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#figurebox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.figurebox" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.pixels_to_xfigureunits">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">pixels_to_xfigureunits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#pixels_to_xfigureunits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.pixels_to_xfigureunits" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a measurement in pixels to units of the current
+figure width scale</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.pixels_to_yfigureunits">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">pixels_to_yfigureunits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#pixels_to_yfigureunits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.pixels_to_yfigureunits" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a measurement in pixels to units of the current
+figure height scale</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.nudge_axis_left">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">nudge_axis_left</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#nudge_axis_left"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.nudge_axis_left" title="Permalink to this definition"></a></dt>
+<dd><p>Moves the left x-axis limit, keeping the right limit intact.
+This changes the width of the plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dx</strong> (<em>number</em>) – Amount (in pixels) to adjust axis</p></li>
+<li><p><strong>ax</strong> (<em>axis</em><em>, </em><em>default None</em>) – If None, uses gca()</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.nudge_axis_right">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">nudge_axis_right</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#nudge_axis_right"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.nudge_axis_right" title="Permalink to this definition"></a></dt>
+<dd><p>Moves the right x-axis limit, keeping the left limit intact.
+This changes the width of the plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dx</strong> (<em>number</em>) – Amount (in pixels) to adjust axis</p></li>
+<li><p><strong>ax</strong> (<em>axis</em><em>, </em><em>default None</em>) – If None, uses gca()</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.nudge_axis_x">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">nudge_axis_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#nudge_axis_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.nudge_axis_x" title="Permalink to this definition"></a></dt>
+<dd><p>This does not change the width of the axis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dx</strong> (<em>number</em>) – Amount (in pixels) to adjust axis</p></li>
+<li><p><strong>ax</strong> (<em>axis</em><em>, </em><em>default None</em>) – If None, uses gca()</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.nudge_axis_y_pixels">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">nudge_axis_y_pixels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#nudge_axis_y_pixels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.nudge_axis_y_pixels" title="Permalink to this definition"></a></dt>
+<dd><p>moves axis dy pixels.
+Direction of dy may depend on axis orientation.
+Does not change axis height.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.adjust_axis_height_pixels">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">adjust_axis_height_pixels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#adjust_axis_height_pixels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.adjust_axis_height_pixels" title="Permalink to this definition"></a></dt>
+<dd><p>resize axis by dy pixels.
+Direction of dy may depends on axis orientation.
+Does not change the baseline position of axis.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.get_ax_size">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">get_ax_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#get_ax_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.get_ax_size" title="Permalink to this definition"></a></dt>
+<dd><p>Gets tha axis size in figure-relative units</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.yunits_to_pixels">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">yunits_to_pixels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#yunits_to_pixels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.yunits_to_pixels" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a measurement in units of the current y-axis to pixels</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.xunits_to_pixels">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">xunits_to_pixels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#xunits_to_pixels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.xunits_to_pixels" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a measurement in units of the current x-axis to pixels</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.yscalebar">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">yscalebar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ycenter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yheight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'k'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#yscalebar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.yscalebar" title="Permalink to this definition"></a></dt>
+<dd><p>Add vertical scale bar to plot</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ax</strong> (<em>axis</em><em>, </em><em>if None</em><em> (</em><em>default</em><em>)</em><em>, </em><em>uses the current axis.</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.xscalebar">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">xscalebar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xcenter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'k'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#xscalebar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.xscalebar" title="Permalink to this definition"></a></dt>
+<dd><p>Add horizontal scale bar to plot</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xcenter</strong> (<em>float</em>) – Horizontal center of the scale bar</p></li>
+<li><p><strong>xlength</strong> (<em>float</em>) – How wide the scale bar is</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.arrow_between">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">arrow_between</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#arrow_between"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.arrow_between" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.nicey">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">nicey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#nicey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.nicey" title="Permalink to this definition"></a></dt>
+<dd><p>Mark only the min/max value of y axis</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.nicex">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">nicex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#nicex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.nicex" title="Permalink to this definition"></a></dt>
+<dd><p>Mark only the min/max value of x axis</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.nicexy">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">nicexy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xby</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yby</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#nicexy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.nicexy" title="Permalink to this definition"></a></dt>
+<dd><p>Mark only the min/max value of y/y axis. See <cite>nicex</cite> and <cite>nicey</cite></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.hcolorbar">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">hcolorbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sideways</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shrink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelpad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#hcolorbar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.hcolorbar" title="Permalink to this definition"></a></dt>
+<dd><p>Matplotlib’s colorbar function is pretty bad. This is less bad.
+r’$mathrm{mu V}^2$’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vmin</strong> (<em>number</em>) – min value for colormap</p></li>
+<li><p><strong>vmax</strong> (<em>number</em>) – mac value for colormap</p></li>
+<li><p><strong>cmap</strong> (<em>colormap</em>) – what colormap to use</p></li>
+<li><p><strong>title</strong> (<em>string</em>) – Units for colormap</p></li>
+<li><p><strong>ax</strong> (<em>axis</em>) – optional, defaults to plt.gca(). axis to which to add colorbar</p></li>
+<li><p><strong>sideways</strong> (<em>bool</em>) – Flips the axis label sideways</p></li>
+<li><p><strong>border</strong> (<em>bool</em>) – Draw border around colormap box?</p></li>
+<li><p><strong>spacing</strong> (<em>number</em>) – distance from axis in pixels. defaults to 5</p></li>
+<li><p><strong>width</strong> (<em>number</em>) – width of colorbar in pixels. defaults to 15</p></li>
+<li><p><strong>labelpad</strong> (<em>number</em>) – padding between colorbar and title in pixels, defaults to 10</p></li>
+<li><p><strong>fontsize</strong> (<em>number</em>) – label font size, defaults to 12</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>colorbar axis</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>axis</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.subfigurelabel">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">subfigurelabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">39</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#subfigurelabel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.subfigurelabel" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>label</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.pixels_to_xunits">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">pixels_to_xunits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#pixels_to_xunits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.pixels_to_xunits" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a measurement in pixels to units of the current x-axis
+scale</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.px2x">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">px2x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lgcpspatial.plot.px2x" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a measurement in pixels to units of the current x-axis
+scale</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.pixels_to_yunits">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">pixels_to_yunits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#pixels_to_yunits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.pixels_to_yunits" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a measurement in pixels to units of the current y-axis
+scale</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.px2y">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">px2y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lgcpspatial.plot.px2y" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a measurement in pixels to units of the current y-axis
+scale</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.circular_gaussian_smooth">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">circular_gaussian_smooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#circular_gaussian_smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.circular_gaussian_smooth" title="Permalink to this definition"></a></dt>
+<dd><p>Smooth signal x with gaussian of standard deviation sigma
+Circularly wrapped using Fourier transform</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sigma</strong> (<em>standard deviation</em>) – </p></li>
+<li><p><strong>x</strong> (<em>1D array-like signal</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.circularly_smooth_colormap">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">circularly_smooth_colormap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#circularly_smooth_colormap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.circularly_smooth_colormap" title="Permalink to this definition"></a></dt>
+<dd><p>Smooth a colormap with cirular boundary conditions</p>
+<p>s: sigma, standard dev of gaussian smoothing kernel in samples
+cm: color map, array-like of RGB tuples</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cm</strong> (<em>colormap</em>) – </p></li>
+<li><p><strong>s</strong> (<em>smoothing radius</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>RBG</strong> – Colormap smoothed with circular boundary conditions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.force_aspect">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">force_aspect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#force_aspect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.force_aspect" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>aspect</strong> (<em>aspect ratio</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.pscale">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">pscale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">99.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#pscale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.pscale" title="Permalink to this definition"></a></dt>
+<dd><p>Plot helper: Scale data by percentiles</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.showkn">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">showkn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#showkn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.showkn" title="Permalink to this definition"></a></dt>
+<dd><p>Plot helper; Shift convolution kernel to plot</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.showim">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">showim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#showim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.showim" title="Permalink to this definition"></a></dt>
+<dd><p>Plot helper: Show image with title, no axes</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.inference_summary_plot">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">inference_summary_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">μh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">μz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#inference_summary_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.inference_summary_plot" title="Permalink to this definition"></a></dt>
+<dd><p>Summarize the result of log-Gaussian process variational
+inference in four plots.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.plot_convex_hull">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">plot_convex_hull</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">py</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#plot_convex_hull"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.plot_convex_hull" title="Permalink to this definition"></a></dt>
+<dd><p>Make a line plot of the convex hull of points given by px and py</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.unit_crosshairs">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">unit_crosshairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">draw_ellipse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_cross</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#unit_crosshairs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.unit_crosshairs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.covellipse_from_points">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">covellipse_from_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#covellipse_from_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.covellipse_from_points" title="Permalink to this definition"></a></dt>
+<dd><p>Helper to construct covariance ellipse from
+collection of 2D points <cite>q</cite> encoded as complex numbers.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.covariance_crosshairs">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">covariance_crosshairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_ellipse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_cross</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2D'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#covariance_crosshairs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.covariance_crosshairs" title="Permalink to this definition"></a></dt>
+<dd><p>For 2D Gaussians these are the confidence intervals
+p   | sigma
+90  : 4.605
+95  : 5.991
+97.5: 7.378
+99  : 9.210
+99.5: 10.597</p>
+<ul class="simple">
+<li><p>Get the eigenvalues and vectors of covariance S</p></li>
+<li><p>Prepare crosshairs for a unit standard normal</p></li>
+<li><p>Transform crosshairs into covariance basis</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> (<em>2D covariance matrix</em>) – </p></li>
+<li><p><strong>p</strong> (<em>fraction</em><em> of </em><em>data ellipse should enclose</em>) – </p></li>
+<li><p><strong>draw_ellipse</strong> (<em>whether to draw the ellipse</em>) – </p></li>
+<li><p><strong>draw_cross</strong> (<em>whether to draw the crosshairs</em>) – </p></li>
+<li><p><strong>mode</strong> (<em>2D</em><em> or </em><em>1D;</em>) – If 2D, ellipse will reflect inner p of probability mass
+If 1D, ellipse will represent threshold for p
+significance for a 1-tailed test in any direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>path</strong> – 2×NPOINTS array of (x,y) path data for plotting</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.good_colorbar">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">good_colorbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sideways</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelpad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vscale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">va</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'c'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#good_colorbar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.good_colorbar" title="Permalink to this definition"></a></dt>
+<dd><p>Matplotlib’s colorbar function is pretty bad. This is less bad.
+r’$mathrm{mu V}^2$’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vmin</strong> (<em>number</em>) – min value for colormap</p></li>
+<li><p><strong>vmax</strong> (<em>number</em>) – mac value for colormap</p></li>
+<li><p><strong>cmap</strong> (<em>colormap</em>) – what colormap to use</p></li>
+<li><p><strong>title</strong> (<em>string</em>) – Units for colormap</p></li>
+<li><p><strong>ax</strong> (<em>axis</em>) – optional, defaults to plt.gca(). axis to which to add colorbar</p></li>
+<li><p><strong>sideways</strong> (<em>bool</em>) – Flips the axis label sideways</p></li>
+<li><p><strong>border</strong> (<em>bool</em>) – Draw border around colormap box?</p></li>
+<li><p><strong>spacing</strong> (<em>number</em>) – distance from axis in pixels. defaults to 5</p></li>
+<li><p><strong>width</strong> (<em>number</em>) – width of colorbar in pixels. defaults to 15</p></li>
+<li><p><strong>labelpad</strong> (<em>number</em>) – padding between colorbar and title in pixels, defaults to 10</p></li>
+<li><p><strong>fontsize</strong> (<em>number</em>) – label font size, defaults to 12</p></li>
+<li><p><strong>vscale</strong> (<em>float</em>) – height adjustment relative to parent axis, defaults to 1.0</p></li>
+<li><p><strong>va</strong> (<em>str</em>) – vertical alignment; “bottom” (‘b’), “center” (‘c’), or “top” (‘t’)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>colorbar axis</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>axis</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.draw_compass">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">draw_compass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xy0=(1.1+0.65j)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r=0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_fn=&lt;matplotlib.colors.LinearSegmentedColormap</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta=18</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#draw_compass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.draw_compass" title="Permalink to this definition"></a></dt>
+<dd><p>Draw a hue-wheel compass rose.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xy0</strong> (<em>center</em><em> of </em><em>compass encoded as x+iy complex number</em>) – </p></li>
+<li><p><strong>r</strong> (<em>size</em><em> of </em><em>compass</em><em>, </em><em>defaults to 0.03</em>) – </p></li>
+<li><p><strong>cmap_fn</strong> (<em>circular colormap to use for compass</em>) – </p></li>
+<li><p><strong>delta</strong> (<em>displacement</em><em> of </em><em>lab</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lgcpspatial.util.html" class="btn btn-neutral float-left" title="lgcpspatial.util module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

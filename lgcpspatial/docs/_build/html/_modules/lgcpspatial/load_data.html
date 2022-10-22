@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lgcpspatial.load_data &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
+            <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.plot.html">plot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>lgcpspatial.load_data</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for lgcpspatial.load_data</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># -*- coding: UTF-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Routines for loading and preparing Krupic lab datasets</span>
+
+<span class="sd">Resolution for the camera used to record R1 is 350px/m;</span>
+<span class="sd">resolution for other rats (R11 and R18) was 338px/m</span>
+<span class="sd">Fs     = 50.0      # Sample rate of data (samples/second)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">datadir</span> <span class="o">=</span> <span class="s2">&quot;/home/mer49/Dropbox (Cambridge University)/OLeary_notebooks/gp/&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span>             <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>        <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">scipy.io</span>   <span class="kn">import</span> <span class="n">loadmat</span>
+
+<span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>       <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.util</span>       <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.estimators</span> <span class="kn">import</span> <span class="n">kde</span>
+
+<span class="c1"># Used to find peaks and truncate radial autocorrelation</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">jn_zeros</span>
+
+<span class="c1"># Used to get subset of 2D space containing the arena</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">ConvexHull</span><span class="p">,</span> <span class="n">convex_hull_plot_2d</span>
+
+
+<div class="viewcode-block" id="patch_position_data"><a class="viewcode-back" href="../../lgcpspatial.load_data.html#lgcpspatial.load_data.patch_position_data">[docs]</a><span class="k">def</span> <span class="nf">patch_position_data</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">delta_threshold</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Linearly interpolate across noise/glitches in the </span>
+<span class="sd">    position tracking.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    px: np.float32</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">pz</span> <span class="o">=</span> <span class="n">px</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">py</span>
+    <span class="n">bad</span> <span class="o">=</span> <span class="n">where</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="n">pz</span><span class="p">))</span><span class="o">&gt;</span><span class="n">delta_threshold</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pz</span><span class="p">[</span><span class="n">bad</span><span class="p">]</span><span class="o">=</span><span class="n">NaN</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">interpolate_NaN</span><span class="p">(</span><span class="n">pz</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">z</span><span class="o">.</span><span class="n">real</span><span class="p">,</span><span class="n">z</span><span class="o">.</span><span class="n">imag</span></div>
+
+
+<div class="viewcode-block" id="bin_spikes"><a class="viewcode-back" href="../../lgcpspatial.load_data.html#lgcpspatial.load_data.bin_spikes">[docs]</a><span class="k">def</span> <span class="nf">bin_spikes</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">w</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Bin spikes, using linear interpolation to distribute </span>
+<span class="sd">    point mass to four nearest pixels, weighted by distance. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters:</span>
+<span class="sd">        px (np.flaot32): x location of points</span>
+<span class="sd">        py (np.float32): y location of points</span>
+<span class="sd">        s (np.array): spike count at each point</span>
+<span class="sd">        L (int): number of spatial bins for the LxL grid</span>
+<span class="sd">        w (np.float32): weights to apply to each point </span>
+<span class="sd">            (default is None for no weigting)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Bin spike counts simple version</span>
+    <span class="c1">#N=histogram2d(y,x,(bins,bins),density=0,weights=w)[0]</span>
+    <span class="c1">#ws=s if w is None else array(s)*array(w)</span>
+    <span class="c1">#K=histogram2d(y,x,(bins,bins),density=0,weights=ws)[0]</span>
+    <span class="c1">#return N,K</span>
+    
+    <span class="k">if</span> <span class="n">w</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">px</span><span class="p">))</span>
+        
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">px</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">py</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span> \
+        <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">px</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">py</span><span class="p">)</span><span class="o">&gt;=</span><span class="mi">0</span>
+    <span class="n">ix</span><span class="p">,</span><span class="n">fx</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">px</span><span class="o">*</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">iy</span><span class="p">,</span><span class="n">fy</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">py</span><span class="o">*</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">ix</span><span class="p">)</span><span class="o">&lt;</span><span class="n">L</span><span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">iy</span><span class="o">&lt;</span><span class="n">L</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">w11</span> <span class="o">=</span> <span class="n">fx</span><span class="o">*</span><span class="n">fy</span><span class="o">*</span><span class="n">w</span>
+    <span class="n">w10</span> <span class="o">=</span> <span class="n">fx</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">fy</span><span class="p">)</span><span class="o">*</span><span class="n">w</span>
+    <span class="n">w01</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">fx</span><span class="p">)</span><span class="o">*</span><span class="n">fy</span><span class="o">*</span><span class="n">w</span>
+    <span class="n">w00</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">fx</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">fy</span><span class="p">)</span><span class="o">*</span><span class="n">w</span>
+    
+    <span class="n">qx</span>  <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="n">ix</span><span class="p">,</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">ix</span><span class="p">,</span><span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">qy</span>  <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="n">iy</span><span class="p">,</span><span class="n">iy</span><span class="p">,</span><span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">z</span>   <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="n">w00</span><span class="p">,</span><span class="n">w10</span><span class="p">,</span><span class="n">w01</span><span class="p">,</span><span class="n">w11</span><span class="p">])</span>
+    
+    <span class="n">ibins</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">N</span>   <span class="o">=</span> <span class="n">histogram2d</span><span class="p">(</span><span class="n">qy</span><span class="p">,</span><span class="n">qx</span><span class="p">,(</span><span class="n">ibins</span><span class="p">,</span><span class="n">ibins</span><span class="p">),</span>
+                      <span class="n">density</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">weights</span><span class="o">=</span><span class="n">z</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ws</span>  <span class="o">=</span> <span class="n">z</span><span class="o">*</span><span class="n">concatenate</span><span class="p">((</span><span class="n">s</span><span class="p">,)</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">K</span>   <span class="o">=</span> <span class="n">histogram2d</span><span class="p">(</span><span class="n">qy</span><span class="p">,</span><span class="n">qx</span><span class="p">,(</span><span class="n">ibins</span><span class="p">,</span><span class="n">ibins</span><span class="p">),</span>
+                      <span class="n">density</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">weights</span><span class="o">=</span><span class="n">ws</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">float32</span><span class="p">(</span><span class="n">N</span><span class="p">),</span><span class="n">float32</span><span class="p">(</span><span class="n">K</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Arena"><a class="viewcode-back" href="../../lgcpspatial.load_data.html#lgcpspatial.load_data.Arena">[docs]</a><span class="k">class</span> <span class="nc">Arena</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Object describing the area visited by an animal within </span>
+<span class="sd">    an experiment.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    mask: np.bool</span>
+<span class="sd">        L x L boolean matrices of grid locations within the </span>
+<span class="sd">        experimetnal arena</span>
+<span class="sd">    nanmask: np.float32</span>
+<span class="sd">        L x L float32 array with 1 for in-bounds points and </span>
+<span class="sd">        NaN for out-of-bounds points. Multiple array data by</span>
+<span class="sd">        this mask before </span>
+<span class="sd">        sending to `imshow()` to render out-of-bounds points</span>
+<span class="sd">        as transparent.</span>
+<span class="sd">    perimeter: np.float32</span>
+<span class="sd">        NPOINTS x 2 list of points in the convex hull of the </span>
+<span class="sd">        experimental arena</span>
+<span class="sd">        in [0,1]² normalied coordinates        </span>
+<span class="sd">    hull: scipy.spatial._qhull.ConvexHull</span>
+<span class="sd">        Convex Hull object describing the arena perimeter</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">L</span><span class="p">,</span>
+                 <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">radius</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+                 <span class="n">thr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Prepare a mask from the convex hull of visited</span>
+<span class="sd">        locations</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        px: np.float32</span>
+<span class="sd">            NPOINTS ndarray</span>
+<span class="sd">            X coordinates of points in [0,1]</span>
+<span class="sd">        py: np.float32</span>
+<span class="sd">            NPOINTS ndarray</span>
+<span class="sd">            Y coordinates of points in [01]</span>
+<span class="sd">        L: int</span>
+<span class="sd">            positive integer</span>
+<span class="sd">            Number of spatial bins (e.g. 128)</span>
+
+<span class="sd">        Other Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        resolution: positive integer</span>
+<span class="sd">            Upsampling factor</span>
+<span class="sd">            Defaults to 1</span>
+<span class="sd">        radius: positive float</span>
+<span class="sd">            Additional padding to add to mask outside</span>
+<span class="sd">            perimeter in pixels. This defines the blur</span>
+<span class="sd">            radius for extending the boundary.</span>
+<span class="sd">        thr: positive float: </span>
+<span class="sd">            Thresholding to use after blur to extend</span>
+<span class="sd">            the boundary.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        arena: Arena</span>
+<span class="sd">            An Arena object containing a LxL boolean array </span>
+<span class="sd">            `mask`, a NPOINTSx2 array of perimeter points</span>
+<span class="sd">            `perimenter`, and a </span>
+<span class="sd">            `scipy.spatial._qhull.ConvexHull` object `hull`; </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="c1"># Encircle points in a convex hull</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">hull</span>   <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="n">verts</span>  <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">perim</span>  <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">verts</span><span class="p">]</span>
+        
+        <span class="c1"># Generate discrete grid at desired resolution</span>
+        <span class="n">Lr</span>     <span class="o">=</span> <span class="n">L</span><span class="o">*</span><span class="n">resolution</span>
+        <span class="n">grdp</span>   <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">Lr</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">Lr</span><span class="p">)[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">grdp</span>   <span class="o">=</span> <span class="n">array</span><span class="p">([</span>
+            <span class="n">grdp</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">ones</span><span class="p">((</span><span class="n">Lr</span><span class="p">,</span><span class="n">Lr</span><span class="p">)),</span>
+            <span class="n">grdp</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">ones</span><span class="p">((</span><span class="n">Lr</span><span class="p">,</span><span class="n">Lr</span><span class="p">))])</span>
+        <span class="n">grdp</span>  <span class="o">=</span> <span class="n">grdp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,(</span><span class="n">Lr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        
+        <span class="c1"># Find points within this grid inside convex hull</span>
+        <span class="n">mask</span>  <span class="o">=</span> <span class="n">is_in_hull</span><span class="p">(</span><span class="n">grdp</span><span class="p">,</span><span class="n">hull</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Lr</span><span class="p">,</span><span class="n">Lr</span><span class="p">)</span>
+        
+        <span class="c1"># Extent the mask to add a margin</span>
+        <span class="n">mask</span>  <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span><span class="n">radius</span><span class="p">)</span><span class="o">&gt;</span><span class="n">thr</span>
+        
+        <span class="c1"># Recalculate hull to include extended mask</span>
+        <span class="n">py</span><span class="p">,</span><span class="n">px</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">Lr</span><span class="p">)</span>
+        <span class="n">points</span><span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">hull</span>  <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="n">verts</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:</span><span class="mi">1</span><span class="p">]])</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perimeter</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">verts</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hull</span> <span class="o">=</span> <span class="n">hull</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span></div>
+        
+<div class="viewcode-block" id="Dataset"><a class="viewcode-back" href="../../lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset">[docs]</a><span class="k">class</span> <span class="nc">Dataset</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Class to load and extract experimental data</span>
+<span class="sd">    from Krupic Lab data format.     </span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    spikes: np.float32</span>
+<span class="sd">        Length NSAMPLES array of spike counts at each time </span>
+<span class="sd">        point.</span>
+<span class="sd">    extent: tuple</span>
+<span class="sd">        (xstart,xstop,ystart,ystop) coordinates of 2D arena </span>
+<span class="sd">        in meters. Pass this as the `extent` argument to </span>
+<span class="sd">        `imshow()` to correctly position L x L grid in </span>
+<span class="sd">        physical coordinates.  </span>
+<span class="sd">    scale: float, units of 1/meters </span>
+<span class="sd">        Scaling factor between (px,py)∈[0,1]²</span>
+<span class="sd">        coordinates and meters. </span>
+<span class="sd">        px/scale = position in meters </span>
+<span class="sd">    px: np.float32</span>
+<span class="sd">        Normalized x-position in [0,1]</span>
+<span class="sd">    py: np.float32</span>
+<span class="sd">        Normalized y-position in [0,1]</span>
+<span class="sd">    margin: float</span>
+<span class="sd">        Margin padding argument passed to constructor. </span>
+<span class="sd">        Fraction of empty space around binned data to avoid </span>
+<span class="sd">        circular FFT wraparound. Ensure your prior kernel</span>
+<span class="sd">        width is smaller than margin*L/2.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">spikes</span><span class="p">,</span><span class="n">margin</span><span class="o">=</span><span class="mf">.1</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        x: np.float32</span>
+<span class="sd">            1D array of animal&#39;s x position.</span>
+<span class="sd">        y: np.float32</span>
+<span class="sd">            1D array of animal&#39;s y position.</span>
+<span class="sd">        spikes: np.float32</span>
+<span class="sd">            1D array of binned spike counts at the same</span>
+<span class="sd">            sample rate as (x,y). </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">spikes</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">spikes</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;x,y, and spikes should be&#39;</span>
+                             <span class="s1">&#39;float32 arrays with the same&#39;</span>
+                             <span class="s1">&#39;length,&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Define normalized coordinates to bin data to grid</span>
+        <span class="n">minx</span><span class="p">,</span><span class="n">maxx</span> <span class="o">=</span> <span class="n">nanmin</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">nanmax</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">miny</span><span class="p">,</span><span class="n">maxy</span> <span class="o">=</span> <span class="n">nanmin</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="n">nanmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">nanmax</span><span class="p">([</span><span class="n">maxx</span><span class="o">-</span><span class="n">minx</span><span class="p">,</span><span class="n">maxy</span><span class="o">-</span><span class="n">miny</span><span class="p">])</span>
+        <span class="n">pad</span>   <span class="o">=</span> <span class="mf">.5</span> <span class="o">+</span> <span class="n">margin</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mf">1e-6</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">delta</span><span class="o">*</span><span class="n">pad</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">xofst</span> <span class="o">=</span> <span class="p">(</span><span class="n">maxx</span><span class="o">+</span><span class="n">minx</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">delta</span><span class="o">*</span><span class="n">pad</span>
+        <span class="n">yofst</span> <span class="o">=</span> <span class="p">(</span><span class="n">maxy</span><span class="o">+</span><span class="n">miny</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">delta</span><span class="o">*</span><span class="n">pad</span>
+        <span class="n">px</span>    <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="p">(</span><span class="n">maxx</span><span class="o">+</span><span class="n">minx</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">delta</span><span class="o">*</span><span class="n">pad</span><span class="p">)</span><span class="o">*</span><span class="n">scale</span>
+        <span class="n">py</span>    <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="p">(</span><span class="n">maxy</span><span class="o">+</span><span class="n">miny</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">delta</span><span class="o">*</span><span class="n">pad</span><span class="p">)</span><span class="o">*</span><span class="n">scale</span>
+        <span class="n">x0</span>    <span class="o">=</span> <span class="p">(</span><span class="n">maxx</span><span class="o">+</span><span class="n">minx</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">delta</span><span class="o">*</span><span class="n">pad</span>
+        <span class="n">y0</span>    <span class="o">=</span> <span class="p">(</span><span class="n">maxy</span><span class="o">+</span><span class="n">miny</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">delta</span><span class="o">*</span><span class="n">pad</span>
+        <span class="n">x1</span>    <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">scale</span><span class="o">+</span><span class="p">(</span><span class="n">maxx</span><span class="o">+</span><span class="n">minx</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">delta</span><span class="o">*</span><span class="n">pad</span>
+        <span class="n">y1</span>    <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">scale</span><span class="o">+</span><span class="p">(</span><span class="n">maxy</span><span class="o">+</span><span class="n">miny</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">delta</span><span class="o">*</span><span class="n">pad</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">extent</span> <span class="o">=</span> <span class="p">(</span><span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">y1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">px</span><span class="o">=</span><span class="n">px</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">py</span><span class="o">=</span><span class="n">py</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">margin</span><span class="o">=</span><span class="n">margin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spikes</span><span class="o">=</span><span class="n">spikes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="o">=</span><span class="n">scale</span>
+    
+<div class="viewcode-block" id="Dataset.from_file"><a class="viewcode-back" href="../../lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset.from_file">[docs]</a>    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="n">margin</span><span class="o">=</span><span class="mf">.1</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Load a dataset, rescaling the spatial locations.</span>
+<span class="sd">        </span>
+<span class="sd">        We correct the head direction angles to align</span>
+<span class="sd">        with the usual definitions of polar angles</span>
+<span class="sd">        for (x,y) position data. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        dataset: str</span>
+<span class="sd">            Which dataset file to load</span>
+<span class="sd">        margin: float</span>
+<span class="sd">            Pading for circular convolution; default .1</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        Dataset: </span>
+<span class="sd">            A Dataset object prepared from the given </span>
+<span class="sd">            grid-cell data file. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># Retrieve data from file</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">loadmat</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="n">squeeze_me</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dataset</span>              <span class="o">=</span> <span class="n">dataset</span>
+        
+        <span class="k">for</span> <span class="n">varname</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;xy dir pos_sample_rate &#39;</span>
+                        <span class="s1">&#39;pixels_per_m spikes_times &#39;</span>
+                        <span class="s1">&#39;spk_sample_rate&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">varname</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected </span><span class="si">%s</span><span class="s1"> to contain a&#39;</span>
+                    <span class="s1">&#39; variable named </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="n">varname</span><span class="p">))</span>
+        
+        <span class="n">xy_position_px</span>       <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;xy&#39;</span><span class="p">]</span>
+        <span class="n">head_direction_deg</span>   <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;dir&#39;</span><span class="p">]</span>
+        <span class="n">position_sample_rate</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;pos_sample_rate&#39;</span><span class="p">]</span>
+        <span class="n">px_per_meter</span>         <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;pixels_per_m&#39;</span><span class="p">]</span>
+        <span class="n">spike_times_samples</span>  <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;spikes_times&#39;</span><span class="p">]</span>
+        <span class="n">spike_sample_rate</span>    <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;spk_sample_rate&#39;</span><span class="p">]</span>
+        
+        <span class="c1"># Fix head direction to line up with px,py</span>
+        <span class="c1"># for usual definitions of Cartesian and polar</span>
+        <span class="c1"># coordinates</span>
+        <span class="n">head_direction_deg</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">head_direction_deg</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span><span class="o">%</span><span class="mi">360</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">spike_times_samples</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The `spikes_times` variable &#39;</span>
+                <span class="s1">&#39;for file </span><span class="si">%s</span><span class="s1"> appears to be empty.&#39;</span><span class="o">%</span><span class="n">dataset</span><span class="p">)</span>
+
+        <span class="c1"># Convert units</span>
+        <span class="n">dt</span>                  <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">position_sample_rate</span>
+        <span class="n">xy_position_meters</span>  <span class="o">=</span> <span class="n">xy_position_px</span> <span class="o">/</span> <span class="n">px_per_meter</span> 
+        <span class="n">spike_times_seconds</span> <span class="o">=</span> <span class="n">spike_times_samples</span><span class="o">/</span> <span class="n">spike_sample_rate</span>
+        <span class="n">NSPIKES</span>             <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spike_times_samples</span><span class="p">)</span>
+        <span class="n">NSAMPLES</span>            <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">head_direction_deg</span><span class="p">)</span>
+
+        <span class="c1"># Downspample spikes to position sampling</span>
+        <span class="n">it</span><span class="p">,</span><span class="n">ft</span>  <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">spike_times_seconds</span><span class="o">/</span><span class="n">dt</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">w</span>      <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="n">NSPIKES</span><span class="p">)</span>
+        <span class="n">wt</span>     <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="mi">1</span><span class="o">-</span><span class="n">ft</span><span class="p">,</span><span class="n">ft</span><span class="p">])</span>
+        <span class="n">qt</span>     <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="n">it</span><span class="p">,</span><span class="n">it</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">spikes</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">histogram</span><span class="p">(</span><span class="n">qt</span><span class="p">,</span>
+           <span class="n">arange</span><span class="p">(</span><span class="n">NSAMPLES</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">density</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">weights</span><span class="o">=</span><span class="n">wt</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        
+        <span class="c1"># Repair defects in position tracking</span>
+        <span class="n">px</span><span class="p">,</span><span class="n">py</span> <span class="o">=</span> <span class="n">xy_position_meters</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">zx</span><span class="p">,</span><span class="n">zy</span> <span class="o">=</span> <span class="n">patch_position_data</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span>
+                                    <span class="n">delta_threshold</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+        
+        <span class="c1"># Build and return Dataset object</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">zx</span><span class="p">,</span><span class="n">zy</span><span class="p">,</span><span class="n">spikes</span><span class="p">,</span><span class="n">margin</span><span class="o">=</span><span class="n">margin</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">dataset</span>              <span class="o">=</span> <span class="n">dataset</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">xy_position_px</span>       <span class="o">=</span> <span class="n">xy_position_px</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">head_direction_deg</span>   <span class="o">=</span> <span class="n">head_direction_deg</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">position_sample_rate</span> <span class="o">=</span> <span class="n">position_sample_rate</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">px_per_meter</span>         <span class="o">=</span> <span class="n">px_per_meter</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">spike_times_samples</span>  <span class="o">=</span> <span class="n">spike_times_samples</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">spike_sample_rate</span>    <span class="o">=</span> <span class="n">spike_sample_rate</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">dt</span>                   <span class="o">=</span> <span class="n">dt</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">xy_position_meters</span>   <span class="o">=</span> <span class="n">xy_position_meters</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">spike_times_seconds</span>  <span class="o">=</span> <span class="n">spike_times_seconds</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">NSPIKES</span>              <span class="o">=</span> <span class="n">NSPIKES</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">NSAMPLES</span>             <span class="o">=</span> <span class="n">NSAMPLES</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="Dataset.prepare"><a class="viewcode-back" href="../../lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset.prepare">[docs]</a>    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span>
+                <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">spike_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">blur_radius</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">doplot</span><span class="o">=</span><span class="kc">False</span>
+               <span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Prepare dataset for further inference.</span>
+<span class="sd">        This function bins spikes and position data, and </span>
+<span class="sd">        heuristically estimates grid scale. It adds the </span>
+<span class="sd">        following attributes to the Dataset object:</span>
+
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        L: int</span>
+<span class="sd">            Size of L x L spatial grid for binned data.</span>
+<span class="sd">            I&#39;ve found that 128² grids work well and are a</span>
+<span class="sd">            good compromise between speed, resolution, and </span>
+<span class="sd">            numerical stability.</span>
+<span class="sd">        arena: Arena</span>
+<span class="sd">            Object describing binned 2D experimental arena </span>
+<span class="sd">            shape. See the documentation of the Arena class </span>
+<span class="sd">            for more details. </span>
+<span class="sd">        n: np.float32</span>
+<span class="sd">            Length L² 1D array of total visits to each </span>
+<span class="sd">            location. This is interpolated, so may contain </span>
+<span class="sd">            non-integer values.</span>
+<span class="sd">        y: np.float32</span>
+<span class="sd">            Length L² 1D array of total spikes at each </span>
+<span class="sd">            location. This is interpolated, so may contain </span>
+<span class="sd">            non-integer values.</span>
+<span class="sd">        P: float</span>
+<span class="sd">            Heuristic grid period from autocorrelogram</span>
+<span class="sd">        prior_variance: float</span>
+<span class="sd">            Heuristic estimate of Gaussian Process prior </span>
+<span class="sd">            kernel marginal variance. If this is bigger, the </span>
+<span class="sd">            prior will be weighted less during Baysian</span>
+<span class="sd">            inference. This heuristic estimate is biased;</span>
+<span class="sd">            you should optimize the kernel hyperparameters</span>
+<span class="sd">            using the ELBO if you want the posterior</span>
+<span class="sd">            variance to be interpretable. See</span>
+<span class="sd">            `grid_search.py`. </span>
+<span class="sd">        bg_blur_radius: float</span>
+<span class="sd">            Low-frequency spatial scale below which rate</span>
+<span class="sd">            variations are considered background</span>
+<span class="sd">            fluctuations and removed. </span>
+<span class="sd">        kde_blur_radius:</span>
+<span class="sd">            Grid-period scale; Use this as the standard</span>
+<span class="sd">            deviation of a Gaussian blur for a Kernel</span>
+<span class="sd">            Density Estimator (KDE) of firing rate as a</span>
+<span class="sd">            function of location.</span>
+<span class="sd">        prior_mean: np.float32</span>
+<span class="sd">            L x L array of estimated background log-rate. </span>
+<span class="sd">            Use this as a prior during Gaussian Process </span>
+<span class="sd">            inference so that the calculated rate maps are</span>
+<span class="sd">            defined in terms of grid-like structure above</span>
+<span class="sd">            these background rate variations. This is</span>
+<span class="sd">            calculated by Gaussian blurring the visits `n`</span>
+<span class="sd">            and spike counts `y` with a kernel with</span>
+<span class="sd">            standard-deviation `bg_blur_radius`, and taking</span>
+<span class="sd">            the logarithm of their ratio.</span>
+<span class="sd">        lograte_guess: np.float32</span>
+<span class="sd">            L x L array of KDE-estimated log-firing rate.</span>
+<span class="sd">            This is calculated by blurring visits `n` and</span>
+<span class="sd">            spike counts `y` with a Gaussian kernel with</span>
+<span class="sd">            standard deviation `kde_blur_radius`, taking </span>
+<span class="sd">            the logarithm of their ratio, and subtracting</span>
+<span class="sd">            prior_mean.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        fn: str</span>
+<span class="sd">            File path to load</span>
+<span class="sd">        L: int</span>
+<span class="sd">            Number of bins in L x L spatial grid</span>
+
+<span class="sd">        Other Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        P: int</span>
+<span class="sd">            Grid period; If not provided we will estimate</span>
+<span class="sd">            this from the autocorrelogram,</span>
+<span class="sd">        blur_radius: float</span>
+<span class="sd">            Initial KDE blur radius for heuristic period</span>
+<span class="sd">            estimate. Default is 2. </span>
+<span class="sd">        spike_weights: float32</span>
+<span class="sd">            Array of sample weightings of the same length</span>
+<span class="sd">            as Dataset.spikes to use when binning.</span>
+<span class="sd">        doplot: boolean</span>
+<span class="sd">            Whether to show a summary plot; Default: True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        A Dataset object containing spatially-binned data,</span>
+<span class="sd">        Heurstic estimates of the grid scale, and initial </span>
+<span class="sd">        firing-rate maps estimated using a kernel density </span>
+<span class="sd">        estimator. See the `PreparedDataset` docstring for </span>
+<span class="sd">        more detail. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># Bin spikes</span>
+        <span class="n">N</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="n">bin_spikes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">px</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">py</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">spikes</span><span class="p">,</span>
+                         <span class="n">L</span><span class="p">,</span>
+                         <span class="n">w</span><span class="o">=</span><span class="n">spike_weights</span><span class="p">)</span> 
+        <span class="n">zeros</span>    <span class="o">=</span> <span class="n">N</span><span class="o">&lt;=</span><span class="mf">0.0</span>
+        <span class="n">N</span><span class="p">[</span><span class="n">zeros</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">y</span>        <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">K</span><span class="o">/</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">zeros</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Prepare mask using the convex hull</span>
+        <span class="n">arena</span> <span class="o">=</span> <span class="n">Arena</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">py</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
+
+        <span class="c1"># Calibrate grid scale</span>
+        <span class="n">λhat</span>   <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">blur_radius</span><span class="p">)</span> <span class="c1"># spikes/second</span>
+        <span class="n">acorr2</span> <span class="o">=</span> <span class="n">fft_acorr</span><span class="p">(</span><span class="n">λhat</span><span class="p">,</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span> <span class="c1"># 2D autocorr.</span>
+        <span class="n">acorrR</span> <span class="o">=</span> <span class="n">radial_average</span><span class="p">(</span><span class="n">acorr2</span><span class="p">)</span> <span class="c1"># radial autocorr.</span>
+        <span class="n">res</span>    <span class="o">=</span> <span class="mi">50</span>                     <span class="c1"># Subsample res.</span>
+        <span class="k">if</span> <span class="n">P</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># № bins to 1st peak</span>
+            <span class="n">P</span><span class="p">,</span><span class="n">acup</span> <span class="o">=</span> <span class="n">acorr_peak</span><span class="p">(</span><span class="n">acorrR</span><span class="p">,</span><span class="n">res</span><span class="p">)</span> 
+            <span class="c1">#if isnan(P):</span>
+            <span class="c1">#    raise AssertionError(&#39;Could not detect grid &#39;</span>
+            <span class="c1">#        &#39;period. Is the period too large? Is &#39;</span>
+            <span class="c1">#        &#39;this a place cell?&#39;)</span>
+            <span class="c1"># Get peiod from peak assuming bessel Jo</span>
+            <span class="n">P</span>  <span class="o">*=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="n">jn_zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">doplot</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span><span class="n">acup</span> <span class="o">=</span> <span class="n">acorr_peak</span><span class="p">(</span><span class="n">acorrR</span><span class="p">,</span><span class="n">res</span><span class="p">)</span>
+            
+        <span class="c1"># Precompute variables</span>
+        <span class="n">kde_blur_radius</span> <span class="o">=</span> <span class="n">P</span><span class="o">/</span><span class="n">pi</span>              <span class="c1"># bins</span>
+        <span class="n">bg_blur_radius</span>  <span class="o">=</span> <span class="n">kde_blur_radius</span><span class="o">*</span><span class="mi">5</span> <span class="c1"># bins</span>
+        <span class="n">n</span>    <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>                    <span class="c1"># s/bin</span>
+        <span class="n">y</span>    <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>                    <span class="c1"># spikes/s/bin</span>
+        <span class="n">λhat</span> <span class="o">=</span> <span class="n">kde</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">kde_blur_radius</span><span class="p">)</span>    <span class="c1"># KDE rate</span>
+        <span class="n">λbg</span>  <span class="o">=</span> <span class="n">kde</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">bg_blur_radius</span><span class="p">)</span>     <span class="c1"># Bkgnd rate</span>
+        <span class="n">lλh</span>  <span class="o">=</span> <span class="n">slog</span><span class="p">(</span><span class="n">λhat</span><span class="p">)</span>                   <span class="c1"># Log rate</span>
+        <span class="n">prior_mean</span>    <span class="o">=</span> <span class="n">slog</span><span class="p">(</span><span class="n">λbg</span><span class="p">)</span>           <span class="c1"># Log bkgnd</span>
+        <span class="n">lograte_guess</span> <span class="o">=</span> <span class="n">lλh</span> <span class="o">-</span> <span class="n">prior_mean</span>    <span class="c1"># Fgnd lograte</span>
+        <span class="c1"># Heuristic guess for prior kernel variance</span>
+        <span class="n">prior_variance</span> <span class="o">=</span> <span class="n">var</span><span class="p">(</span><span class="n">lograte_guess</span><span class="p">[</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">])</span> 
+        
+        <span class="k">if</span> <span class="n">doplot</span><span class="p">:</span>
+            <span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mf">4.5</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+            <span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">right</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+                            <span class="n">top</span><span class="o">=</span><span class="mf">.88</span><span class="p">,</span><span class="n">bottom</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                            <span class="n">wspace</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">imshow</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">percentile</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span>
+                   <span class="n">vmax</span><span class="o">=</span><span class="n">percentile</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="mi">98</span><span class="p">));</span>
+            <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Visits&#39;</span><span class="p">);</span> <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">imshow</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">),</span><span class="n">vmin</span><span class="o">=</span><span class="n">percentile</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+                   <span class="n">vmax</span><span class="o">=</span><span class="n">percentile</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="mi">98</span><span class="p">));</span>
+            <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Activity&#39;</span><span class="p">);</span> <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">showim</span><span class="p">(</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span><span class="s1">&#39;Mask&#39;</span><span class="p">);</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">=</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">imshow</span><span class="p">(</span><span class="n">λhat</span><span class="o">*</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                   <span class="n">vmax</span><span class="o">=</span><span class="n">percentile</span><span class="p">(</span><span class="n">λhat</span><span class="p">,</span><span class="mi">99</span><span class="p">));</span>
+            <span class="n">title</span><span class="p">(</span><span class="s1">&#39;KDE-smoothed rate&#39;</span><span class="p">);</span> <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">showim</span><span class="p">(</span><span class="n">lograte_guess</span><span class="p">,</span><span class="s1">&#39;Foreground log-rate&#39;</span><span class="p">,</span>
+                   <span class="n">mask</span><span class="o">=</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">);</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">showim</span><span class="p">(</span><span class="n">prior_mean</span><span class="p">,</span><span class="s1">&#39;Background log-rate&#39;</span><span class="p">,</span>
+                   <span class="n">mask</span><span class="o">=</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">);</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s1">&#39;dataset&#39;</span><span class="p">):</span> 
+                <span class="n">suptitle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">imshow</span><span class="p">(</span><span class="n">acorr2</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">percentile</span><span class="p">(</span><span class="n">acorr2</span><span class="p">,</span><span class="mf">99.9</span><span class="p">))</span>
+            <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Autocorrelation&#39;</span><span class="p">);</span> <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">=</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">colspan</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">plot</span><span class="p">((</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">L</span><span class="o">*</span><span class="n">res</span><span class="p">)),</span><span class="n">acup</span><span class="p">)</span>
+            <span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Δbins&#39;</span><span class="p">)</span>
+            <span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;spike²/sample²&#39;</span><span class="p">)</span>
+            <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Radial Autocorrelation&#39;</span><span class="p">)</span>
+            <span class="n">axvline</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">simpleaxis</span><span class="p">()</span>
+            <span class="n">nudge_axis_left</span><span class="p">(</span><span class="mi">240</span><span class="p">)</span>
+            <span class="n">nudge_axis_right</span><span class="p">(</span><span class="mi">35</span><span class="p">)</span>
+            <span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span> <span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;sample/bin&#39;</span><span class="p">)</span>
+            <span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span> <span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;spike/sample&#39;</span><span class="p">)</span>
+            <span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span> <span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;spike/sample&#39;</span>
+                                <span class="p">)</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span><span class="c1"># spacing hack</span>
+            <span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">4</span><span class="p">]);</span> <span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;spike/sample&#39;</span><span class="p">)</span>
+            <span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">5</span><span class="p">]);</span> <span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;log-rate&#39;</span><span class="p">)</span>
+            <span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">6</span><span class="p">]);</span> <span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;log-rate&#39;</span><span class="p">)</span>
+            <span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">7</span><span class="p">]);</span> <span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;spike²/sample²&#39;</span><span class="p">)</span>
+            <span class="n">figurebox</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">K</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">λhat</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">λbg</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">L</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">=</span><span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">=</span><span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">=</span><span class="n">P</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arena</span><span class="o">=</span><span class="n">arena</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bg_blur_radius</span>  <span class="o">=</span> <span class="n">bg_blur_radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prior_mean</span>      <span class="o">=</span> <span class="n">prior_mean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kde_blur_radius</span> <span class="o">=</span> <span class="n">kde_blur_radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lograte_guess</span>   <span class="o">=</span> <span class="n">lograte_guess</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prior_variance</span>  <span class="o">=</span> <span class="n">prior_variance</span>
+        
+        <span class="c1"># This is helpful</span>
+        <span class="n">perimeter_meters</span> <span class="o">=</span> <span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span> \
+            <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+        <span class="n">arena</span><span class="o">.</span><span class="n">perimeter_meters</span> <span class="o">=</span> <span class="n">perimeter_meters</span>
+        
+        <span class="k">return</span> <span class="bp">self</span></div>
+    
+<div class="viewcode-block" id="Dataset.create_posthoc"><a class="viewcode-back" href="../../lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset.create_posthoc">[docs]</a>    <span class="k">def</span> <span class="nf">create_posthoc</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">y</span><span class="p">,</span>
+                       <span class="n">prior_mean</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                       <span class="n">lograte_guess</span><span class="o">=</span><span class="kc">None</span>
+                      <span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Bypass normal initialization and Dataset holding </span>
+<span class="sd">        only binned positions and rate. </span>
+<span class="sd">        This is only used by </span>
+<span class="sd">        `example 0 hyperparameter groundtruth test.ipynb`</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">==</span><span class="n">L</span><span class="o">*</span><span class="n">L</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">==</span><span class="n">L</span><span class="o">*</span><span class="n">L</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">Dataset</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">prior_mean</span>    <span class="o">=</span> <span class="n">prior_mean</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">lograte_guess</span> <span class="o">=</span> <span class="n">lograte_guess</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">L</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+    
+<div class="viewcode-block" id="Dataset.reweighted"><a class="viewcode-back" href="../../lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset.reweighted">[docs]</a>    <span class="k">def</span> <span class="nf">reweighted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">weights</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Re-bin spike histogram using the provided weights</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        weights: 1D np.array</span>
+<span class="sd">            1D array of spike weights of the same length</span>
+<span class="sd">            as data.spikes.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        Dataset:</span>
+<span class="sd">            New dataset with spike histogram binned using</span>
+<span class="sd">            the provided weights.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">spikes</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;list of weights should be &#39;</span>
+                <span class="s1">&#39;the same length as Dataset.spikes.&#39;</span><span class="p">)</span>
+            
+        <span class="n">N</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">ravel</span><span class="p">,</span><span class="n">bin_spikes</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">px</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">py</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spikes</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">weights</span><span class="p">))</span>
+        <span class="n">Y</span>   <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">K</span><span class="o">/</span><span class="n">maximum</span><span class="p">(</span><span class="mf">1e-9</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+        <span class="n">Y</span><span class="p">[</span><span class="n">N</span><span class="o">&lt;=</span><span class="mf">1e-9</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">create_posthoc</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prior_mean</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lograte_guess</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+    
+<div class="viewcode-block" id="Dataset.normalized_to_physical_units"><a class="viewcode-back" href="../../lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset.normalized_to_physical_units">[docs]</a>    <span class="k">def</span> <span class="nf">normalized_to_physical_units</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Convert a list of points from [0,1]² units to</span>
+<span class="sd">        physical units (meters)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        p: np.array</span>
+<span class="sd">            array of 2D point data</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        np.array: </span>
+<span class="sd">            2×NPOINTS array of points in physical units</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">iscomplex</span><span class="p">(</span><span class="n">p</span><span class="p">)):</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">float32</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">real</span><span class="p">,</span><span class="n">p</span><span class="o">.</span><span class="n">imag</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">!=</span><span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected a list of 2D points&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">!=</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">!=</span><span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s1">&#39;Could not figure out which &#39;</span><span class="o">+</span>
+                <span class="s1">&#39;direction contains (x,y) points for &#39;</span><span class="o">+</span>
+                <span class="s1">&#39;shape </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">,))</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">p</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">p</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected points in [0,1]², but &#39;</span><span class="o">+</span>
+                <span class="s1">&#39;point data contained values outside this.&#39;</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">scale</span> <span class="o">+</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">T</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
