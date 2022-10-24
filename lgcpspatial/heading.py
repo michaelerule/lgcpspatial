@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 """
-heading.py: Subroutines used in example 5 heading dependence.ipynb
+heading.py: Subroutines used in 
+`example 5: heading dependence`.
 """
 
 import numpy             as np
@@ -12,11 +13,13 @@ from numpy import *
 
 from collections   import defaultdict
 
-from lgcpspatial.util          import progress_bar,is_in_hull,pdist
+from lgcpspatial.util          import *
 from lgcpspatial.savitskygolay import SGdifferentiate as ddt
 from lgcpspatial.load_data     import bin_spikes, Arena
-from lgcpspatial.lgcp2d        import DiagonalFourierLowrank,coordinate_descent
-from lgcpspatial.posterior     import interpolate_peaks,SampledConfidence
+from lgcpspatial.lgcp2d        import DiagonalFourierLowrank
+from lgcpspatial.lgcp2d        import coordinate_descent
+from lgcpspatial.posterior     import interpolate_peaks
+from lgcpspatial.posterior     import SampledConfidence
 from lgcpspatial.plot          import *
 from lgcpspatial.grid_search   import grid_search
 
@@ -609,7 +612,7 @@ def locate_opposites(peaks,maxd,starti,edges):
     return iop,int32(nan_to_num(op,nan=-1)),dd
 
 
-def plot_connection_arrow(op,q1,q2,**kwargs):
+def plot_connection_arrow(q1,q2,op=None,**kwargs):
     '''
     Draw arrows connecting related fields from two maps. 
     
@@ -620,6 +623,8 @@ def plot_connection_arrow(op,q1,q2,**kwargs):
     q1: field centers in map 1 (as x+iy complex numbers)
     q2: field centers in map 2 (as x+iy complex numbers)
     '''
+    if op is None:
+        op = arange(len(q1))
     q1 = p2c(q1)
     q2 = p2c(q2)
     a = exp(0.35j-.35) # For arrows
@@ -631,8 +636,15 @@ def plot_connection_arrow(op,q1,q2,**kwargs):
             lines+=[m2+v*a,m1,m2,NaN,m1,m2+v*conj(a),NaN]
     plot(real(lines),imag(lines),**{'color':RUST,'lw':.4,**kwargs})
 
-def refit_hyperparameters_heading_weighted(data,model,θ,NSEW):
+
+def fit_heading_variance(data,model,θ,NSEW):
     '''
+    Re-optimize the prior marginal variance for the 
+    given set of heading-weighted models.
+    
+    This is necessary for achieving interpretable posterior
+    confidence intervals, since variable amounts (generally,
+    less) of data are present for the different directions.
     
     Parameters
     --------------------------------------------------------
@@ -691,7 +703,8 @@ def refit_hyperparameters_heading_weighted(data,model,θ,NSEW):
         models.append(model)
         fits.append(fit)
     return models, fits
-    
+
+
 def matched_cardinal_points(peaks,edges,indexNSEW):
     '''
     For each connected component from tracking peaks over
@@ -735,21 +748,27 @@ def matched_cardinal_points(peaks,edges,indexNSEW):
         ]
     return array(points)
 
-def sample_posterior_all_heading_angles(
+
+def sample_heading_angles(
     data,
     models,
     fits,
-    angleNSEW,
-    colorNSEW,
+    angles,
     exclusion_radius = None,
+    edge_radius      = None,
     nsamples         = 2000,
     resolution       = 2,
-    height_threshold = 0.9,
-    prpeak_threshold = 0.9,
-    doplot = True):
+    height_threshold = 0.8,
+    prpeak_threshold = 0.8,
+    doplot           = True,
+    names            = None,
+    colors           = None):
     '''
     Performed a detailed analysis of a range of heading
     angles.
+    
+    Apply this to the lists`models` and `fits` returned by
+    `fit_heading_variance(data,model,heading,angles)`.
     
     This routine re-optimizes the kernel parameters 
     via grid-search for each heading angle, and calculates
@@ -762,18 +781,28 @@ def sample_posterior_all_heading_angles(
         List of N Models
     fits: list
         List of N fits returned by `coordinate_descent`
-    angleNSEW: list
+    angles: list of floats
         List of heading directions for each model
-    colorNSEW:
-        List of plotting colors for each head direcgiton
+        
+    Other Parameters
+    --------------------------------------------------------
     
     Other Parameters
     --------------------------------------------------------
     exclusion_radius: positive float
-        Region a peak must clear to be a local maximum
+        Region a peak must clear to be a local maximum,
+        In units of pixels in the L×L grid.
+        If `None`, defaults to `models[0].P/2.5`.
+    edge_radius: positive float
+        Remove peaks closer than `edge_radius` bins
+        to the arena's edge. The default value of 0
+        does not remove points within a margin of
+        the boundary.
+        In units of pixels in the L×L grid.
+        If `None`, defaults to `models[0].P/2.0`.
     nsamples: positive int
         Number of posterior samples to use
-    resolution: positive int
+    resolution: positive int; default 2
         Upsampling factor for posterior sampling
     height_threshold: positive float ∈[0,1]
         Fraction of locations a peak must be taller than
@@ -781,36 +810,47 @@ def sample_posterior_all_heading_angles(
     prpeak_threshold: positive float ∈[0,1]
         Fraction of samples a grid field must be present in
         to be included
-    doplot: boolean
-        Whether to draw a plot of the resulting samples
+    doplot: boolean; default True
+        Whether to draw plots
+    names: list of str
+        Titles of each plot
+    colors: lost of Matplotlib colors
+        List of plotting colors for each heading angle
     
     '''
     if exclusion_radius is None:
-        exclusion_radius = models[0].P/2
+        exclusion_radius = models[0].P/2.5
+    if edge_radius is None:
+        edge_radius = models[0].P/2
     
+    kplot = None
     if doplot:
-        figure(0,(4,4),200)
-        subplots_adjust(0,0,1,1,0,0)
+        kplot = int(ceil(sqrt(len(angles))))
+        figure(0,(3,3),200)
+        subplots_adjust(0,0,1,1,0,0.1)
 
     samples = []
-    for i,phi in enumerate(angleNSEW): 
+    for i,phi in enumerate(angles): 
         model = models[i]
         fit   = fits[i]
         if doplot:
-            subplot(2,2,i+1)
+            subplot(kplot,kplot,i+1)
         samples.append(SampledConfidence(
             data,
             model,
             fit,
             radius           = exclusion_radius,
+            edge_radius      = edge_radius,
             resolution       = resolution,
             nsamples         = nsamples,
             height_threshold = height_threshold,
             prpeak_threshold = prpeak_threshold,
             pct              = 95,
             doplot           = doplot,
-            color            = colorNSEW[i]
+            color            = colors[i],
+            scalebar         = i==0
         ))
         if doplot:
-            title('')
+            title(names[i])
+            
     return samples

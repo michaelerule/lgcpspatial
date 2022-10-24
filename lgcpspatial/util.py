@@ -245,11 +245,19 @@ def is_in_hull(P,hull):
     --------------------------------------------------------
     P: points
     hull: Convex Hull object
+    
+    Returns
+    --------------------------------------------------------
+    isInHull: Length NPOINTS 1D np.bool
+        Array of booleans indicating which points are within
+        the convex hull.
     '''
-    P = c2p(p2c(P)).T # lazy way to reuse code to fix array shape issues
+    P = c2p(p2c(P)).T # lazy code reuse: ensure array shape
     A = hull.equations[:,0:-1]
     b = np.transpose(np.array([hull.equations[:,-1]]))
-    isInHull = np.all((A @ np.transpose(P)) <= np.tile(-b,(1,len(P))),axis=0)
+    isInHull = np.all(
+        (A @ np.transpose(P))<=np.tile(-b,(1,len(P))),
+        axis=0)
     return isInHull
     
 
@@ -266,9 +274,13 @@ def blurkernel(L,σ,normalize=False):
     
     Parameters
     --------------------------------------------------------
-    L: Size of L×L spatial domain
-    σ: kernel radius exp(-x²/σ) (standard deviation in x and y ×⎷2)
-    normalize: boolean; whether to make kernel sum to 1
+    L: int
+        Size of L×L spatial domain
+    σ: positive float
+        kernel radius exp(-x²/σ) (standard deviation in x 
+        and y ×⎷2)
+    normalize: boolean
+        Whether to make kernel sum to 1
     '''
     k = exp(-(arange(-L//2,L//2)/σ)**2)
     if normalize: 
@@ -842,7 +854,8 @@ def to_xypoint(z):
     # Possibly already a point? 
     z = float32(z)
     if len(z.shape)<=0:
-        raise ValueError('This looks like a scalar, not a point')
+        raise ValueError(
+            'This looks like a scalar, not a point')
     if z.shape[0]==1:
         return z
     if np.sum(int32(z.shape)==2)!=1:
@@ -879,12 +892,15 @@ def closest(point,otherpoints,radius=inf):
     '''
     radius = float(radius)
     if radius<=0:
-        raise ValueError('Error, radius should be positive')
+        raise ValueError(
+            'Error, radius should be positive')
     point       = to_xypoint(point)
     otherpoints = to_xypoint(otherpoints)
     if not point.shape==(2,):
-        raise ValueError('Expected (x,y) point as 1st argument')
-    otherpoints = otherpoints.reshape(2,np.prod(otherpoints.shape[1:]))
+        raise ValueError(
+            'Expected (x,y) point as 1st argument')
+    otherpoints = otherpoints.reshape(
+        2,np.prod(otherpoints.shape[1:]))
     
     distances = norm(point[:,None] - otherpoints,2,0)
     nearest   = argmin(distances)

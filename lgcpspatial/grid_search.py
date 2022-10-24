@@ -5,12 +5,16 @@ from numpy import *
 from matplotlib import *
 from matplotlib.pyplot import *
 
-def grid_search(pargrid,evaluate):
+def grid_search(
+    pargrid,
+    evaluate,
+    verbose=True,
+    ):
     '''
     Grid search hyperparameter optimization    
     
     Parameters
-    ----------
+    --------------------------------------------------------
     pargrid: list of arrays
         A list; Each element is a list of values for a given 
         parameter to search over
@@ -30,8 +34,13 @@ def grid_search(pargrid,evaluate):
             info: object
                 Anything else you'd like to save
     
+    Other Parameters
+    --------------------------------------------------------
+    verbose: boolean, default True
+        Whether to print progress update
+    
     Returns
-    -------
+    --------------------------------------------------------
     best: 
         best index into parameter grid
     pars: 
@@ -42,7 +51,8 @@ def grid_search(pargrid,evaluate):
         3-tuple return-value of the `evaluate` function,
         passed by the user. `state` is also user-defined.
     allresults: 
-        all other results
+        All other results as an object array.
+        Grid points that were not evaluated are None.
     '''
     
     # - Get shape of search grid
@@ -79,10 +89,11 @@ def grid_search(pargrid,evaluate):
         pars            = [pr[i] for pr,i in zip(pargrid,index)]
         results[index]  = evaluate(pars,state=None)
         state, ll, info = results[index]
-        print('\r[%s](%s) loss=%e'%\
-            (','.join(['%d'%i for i in index]),
-             ','.join(['%0.2e'%p for p in pars]),ll),
-              flush=True,end='')
+        if verbose:
+            print('\r[%s](%s) loss=%e'%\
+                (','.join(['%d'%i for i in index]),
+                 ','.join(['%0.2e'%p for p in pars]),ll),
+                  flush=True,end='')
         # Figure out where to go next
         # - Try continuing in current direction first
         # - Recurse along all other directions until better parameters found
@@ -105,5 +116,6 @@ def grid_search(pargrid,evaluate):
     search(pari)
     best = current_best()[0]
     pars = [pr[i] for pr,i in zip(pargrid,best)]
-    print('(done)')
+    if verbose:
+        print('(done)')
     return best,pars,results[best],results

@@ -664,16 +664,14 @@ class DiagonalFourierLowrank:
         '''
         Calculate the (negative) evidence lower bound
         
-         - This assumes the self-consistency condition q=nγλ
-        
         Notes on scaling/comparison of this quantity: 
         
          - This is computed in the low-rank subspace.
-         - Assume posterior = prior outside this subspace.
-         - Within the discarded subspace, we have ΛΣ=I
-         - Let D=L²-R be dimension of discarded subspace.
-         - This should contribute D from the trace.
-         - The log-determinant is zero.
+         - Assumes posterior = prior outside this subspace.
+           - In the discarded subspace, we have ΛΣ=I
+           - Let D=L²-R be dimension of discarded subspace.
+           - This should contribute D from the trace.
+           - log-determinant of the excluded subspace=0
          - Confirm R = L²-D is the correct normalization.
         
         Parameters

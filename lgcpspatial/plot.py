@@ -553,7 +553,8 @@ def nicexy(xby=None,yby=None,**kwargs):
     nicey(by=yby,**kwargs)
 
 
-def hcolorbar(vmin=None,
+def hcolorbar(
+    vmin=None,
     vmax=None,
     cmap=None,
     title='',
@@ -566,7 +567,8 @@ def hcolorbar(vmin=None,
     labelpad=10,
     fontsize=10,):
     '''
-    Matplotlib's colorbar function is pretty bad. This is less bad.
+    Matplotlib's colorbar function is bad. 
+    This is less bad.
     r'$\mathrm{\mu V}^2$'
 
     Parameters:
@@ -596,11 +598,15 @@ def hcolorbar(vmin=None,
     CWIDTH  = pixels_to_yfigureunits(width,ax=ax)
     # manually add colorbar axes 
     bb = ax.get_position()
-    x,y,w,h,r,b = bb.xmin,bb.ymin,bb.width,bb.height,bb.xmax,bb.ymax
+    x,y,w,h,r,b = bb.xmin,bb.ymin,bb.width,bb.height
+    r,b = bb.xmax,bb.ymax
     use = w*shrink
     extra = w-use
     pad = extra/2
-    cax = plt.axes((r-w+pad,y+SPACING,use,CWIDTH),facecolor='w',frameon=border)
+    cax = plt.axes(
+        (r-w+pad,y+SPACING,use,CWIDTH),
+        facecolor='w',
+        frameon=border)
     plt.sca(cax)
     plt.imshow(np.array([np.linspace(vmin,vmax,100)]),
         extent=(vmin,vmax,0,1),
@@ -630,14 +636,22 @@ def hcolorbar(vmin=None,
             verticalalignment  ='top')
     # Hide ticks
     noaxis()
-    cax.tick_params('both', length=0, width=0, which='major')
+    cax.tick_params(
+        'both', length=0, width=0, which='major')
     cax.yaxis.set_label_position("right")
     cax.yaxis.tick_right()
     plt.sca(oldax) #restore previously active axis
     return cax
 
 
-def subfigurelabel(x,fontsize=10,dx=39,dy=7,ax=None,bold=True,**kwargs):
+def subfigurelabel(
+    x,
+    fontsize=10,
+    dx=39,
+    dy=7,
+    ax=None,
+    bold=True,
+    **kwargs):
     '''
     Parameters
     --------------------------------------------------------
@@ -694,8 +708,8 @@ px2y = pixels_to_yunits
 
 def circular_gaussian_smooth(x,sigma):
     '''
-    Smooth signal x with gaussian of standard deviation sigma
-    Circularly wrapped using Fourier transform
+    Smooth signal x with gaussian of standard deviation 
+    `sigma`, circularly wrapped using Fourier transform.
     
     Parameters
     --------------------------------------------------------
@@ -709,14 +723,16 @@ def circular_gaussian_smooth(x,sigma):
     g = np.exp(-np.linspace(-N/2,N/2,N)**2/sigma**2)
     g/= np.sum(g)
     f = np.fft.fft(g)
-    return np.fft.fftshift(np.fft.ifft(np.fft.fft(x)*f).real)
+    return np.fft.fftshift(
+        np.fft.ifft(np.fft.fft(x)*f).real)
 
 
 def circularly_smooth_colormap(cm,s):
     '''
     Smooth a colormap with cirular boundary conditions
 
-    s: sigma, standard dev of gaussian smoothing kernel in samples
+    s: sigma, standard dev of gaussian smoothing kernel in 
+       samples
     cm: color map, array-like of RGB tuples
     
     Parameters
@@ -739,6 +755,7 @@ def circularly_smooth_colormap(cm,s):
     RGB = np.array([R,G,B]).T
     #return np.array([np.fft.fftshift(c) for c in RGB.T]).T
     return RGB
+
 colors = [VIOLET,
           MAUVE,
           RUST,
@@ -936,12 +953,13 @@ def covariance_crosshairs(
     mode='2D'):
     '''
     For 2D Gaussians these are the confidence intervals
-    p   | sigma
-    90  : 4.605
-    95  : 5.991
-    97.5: 7.378
-    99  : 9.210
-    99.5: 10.597
+    
+        p   | sigma
+        90  : 4.605
+        95  : 5.991
+        97.5: 7.378
+        99  : 9.210
+        99.5: 10.597
 
     - Get the eigenvalues and vectors of covariance S
     - Prepare crosshairs for a unit standard normal
@@ -954,7 +972,8 @@ def covariance_crosshairs(
     draw_ellipse: whether to draw the ellipse
     draw_cross: whether to draw the crosshairs
     mode: 2D or 1D; 
-        If 2D, ellipse will reflect inner p of probability mass
+        If 2D, ellipse will reflect inner p of probability
+        mass
         If 1D, ellipse will represent threshold for p 
         significance for a 1-tailed test in any direction.
     
@@ -1000,23 +1019,43 @@ def good_colorbar(vmin=None,
     vscale=1.0,
     va='c'):
     '''
-    Matplotlib's colorbar function is pretty bad. This is less bad.
+    Matplotlib's colorbar function is pretty bad. 
+    This is less bad.
     r'$\mathrm{\mu V}^2$'
 
     Parameters:
-        vmin     (number)  : min value for colormap
-        vmax     (number)  : mac value for colormap
-        cmap     (colormap): what colormap to use
-        title    (string)  : Units for colormap
-        ax       (axis)    : optional, defaults to plt.gca(). axis to which to add colorbar
-        sideways (bool)    : Flips the axis label sideways
-        border   (bool)    : Draw border around colormap box? 
-        spacing  (number)  : distance from axis in pixels. defaults to 5
-        width    (number)  : width of colorbar in pixels. defaults to 15
-        labelpad (number)  : padding between colorbar and title in pixels, defaults to 10
-        fontsize (number)  : label font size, defaults to 12
-        vscale   (float)   : height adjustment relative to parent axis, defaults to 1.0
-        va       (str)     : vertical alignment; "bottom" ('b'), "center" ('c'), or "top" ('t')
+        vmin: scalar
+            min value for colormap
+        vmax: scalar
+            max value for colormap
+        cmap: Matplotlib.colormap
+            what colormap to use
+        title: str
+            Units for colormap
+        ax: axis
+            Optional, defaults to plt.gca(). 
+            Axis to which to add colorbar
+        sideways: bool
+            Flip the axis label sideways?
+        border: bool
+            Draw border around colormap box? 
+        spacing: scalar
+            Distance from axis in pixels. 
+            defaults to 5
+        width: scalar
+            Width of colorbar in pixels. 
+            Defaults to 15
+        labelpad: scalar
+            Padding between colorbar and title in pixels, 
+            defaults to 10
+        fontsize: scalar
+            Label font size, defaults to 12
+        vscale: float
+            Height adjustment relative to parent axis, 
+            defaults to 1.0
+        va: str
+            Verrtical alignment; "bottom" ('b'), 
+            "center" ('c'), or "top" ('t')
     Returns:
         axis: colorbar axis
     '''
@@ -1032,19 +1071,22 @@ def good_colorbar(vmin=None,
     CWIDTH  = pixels_to_xfigureunits(width,ax=ax)
     # manually add colorbar axes 
     bb = ax.get_position()
-    x,y,w,h,r,b = bb.xmin,bb.ymin,bb.width,bb.height,bb.xmax,bb.ymax
+    x,y,w,h = bb.xmin,bb.ymin,bb.width,bb.height
+    r,b = bb.xmax,bb.ymax
     y0 = {
         'b':lambda:b-h,
         'c':lambda:b-(h+h*vscale)/2,
         't':lambda:b-h*vscale
     }[va[0]]()
-    cax = plt.axes((r+SPACING,y0,CWIDTH,h*vscale),frameon=True)
+    cax = plt.axes(
+        (r+SPACING,y0,CWIDTH,h*vscale),frameon=True)
     plt.sca(cax)
     plt.imshow(np.array([np.linspace(vmax,vmin,100)]).T,
         extent=(0,1,vmin,vmax),
         aspect='auto',
         origin='upper',
         cmap=cmap)
+    plt.box(False)
     nox()
     nicey()
     cax.yaxis.tick_right()
@@ -1068,13 +1110,15 @@ def good_colorbar(vmin=None,
             verticalalignment  ='center')
     # Hide ticks
     #noaxis()
-    cax.tick_params('both', length=0, width=0, which='major')
+    cax.tick_params(
+        'both', length=0, width=0, which='major')
     cax.yaxis.set_label_position("right")
     cax.yaxis.tick_right()
     plt.sca(oldax) #restore previously active axis
     return cax
 
-def draw_compass(xy0=1.1+.65j,r=0.03,cmap_fn=riley,delta=18):
+def draw_compass(
+    xy0=1.1+.65j,r=0.03,cmap_fn=riley,delta=18):
     '''
     Draw a hue-wheel compass rose.
     

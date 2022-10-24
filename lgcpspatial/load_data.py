@@ -193,6 +193,62 @@ class Arena:
         self.nanmask = float32(mask)
         self.nanmask[self.nanmask<1] = NaN
         
+        
+    def close_to_boundary(self, peaks, radius):
+        '''
+        Detect peaks within distance `radius` of the 
+        Arena boundary. 
+
+        Parameters
+        ----------------------------------------------------
+        peaks: 2 × NPOINTS np.float32  
+            (x,y) positions of peaks to trim 
+            in normalized [0,1]² coordinates.
+        radius: float
+            Distance from edge to trim
+            in pixels
+
+        Returns
+        ----------------------------------------------------
+        is_close: Length NPOINTS 1D np.bool
+            Boolean array indicating 
+        '''
+        if np.any(peaks<0) or np.any(peaks>1):
+            raise ValueError(
+                'Expected peaks to be 2×NPOINTS np.float32 '
+                'array of (x,y) points in normalized [0,1]²'
+                'coordinates; Got values outside [0,1]².')
+        L  = self.mask.shape[0]
+        outside = (zgrid(L)/L+.5+.5j)[~self.mask]
+        zpeaks  = [1,1j]@peaks
+        D  = abs(zpeaks[:,None]-outside[None,:])
+        D  = np.min(D,1)
+        return D<radius/L
+    
+    
+    def remove_near_boundary(self, peaks, radius):
+        '''
+        Delete peaks that are too close to the edgs of
+        an experimental arena
+
+        Parameters
+        ----------------------------------------------------
+        peaks: 2 × NPOINTS np.float32  
+            (x,y) positions of peaks to trim 
+            in normalized [0,1]² coordinates.
+        radius: float
+            Distance from edge to trim
+            in pixels
+
+        Returns
+        ----------------------------------------------------
+        peaks: 2 × NPOINTS np.float32  
+            (x,y) positions of peaks further than `radius`
+            pixels from the boundary.      
+        '''
+        ok = ~self.close_to_boundary(peaks,radius)
+        return peaks[:,ok]
+        
 class Dataset:
     '''
     Class to load and extract experimental data
