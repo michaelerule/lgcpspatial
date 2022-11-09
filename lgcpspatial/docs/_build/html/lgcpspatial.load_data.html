@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="lgcpspatial.estimators module" href="lgcpspatial.estimators.html" />
+    <link rel="next" title="lgcpspatial.grid_search module" href="lgcpspatial.grid_search.html" />
     <link rel="prev" title="lgcpspatial.simulate_data module" href="lgcpspatial.simulate_data.html" /> 
 </head>
 
@@ -65,6 +65,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#lgcpspatial.load_data.Arena.nanmask"><code class="docutils literal notranslate"><span class="pre">Arena.nanmask</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#lgcpspatial.load_data.Arena.perimeter"><code class="docutils literal notranslate"><span class="pre">Arena.perimeter</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#lgcpspatial.load_data.Arena.hull"><code class="docutils literal notranslate"><span class="pre">Arena.hull</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lgcpspatial.load_data.Arena.close_to_boundary"><code class="docutils literal notranslate"><span class="pre">Arena.close_to_boundary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lgcpspatial.load_data.Arena.remove_near_boundary"><code class="docutils literal notranslate"><span class="pre">Arena.remove_near_boundary()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.load_data.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a><ul>
@@ -93,10 +95,11 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
 </ul>
@@ -239,6 +242,53 @@ in [0,1]² normalied coordinates</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>scipy.spatial._qhull.ConvexHull</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lgcpspatial.load_data.Arena.close_to_boundary">
+<span class="sig-name descname"><span class="pre">close_to_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/load_data.html#Arena.close_to_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.load_data.Arena.close_to_boundary" title="Permalink to this definition"></a></dt>
+<dd><p>Detect peaks within distance <cite>radius</cite> of the
+Arena boundary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> (<em>2 × NPOINTS np.float32</em>) – (x,y) positions of peaks to trim
+in normalized [0,1]² coordinates.</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Distance from edge to trim
+in pixels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>is_close</strong> – Boolean array indicating</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Length NPOINTS 1D np.bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lgcpspatial.load_data.Arena.remove_near_boundary">
+<span class="sig-name descname"><span class="pre">remove_near_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/load_data.html#Arena.remove_near_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.load_data.Arena.remove_near_boundary" title="Permalink to this definition"></a></dt>
+<dd><p>Delete peaks that are too close to the edgs of
+an experimental arena</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> (<em>2 × NPOINTS np.float32</em>) – (x,y) positions of peaks to trim
+in normalized [0,1]² coordinates.</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Distance from edge to trim
+in pixels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>peaks</strong> – (x,y) positions of peaks further than <cite>radius</cite>
+pixels from the boundary.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>2 × NPOINTS np.float32</p>
 </dd>
 </dl>
 </dd></dl>
@@ -578,7 +628,7 @@ physical units (meters)</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="lgcpspatial.simulate_data.html" class="btn btn-neutral float-left" title="lgcpspatial.simulate_data module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="lgcpspatial.estimators.html" class="btn btn-neutral float-right" title="lgcpspatial.estimators module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="lgcpspatial.grid_search.html" class="btn btn-neutral float-right" title="lgcpspatial.grid_search module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

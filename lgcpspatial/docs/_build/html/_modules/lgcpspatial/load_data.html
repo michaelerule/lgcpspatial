@@ -55,10 +55,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.plot.html">plot</a></li>
 </ul>
@@ -281,7 +282,63 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">hull</span> <span class="o">=</span> <span class="n">hull</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span>
+        
+        
+<div class="viewcode-block" id="Arena.close_to_boundary"><a class="viewcode-back" href="../../lgcpspatial.load_data.html#lgcpspatial.load_data.Arena.close_to_boundary">[docs]</a>    <span class="k">def</span> <span class="nf">close_to_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Detect peaks within distance `radius` of the </span>
+<span class="sd">        Arena boundary. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        peaks: 2 × NPOINTS np.float32  </span>
+<span class="sd">            (x,y) positions of peaks to trim </span>
+<span class="sd">            in normalized [0,1]² coordinates.</span>
+<span class="sd">        radius: float</span>
+<span class="sd">            Distance from edge to trim</span>
+<span class="sd">            in pixels</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        is_close: Length NPOINTS 1D np.bool</span>
+<span class="sd">            Boolean array indicating </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">peaks</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">peaks</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;Expected peaks to be 2×NPOINTS np.float32 &#39;</span>
+                <span class="s1">&#39;array of (x,y) points in normalized [0,1]²&#39;</span>
+                <span class="s1">&#39;coordinates; Got values outside [0,1]².&#39;</span><span class="p">)</span>
+        <span class="n">L</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">outside</span> <span class="o">=</span> <span class="p">(</span><span class="n">zgrid</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">/</span><span class="n">L</span><span class="o">+</span><span class="mf">.5</span><span class="o">+</span><span class="mf">.5</span><span class="n">j</span><span class="p">)[</span><span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">zpeaks</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@peaks</span>
+        <span class="n">D</span>  <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">zpeaks</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">-</span><span class="n">outside</span><span class="p">[</span><span class="kc">None</span><span class="p">,:])</span>
+        <span class="n">D</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">D</span><span class="o">&lt;</span><span class="n">radius</span><span class="o">/</span><span class="n">L</span></div>
+    
+    
+<div class="viewcode-block" id="Arena.remove_near_boundary"><a class="viewcode-back" href="../../lgcpspatial.load_data.html#lgcpspatial.load_data.Arena.remove_near_boundary">[docs]</a>    <span class="k">def</span> <span class="nf">remove_near_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Delete peaks that are too close to the edgs of</span>
+<span class="sd">        an experimental arena</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        peaks: 2 × NPOINTS np.float32  </span>
+<span class="sd">            (x,y) positions of peaks to trim </span>
+<span class="sd">            in normalized [0,1]² coordinates.</span>
+<span class="sd">        radius: float</span>
+<span class="sd">            Distance from edge to trim</span>
+<span class="sd">            in pixels</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        peaks: 2 × NPOINTS np.float32  </span>
+<span class="sd">            (x,y) positions of peaks further than `radius`</span>
+<span class="sd">            pixels from the boundary.      </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">close_to_boundary</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">radius</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">peaks</span><span class="p">[:,</span><span class="n">ok</span><span class="p">]</span></div></div>
         
 <div class="viewcode-block" id="Dataset"><a class="viewcode-back" href="../../lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset">[docs]</a><span class="k">class</span> <span class="nc">Dataset</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>

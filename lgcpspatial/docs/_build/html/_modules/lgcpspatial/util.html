@@ -55,10 +55,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.plot.html">plot</a></li>
 </ul>
@@ -335,11 +336,19 @@
 <span class="sd">    --------------------------------------------------------</span>
 <span class="sd">    P: points</span>
 <span class="sd">    hull: Convex Hull object</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    isInHull: Length NPOINTS 1D np.bool</span>
+<span class="sd">        Array of booleans indicating which points are within</span>
+<span class="sd">        the convex hull.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">P</span> <span class="o">=</span> <span class="n">c2p</span><span class="p">(</span><span class="n">p2c</span><span class="p">(</span><span class="n">P</span><span class="p">))</span><span class="o">.</span><span class="n">T</span> <span class="c1"># lazy way to reuse code to fix array shape issues</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">c2p</span><span class="p">(</span><span class="n">p2c</span><span class="p">(</span><span class="n">P</span><span class="p">))</span><span class="o">.</span><span class="n">T</span> <span class="c1"># lazy code reuse: ensure array shape</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">hull</span><span class="o">.</span><span class="n">equations</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">hull</span><span class="o">.</span><span class="n">equations</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]]))</span>
-    <span class="n">isInHull</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">((</span><span class="n">A</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">P</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">))),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">isInHull</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">P</span><span class="p">))</span><span class="o">&lt;=</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">))),</span>
+        <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">isInHull</span></div>
     
 
@@ -356,9 +365,13 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    --------------------------------------------------------</span>
-<span class="sd">    L: Size of L×L spatial domain</span>
-<span class="sd">    σ: kernel radius exp(-x²/σ) (standard deviation in x and y ×⎷2)</span>
-<span class="sd">    normalize: boolean; whether to make kernel sum to 1</span>
+<span class="sd">    L: int</span>
+<span class="sd">        Size of L×L spatial domain</span>
+<span class="sd">    σ: positive float</span>
+<span class="sd">        kernel radius exp(-x²/σ) (standard deviation in x </span>
+<span class="sd">        and y ×⎷2)</span>
+<span class="sd">    normalize: boolean</span>
+<span class="sd">        Whether to make kernel sum to 1</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">k</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">σ</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span> 
@@ -932,7 +945,8 @@
     <span class="c1"># Possibly already a point? </span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;This looks like a scalar, not a point&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;This looks like a scalar, not a point&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">z</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">int32</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span><span class="o">!=</span><span class="mi">1</span><span class="p">:</span>
@@ -969,12 +983,15 @@
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">radius</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Error, radius should be positive&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Error, radius should be positive&#39;</span><span class="p">)</span>
     <span class="n">point</span>       <span class="o">=</span> <span class="n">to_xypoint</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
     <span class="n">otherpoints</span> <span class="o">=</span> <span class="n">to_xypoint</span><span class="p">(</span><span class="n">otherpoints</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">point</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="p">(</span><span class="mi">2</span><span class="p">,):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected (x,y) point as 1st argument&#39;</span><span class="p">)</span>
-    <span class="n">otherpoints</span> <span class="o">=</span> <span class="n">otherpoints</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">otherpoints</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Expected (x,y) point as 1st argument&#39;</span><span class="p">)</span>
+    <span class="n">otherpoints</span> <span class="o">=</span> <span class="n">otherpoints</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+        <span class="mi">2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">otherpoints</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
     
     <span class="n">distances</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">point</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">otherpoints</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">nearest</span>   <span class="o">=</span> <span class="n">argmin</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>

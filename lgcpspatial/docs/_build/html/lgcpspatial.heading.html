@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="lgcpspatial.util module" href="lgcpspatial.util.html" />
+    <link rel="next" title="lgcpspatial.estimators module" href="lgcpspatial.estimators.html" />
     <link rel="prev" title="lgcpspatial.posterior module" href="lgcpspatial.posterior.html" /> 
 </head>
 
@@ -58,8 +58,8 @@
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">heading</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.smoothed_heading_angle"><code class="docutils literal notranslate"><span class="pre">smoothed_heading_angle()</span></code></a></li>
@@ -71,11 +71,12 @@
 <li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.plot_tracked_peaks"><code class="docutils literal notranslate"><span class="pre">plot_tracked_peaks()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.locate_opposites"><code class="docutils literal notranslate"><span class="pre">locate_opposites()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.plot_connection_arrow"><code class="docutils literal notranslate"><span class="pre">plot_connection_arrow()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.refit_hyperparameters_heading_weighted"><code class="docutils literal notranslate"><span class="pre">refit_hyperparameters_heading_weighted()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.fit_heading_variance"><code class="docutils literal notranslate"><span class="pre">fit_heading_variance()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.matched_cardinal_points"><code class="docutils literal notranslate"><span class="pre">matched_cardinal_points()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.sample_posterior_all_heading_angles"><code class="docutils literal notranslate"><span class="pre">sample_posterior_all_heading_angles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.sample_heading_angles"><code class="docutils literal notranslate"><span class="pre">sample_heading_angles()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
 </ul>
@@ -130,7 +131,8 @@
 </style>
 <section id="module-lgcpspatial.heading">
 <span id="lgcpspatial-heading-module"></span><h1>lgcpspatial.heading module<a class="headerlink" href="#module-lgcpspatial.heading" title="Permalink to this heading"></a></h1>
-<p>heading.py: Subroutines used in example 5 heading dependence.ipynb</p>
+<p>heading.py: Subroutines used in
+<cite>example 5: heading dependence</cite>.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.smoothed_heading_angle">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">smoothed_heading_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">py</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#smoothed_heading_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.smoothed_heading_angle" title="Permalink to this definition"></a></dt>
@@ -436,7 +438,7 @@ If no match exists, -1</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.plot_connection_arrow">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">plot_connection_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">op</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#plot_connection_arrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.plot_connection_arrow" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">plot_connection_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#plot_connection_arrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.plot_connection_arrow" title="Permalink to this definition"></a></dt>
 <dd><p>Draw arrows connecting related fields from two maps.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -450,9 +452,14 @@ If no match exists, -1</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="lgcpspatial.heading.refit_hyperparameters_heading_weighted">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">refit_hyperparameters_heading_weighted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">θ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NSEW</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#refit_hyperparameters_heading_weighted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.refit_hyperparameters_heading_weighted" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dt class="sig sig-object py" id="lgcpspatial.heading.fit_heading_variance">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">fit_heading_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">θ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NSEW</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#fit_heading_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.fit_heading_variance" title="Permalink to this definition"></a></dt>
+<dd><p>Re-optimize the prior marginal variance for the
+given set of heading-weighted models.</p>
+<p>This is necessary for achieving interpretable posterior
+confidence intervals, since variable amounts (generally,
+less) of data are present for the different directions.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset" title="lgcpspatial.load_data.Dataset"><em>Dataset</em></a>) – </p></li>
@@ -509,10 +516,12 @@ for the heading-angle-indecies specified by
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="lgcpspatial.heading.sample_posterior_all_heading_angles">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">sample_posterior_all_heading_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angleNSEW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorNSEW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclusion_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prpeak_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#sample_posterior_all_heading_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.sample_posterior_all_heading_angles" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="lgcpspatial.heading.sample_heading_angles">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">sample_heading_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclusion_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prpeak_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#sample_heading_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.sample_heading_angles" title="Permalink to this definition"></a></dt>
 <dd><p>Performed a detailed analysis of a range of heading
 angles.</p>
+<p>Apply this to the lists`models` and <cite>fits</cite> returned by
+<cite>fit_heading_variance(data,model,heading,angles)</cite>.</p>
 <p>This routine re-optimizes the kernel parameters
 via grid-search for each heading angle, and calculates
 posterior confidence intervals via sampling.</p>
@@ -522,16 +531,25 @@ posterior confidence intervals via sampling.</p>
 <li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset" title="lgcpspatial.load_data.Dataset"><em>Dataset</em></a>) – </p></li>
 <li><p><strong>models</strong> (<em>list</em>) – List of N Models</p></li>
 <li><p><strong>fits</strong> (<em>list</em>) – List of N fits returned by <cite>coordinate_descent</cite></p></li>
-<li><p><strong>angleNSEW</strong> (<em>list</em>) – List of heading directions for each model</p></li>
-<li><p><strong>colorNSEW</strong> – List of plotting colors for each head direcgiton</p></li>
-<li><p><strong>exclusion_radius</strong> (<em>positive float</em>) – Region a peak must clear to be a local maximum</p></li>
+<li><p><strong>angles</strong> (<em>list</em><em> of </em><em>floats</em>) – List of heading directions for each model</p></li>
+<li><p><strong>exclusion_radius</strong> (<em>positive float</em>) – Region a peak must clear to be a local maximum,
+In units of pixels in the L×L grid.
+If <cite>None</cite>, defaults to <cite>models[0].P/2.5</cite>.</p></li>
+<li><p><strong>edge_radius</strong> (<em>positive float</em>) – Remove peaks closer than <cite>edge_radius</cite> bins
+to the arena’s edge. The default value of 0
+does not remove points within a margin of
+the boundary.
+In units of pixels in the L×L grid.
+If <cite>None</cite>, defaults to <cite>models[0].P/2.0</cite>.</p></li>
 <li><p><strong>nsamples</strong> (<em>positive int</em>) – Number of posterior samples to use</p></li>
-<li><p><strong>resolution</strong> (<em>positive int</em>) – Upsampling factor for posterior sampling</p></li>
+<li><p><strong>resolution</strong> (<em>positive int; default 2</em>) – Upsampling factor for posterior sampling</p></li>
 <li><p><strong>height_threshold</strong> (<em>positive float ∈</em><em>[</em><em>0</em><em>,</em><em>1</em><em>]</em>) – Fraction of locations a peak must be taller than
 to be included</p></li>
 <li><p><strong>prpeak_threshold</strong> (<em>positive float ∈</em><em>[</em><em>0</em><em>,</em><em>1</em><em>]</em>) – Fraction of samples a grid field must be present in
 to be included</p></li>
-<li><p><strong>doplot</strong> (<em>boolean</em>) – Whether to draw a plot of the resulting samples</p></li>
+<li><p><strong>doplot</strong> (<em>boolean; default True</em>) – Whether to draw plots</p></li>
+<li><p><strong>names</strong> (<em>list</em><em> of </em><em>str</em>) – Titles of each plot</p></li>
+<li><p><strong>colors</strong> (<em>lost</em><em> of </em><em>Matplotlib colors</em>) – List of plotting colors for each heading angle</p></li>
 </ul>
 </dd>
 </dl>
@@ -544,7 +562,7 @@ to be included</p></li>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="lgcpspatial.posterior.html" class="btn btn-neutral float-left" title="lgcpspatial.posterior module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="lgcpspatial.util.html" class="btn btn-neutral float-right" title="lgcpspatial.util module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="lgcpspatial.estimators.html" class="btn btn-neutral float-right" title="lgcpspatial.estimators module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

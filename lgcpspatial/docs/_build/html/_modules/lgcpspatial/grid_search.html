@@ -55,10 +55,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.plot.html">plot</a></li>
 </ul>
@@ -95,12 +96,16 @@
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="o">*</span>
 
-<div class="viewcode-block" id="grid_search"><a class="viewcode-back" href="../../lgcpspatial.grid_search.html#lgcpspatial.grid_search.grid_search">[docs]</a><span class="k">def</span> <span class="nf">grid_search</span><span class="p">(</span><span class="n">pargrid</span><span class="p">,</span><span class="n">evaluate</span><span class="p">):</span>
+<div class="viewcode-block" id="grid_search"><a class="viewcode-back" href="../../lgcpspatial.grid_search.html#lgcpspatial.grid_search.grid_search">[docs]</a><span class="k">def</span> <span class="nf">grid_search</span><span class="p">(</span>
+    <span class="n">pargrid</span><span class="p">,</span>
+    <span class="n">evaluate</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Grid search hyperparameter optimization    </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
+<span class="sd">    --------------------------------------------------------</span>
 <span class="sd">    pargrid: list of arrays</span>
 <span class="sd">        A list; Each element is a list of values for a given </span>
 <span class="sd">        parameter to search over</span>
@@ -120,8 +125,13 @@
 <span class="sd">            info: object</span>
 <span class="sd">                Anything else you&#39;d like to save</span>
 <span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    verbose: boolean, default True</span>
+<span class="sd">        Whether to print progress update</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
-<span class="sd">    -------</span>
+<span class="sd">    --------------------------------------------------------</span>
 <span class="sd">    best: </span>
 <span class="sd">        best index into parameter grid</span>
 <span class="sd">    pars: </span>
@@ -132,7 +142,8 @@
 <span class="sd">        3-tuple return-value of the `evaluate` function,</span>
 <span class="sd">        passed by the user. `state` is also user-defined.</span>
 <span class="sd">    allresults: </span>
-<span class="sd">        all other results</span>
+<span class="sd">        All other results as an object array.</span>
+<span class="sd">        Grid points that were not evaluated are None.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="c1"># - Get shape of search grid</span>
@@ -169,10 +180,11 @@
         <span class="n">pars</span>            <span class="o">=</span> <span class="p">[</span><span class="n">pr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">pr</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pargrid</span><span class="p">,</span><span class="n">index</span><span class="p">)]</span>
         <span class="n">results</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>  <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span><span class="n">state</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="n">state</span><span class="p">,</span> <span class="n">ll</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">[</span><span class="si">%s</span><span class="s1">](</span><span class="si">%s</span><span class="s1">) loss=</span><span class="si">%e</span><span class="s1">&#39;</span><span class="o">%</span>\
-            <span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]),</span>
-             <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%0.2e</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pars</span><span class="p">]),</span><span class="n">ll</span><span class="p">),</span>
-              <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">[</span><span class="si">%s</span><span class="s1">](</span><span class="si">%s</span><span class="s1">) loss=</span><span class="si">%e</span><span class="s1">&#39;</span><span class="o">%</span>\
+                <span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]),</span>
+                 <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%0.2e</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pars</span><span class="p">]),</span><span class="n">ll</span><span class="p">),</span>
+                  <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
         <span class="c1"># Figure out where to go next</span>
         <span class="c1"># - Try continuing in current direction first</span>
         <span class="c1"># - Recurse along all other directions until better parameters found</span>
@@ -195,7 +207,8 @@
     <span class="n">search</span><span class="p">(</span><span class="n">pari</span><span class="p">)</span>
     <span class="n">best</span> <span class="o">=</span> <span class="n">current_best</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">pars</span> <span class="o">=</span> <span class="p">[</span><span class="n">pr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">pr</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pargrid</span><span class="p">,</span><span class="n">best</span><span class="p">)]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(done)&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(done)&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">best</span><span class="p">,</span><span class="n">pars</span><span class="p">,</span><span class="n">results</span><span class="p">[</span><span class="n">best</span><span class="p">],</span><span class="n">results</span></div>
 </pre></div>
 

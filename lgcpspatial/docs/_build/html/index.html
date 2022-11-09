@@ -57,10 +57,11 @@
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
 </ul>
@@ -141,23 +142,30 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html#Use-grid-search-to-find-kernel-hyperparameters-with-largest-evidence-lower-bound">Use grid search to find kernel hyperparameters with largest evidence lower-bound</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html#Grid-search-to-find-kernel-hyperparameters-with-best-evidence-lower-bound">Grid search to find kernel hyperparameters with best evidence lower-bound</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html#The-heuristic-parameters-were-close-to-optimal-in-this-case">The heuristic parameters were close to optimal in this case</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html#Detailed-parameter-sweep-to-visualize-for-the-paper">Detailed parameter sweep to visualize for the paper</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="example%204%20confidence%20intervals.html#Retrieve-data-and-obtain-posterior-log-rate-map">Retrieve data and obtain posterior log-rate map</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example%204%20confidence%20intervals.html#Confidence-intervals-via-sampling-or-quadratic-approximation">Confidence intervals via sampling or quadratic approximation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example%204%20confidence%20intervals.html#Figure-4d">Figure 4d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example%204%20confidence%20intervals.html#Joint-confidence-ellipses-(experimental)">Joint confidence ellipses (experimental)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="example%205%20heading%20dependence.html">Example 5: Heading dependence</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="example%205%20heading%20dependence.html#Setup-workspace,-load,-and-prepare-dataset">Setup workspace, load, and prepare dataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="example%205%20heading%20dependence.html#Fit-maps-for-a-range-of-heading-angles">Fit maps for a range of heading angles</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example%205%20heading%20dependence.html#Get-confidence-intervals-for-maps-in-cardinal-directions">Get confidence intervals for maps in cardinal directions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example%205%20heading%20dependence.html#Show-peak-densities">Show peak densities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example%205%20heading%20dependence.html#Confidence-ellipses-and-p-values-for-peak-shifts">Confidence ellipses and p-values for peak shifts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example%205%20heading%20dependence.html#Overall-significance-summary">Overall significance summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example%205%20heading%20dependence.html#Identify-shifted-versions-of-the-same-grid-field">Identify shifted versions of the same grid field</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="example%205%20heading%20dependence.html#Save-figure-5b">Save figure 5b</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="example%205%20heading%20dependence.html#Get-confidence-intervals-for-maps-in-cardinal-directions">Get confidence intervals for maps in cardinal directions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="example%205%20heading%20dependence.html#Get-sampled-confidence-intervals-for-each-direction">Get sampled confidence intervals for each direction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="example%205%20heading%20dependence.html#Save-Figure-5c">Save Figure 5c</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -205,6 +213,8 @@
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.load_data.html#lgcpspatial.load_data.Arena.nanmask"><code class="docutils literal notranslate"><span class="pre">Arena.nanmask</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.load_data.html#lgcpspatial.load_data.Arena.perimeter"><code class="docutils literal notranslate"><span class="pre">Arena.perimeter</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.load_data.html#lgcpspatial.load_data.Arena.hull"><code class="docutils literal notranslate"><span class="pre">Arena.hull</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.load_data.html#lgcpspatial.load_data.Arena.close_to_boundary"><code class="docutils literal notranslate"><span class="pre">Arena.close_to_boundary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.load_data.html#lgcpspatial.load_data.Arena.remove_near_boundary"><code class="docutils literal notranslate"><span class="pre">Arena.remove_near_boundary()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a><ul>
@@ -233,16 +243,12 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.estimators.html#lgcpspatial.estimators.estimate_period_via_autocorrelation"><code class="docutils literal notranslate"><span class="pre">estimate_period_via_autocorrelation()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.estimators.html#lgcpspatial.estimators.biased_rate"><code class="docutils literal notranslate"><span class="pre">biased_rate()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.estimators.html#lgcpspatial.estimators.kde"><code class="docutils literal notranslate"><span class="pre">kde()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.estimators.html#lgcpspatial.estimators.linearGP"><code class="docutils literal notranslate"><span class="pre">linearGP()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.estimators.html#lgcpspatial.estimators.convolutionalLinearGP"><code class="docutils literal notranslate"><span class="pre">convolutionalLinearGP()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.grid_search.html#lgcpspatial.grid_search.grid_search"><code class="docutils literal notranslate"><span class="pre">grid_search()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.hyperparameters.html#lgcpspatial.hyperparameters.gridsearch_optimize"><code class="docutils literal notranslate"><span class="pre">gridsearch_optimize()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a><ul>
@@ -271,9 +277,17 @@
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.plot_tracked_peaks"><code class="docutils literal notranslate"><span class="pre">plot_tracked_peaks()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.locate_opposites"><code class="docutils literal notranslate"><span class="pre">locate_opposites()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.plot_connection_arrow"><code class="docutils literal notranslate"><span class="pre">plot_connection_arrow()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.refit_hyperparameters_heading_weighted"><code class="docutils literal notranslate"><span class="pre">refit_hyperparameters_heading_weighted()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.fit_heading_variance"><code class="docutils literal notranslate"><span class="pre">fit_heading_variance()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.matched_cardinal_points"><code class="docutils literal notranslate"><span class="pre">matched_cardinal_points()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.sample_posterior_all_heading_angles"><code class="docutils literal notranslate"><span class="pre">sample_posterior_all_heading_angles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.sample_heading_angles"><code class="docutils literal notranslate"><span class="pre">sample_heading_angles()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.estimators.html#lgcpspatial.estimators.estimate_period_via_autocorrelation"><code class="docutils literal notranslate"><span class="pre">estimate_period_via_autocorrelation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.estimators.html#lgcpspatial.estimators.biased_rate"><code class="docutils literal notranslate"><span class="pre">biased_rate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.estimators.html#lgcpspatial.estimators.kde"><code class="docutils literal notranslate"><span class="pre">kde()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.estimators.html#lgcpspatial.estimators.linearGP"><code class="docutils literal notranslate"><span class="pre">linearGP()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.estimators.html#lgcpspatial.estimators.convolutionalLinearGP"><code class="docutils literal notranslate"><span class="pre">convolutionalLinearGP()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a><ul>

@@ -84,10 +84,11 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
 </ul>
@@ -404,20 +405,15 @@ domain. Size L² float32 or float64</p></li>
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.DiagonalFourierLowrank.loss">
 <span class="sig-name descname"><span class="pre">loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lowrank_posterior_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_marginal_variances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.loss" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the (negative) evidence lower bound</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>This assumes the self-consistency condition q=nγλ</p></li>
-</ul>
-</div></blockquote>
 <p>Notes on scaling/comparison of this quantity:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>This is computed in the low-rank subspace.</p></li>
-<li><p>Assume posterior = prior outside this subspace.</p></li>
-<li><p>Within the discarded subspace, we have ΛΣ=I</p></li>
-<li><p>Let D=L²-R be dimension of discarded subspace.</p></li>
-<li><p>This should contribute D from the trace.</p></li>
-<li><p>The log-determinant is zero.</p></li>
+<li><p>Assumes posterior = prior outside this subspace.
+- In the discarded subspace, we have ΛΣ=I
+- Let D=L²-R be dimension of discarded subspace.
+- This should contribute D from the trace.
+- log-determinant of the excluded subspace=0</p></li>
 <li><p>Confirm R = L²-D is the correct normalization.</p></li>
 </ul>
 </div></blockquote>

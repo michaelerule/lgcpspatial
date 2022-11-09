@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lgcpspatial.hyperparameters module &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="lgcpspatial.posterior module" href="lgcpspatial.posterior.html" />
+    <link rel="prev" title="lgcpspatial.grid_search module" href="lgcpspatial.grid_search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
+            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hyperparameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.hyperparameters.gridsearch_optimize"><code class="docutils literal notranslate"><span class="pre">gridsearch_optimize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>lgcpspatial.hyperparameters module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/lgcpspatial.hyperparameters.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="module-lgcpspatial.hyperparameters">
+<span id="lgcpspatial-hyperparameters-module"></span><h1>lgcpspatial.hyperparameters module<a class="headerlink" href="#module-lgcpspatial.hyperparameters" title="Permalink to this heading"></a></h1>
+<p>hyperparameters.py:</p>
+<p>Wrapper for using grid search for optimizing the prior
+kernel’s hyperparamters for the DiagonalFourierLowrank
+model class.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.hyperparameters.gridsearch_optimize">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.hyperparameters.</span></span><span class="sig-name descname"><span class="pre">gridsearch_optimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">np</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">201</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">201</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kclip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variance_attenuate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/hyperparameters.html#gridsearch_optimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.hyperparameters.gridsearch_optimize" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset" title="lgcpspatial.load_data.Dataset"><em>load_data.Dataset</em></a>) – <dl class="simple">
+<dt>Prepared dataset with the following attributes:</dt><dd><dl class="simple">
+<dt>L: posive int</dt><dd><p>Size of L×L spatial grid, in bins</p>
+</dd>
+<dt>P: postive float</dt><dd><p>Grid cell’s heuristic period, units of bins</p>
+</dd>
+<dt>prior_variance: positive float</dt><dd><p>Heuristic kernel prior zero-lag variance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>np</strong> (<em>positive odd int; default 201</em>) – Number of grid period values to explore
+in the grid search.</p></li>
+<li><p><strong>nv</strong> (<em>positive odd int; default 201</em>) – Number of prior marginal variance values to explore
+in the grid search.</p></li>
+<li><p><strong>rp</strong> (<em>float &gt;1.0; default 4</em>) – Ratio above and below the provided <cite>dataset.P</cite>
+grid cell period to explore.
+This will explore <cite>np</cite> periods evenly spaced on
+a logarithmic scale between <cite>dataset.P/rp</cite> and
+<cite>dataset.P*rp</cite>.</p></li>
+<li><p><strong>150</strong> (<em>rv float &gt;1.0; default</em>) – Ratio above and below the provided <cite>dataset.P</cite>
+grid cell period to explore.
+This will explore <cite>nv</cite> periods evenly spaced on
+a logarithmic scale between
+<cite>dataset.prior_variance/rv</cite> and
+<cite>dataset.prior_variance*rv</cite>.</p></li>
+<li><p><strong>kclip</strong> (<em>int</em><em>, </em><em>default 3</em>) – <dl class="simple">
+<dt>Bessel zero to clip the grid-cell kernel at.</dt><dd><ul>
+<li><dl class="simple">
+<dt>3: Nearest-neighbor grid order</dt><dd><p>Kernel will expect positive correlations
+between adjacent grid feilds separated by
+the cell’s period</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>2: Field-repulsion at grid scale only</dt><dd><p>Kernel will contain a local bump at the
+typical grid field scale, as well as an
+inhibitory surround at the same width.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>1: Characteristic smoothness scale only</dt><dd><dl class="simple">
+<dt>(Reduces kernel to ~Gaussian bump at the</dt><dd><p>size of the average grid field).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>&gt;3: Larger numbers correspond to stronger</dt><dd><p>assumptions of long-range order.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>variance_attenuate</strong> (<em>float</em><em>, </em><em>default 0.5</em>) – We recycle the estiamte of the posterior variance
+between successive evaluations of the grid search.
+This can reduce the number of iterations needed
+to converge. However, there is risk of isntabiltiy
+if the posterior marginal variance is initially
+too large. This fraction multiplies the variance
+carried-over from nearby parameters. Set this to
+a smaller number (I suggest 0) if you run into
+issues with the variance iteration diverging.</p></li>
+<li><p><strong>verbose</strong> (<em>boolean</em><em>, </em><em>default True</em>) – Whether to print progress update</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>bestindex</em> – best index into parameter grid</p></li>
+<li><p><em>bestpars</em> – values of best parameters</p></li>
+<li><p><em>bestresult]</em> – (state, likelihood, info) at best parameters.
+<cite>info</cite> is determined by the third element in the
+3-tuple return-value of the <cite>evaluate</cite> function,
+passed by the user. <cite>state</cite> is also user-defined.</p></li>
+<li><p><em>allresults</em> – All other results as an object array.
+Grid points that were not evaluated are None.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lgcpspatial.grid_search.html" class="btn btn-neutral float-left" title="lgcpspatial.grid_search module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lgcpspatial.posterior.html" class="btn btn-neutral float-right" title="lgcpspatial.posterior module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

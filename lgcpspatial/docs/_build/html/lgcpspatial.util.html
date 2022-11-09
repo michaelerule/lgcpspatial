@@ -22,7 +22,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="lgcpspatial.plot module" href="lgcpspatial.plot.html" />
-    <link rel="prev" title="lgcpspatial.heading module" href="lgcpspatial.heading.html" /> 
+    <link rel="prev" title="lgcpspatial.estimators module" href="lgcpspatial.estimators.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,10 +58,11 @@
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">util</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.util.tic"><code class="docutils literal notranslate"><span class="pre">tic()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.util.progress_bar"><code class="docutils literal notranslate"><span class="pre">progress_bar()</span></code></a></li>
@@ -269,6 +270,13 @@ credit: <a class="reference external" href="https://stackoverflow.com/a/52405173
 <li><p><strong>hull</strong> (<em>Convex Hull object</em>) – </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>isInHull</strong> – Array of booleans indicating which points are within
+the convex hull.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Length NPOINTS 1D np.bool</p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -279,9 +287,10 @@ credit: <a class="reference external" href="https://stackoverflow.com/a/52405173
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>L</strong> (<em>Size</em><em> of </em><em>L×L spatial domain</em>) – </p></li>
-<li><p><strong>σ</strong> (<em>kernel radius exp</em><em>(</em><em>-x²/σ</em><em>) </em><em>(</em><em>standard deviation in x and y ×⎷2</em><em>)</em>) – </p></li>
-<li><p><strong>normalize</strong> (<em>boolean; whether to make kernel sum to 1</em>) – </p></li>
+<li><p><strong>L</strong> (<em>int</em>) – Size of L×L spatial domain</p></li>
+<li><p><strong>σ</strong> (<em>positive float</em>) – kernel radius exp(-x²/σ) (standard deviation in x
+and y ×⎷2)</p></li>
+<li><p><strong>normalize</strong> (<em>boolean</em>) – Whether to make kernel sum to 1</p></li>
 </ul>
 </dd>
 </dl>
@@ -786,7 +795,7 @@ if there is no match within radius</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="lgcpspatial.heading.html" class="btn btn-neutral float-left" title="lgcpspatial.heading module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lgcpspatial.estimators.html" class="btn btn-neutral float-left" title="lgcpspatial.estimators module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="lgcpspatial.plot.html" class="btn btn-neutral float-right" title="lgcpspatial.plot module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -35,10 +35,11 @@ The project source can be browsed or downloaded from `github
    lgcp2d <lgcpspatial.lgcp2d>
    simulate_data <lgcpspatial.simulate_data>
    load_data <lgcpspatial.load_data>
-   estimators <lgcpspatial.estimators>
    grid_search <lgcpspatial.grid_search>
+   hyperparameters <lgcpspatial.hyperparameters>
    posterior <lgcpspatial.posterior>
    heading <lgcpspatial.heading>
+   estimators <lgcpspatial.estimators>
    util <lgcpspatial.util>
    plot <lgcpspatial.plot>
    

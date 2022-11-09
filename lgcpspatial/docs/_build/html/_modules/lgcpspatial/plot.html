@@ -55,10 +55,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.plot.html">plot</a></li>
 </ul>
@@ -643,7 +644,8 @@
     <span class="n">nicey</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">yby</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="hcolorbar"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.hcolorbar">[docs]</a><span class="k">def</span> <span class="nf">hcolorbar</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="hcolorbar"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.hcolorbar">[docs]</a><span class="k">def</span> <span class="nf">hcolorbar</span><span class="p">(</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
@@ -656,7 +658,8 @@
     <span class="n">labelpad</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Matplotlib&#39;s colorbar function is pretty bad. This is less bad.</span>
+<span class="sd">    Matplotlib&#39;s colorbar function is bad. </span>
+<span class="sd">    This is less bad.</span>
 <span class="sd">    r&#39;$\mathrm{\mu V}^2$&#39;</span>
 
 <span class="sd">    Parameters:</span>
@@ -686,11 +689,15 @@
     <span class="n">CWIDTH</span>  <span class="o">=</span> <span class="n">pixels_to_yfigureunits</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
     <span class="c1"># manually add colorbar axes </span>
     <span class="n">bb</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span>
-    <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">width</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">height</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">ymax</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">width</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">height</span>
+    <span class="n">r</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">ymax</span>
     <span class="n">use</span> <span class="o">=</span> <span class="n">w</span><span class="o">*</span><span class="n">shrink</span>
     <span class="n">extra</span> <span class="o">=</span> <span class="n">w</span><span class="o">-</span><span class="n">use</span>
     <span class="n">pad</span> <span class="o">=</span> <span class="n">extra</span><span class="o">/</span><span class="mi">2</span>
-    <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">((</span><span class="n">r</span><span class="o">-</span><span class="n">w</span><span class="o">+</span><span class="n">pad</span><span class="p">,</span><span class="n">y</span><span class="o">+</span><span class="n">SPACING</span><span class="p">,</span><span class="n">use</span><span class="p">,</span><span class="n">CWIDTH</span><span class="p">),</span><span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">frameon</span><span class="o">=</span><span class="n">border</span><span class="p">)</span>
+    <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="n">w</span><span class="o">+</span><span class="n">pad</span><span class="p">,</span><span class="n">y</span><span class="o">+</span><span class="n">SPACING</span><span class="p">,</span><span class="n">use</span><span class="p">,</span><span class="n">CWIDTH</span><span class="p">),</span>
+        <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+        <span class="n">frameon</span><span class="o">=</span><span class="n">border</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">cax</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="p">,</span><span class="mi">100</span><span class="p">)]),</span>
         <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
@@ -720,14 +727,22 @@
             <span class="n">verticalalignment</span>  <span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
     <span class="c1"># Hide ticks</span>
     <span class="n">noaxis</span><span class="p">()</span>
-    <span class="n">cax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">)</span>
+    <span class="n">cax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span>
+        <span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">)</span>
     <span class="n">cax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
     <span class="n">cax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">tick_right</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">oldax</span><span class="p">)</span> <span class="c1">#restore previously active axis</span>
     <span class="k">return</span> <span class="n">cax</span></div>
 
 
-<div class="viewcode-block" id="subfigurelabel"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.subfigurelabel">[docs]</a><span class="k">def</span> <span class="nf">subfigurelabel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">dx</span><span class="o">=</span><span class="mi">39</span><span class="p">,</span><span class="n">dy</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="subfigurelabel"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.subfigurelabel">[docs]</a><span class="k">def</span> <span class="nf">subfigurelabel</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">dx</span><span class="o">=</span><span class="mi">39</span><span class="p">,</span>
+    <span class="n">dy</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    --------------------------------------------------------</span>
@@ -784,8 +799,8 @@
 
 <div class="viewcode-block" id="circular_gaussian_smooth"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.circular_gaussian_smooth">[docs]</a><span class="k">def</span> <span class="nf">circular_gaussian_smooth</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">sigma</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Smooth signal x with gaussian of standard deviation sigma</span>
-<span class="sd">    Circularly wrapped using Fourier transform</span>
+<span class="sd">    Smooth signal x with gaussian of standard deviation </span>
+<span class="sd">    `sigma`, circularly wrapped using Fourier transform.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    --------------------------------------------------------</span>
@@ -799,14 +814,16 @@
     <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">g</span><span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="circularly_smooth_colormap"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.circularly_smooth_colormap">[docs]</a><span class="k">def</span> <span class="nf">circularly_smooth_colormap</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span><span class="n">s</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Smooth a colormap with cirular boundary conditions</span>
 
-<span class="sd">    s: sigma, standard dev of gaussian smoothing kernel in samples</span>
+<span class="sd">    s: sigma, standard dev of gaussian smoothing kernel in </span>
+<span class="sd">       samples</span>
 <span class="sd">    cm: color map, array-like of RGB tuples</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -829,6 +846,7 @@
     <span class="n">RGB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">R</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">B</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
     <span class="c1">#return np.array([np.fft.fftshift(c) for c in RGB.T]).T</span>
     <span class="k">return</span> <span class="n">RGB</span></div>
+
 <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">VIOLET</span><span class="p">,</span>
           <span class="n">MAUVE</span><span class="p">,</span>
           <span class="n">RUST</span><span class="p">,</span>
@@ -1026,12 +1044,13 @@
     <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;2D&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    For 2D Gaussians these are the confidence intervals</span>
-<span class="sd">    p   | sigma</span>
-<span class="sd">    90  : 4.605</span>
-<span class="sd">    95  : 5.991</span>
-<span class="sd">    97.5: 7.378</span>
-<span class="sd">    99  : 9.210</span>
-<span class="sd">    99.5: 10.597</span>
+<span class="sd">    </span>
+<span class="sd">        p   | sigma</span>
+<span class="sd">        90  : 4.605</span>
+<span class="sd">        95  : 5.991</span>
+<span class="sd">        97.5: 7.378</span>
+<span class="sd">        99  : 9.210</span>
+<span class="sd">        99.5: 10.597</span>
 
 <span class="sd">    - Get the eigenvalues and vectors of covariance S</span>
 <span class="sd">    - Prepare crosshairs for a unit standard normal</span>
@@ -1044,7 +1063,8 @@
 <span class="sd">    draw_ellipse: whether to draw the ellipse</span>
 <span class="sd">    draw_cross: whether to draw the crosshairs</span>
 <span class="sd">    mode: 2D or 1D; </span>
-<span class="sd">        If 2D, ellipse will reflect inner p of probability mass</span>
+<span class="sd">        If 2D, ellipse will reflect inner p of probability</span>
+<span class="sd">        mass</span>
 <span class="sd">        If 1D, ellipse will represent threshold for p </span>
 <span class="sd">        significance for a 1-tailed test in any direction.</span>
 <span class="sd">    </span>
@@ -1090,23 +1110,43 @@
     <span class="n">vscale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
     <span class="n">va</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Matplotlib&#39;s colorbar function is pretty bad. This is less bad.</span>
+<span class="sd">    Matplotlib&#39;s colorbar function is pretty bad. </span>
+<span class="sd">    This is less bad.</span>
 <span class="sd">    r&#39;$\mathrm{\mu V}^2$&#39;</span>
 
 <span class="sd">    Parameters:</span>
-<span class="sd">        vmin     (number)  : min value for colormap</span>
-<span class="sd">        vmax     (number)  : mac value for colormap</span>
-<span class="sd">        cmap     (colormap): what colormap to use</span>
-<span class="sd">        title    (string)  : Units for colormap</span>
-<span class="sd">        ax       (axis)    : optional, defaults to plt.gca(). axis to which to add colorbar</span>
-<span class="sd">        sideways (bool)    : Flips the axis label sideways</span>
-<span class="sd">        border   (bool)    : Draw border around colormap box? </span>
-<span class="sd">        spacing  (number)  : distance from axis in pixels. defaults to 5</span>
-<span class="sd">        width    (number)  : width of colorbar in pixels. defaults to 15</span>
-<span class="sd">        labelpad (number)  : padding between colorbar and title in pixels, defaults to 10</span>
-<span class="sd">        fontsize (number)  : label font size, defaults to 12</span>
-<span class="sd">        vscale   (float)   : height adjustment relative to parent axis, defaults to 1.0</span>
-<span class="sd">        va       (str)     : vertical alignment; &quot;bottom&quot; (&#39;b&#39;), &quot;center&quot; (&#39;c&#39;), or &quot;top&quot; (&#39;t&#39;)</span>
+<span class="sd">        vmin: scalar</span>
+<span class="sd">            min value for colormap</span>
+<span class="sd">        vmax: scalar</span>
+<span class="sd">            max value for colormap</span>
+<span class="sd">        cmap: Matplotlib.colormap</span>
+<span class="sd">            what colormap to use</span>
+<span class="sd">        title: str</span>
+<span class="sd">            Units for colormap</span>
+<span class="sd">        ax: axis</span>
+<span class="sd">            Optional, defaults to plt.gca(). </span>
+<span class="sd">            Axis to which to add colorbar</span>
+<span class="sd">        sideways: bool</span>
+<span class="sd">            Flip the axis label sideways?</span>
+<span class="sd">        border: bool</span>
+<span class="sd">            Draw border around colormap box? </span>
+<span class="sd">        spacing: scalar</span>
+<span class="sd">            Distance from axis in pixels. </span>
+<span class="sd">            defaults to 5</span>
+<span class="sd">        width: scalar</span>
+<span class="sd">            Width of colorbar in pixels. </span>
+<span class="sd">            Defaults to 15</span>
+<span class="sd">        labelpad: scalar</span>
+<span class="sd">            Padding between colorbar and title in pixels, </span>
+<span class="sd">            defaults to 10</span>
+<span class="sd">        fontsize: scalar</span>
+<span class="sd">            Label font size, defaults to 12</span>
+<span class="sd">        vscale: float</span>
+<span class="sd">            Height adjustment relative to parent axis, </span>
+<span class="sd">            defaults to 1.0</span>
+<span class="sd">        va: str</span>
+<span class="sd">            Verrtical alignment; &quot;bottom&quot; (&#39;b&#39;), </span>
+<span class="sd">            &quot;center&quot; (&#39;c&#39;), or &quot;top&quot; (&#39;t&#39;)</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        axis: colorbar axis</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -1122,19 +1162,22 @@
     <span class="n">CWIDTH</span>  <span class="o">=</span> <span class="n">pixels_to_xfigureunits</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
     <span class="c1"># manually add colorbar axes </span>
     <span class="n">bb</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span>
-    <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">width</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">height</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">ymax</span>
+    <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">h</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">ymin</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">width</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">height</span>
+    <span class="n">r</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">bb</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span><span class="n">bb</span><span class="o">.</span><span class="n">ymax</span>
     <span class="n">y0</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;b&#39;</span><span class="p">:</span><span class="k">lambda</span><span class="p">:</span><span class="n">b</span><span class="o">-</span><span class="n">h</span><span class="p">,</span>
         <span class="s1">&#39;c&#39;</span><span class="p">:</span><span class="k">lambda</span><span class="p">:</span><span class="n">b</span><span class="o">-</span><span class="p">(</span><span class="n">h</span><span class="o">+</span><span class="n">h</span><span class="o">*</span><span class="n">vscale</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
         <span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="k">lambda</span><span class="p">:</span><span class="n">b</span><span class="o">-</span><span class="n">h</span><span class="o">*</span><span class="n">vscale</span>
     <span class="p">}[</span><span class="n">va</span><span class="p">[</span><span class="mi">0</span><span class="p">]]()</span>
-    <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">((</span><span class="n">r</span><span class="o">+</span><span class="n">SPACING</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">CWIDTH</span><span class="p">,</span><span class="n">h</span><span class="o">*</span><span class="n">vscale</span><span class="p">),</span><span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">cax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">r</span><span class="o">+</span><span class="n">SPACING</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">CWIDTH</span><span class="p">,</span><span class="n">h</span><span class="o">*</span><span class="n">vscale</span><span class="p">),</span><span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">cax</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">vmax</span><span class="p">,</span><span class="n">vmin</span><span class="p">,</span><span class="mi">100</span><span class="p">)])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
         <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="p">),</span>
         <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
         <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;upper&#39;</span><span class="p">,</span>
         <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">nox</span><span class="p">()</span>
     <span class="n">nicey</span><span class="p">()</span>
     <span class="n">cax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">tick_right</span><span class="p">()</span>
@@ -1158,13 +1201,15 @@
             <span class="n">verticalalignment</span>  <span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
     <span class="c1"># Hide ticks</span>
     <span class="c1">#noaxis()</span>
-    <span class="n">cax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">)</span>
+    <span class="n">cax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span>
+        <span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">)</span>
     <span class="n">cax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
     <span class="n">cax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">tick_right</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">sca</span><span class="p">(</span><span class="n">oldax</span><span class="p">)</span> <span class="c1">#restore previously active axis</span>
     <span class="k">return</span> <span class="n">cax</span></div>
 
-<div class="viewcode-block" id="draw_compass"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.draw_compass">[docs]</a><span class="k">def</span> <span class="nf">draw_compass</span><span class="p">(</span><span class="n">xy0</span><span class="o">=</span><span class="mf">1.1</span><span class="o">+</span><span class="mf">.65</span><span class="n">j</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span><span class="n">cmap_fn</span><span class="o">=</span><span class="n">riley</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="mi">18</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_compass"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.draw_compass">[docs]</a><span class="k">def</span> <span class="nf">draw_compass</span><span class="p">(</span>
+    <span class="n">xy0</span><span class="o">=</span><span class="mf">1.1</span><span class="o">+</span><span class="mf">.65</span><span class="n">j</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span><span class="n">cmap_fn</span><span class="o">=</span><span class="n">riley</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="mi">18</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Draw a hue-wheel compass rose.</span>
 <span class="sd">    </span>

@@ -10,6 +10,7 @@ Submodules
    lgcpspatial.estimators
    lgcpspatial.grid_search
    lgcpspatial.heading
+   lgcpspatial.hyperparameters
    lgcpspatial.lgcp2d
    lgcpspatial.load_data
    lgcpspatial.plot

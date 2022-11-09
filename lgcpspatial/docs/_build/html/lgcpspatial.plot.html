@@ -57,10 +57,11 @@
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">plot</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.plot.simpleaxis"><code class="docutils literal notranslate"><span class="pre">simpleaxis()</span></code></a></li>
@@ -393,7 +394,8 @@ Does not change the baseline position of axis.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.plot.hcolorbar">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">hcolorbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sideways</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shrink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelpad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#hcolorbar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.hcolorbar" title="Permalink to this definition"></a></dt>
-<dd><p>Matplotlib’s colorbar function is pretty bad. This is less bad.
+<dd><p>Matplotlib’s colorbar function is bad.
+This is less bad.
 r’$mathrm{mu V}^2$’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -461,8 +463,8 @@ scale</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.plot.circular_gaussian_smooth">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">circular_gaussian_smooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#circular_gaussian_smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.circular_gaussian_smooth" title="Permalink to this definition"></a></dt>
-<dd><p>Smooth signal x with gaussian of standard deviation sigma
-Circularly wrapped using Fourier transform</p>
+<dd><p>Smooth signal x with gaussian of standard deviation
+<cite>sigma</cite>, circularly wrapped using Fourier transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -477,8 +479,11 @@ Circularly wrapped using Fourier transform</p>
 <dt class="sig sig-object py" id="lgcpspatial.plot.circularly_smooth_colormap">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">circularly_smooth_colormap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#circularly_smooth_colormap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.circularly_smooth_colormap" title="Permalink to this definition"></a></dt>
 <dd><p>Smooth a colormap with cirular boundary conditions</p>
-<p>s: sigma, standard dev of gaussian smoothing kernel in samples
-cm: color map, array-like of RGB tuples</p>
+<dl class="simple">
+<dt>s: sigma, standard dev of gaussian smoothing kernel in</dt><dd><p>samples</p>
+</dd>
+</dl>
+<p>cm: color map, array-like of RGB tuples</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -551,13 +556,15 @@ collection of 2D points <cite>q</cite> encoded as complex numbers.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.plot.covariance_crosshairs">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">covariance_crosshairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_ellipse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_cross</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2D'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#covariance_crosshairs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.covariance_crosshairs" title="Permalink to this definition"></a></dt>
-<dd><p>For 2D Gaussians these are the confidence intervals
-p   | sigma
+<dd><p>For 2D Gaussians these are the confidence intervals</p>
+<blockquote>
+<div><p>p   | sigma
 90  : 4.605
 95  : 5.991
 97.5: 7.378
 99  : 9.210
 99.5: 10.597</p>
+</div></blockquote>
 <ul class="simple">
 <li><p>Get the eigenvalues and vectors of covariance S</p></li>
 <li><p>Prepare crosshairs for a unit standard normal</p></li>
@@ -570,7 +577,8 @@ p   | sigma
 <li><p><strong>p</strong> (<em>fraction</em><em> of </em><em>data ellipse should enclose</em>) – </p></li>
 <li><p><strong>draw_ellipse</strong> (<em>whether to draw the ellipse</em>) – </p></li>
 <li><p><strong>draw_cross</strong> (<em>whether to draw the crosshairs</em>) – </p></li>
-<li><p><strong>mode</strong> (<em>2D</em><em> or </em><em>1D;</em>) – If 2D, ellipse will reflect inner p of probability mass
+<li><p><strong>mode</strong> (<em>2D</em><em> or </em><em>1D;</em>) – If 2D, ellipse will reflect inner p of probability
+mass
 If 1D, ellipse will represent threshold for p
 significance for a 1-tailed test in any direction.</p></li>
 </ul>
@@ -587,24 +595,44 @@ significance for a 1-tailed test in any direction.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.plot.good_colorbar">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">good_colorbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sideways</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelpad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vscale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">va</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'c'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#good_colorbar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.good_colorbar" title="Permalink to this definition"></a></dt>
-<dd><p>Matplotlib’s colorbar function is pretty bad. This is less bad.
+<dd><p>Matplotlib’s colorbar function is pretty bad.
+This is less bad.
 r’$mathrm{mu V}^2$’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>vmin</strong> (<em>number</em>) – min value for colormap</p></li>
-<li><p><strong>vmax</strong> (<em>number</em>) – mac value for colormap</p></li>
-<li><p><strong>cmap</strong> (<em>colormap</em>) – what colormap to use</p></li>
-<li><p><strong>title</strong> (<em>string</em>) – Units for colormap</p></li>
-<li><p><strong>ax</strong> (<em>axis</em>) – optional, defaults to plt.gca(). axis to which to add colorbar</p></li>
-<li><p><strong>sideways</strong> (<em>bool</em>) – Flips the axis label sideways</p></li>
-<li><p><strong>border</strong> (<em>bool</em>) – Draw border around colormap box?</p></li>
-<li><p><strong>spacing</strong> (<em>number</em>) – distance from axis in pixels. defaults to 5</p></li>
-<li><p><strong>width</strong> (<em>number</em>) – width of colorbar in pixels. defaults to 15</p></li>
-<li><p><strong>labelpad</strong> (<em>number</em>) – padding between colorbar and title in pixels, defaults to 10</p></li>
-<li><p><strong>fontsize</strong> (<em>number</em>) – label font size, defaults to 12</p></li>
-<li><p><strong>vscale</strong> (<em>float</em>) – height adjustment relative to parent axis, defaults to 1.0</p></li>
-<li><p><strong>va</strong> (<em>str</em>) – vertical alignment; “bottom” (‘b’), “center” (‘c’), or “top” (‘t’)</p></li>
+<li><p><strong>vmin</strong> – scalar
+min value for colormap</p></li>
+<li><p><strong>vmax</strong> – scalar
+max value for colormap</p></li>
+<li><p><strong>cmap</strong> – Matplotlib.colormap
+what colormap to use</p></li>
+<li><p><strong>title</strong> – str
+Units for colormap</p></li>
+<li><p><strong>ax</strong> – axis
+Optional, defaults to plt.gca().
+Axis to which to add colorbar</p></li>
+<li><p><strong>sideways</strong> – bool
+Flip the axis label sideways?</p></li>
+<li><p><strong>border</strong> – bool
+Draw border around colormap box?</p></li>
+<li><p><strong>spacing</strong> – scalar
+Distance from axis in pixels.
+defaults to 5</p></li>
+<li><p><strong>width</strong> – scalar
+Width of colorbar in pixels.
+Defaults to 15</p></li>
+<li><p><strong>labelpad</strong> – scalar
+Padding between colorbar and title in pixels,
+defaults to 10</p></li>
+<li><p><strong>fontsize</strong> – scalar
+Label font size, defaults to 12</p></li>
+<li><p><strong>vscale</strong> – float
+Height adjustment relative to parent axis,
+defaults to 1.0</p></li>
+<li><p><strong>va</strong> – str
+Verrtical alignment; “bottom” (‘b’),
+“center” (‘c’), or “top” (‘t’)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

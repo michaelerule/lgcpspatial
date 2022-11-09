@@ -55,10 +55,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.plot.html">plot</a></li>
 </ul>
@@ -363,8 +364,10 @@
     <span class="n">C</span> <span class="o">=</span> <span class="n">chinv</span><span class="p">(</span><span class="n">float32</span><span class="p">(</span><span class="n">diag</span><span class="p">(</span><span class="n">Λ</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span><span class="nd">@x</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="c1"># Σ Cholesky</span>
     
     <span class="c1"># Draw samples from Gaussian posterior</span>
-    <span class="n">Δ</span>  <span class="o">=</span> <span class="n">C</span><span class="nd">@float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="n">nsamples</span><span class="p">))</span> <span class="c1"># Δ from low-d mean </span>
-    <span class="n">zh</span> <span class="o">=</span> <span class="n">Δ</span> <span class="o">+</span> <span class="n">posterior_mean</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span>      <span class="c1"># low-d samples</span>
+    <span class="c1"># Δ: diplacement from low-d mean </span>
+    <span class="c1"># zh: low-d samples</span>
+    <span class="n">Δ</span>  <span class="o">=</span> <span class="n">C</span><span class="nd">@float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="n">nsamples</span><span class="p">))</span> 
+    <span class="n">zh</span> <span class="o">=</span> <span class="n">Δ</span> <span class="o">+</span> <span class="n">posterior_mean</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span>      
     
     <span class="c1"># Convert log-rate samples to position space and return</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">h2e</span><span class="o">.</span><span class="n">T</span><span class="nd">@zh</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">nsamples</span><span class="p">)</span></div>
@@ -375,12 +378,13 @@
         <span class="n">model</span><span class="p">,</span>
         <span class="n">posterior_mean</span><span class="p">,</span>
         <span class="n">posterior_variance</span><span class="p">,</span>
-        <span class="n">arena</span>     <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">nsamples</span>  <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
-        <span class="n">resolution</span><span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-        <span class="n">radius</span>    <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
-        <span class="n">height_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">prpeak_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">arena</span>            <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">nsamples</span>         <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
+        <span class="n">resolution</span>       <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">radius</span>           <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">edge_radius</span>      <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">height_threshold</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">prpeak_threshold</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Sample the distribution of grid-field peaks from </span>
 <span class="sd">        a log-Gaussian posterior distribution.</span>
@@ -403,7 +407,8 @@
 <span class="sd">            a local region around each local maximum in the </span>
 <span class="sd">            peak `density` map.</span>
 <span class="sd">        peaks: np.float32</span>
-<span class="sd">            2xNPEAKS array of grid-field-peak (x,y) coordinates</span>
+<span class="sd">            2xNPEAKS array of grid-field-peak (x,y) </span>
+<span class="sd">            coordinates.</span>
 <span class="sd">        totals:</span>
 <span class="sd">            Number of samples within each peak basin that</span>
 <span class="sd">            actually contained a peak.</span>
@@ -412,11 +417,11 @@
 <span class="sd">        sigmas: np.float32</span>
 <span class="sd">            2D sampled covariance of each peak</span>
 <span class="sd">        nearest: np.float32</span>
-<span class="sd">            (L*resolution)x(L*resolution) map of Voronoi regions</span>
-<span class="sd">            for each peak</span>
+<span class="sd">            (L*resolution)x(L*resolution) map of Voronoi </span>
+<span class="sd">            regions for each peak</span>
 <span class="sd">        kde: np.float32</span>
-<span class="sd">            (L*resolution)x(L*resolution) smoothed peak density</span>
-<span class="sd">            map.</span>
+<span class="sd">            (L*resolution)x(L*resolution) smoothed peak </span>
+<span class="sd">            density map.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -446,7 +451,14 @@
 <span class="sd">            Upsampling factor compared to the bin-grid </span>
 <span class="sd">            resolution; Default is 2</span>
 <span class="sd">        radius: float</span>
+<span class="sd">            Local region (in units of pixels on the L×L</span>
+<span class="sd">            grid) that peaks should clear to be included.</span>
 <span class="sd">            I suggest P/2.5</span>
+<span class="sd">        edge_radius: float; Default 0</span>
+<span class="sd">            Remove peaks closer than `edge_radius` bins</span>
+<span class="sd">            to the arena&#39;s edge. The default value of 0</span>
+<span class="sd">            does not remove points within a margin of</span>
+<span class="sd">            the boundary.</span>
 <span class="sd">        height_threshold: float</span>
 <span class="sd">            Peak height threshold</span>
 <span class="sd">        prpeak_threshold: float</span>
@@ -461,33 +473,41 @@
             <span class="n">posterior_variance</span><span class="p">,</span>
             <span class="n">nsamples</span><span class="p">)</span>
         <span class="n">L</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">L</span>
-
-        <span class="c1"># Count peaks at each location with linear interpolation</span>
+        
+        <span class="c1"># Count peaks at each location with linear interp.</span>
         <span class="n">density</span> <span class="o">=</span> <span class="n">get_peak_density</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">resolution</span><span class="p">,</span>
             <span class="n">height_threshold</span><span class="o">=</span><span class="n">percentile</span><span class="p">(</span>
                 <span class="n">z</span><span class="p">,</span><span class="mi">100</span><span class="o">*</span><span class="n">height_threshold</span><span class="p">))</span><span class="o">/</span><span class="n">nsamples</span>
-
-        <span class="c1"># Normalize the region around each of the identified </span>
-        <span class="c1"># grid-field centers</span>
+        
+        <span class="c1"># Normalize the region around each of the  </span>
+        <span class="c1"># identified grid-field centers</span>
         <span class="c1"># Focus on a local radius of r=P/2.5</span>
         <span class="c1"># Gaussian blur (σ=r/8) density to find fields</span>
         <span class="n">pfield</span>  <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">density</span><span class="p">))</span>
-        <span class="c1">#radius *= resolution</span>
-
+        
         <span class="c1"># Get density-peak centroids with interpolation</span>
         <span class="c1"># Peak locations are returned in [0,1] coordinates</span>
-        <span class="n">kde</span>    <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">density</span><span class="p">,</span><span class="n">radius</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
-        <span class="n">peaks</span>  <span class="o">=</span> <span class="n">interpolate_peaks</span><span class="p">(</span><span class="n">kde</span><span class="p">,</span>
+        <span class="n">kde</span>   <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">density</span><span class="p">,</span><span class="n">radius</span><span class="o">*</span><span class="n">resolution</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">interpolate_peaks</span><span class="p">(</span><span class="n">kde</span><span class="p">,</span>
             <span class="n">r</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">radius</span><span class="o">*</span><span class="n">resolution</span><span class="p">))</span>
-        <span class="n">keep</span>   <span class="o">=</span> <span class="n">is_in_hull</span><span class="p">(</span><span class="n">peaks</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">arena</span><span class="o">.</span><span class="n">hull</span><span class="p">)</span>
-
+        
+        <span class="c1"># Remove points outside hull or too close to edge</span>
+        <span class="n">keep</span>  <span class="o">=</span> <span class="n">is_in_hull</span><span class="p">(</span><span class="n">peaks</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">arena</span><span class="o">.</span><span class="n">hull</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">edge_radius</span><span class="o">&gt;</span><span class="mf">0.</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">arena</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">keep</span> <span class="o">=</span> <span class="n">keep</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">arena</span><span class="o">.</span><span class="n">close_to_boundary</span><span class="p">(</span>
+                <span class="n">peaks</span><span class="p">,</span> 
+                <span class="n">edge_radius</span><span class="p">)</span>
+        
         <span class="c1"># Calculate Voronoi region around each peak.</span>
+        <span class="c1"># It is useful to retain out-of-bounds peaks</span>
+        <span class="c1"># here since these limit the domain of peaks</span>
+        <span class="c1"># close to the edge of the arena.</span>
         <span class="n">rz</span>      <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@peaks</span>
         <span class="n">lr</span>      <span class="o">=</span> <span class="n">L</span><span class="o">*</span><span class="n">resolution</span>
         <span class="n">grid</span>    <span class="o">=</span> <span class="n">zgrid</span><span class="p">(</span><span class="n">lr</span><span class="p">)</span><span class="o">/</span><span class="n">lr</span><span class="o">+</span><span class="mf">.5</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="p">)</span>
         <span class="n">D</span>       <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">grid</span><span class="p">[:,:,</span><span class="kc">None</span><span class="p">]</span><span class="o">-</span><span class="n">rz</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">,:])</span>
         <span class="n">nearest</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">argmin</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
-        <span class="n">nearest</span><span class="p">[</span><span class="n">nanmin</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span><span class="n">radius</span><span class="o">/</span><span class="n">L</span><span class="p">]</span><span class="o">=</span><span class="n">NaN</span>
+        <span class="n">nearest</span><span class="p">[</span><span class="n">nanmin</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span><span class="n">model</span><span class="o">.</span><span class="n">P</span><span class="o">/</span><span class="n">L</span><span class="p">]</span><span class="o">=</span><span class="n">NaN</span>
 
         <span class="n">field_ids</span> <span class="o">=</span> <span class="n">unique</span><span class="p">(</span><span class="n">nearest</span><span class="p">)</span>
         <span class="n">field_ids</span> <span class="o">=</span> <span class="n">int32</span><span class="p">(</span><span class="n">field_ids</span><span class="p">[</span><span class="n">isfinite</span><span class="p">(</span><span class="n">field_ids</span><span class="p">)])</span>
@@ -513,7 +533,8 @@
             <span class="n">sigmas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;zN,ZN,N-&gt;zZ&#39;</span><span class="p">,</span><span class="n">delta</span><span class="p">,</span><span class="n">delta</span><span class="p">,</span><span class="n">pr</span><span class="p">)</span>
             <span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="o">=</span> <span class="n">c2p</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
         
-        <span class="n">keep</span>   <span class="o">=</span> <span class="p">(</span><span class="n">totals</span> <span class="o">&gt;</span> <span class="n">prpeak_threshold</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">is_in_hull</span><span class="p">(</span><span class="n">means</span><span class="p">,</span><span class="n">arena</span><span class="o">.</span><span class="n">hull</span><span class="p">)</span>
+        <span class="n">keep</span>   <span class="o">=</span> <span class="p">(</span><span class="n">totals</span> <span class="o">&gt;</span> <span class="n">prpeak_threshold</span><span class="p">)</span> <span class="o">&amp;</span> \
+            <span class="n">is_in_hull</span><span class="p">(</span><span class="n">means</span><span class="p">,</span><span class="n">arena</span><span class="o">.</span><span class="n">hull</span><span class="p">)</span>
         <span class="n">peaks</span>  <span class="o">=</span> <span class="n">peaks</span><span class="p">[:,</span><span class="n">keep</span><span class="p">]</span>
         <span class="n">totals</span> <span class="o">=</span> <span class="n">totals</span><span class="p">[</span><span class="n">keep</span><span class="p">]</span>
         <span class="n">means</span>  <span class="o">=</span> <span class="n">means</span><span class="p">[</span><span class="n">keep</span><span class="p">]</span>
@@ -530,14 +551,20 @@
 
 
 <div class="viewcode-block" id="SampledConfidence"><a class="viewcode-back" href="../../lgcpspatial.posterior.html#lgcpspatial.posterior.SampledConfidence">[docs]</a><span class="k">class</span> <span class="nc">SampledConfidence</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">radius</span><span class="p">,</span>
-        <span class="n">resolution</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-        <span class="n">nsamples</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span>
-        <span class="n">height_threshold</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-        <span class="n">pct</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span>
-        <span class="n">prpeak_threshold</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-        <span class="n">doplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bone_r&#39;</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">fit</span><span class="p">,</span>
+        <span class="n">radius</span><span class="p">,</span>
+        <span class="n">edge_radius</span>      <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span>
+        <span class="n">resolution</span>       <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">nsamples</span>         <span class="o">=</span> <span class="mi">4000</span><span class="p">,</span>
+        <span class="n">height_threshold</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span>
+        <span class="n">prpeak_threshold</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span>
+        <span class="n">pct</span>              <span class="o">=</span> <span class="mi">95</span><span class="p">,</span>
+        <span class="n">doplot</span>           <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">cmap</span>             <span class="o">=</span> <span class="s1">&#39;bone_r&#39;</span><span class="p">,</span>
+        <span class="n">scalebar</span>         <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Construct confidence intervals for grid-field peaks</span>
@@ -570,6 +597,11 @@
 
 <span class="sd">        Other Parameters</span>
 <span class="sd">        ----------------</span>
+<span class="sd">        edge_radius: float; Default 0</span>
+<span class="sd">            Remove peaks closer than `edge_radius` bins</span>
+<span class="sd">            to the arena&#39;s edge. The default value of 0</span>
+<span class="sd">            does not remove points within a margin of</span>
+<span class="sd">            the boundary.</span>
 <span class="sd">        resolution: positive integer</span>
 <span class="sd">            Grid upsampling factor, defaults to 2</span>
 <span class="sd">        nsamples: positive integer</span>
@@ -589,6 +621,8 @@
 <span class="sd">            Plot resulting grid map? Default is False.</span>
 <span class="sd">        cmap: matplotlib.colormap</span>
 <span class="sd">            Forwarded to `imshow()` if `doplot=True`</span>
+<span class="sd">        scalebar: boolean; default True</span>
+<span class="sd">            Draw 1 meter scale bar?</span>
 <span class="sd">        **kwargs:</span>
 <span class="sd">            Forwarded to `plot()` if `doplot` is True</span>
 <span class="sd">            </span>
@@ -607,9 +641,7 @@
 <span class="sd">                arena at the upsampled resolution.</span>
 
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cached</span>
-
-        <span class="n">arena</span> <span class="o">=</span> <span class="n">Arena</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">py</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">resolution</span><span class="p">)</span>
+        <span class="n">L</span>     <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">L</span>
 
         <span class="c1"># Retrieve the posterior mode (in low-D frequency)</span>
         <span class="c1"># and variance (in space)</span>
@@ -620,10 +652,11 @@
             <span class="n">model</span><span class="p">,</span>
             <span class="n">posterior_mean</span><span class="p">,</span>
             <span class="n">posterior_variance</span><span class="p">,</span>
-            <span class="n">arena</span>      <span class="o">=</span> <span class="n">arena</span><span class="p">,</span>
-            <span class="n">nsamples</span>   <span class="o">=</span> <span class="n">nsamples</span><span class="p">,</span>
-            <span class="n">resolution</span> <span class="o">=</span> <span class="n">resolution</span><span class="p">,</span>
-            <span class="n">radius</span>     <span class="o">=</span> <span class="n">radius</span><span class="p">,</span>
+            <span class="n">arena</span>            <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="p">,</span>
+            <span class="n">nsamples</span>         <span class="o">=</span> <span class="n">nsamples</span><span class="p">,</span>
+            <span class="n">resolution</span>       <span class="o">=</span> <span class="n">resolution</span><span class="p">,</span>
+            <span class="n">radius</span>           <span class="o">=</span> <span class="n">radius</span><span class="p">,</span>
+            <span class="n">edge_radius</span>      <span class="o">=</span> <span class="n">edge_radius</span><span class="p">,</span>
             <span class="n">height_threshold</span> <span class="o">=</span> <span class="n">height_threshold</span><span class="p">,</span>
             <span class="n">prpeak_threshold</span> <span class="o">=</span> <span class="n">prpeak_threshold</span><span class="p">)</span>
         
@@ -644,7 +677,6 @@
         <span class="n">m1</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">scale</span><span class="o">*</span><span class="p">(</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">resolution</span>
         <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="o">/</span><span class="n">m1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="c1"># (cm/pixel)²</span>
         <span class="n">pfield</span> <span class="o">/=</span> <span class="n">dx</span>
-
         <span class="n">nfields</span> <span class="o">=</span> <span class="n">peaks</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>    
 
         <span class="c1"># Collect all ellipses to plot </span>
@@ -660,6 +692,9 @@
                 <span class="n">gaussians</span><span class="o">+=</span><span class="p">[(</span><span class="n">mu</span><span class="p">,</span><span class="n">sigma</span><span class="p">)]</span>
         <span class="n">ellipses</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">ellipses</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
 
+        <span class="c1"># Get higher resolution masks for upsampled data</span>
+        <span class="n">arena</span> <span class="o">=</span> <span class="n">Arena</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">py</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="n">resolution</span><span class="p">)</span>
+        
         <span class="c1"># Create a plot of sampled confidence intervals</span>
         <span class="k">if</span> <span class="n">doplot</span><span class="p">:</span>
             <span class="c1"># Plot peak densities</span>
@@ -679,19 +714,24 @@
                   <span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> Ellipses: 95&#39;</span>\
                   <span class="o">+</span><span class="n">truepct</span><span class="o">+</span><span class="s1">&#39; confidence&#39;</span><span class="p">)</span>
 
-            <span class="c1"># Add a scale bar</span>
-            <span class="n">y0</span> <span class="o">=</span> <span class="n">where</span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-                <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">resolution</span><span class="p">)</span>
-            <span class="n">y1</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">m1</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">resolution</span><span class="p">)</span>
-            <span class="n">x0</span> <span class="o">=</span> <span class="p">(</span><span class="n">where</span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-                <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">20</span><span class="o">*</span><span class="n">resolution</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">resolution</span><span class="p">)</span>
-            <span class="n">yscalebar</span><span class="p">((</span><span class="n">y0</span><span class="o">+</span><span class="n">y1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">,</span><span class="s1">&#39;1 m&#39;</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">scalebar</span><span class="p">:</span>
+                <span class="c1"># Add a scale bar</span>
+                <span class="n">y0</span> <span class="o">=</span> <span class="n">where</span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">resolution</span><span class="p">)</span>
+                <span class="n">y1</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">m1</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">resolution</span><span class="p">)</span>
+                <span class="n">x0</span> <span class="o">=</span> <span class="p">(</span><span class="n">where</span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">20</span><span class="o">*</span><span class="n">resolution</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">resolution</span><span class="p">)</span>
+                <span class="n">yscalebar</span><span class="p">((</span><span class="n">y0</span><span class="o">+</span><span class="n">y1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">y1</span><span class="o">-</span><span class="n">y0</span><span class="p">,</span><span class="s1">&#39;1 m&#39;</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span>
+                          <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 
             <span class="c1"># Add color bar</span>
-            <span class="n">hcolorbar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">vmax</span><span class="p">,</span>
+            <span class="n">good_colorbar</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">vmax</span><span class="p">,</span>
                 <span class="n">cmap</span><span class="p">,</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">Pr($peak$)$ / cm²&#39;</span><span class="p">,</span>
-                <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">sideways</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">shrink</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
-            <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">ellipses</span><span class="p">,</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;lw&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span><span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="n">OCHRE</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">})</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">sideways</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">vscale</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+            <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">ellipses</span><span class="p">,</span><span class="o">**</span><span class="p">{</span>
+                <span class="s1">&#39;lw&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">,</span>
+                <span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="n">OCHRE</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">})</span>
             <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
             <span class="n">ylim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 
@@ -709,9 +749,11 @@
         <span class="n">fit</span><span class="p">,</span>
         <span class="n">radius</span><span class="p">,</span>
         <span class="n">localization_radius</span><span class="p">,</span>
-        <span class="n">height_threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-        <span class="n">pct</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span>
-        <span class="n">doplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">edge_radius</span>      <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">height_threshold</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">pct</span>              <span class="o">=</span> <span class="mi">95</span><span class="p">,</span>
+        <span class="n">doplot</span>           <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">draw_border</span>      <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Locally-quadratic approximation of peak-location</span>
@@ -743,6 +785,11 @@
 
 <span class="sd">        Other Parameters</span>
 <span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        edge_radius: float; Default 0</span>
+<span class="sd">            Remove peaks closer than `edge_radius` bins</span>
+<span class="sd">            to the arena&#39;s edge. The default value of 0</span>
+<span class="sd">            does not remove points within a margin of</span>
+<span class="sd">            the boundary.</span>
 <span class="sd">        height_threshold: float in (0,1)</span>
 <span class="sd">            Inclusion threshold for peak height in each </span>
 <span class="sd">            sample and probability peak over all samples,</span>
@@ -754,8 +801,10 @@
 <span class="sd">        pct: float in (0,100)</span>
 <span class="sd">            percentile to use for confidence bounds,</span>
 <span class="sd">            default:95</span>
-<span class="sd">        doplot: boolean</span>
+<span class="sd">        doplot: boolean, default True</span>
 <span class="sd">            Render a plot of the grid map? Default:False. </span>
+<span class="sd">        draw_border: boolean, default True</span>
+<span class="sd">            Whether to render the arena border if plotting.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
 
         <span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cached</span>
@@ -774,8 +823,11 @@
             <span class="n">height_threshold</span><span class="o">=</span>
             <span class="n">percentile</span><span class="p">(</span><span class="n">μ</span><span class="p">,</span><span class="mi">100</span><span class="o">*</span><span class="n">height_threshold</span><span class="p">))[:</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[:,</span><span class="n">is_in_hull</span><span class="p">(</span><span class="n">peaks</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">hull</span><span class="p">)]</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">shape</span><span class="p">(</span><span class="n">peaks</span><span class="p">))</span>
-
+        <span class="k">if</span> <span class="n">edge_radius</span><span class="o">&gt;</span><span class="mf">0.</span><span class="p">:</span>
+            <span class="n">peaks</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">remove_near_boundary</span><span class="p">(</span>
+                <span class="n">peaks</span><span class="p">,</span> 
+                <span class="n">edge_radius</span><span class="p">)</span>
+        
         <span class="c1"># Get negative of 2×2 Hessians at all points</span>
         <span class="n">pidx</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">int32</span><span class="p">(</span><span class="n">peaks</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">L</span><span class="o">+</span><span class="mf">0.5</span><span class="p">),)</span>
         <span class="n">H</span>    <span class="o">=</span> <span class="o">-</span><span class="n">hessian_2D</span><span class="p">(</span><span class="n">μ</span><span class="p">)[</span><span class="n">pidx</span><span class="p">]</span>
@@ -836,8 +888,9 @@
         <span class="n">ellipses</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">ellipses</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
 
         <span class="k">if</span> <span class="n">doplot</span><span class="p">:</span>
-            <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
-            <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">draw_border</span><span class="p">:</span>
+                <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+                <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;text.usetex&#39;</span><span class="p">]:</span>
                 <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Ellipses: </span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">pct</span><span class="p">)</span><span class="o">+</span>
                       <span class="sa">r</span><span class="s1">&#39;\</span><span class="si">% c</span><span class="s1">onfidence&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -854,6 +907,7 @@
             <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;square&#39;</span><span class="p">)</span>
             <span class="n">ylim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">peaks</span><span class="o">=</span><span class="n">peaks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ellipses</span><span class="o">=</span><span class="n">ellipses</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gaussians</span><span class="o">=</span><span class="n">gaussians</span></div>
 
@@ -865,6 +919,7 @@
         <span class="n">fit</span><span class="p">,</span> 
         <span class="n">radius</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">localization_radius</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">edge_radius</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">height_threshold</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
         <span class="n">pct</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span>
         <span class="n">regularization</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span>
@@ -902,6 +957,11 @@
 <span class="sd">            </span>
 <span class="sd">        pct: float in (0,100), default:95</span>
 <span class="sd">            percentile to use for confidence bounds</span>
+<span class="sd">        edge_radius: float; Default 0</span>
+<span class="sd">            Remove peaks closer than `edge_radius` bins</span>
+<span class="sd">            to the arena&#39;s edge. The default value of 0</span>
+<span class="sd">            does not remove points within a margin of</span>
+<span class="sd">            the boundary.</span>
 <span class="sd">        doplot: boolean, default:False. </span>
 <span class="sd">            Plot resulting the grid map? </span>
 <span class="sd">        **kwargs:</span>
@@ -943,13 +1003,14 @@
         <span class="n">pidx</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">int64</span><span class="p">(</span><span class="n">peaks</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">L</span><span class="o">+</span><span class="mf">0.5</span><span class="p">),)</span>
         <span class="n">H</span>    <span class="o">=</span> <span class="o">-</span><span class="n">hessian_2D</span><span class="p">(</span><span class="n">μ</span><span class="p">)[</span><span class="n">pidx</span><span class="p">]</span>
 
-        <span class="c1"># Obtain posterior mean Hessian and covariance gradients</span>
+        <span class="c1"># Obtain posterior derivatives</span>
         <span class="c1"># - Get low-rank Cholesky factor of covariance</span>
-        <span class="c1"># - Construct discrete derivatives in low-D Hartley space</span>
-        <span class="c1"># - Obtain low-rank derivatives (left-multiply)</span>
+        <span class="c1"># - Get discrete derivatives in low-D Hartley space</span>
+        <span class="c1"># - Get low-rank derivatives (left-multiply)</span>
         <span class="c1"># - Project back to spatial domain only at peaks</span>
-        <span class="c1">#   by keeping only those columns in the inverse transform </span>
-        <span class="c1">#   model.h2e that correspond to a peak location.</span>
+        <span class="c1">#   by keeping only those columns in the inverse </span>
+        <span class="c1">#   transform model.h2e that correspond to a peak </span>
+        <span class="c1">#   location.</span>
         <span class="n">Q</span>   <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">low_rank_cholesky</span><span class="p">(</span><span class="n">posterior_mean</span><span class="p">,</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
         <span class="n">dx</span>  <span class="o">=</span> <span class="n">dx_op</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
         <span class="n">fx</span>  <span class="o">=</span> <span class="n">fft2</span><span class="p">(</span><span class="n">dx</span>  <span class="p">,</span><span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span><span class="p">)[</span><span class="n">use2d</span><span class="p">]</span>
@@ -958,20 +1019,22 @@
         <span class="n">dxQ</span> <span class="o">=</span> <span class="n">RI</span><span class="p">((</span><span class="n">fx</span><span class="o">.</span><span class="n">T</span><span class="o">*</span><span class="n">fQ</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
         <span class="n">dyQ</span> <span class="o">=</span> <span class="n">RI</span><span class="p">((</span><span class="n">fy</span><span class="o">.</span><span class="n">T</span><span class="o">*</span><span class="n">fQ</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
-        <span class="c1"># At this point, dxQ and dyQ are the x and y derivatives</span>
-        <span class="c1"># Applied on the left to the Cholesky factor of the posterior</span>
-        <span class="c1"># covariance. Together, they describe the derivatives</span>
-        <span class="c1"># of the posterior covariance at all locations. </span>
-        <span class="c1"># In lgcp2d, h2e is defined as the R×L² matrix of 2D fourier</span>
-        <span class="c1"># components. Cutting out only the [pidx] locations from this</span>
-        <span class="c1"># operator corresponds to inverting the Hartley transform</span>
-        <span class="c1"># only at the locations where peaks exist (saves time). </span>
+        <span class="c1"># At this point, dxQ and dyQ are the x and y </span>
+        <span class="c1"># derivatives applied on the left to the Cholesky </span>
+        <span class="c1"># factor of the posterior covariance. Together, they</span>
+        <span class="c1"># describe the derivatives of the posterior </span>
+        <span class="c1"># covariance at all locations. In lgcp2d, h2e is </span>
+        <span class="c1"># defined as the R×L² matrix of 2D fourier </span>
+        <span class="c1"># components. Cutting out only the [pidx] locations </span>
+        <span class="c1"># from this operator corresponds to inverting the </span>
+        <span class="c1"># Hartley transform only at the locations where</span>
+        <span class="c1"># peaks exist (saves time). </span>
         <span class="n">ispk</span> <span class="o">=</span> <span class="n">h2e</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">pidx</span><span class="p">]</span>
         <span class="n">J</span>    <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">ispk</span><span class="nd">@dxQ</span><span class="p">,</span><span class="n">ispk</span><span class="nd">@dyQ</span><span class="p">])</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 
-        <span class="c1"># Calculate covariances and prepare covariance crosshairs </span>
-        <span class="c1"># - Calculated the expected peak shift covariance Σx0</span>
-        <span class="c1"># - If the peak is localized, plot 95% confidence ellipse</span>
+        <span class="c1"># Calculate covariances and crosshairs </span>
+        <span class="c1"># - Calculated expected peak shift covariance Σx0</span>
+        <span class="c1"># - If peak is localized, plot 95% ellipse</span>
         <span class="c1"># - Collect all ellipse to plot at once (faster)</span>
         <span class="n">bad</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">ii</span><span class="p">,(</span><span class="n">mx</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">peaks</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">H</span><span class="p">,</span><span class="n">J</span><span class="p">)):</span>
@@ -982,7 +1045,10 @@
                 <span class="n">bad</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
                 <span class="k">continue</span>
             <span class="c1"># Use if peak is acceptably localized</span>
-            <span class="n">cxy</span>  <span class="o">=</span> <span class="n">covariance_crosshairs</span><span class="p">(</span><span class="n">Σx0</span><span class="p">,</span><span class="n">p</span><span class="o">=</span><span class="n">pct</span><span class="o">/</span><span class="mi">100</span><span class="p">,</span><span class="n">draw_cross</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+            <span class="n">cxy</span>  <span class="o">=</span> <span class="n">covariance_crosshairs</span><span class="p">(</span>
+                <span class="n">Σx0</span><span class="p">,</span>
+                <span class="n">p</span><span class="o">=</span><span class="n">pct</span><span class="o">/</span><span class="mi">100</span><span class="p">,</span>
+                <span class="n">draw_cross</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">cxy</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">&gt;</span><span class="n">localization_radius</span><span class="o">/</span><span class="n">L</span><span class="p">:</span>
                 <span class="n">bad</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span>
 
@@ -1034,7 +1100,8 @@
             <span class="n">ylim</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
             <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">            figure(figsize=(10,10),dpi=120)</span>
-<span class="sd">            imshow(Σx0,vmin=-.0001,vmax=.0001,extent=(0.5,nkeep+0.5)*2)</span>
+<span class="sd">            imshow(Σx0,vmin=-.0001,vmax=.0001,</span>
+<span class="sd">                extent=(0.5,nkeep+0.5)*2)</span>
 <span class="sd">            xticks(arange(nkeep)+1,map(str,ok));</span>
 <span class="sd">            yticks(arange(nkeep)+1,map(str,ok));</span>
 <span class="sd">            for i in range(1,nkeep):</span>
@@ -1051,6 +1118,10 @@
         
 <div class="viewcode-block" id="fraction_within_arena"><a class="viewcode-back" href="../../lgcpspatial.posterior.html#lgcpspatial.posterior.fraction_within_arena">[docs]</a><span class="k">def</span> <span class="nf">fraction_within_arena</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">gaussians</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function is depricated. Testing whether </span>
+<span class="sd">    peaks are close to the edge is now handled by</span>
+<span class="sd">    `load_data.Arena.remove_near_boundary()`</span>
+<span class="sd">    </span>
 <span class="sd">    For a list of 2D Gaussians given as (μ,Σ) tuples, </span>
 <span class="sd">    estimate the fraction of probability mass within </span>
 <span class="sd">    data.arena.hull. </span>

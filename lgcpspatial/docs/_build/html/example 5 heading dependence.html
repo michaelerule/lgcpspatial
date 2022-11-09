@@ -56,10 +56,15 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Example 5: Heading dependence</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#Setup-workspace,-load,-and-prepare-dataset">Setup workspace, load, and prepare dataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#Fit-maps-for-a-range-of-heading-angles">Fit maps for a range of heading angles</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Get-confidence-intervals-for-maps-in-cardinal-directions">Get confidence intervals for maps in cardinal directions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Show-peak-densities">Show peak densities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Confidence-ellipses-and-p-values-for-peak-shifts">Confidence ellipses and p-values for peak shifts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Overall-significance-summary">Overall significance summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Identify-shifted-versions-of-the-same-grid-field">Identify shifted versions of the same grid field</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Save-figure-5b">Save figure 5b</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Get-confidence-intervals-for-maps-in-cardinal-directions">Get confidence intervals for maps in cardinal directions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Get-sampled-confidence-intervals-for-each-direction">Get sampled confidence intervals for each direction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Save-Figure-5c">Save Figure 5c</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -68,10 +73,11 @@
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
 </ul>
@@ -387,26 +393,27 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">loadmat</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+
+<span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">loadmat</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.load_data</span>     <span class="kn">import</span> <span class="n">Dataset</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>        <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>        <span class="kn">import</span> <span class="n">coordinate_descent</span>
-
+<span class="kn">from</span> <span class="nn">lgcpspatial.load_data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>    <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>    <span class="kn">import</span> <span class="n">coordinate_descent</span>
 
 <span class="c1"># Load dataset R11_20190607_EC_02</span>
 <span class="n">L</span>        <span class="o">=</span> <span class="mi">128</span> <span class="c1"># Grid size for position bins</span>
-<span class="n">pad</span>      <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># Edge padding (Avoids circular convolution wrap-around)</span>
 <span class="n">dataset</span>  <span class="o">=</span> <span class="s1">&#39;R11_20190607_EC_02.mat&#39;</span>
 <span class="n">datadir</span>  <span class="o">=</span> <span class="s1">&#39;../example data/&#39;</span>
 <span class="n">fn</span>       <span class="o">=</span> <span class="n">datadir</span> <span class="o">+</span> <span class="n">dataset</span>
 <span class="n">Fs</span>       <span class="o">=</span> <span class="n">loadmat</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span><span class="n">squeeze_me</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s1">&#39;pos_sample_rate&#39;</span><span class="p">]</span>
-<span class="n">data</span>     <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span><span class="n">pad</span><span class="p">)</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+<span class="n">data</span>     <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 
 <span class="c1"># Infer using parameters optimized by optimize_hyperparameters.ipynb</span>
 <span class="n">P</span>        <span class="o">=</span> <span class="mf">11.44</span> <span class="c1"># Grid period</span>
-<span class="n">σ0</span>       <span class="o">=</span> <span class="mf">0.103</span> <span class="c1"># Log-rate prior covariance kernel peak variance (zero lag variance)</span>
+<span class="n">σ0</span>       <span class="o">=</span> <span class="mf">0.103</span> <span class="c1"># kernel variance (zero lag variance)</span>
 <span class="n">model</span>    <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">σ0</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
 <span class="n">fit</span>      <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
 <span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">vfe</span> <span class="o">=</span> <span class="n">fit</span>
@@ -424,9 +431,11 @@ div.rendered_html tbody tr:hover {
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">get_peaks_at_heading_angles</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">link_peaks</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">plot_tracked_peaks</span>
 
-<span class="c1"># Higher-resolution heading angle sweep</span>
+<span class="c1"># High-resolution heading angle sweep</span>
+<span class="c1"># Don&#39;t re-optimize kernel variance here (faster,</span>
+<span class="c1"># sufficiently accurate for peak locations, less-meaningful</span>
+<span class="c1"># posterior confidence)</span>
 <span class="n">Nphi</span> <span class="o">=</span> <span class="mi">36</span>
 <span class="n">phis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">Nphi</span><span class="o">+</span><span class="mi">1</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
@@ -434,11 +443,10 @@ div.rendered_html tbody tr:hover {
 <span class="c1"># locate peaks tracked over a range of heading angles</span>
 <span class="n">peaks</span> <span class="o">=</span> <span class="n">get_peaks_at_heading_angles</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">phis</span><span class="p">)</span>
 <span class="n">edges</span> <span class="o">=</span> <span class="n">link_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">P</span><span class="o">/</span><span class="n">L</span><span class="o">/</span><span class="n">Nphi</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">plot_tracked_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">edges</span><span class="p">,</span><span class="n">perim</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
+<div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
@@ -446,79 +454,66 @@ div.rendered_html tbody tr:hover {
 
 </pre></div></div>
 </div>
+</section>
+<section id="Identify-shifted-versions-of-the-same-grid-field">
+<h2>Identify shifted versions of the same grid field<a class="headerlink" href="#Identify-shifted-versions-of-the-same-grid-field" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">match_peaks</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">plot_tracked_peaks</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>    <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Largest separation between peaks at adjacent heading angles</span>
+<span class="c1"># allowed for assuming two peaks come from the same field.</span>
+<span class="n">maximum_point_distance</span> <span class="o">=</span> <span class="p">(</span><span class="n">P</span><span class="o">/</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="mi">15</span><span class="o">/</span><span class="n">Nphi</span>
+
+<span class="n">figure</span><span class="p">(</span><span class="mi">0</span><span class="p">,(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mi">120</span><span class="p">)</span>
+<span class="n">subplots_adjust</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">:</span>
+    <span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">q</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mf">.1</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Raw peaks&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;square&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">xl</span><span class="p">,</span><span class="n">yl</span> <span class="o">=</span> <span class="n">xlim</span><span class="p">(),</span><span class="n">ylim</span><span class="p">()</span>
+
+<span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">)</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">match_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">maximum_point_distance</span><span class="p">)</span>
+<span class="n">plot_tracked_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">edges</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">.4</span><span class="p">,</span><span class="n">compass</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Matched peaks&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;square&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">xlim</span><span class="p">(</span><span class="o">*</span><span class="n">xl</span><span class="p">);</span> <span class="n">ylim</span><span class="p">(</span><span class="o">*</span><span class="n">yl</span><span class="p">)</span>
+
+<span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">)</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">link_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">maximum_point_distance</span><span class="p">)</span>
+<span class="n">plot_tracked_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">edges</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">.4</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Retained fields&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;square&#39;</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">xlim</span><span class="p">(</span><span class="o">*</span><span class="n">xl</span><span class="p">);</span> <span class="n">ylim</span><span class="p">(</span><span class="o">*</span><span class="n">yl</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/example_5_heading_dependence_5_1.png" src="_images/example_5_heading_dependence_5_1.png" />
+<img alt="_images/example_5_heading_dependence_7_0.png" src="_images/example_5_heading_dependence_7_0.png" />
 </div>
 </div>
-</section>
-<section id="Get-confidence-intervals-for-maps-in-cardinal-directions">
-<h2>Get confidence intervals for maps in cardinal directions<a class="headerlink" href="#Get-confidence-intervals-for-maps-in-cardinal-directions" title="Permalink to this heading"></a></h2>
-<p>We also re-optimize prior variance for each single-direction dataset here; This doesn’t change peak locations but ensures that our posterior covariances are OK (we will need them to estimate confidence intervals later).</p>
+<section id="Save-figure-5b">
+<h3>Save figure 5b<a class="headerlink" href="#Save-figure-5b" title="Permalink to this heading"></a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.heading</span>     <span class="kn">import</span> <span class="n">smoothed_heading_angle</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.grid_search</span> <span class="kn">import</span> <span class="n">grid_search</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.posterior</span>   <span class="kn">import</span> <span class="n">SampledConfidence</span>
-
-<span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">spikes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">py</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">spikes</span>
-
-<span class="c1"># Prepare hyperparameter grid</span>
-<span class="n">rβ</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># Range (ratio) to search for optimal kernel height</span>
-<span class="n">Nβ</span> <span class="o">=</span> <span class="mi">21</span> <span class="c1"># Kernel height search grid resolutions</span>
-<span class="n">βs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">rβ</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">*</span><span class="n">rβ</span><span class="p">),</span><span class="n">Nβ</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">pargrid</span> <span class="o">=</span> <span class="p">[</span><span class="n">βs</span><span class="p">]</span>
-
-<span class="c1"># Define parameters for sampling</span>
-<span class="n">nsamples</span>   <span class="o">=</span> <span class="mi">4000</span> <span class="c1"># Number of samples for peak distribution</span>
-<span class="n">resolution</span> <span class="o">=</span> <span class="mi">2</span>    <span class="c1"># Interpolation resolution</span>
-<span class="n">radius</span>     <span class="o">=</span> <span class="n">P</span><span class="o">/</span><span class="mi">2</span>  <span class="c1"># Peak region</span>
-
-<span class="c1"># Define cardinal directions</span>
-<span class="n">phiW</span><span class="p">,</span><span class="n">phiS</span><span class="p">,</span><span class="n">phiE</span><span class="p">,</span><span class="n">phiN</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
-<span class="n">NSEW</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">phiN</span><span class="p">,</span><span class="n">phiS</span><span class="p">,</span><span class="n">phiE</span><span class="p">,</span><span class="n">phiW</span><span class="p">])</span>
-
-<span class="c1"># Get Heading angle from lowpass kinematics derivative</span>
-<span class="c1"># Heading angles range start as westward=0, then</span>
-<span class="c1"># rotate anticlockwise to southward, eastward,...</span>
-<span class="n">heading_angle</span> <span class="o">=</span> <span class="n">smoothed_heading_angle</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">)</span>
-<span class="n">prior_variance</span> <span class="o">=</span> <span class="n">σ0</span>
-<span class="n">samples</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">fits</span> <span class="o">=</span> <span class="p">[],[],[]</span>
-<span class="k">for</span> <span class="n">iphi</span><span class="p">,</span><span class="n">phi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">NSEW</span><span class="p">):</span>
-    <span class="c1"># Heading-weighted data binning</span>
-    <span class="n">sw</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">heading_angle</span><span class="o">-</span><span class="n">phi</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
-    <span class="n">data2</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reweighted</span><span class="p">(</span><span class="n">sw</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">evaluate_ELBO</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span><span class="n">state</span><span class="p">):</span>
-        <span class="n">β</span>       <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">μ</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">μh</span>  <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span><span class="o">*</span><span class="mi">3</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">state</span>
-        <span class="n">model</span>   <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span>
-            <span class="n">prior_variance</span><span class="o">/</span><span class="n">β</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data2</span><span class="p">)</span>
-        <span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">nl</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@μh</span> <span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">μh</span><span class="p">),</span> <span class="o">-</span><span class="n">nl</span><span class="p">,</span> <span class="n">model</span>
-    <span class="c1"># Run overall grid search</span>
-    <span class="n">bestix</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span> <span class="o">=</span>\
-        <span class="n">grid_search</span><span class="p">(</span><span class="n">pargrid</span><span class="p">,</span><span class="n">evaluate_ELBO</span><span class="p">)</span>
-    <span class="n">beta</span> <span class="o">=</span> <span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">newsigma</span> <span class="o">=</span> <span class="n">σ0</span><span class="o">/</span><span class="n">beta</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;σ0   = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">σ0</span>)
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;β    = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">beta</span>)
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;σ0/β = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">newsigma</span>)
-    <span class="c1"># Infer and save</span>
-    <span class="n">model</span><span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">newsigma</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data2</span><span class="p">)</span>
-    <span class="n">fit</span>  <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
-
-    <span class="c1"># sample (density, pfield, mask, rx, ry, totals)</span>
-    <span class="n">sample</span> <span class="o">=</span> <span class="n">SampledConfidence</span><span class="p">(</span>
-        <span class="n">data</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">radius</span><span class="p">,</span><span class="n">resolution</span><span class="p">,</span><span class="n">nsamples</span><span class="p">,</span><span class="n">doplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">pct</span><span class="o">=</span><span class="mi">95</span><span class="p">)</span>
-    <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
-    <span class="n">models</span> <span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-    <span class="n">fits</span>   <span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">(</span><span class="mi">0</span><span class="p">,(</span><span class="mf">2.5</span><span class="p">,</span><span class="mf">2.5</span><span class="p">),</span><span class="mi">120</span><span class="p">)</span>
+<span class="n">plot_tracked_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">edges</span><span class="p">,</span><span class="n">perim</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="p">)</span>
+<span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;fig5b.svg&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -526,327 +521,155 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<div class="highlight"><pre>
-[7](1.52e+00) loss=-1.203901e+033(done)
-σ0   = 0.103000
-β    = 1.319508
-σ0/β = 0.078059
-[13](6.60e-01) loss=-1.206408e+03(done)
-σ0   = 0.103000
-β    = 0.757858
-σ0/β = 0.135909
-[12](7.58e-01) loss=-1.191370e+03(done)
-σ0   = 0.103000
-β    = 0.870551
-σ0/β = 0.118316
-[9](1.15e+00) loss=-1.175050e+033(done)
-σ0   = 0.103000
-β    = 1.000000
-σ0/β = 0.103000
-</pre></div></div>
-</div>
-</section>
-<section id="Show-peak-densities">
-<h2>Show peak densities<a class="headerlink" href="#Show-peak-densities" title="Permalink to this heading"></a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.load_data</span> <span class="kn">import</span> <span class="n">Arena</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>      <span class="kn">import</span> <span class="o">*</span>
-
-<span class="c1"># Colors for each direction</span>
-<span class="n">cW</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span><span class="mf">.05</span><span class="p">,</span><span class="mf">0.6</span><span class="p">]</span> <span class="c1"># Magenta</span>
-<span class="n">cS</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]</span> <span class="c1"># Orange</span>
-<span class="n">cE</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">.95</span><span class="p">,</span><span class="mf">0.4</span><span class="p">]</span> <span class="c1"># Bright green</span>
-<span class="n">cN</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]</span> <span class="c1"># Azure</span>
-
-<span class="n">pct</span>  <span class="o">=</span> <span class="mf">99.9</span> <span class="c1"># Saturate pixels above this</span>
-<span class="n">mask</span> <span class="o">=</span> <span class="n">Arena</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">py</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">resolution</span><span class="p">)</span><span class="o">.</span><span class="n">mask</span>
-<span class="n">N</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">W</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">density</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">]</span>
-
-<span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span>
-<span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
-<span class="n">colors</span>  <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">cE</span><span class="p">,</span><span class="n">cW</span><span class="p">])</span>
-<span class="n">RGBEW</span>   <span class="o">=</span> <span class="n">clip</span><span class="p">(</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;dc,dxy-&gt;xyc&#39;</span><span class="p">,</span><span class="n">colors</span><span class="p">,</span>
-    <span class="n">array</span><span class="p">([(</span><span class="n">E</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">E</span><span class="p">,</span><span class="n">pct</span><span class="p">)),(</span><span class="n">W</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">W</span><span class="p">,</span><span class="n">pct</span><span class="p">))])),</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">RGBEW</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">imshow</span><span class="p">(</span><span class="n">RGBEW</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
-<span class="n">noxyaxes</span><span class="p">()</span>
-<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Eastward (green) vs</span><span class="se">\n</span><span class="s1">Westward (red)&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
-<span class="n">colors</span>  <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">cN</span><span class="p">,</span><span class="n">cS</span><span class="p">])</span>
-<span class="n">RGBNS</span>   <span class="o">=</span> <span class="n">clip</span><span class="p">(</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;dc,dxy-&gt;xyc&#39;</span><span class="p">,</span><span class="n">colors</span><span class="p">,</span>
-    <span class="n">array</span><span class="p">([(</span><span class="n">N</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">pct</span><span class="p">)),(</span><span class="n">S</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">pct</span><span class="p">))])),</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">RGBNS</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">imshow</span><span class="p">(</span><span class="n">RGBNS</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
-<span class="n">noxyaxes</span><span class="p">()</span>
-<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Northward (blue) vs</span><span class="se">\n</span><span class="s1">Southward (orange)&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Text(0.5, 1.0, &#39;Northward (blue) vs\nSouthward (orange)&#39;)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_5_heading_dependence_9_1.png" src="_images/example_5_heading_dependence_9_1.png" />
+<img alt="_images/example_5_heading_dependence_9_0.png" src="_images/example_5_heading_dependence_9_0.png" />
 </div>
 </div>
 </section>
-<section id="Confidence-ellipses-and-p-values-for-peak-shifts">
-<h2>Confidence ellipses and p-values for peak shifts<a class="headerlink" href="#Confidence-ellipses-and-p-values-for-peak-shifts" title="Permalink to this heading"></a></h2>
-<p>Note that the statistics of individual grid fields within the same map are not independent, so correcting for multiple-comparisons here is tricky. We’ll explore this later.</p>
+</section>
+<section id="Get-confidence-intervals-for-maps-in-cardinal-directions">
+<h2>Get confidence intervals for maps in cardinal directions<a class="headerlink" href="#Get-confidence-intervals-for-maps-in-cardinal-directions" title="Permalink to this heading"></a></h2>
+<p>Re-optimizing the kernel variance will adjust the posterior confidence intervals to account for the fact that, due to heading-dependent weighting, each heading direction now has a different effective number of sampled.</p>
+<p>We are focus on opposite heading directions because these are fit on entirely non-overlapping sets of data, due to the heading weights tapering to zero for opposing directions.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">locate_opposites</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">plot_connection_arrow</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.util</span> <span class="kn">import</span> <span class="n">pdist</span>
-<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">smoothed_heading_angle</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">fit_heading_variance</span>
 
-<span class="n">titles</span>      <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Northward vs Southward&#39;</span><span class="p">,</span><span class="s1">&#39;Eastward vs Westward&#39;</span><span class="p">,]</span>
-<span class="n">iN</span><span class="p">,</span><span class="n">iS</span><span class="p">,</span><span class="n">iE</span><span class="p">,</span><span class="n">iW</span> <span class="o">=</span> <span class="n">argmin</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">NSEW</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span><span class="o">-</span><span class="n">phis</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]),</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">directions</span>  <span class="o">=</span> <span class="p">[</span><span class="n">iN</span><span class="p">,</span><span class="n">iE</span><span class="p">]</span>
-
-<span class="c1"># Indexes of NS,EW cardinal pairs</span>
-<span class="n">cardinal</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)]</span>
-
-<span class="c1"># P-value threshold to plot</span>
-<span class="n">pths</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mf">.05</span><span class="p">,</span><span class="mf">1.0</span><span class="p">])</span>
-
-<span class="c1"># Colors p-value threshold ellipsesdirections</span>
-<span class="n">cc</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span><span class="p">(</span><span class="n">BLACK</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,(</span><span class="n">array</span><span class="p">(</span><span class="n">BLACK</span><span class="p">)</span><span class="o">+</span><span class="n">array</span><span class="p">(</span><span class="n">WHITE</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
-
-<span class="c1"># Encode tracked peaks as complex to simplify math</span>
-<span class="n">q</span>  <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@pk</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
-
-<span class="c1"># Tolerance for matching peaks</span>
-<span class="n">connection_radius</span> <span class="o">=</span> <span class="n">P</span><span class="o">/</span><span class="n">L</span><span class="o">/</span><span class="mi">5</span>
-
-<span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
-<span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span><span class="n">bottom</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">top</span><span class="o">=</span><span class="mf">.9</span><span class="p">,</span><span class="n">wspace</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">allpairinfo</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">iplot</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">directions</span><span class="p">):</span>
-    <span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">iplot</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Find connected peaks from opposing directions</span>
-<span class="sd">    - q encodes (rx,ry) peak-&lt;λ&gt; as rx+1j*ry in [0,1]² normalized coordinates</span>
-<span class="sd">    - There&#39;s a separate set of peaks for each direction</span>
-<span class="sd">    - Means m1,m2 are sampled peak centroids ~ q</span>
-<span class="sd">    - p95s: [[((ellipse_path),(μ,Σ)),… for each peak],… for each [N,S,E,W]]</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="c1"># match peaks</span>
-    <span class="n">iop</span><span class="p">,</span><span class="n">op</span> <span class="o">=</span> <span class="n">locate_opposites</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">P</span><span class="o">/</span><span class="n">L</span><span class="o">*</span><span class="mf">0.67</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">edges</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
-    <span class="c1"># Get locations of these peaks encoded as complex number</span>
-    <span class="n">q1</span><span class="p">,</span><span class="n">q2</span>  <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">q</span><span class="p">[</span><span class="n">iop</span><span class="p">]</span>
-    <span class="c1"># Look up 90% Σs</span>
-    <span class="n">direction2</span><span class="p">,</span><span class="n">direction1</span> <span class="o">=</span> <span class="n">cardinal</span><span class="p">[</span><span class="n">iplot</span><span class="p">]</span>
-    <span class="n">g1</span>  <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="n">direction1</span><span class="p">]</span><span class="o">.</span><span class="n">gaussians</span>
-    <span class="n">g2</span>  <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="n">direction2</span><span class="p">]</span><span class="o">.</span><span class="n">gaussians</span>
-    <span class="c1"># unpack μs, Σs of gaussian confidence intervals</span>
-    <span class="n">m1</span><span class="p">,</span><span class="n">S1</span>  <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">g1</span><span class="p">))</span>
-    <span class="n">m2</span><span class="p">,</span><span class="n">S2</span>  <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">float32</span><span class="p">,</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">g2</span><span class="p">))</span>
-    <span class="c1"># encode peak means as complex</span>
-    <span class="n">z1</span><span class="p">,</span><span class="n">z2</span>  <span class="o">=</span> <span class="n">m1</span><span class="o">@</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">],</span><span class="n">m2</span><span class="o">@</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span>
-
-    <span class="c1"># Register connected-peak data &amp; posterior-confidence info</span>
-    <span class="c1"># These should be close, but aren&#39;t exactly equal</span>
-    <span class="c1"># Match them up based on proximity.</span>
-    <span class="n">d1</span><span class="p">,</span><span class="n">d2</span> <span class="o">=</span> <span class="n">pdist</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span><span class="n">q1</span><span class="p">),</span><span class="n">pdist</span><span class="p">(</span><span class="n">z2</span><span class="p">,</span><span class="n">q2</span><span class="p">)</span>
-    <span class="n">i1</span><span class="p">,</span><span class="n">i2</span> <span class="o">=</span> <span class="n">argmin</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">argmin</span><span class="p">(</span><span class="n">d2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">i1</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">&gt;=</span><span class="n">connection_radius</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="n">i2</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">&gt;=</span><span class="n">connection_radius</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="n">op2</span> <span class="o">=</span> <span class="n">int32</span><span class="p">(</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">z1</span><span class="p">)))</span><span class="o">-</span><span class="mi">1</span>
-    <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">k</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span> <span class="k">continue</span>
-        <span class="n">l</span><span class="p">,</span><span class="n">m</span> <span class="o">=</span> <span class="n">i1</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">i2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">l</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">m</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span> <span class="n">op2</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">=</span><span class="n">m</span>
-    <span class="n">plot_connection_arrow</span><span class="p">(</span><span class="n">op2</span><span class="p">,</span><span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span><span class="n">zorder</span><span class="o">=</span><span class="mi">99</span><span class="p">)</span>
-
-    <span class="c1"># Get p-values using a z-test</span>
-    <span class="n">elps</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pths</span><span class="p">]</span>
-    <span class="n">allp</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">pairinfo</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">op2</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">k</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span> <span class="k">continue</span>
-        <span class="n">m1</span><span class="p">,</span><span class="n">S1</span> <span class="o">=</span> <span class="n">g1</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
-        <span class="n">m2</span><span class="p">,</span><span class="n">S2</span> <span class="o">=</span> <span class="n">g2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
-        <span class="n">pairinfo</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="n">m1</span><span class="p">,</span><span class="n">S1</span><span class="p">),(</span><span class="n">m2</span><span class="p">,</span><span class="n">S2</span><span class="p">)))</span>
-        <span class="c1"># Covariance of difference is sum of covariances</span>
-        <span class="n">S</span> <span class="o">=</span> <span class="n">S1</span><span class="o">+</span><span class="n">S2</span>
-        <span class="c1"># Mean of difference is difference of means</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">m2</span><span class="o">-</span><span class="n">m1</span>
-        <span class="c1"># Find unit-direction of shift</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">d</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-        <span class="c1"># Obtain variance along shift direction</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="nd">@S@u</span><span class="p">)</span>
-        <span class="c1"># Get p-value from z-score</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-        <span class="n">allp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-        <span class="c1"># Assign this pair to a signficicance bracket</span>
-        <span class="k">for</span> <span class="n">ip</span><span class="p">,</span><span class="n">pth</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pths</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">p</span><span class="o">&lt;=</span><span class="n">pth</span><span class="p">:</span>
-                <span class="n">cross</span> <span class="o">=</span> <span class="n">covariance_crosshairs</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">p</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span><span class="n">draw_ellipse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">draw_cross</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;1D&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">m2</span>
-                <span class="n">elps</span><span class="p">[</span><span class="n">ip</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">cross</span><span class="p">)</span>
-                <span class="n">elps</span><span class="p">[</span><span class="n">ip</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">NaN</span><span class="p">,]</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
-                <span class="k">break</span>
-    <span class="n">allpairinfo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pairinfo</span><span class="p">)</span>
-
-    <span class="c1"># Plot ellipses (different colors for different significance)</span>
-    <span class="k">for</span> <span class="n">ip</span><span class="p">,</span><span class="n">pth</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pths</span><span class="p">):</span>
-        <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">array</span><span class="p">(</span><span class="n">elps</span><span class="p">[</span><span class="n">ip</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">cc</span><span class="p">[</span><span class="n">ip</span><span class="p">])</span>
-
-    <span class="c1"># Add arena bounding box and show plot</span>
-    <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">zorder</span><span class="o">=-</span><span class="mi">99</span><span class="p">)</span>
-    <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">zorder</span><span class="o">=-</span><span class="mi">98</span><span class="p">)</span>
-    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;square&#39;</span><span class="p">)</span>
-    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-    <span class="n">title</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="n">iplot</span><span class="p">],</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-    <span class="n">ylim</span><span class="p">(</span><span class="o">*</span><span class="n">ylim</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">angleNSEW</span> <span class="o">=</span> <span class="n">float32</span><span class="p">([</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">pi</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">models</span><span class="p">,</span> <span class="n">fits</span> <span class="o">=</span> <span class="n">fit_heading_variance</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">smoothed_heading_angle</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">py</span><span class="p">),</span>
+    <span class="n">angleNSEW</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_5_heading_dependence_11_0.png" src="_images/example_5_heading_dependence_11_0.png" />
-</div>
-</div>
-</section>
-<section id="Overall-significance-summary">
-<h2>Overall significance summary<a class="headerlink" href="#Overall-significance-summary" title="Permalink to this heading"></a></h2>
-<p>Is there a significant <em>consistent shift</em> between all tracked fields? It looks that way, but the statistics for individual fields are correlated due to the Gaussian process prior. To address this, we can sample all fields jointly and compare the average shift over all tracked fields within a sample. The joint sampling preserves correlations. We draw samples for two opposing directs and compare all pairs of multi-field samples where at least 60% of the tracked fields are present (some fields
-don’t appear in all samples).</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.posterior</span> <span class="kn">import</span> <span class="n">sample_posterior_lograte</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.posterior</span> <span class="kn">import</span> <span class="n">interpolate_peaks</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.heading</span>   <span class="kn">import</span> <span class="n">pair_points</span>
-
-<span class="n">connection_radius</span> <span class="o">=</span> <span class="n">P</span><span class="o">/</span><span class="n">L</span><span class="o">*</span><span class="mf">0.45</span>
-<span class="n">nsamples</span> <span class="o">=</span> <span class="mi">1500</span>
-
-<span class="c1"># Precompute to convert results to physical units</span>
-<span class="n">scale</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">z0</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">m_per_pixel</span> <span class="o">=</span> <span class="n">diff</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">extent</span><span class="p">[:</span><span class="mi">2</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">L</span>
-
-<span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">iplot</span><span class="p">,</span><span class="n">iph</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">directions</span><span class="p">):</span>
-
-    <span class="c1"># Match peaks based on fast (non-optimized) posterior means</span>
-    <span class="c1"># iop: which phase index is opposite of this one</span>
-    <span class="c1"># op:  index to matches in opposite direction (-1 if not matches)</span>
-    <span class="n">iop</span><span class="p">,</span><span class="n">op</span> <span class="o">=</span> <span class="n">locate_opposites</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">P</span><span class="o">/</span><span class="n">L</span><span class="o">*</span><span class="mf">0.67</span><span class="p">,</span><span class="n">iph</span><span class="p">,</span><span class="n">edges</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
-
-    <span class="c1"># Locations of matched peak in this direction and its opposite</span>
-    <span class="n">z1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@peaks</span><span class="p">[</span><span class="n">iph</span><span class="p">][:,</span>   <span class="n">op</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="p">]</span>
-    <span class="n">z2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@peaks</span><span class="p">[</span><span class="n">iop</span><span class="p">][:,</span><span class="n">op</span><span class="p">[</span><span class="n">op</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">]]</span>
-
-    <span class="n">correlated_samples</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">all_fields</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">direction2</span><span class="p">,</span><span class="n">direction1</span> <span class="o">=</span> <span class="n">cardinal</span><span class="p">[</span><span class="n">iplot</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">zi</span><span class="p">,</span><span class="n">direction</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">],[</span><span class="n">direction1</span><span class="p">,</span><span class="n">direction2</span><span class="p">]):</span>
-
-        <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span>
-        <span class="n">μh</span><span class="p">,</span><span class="n">v</span>  <span class="o">=</span> <span class="n">fits</span><span class="p">[</span><span class="n">direction</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span>
-
-        <span class="c1"># Draw samples from the posterior</span>
-        <span class="c1"># (collect lists of peaks as complex numbers for each sample)</span>
-        <span class="n">sample</span>   <span class="o">=</span> <span class="n">sample_posterior_lograte</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">nsamples</span><span class="p">)</span>
-        <span class="n">ix</span><span class="p">,</span><span class="n">iy</span><span class="p">,</span><span class="n">iz</span> <span class="o">=</span> <span class="n">interpolate_peaks</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span>
-            <span class="n">r</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">P</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span>
-            <span class="n">height_threshold</span><span class="o">=</span><span class="n">percentile</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span><span class="mi">50</span><span class="p">))</span>
-        <span class="n">q</span> <span class="o">=</span> <span class="n">ix</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">iy</span>
-        <span class="n">psamples</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="n">iz</span><span class="o">==</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsamples</span><span class="p">)]</span>
-
-        <span class="c1"># For each tracked peak, record correlated samples</span>
-        <span class="n">s1</span> <span class="o">=</span> <span class="n">full</span><span class="p">((</span><span class="n">nsamples</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">zi</span><span class="p">)),</span><span class="n">NaN</span><span class="p">,</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">ii</span><span class="p">,</span><span class="n">qi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">psamples</span><span class="p">):</span>
-            <span class="n">iz</span><span class="p">,</span><span class="n">iq</span> <span class="o">=</span> <span class="n">pair_points</span><span class="p">(</span><span class="n">zi</span><span class="p">,</span><span class="n">qi</span><span class="p">,</span><span class="n">connection_radius</span><span class="p">)</span>
-            <span class="n">s1</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span><span class="n">iz</span><span class="p">]</span> <span class="o">=</span> <span class="n">qi</span><span class="p">[</span><span class="n">iq</span><span class="p">]</span>
-
-        <span class="n">correlated_samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
-        <span class="n">all_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">zi</span><span class="p">)</span>
-
-    <span class="c1"># Switch to units of meters</span>
-    <span class="n">all_fields</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">all_fields</span><span class="p">)</span><span class="o">*</span><span class="n">scale</span><span class="o">+</span><span class="n">z0</span>
-    <span class="n">correlated_samples</span> <span class="o">=</span> <span class="n">complex64</span><span class="p">(</span><span class="n">correlated_samples</span><span class="p">)</span><span class="o">*</span><span class="n">scale</span><span class="o">+</span><span class="n">z0</span>
-
-    <span class="n">D</span> <span class="o">=</span> <span class="n">correlated_samples</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="kc">None</span><span class="p">,:,:]</span><span class="o">-</span><span class="n">correlated_samples</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="kc">None</span><span class="p">,:]</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="n">correlated_samples</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">D</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nsamples</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">n</span><span class="p">)[[</span><span class="n">nsamples</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="nd">@int32</span><span class="p">(</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">nsamples</span><span class="p">))]</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">u</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="n">n</span><span class="o">*</span><span class="mf">0.6</span><span class="p">]</span>
-    <span class="n">Δ</span> <span class="o">=</span> <span class="n">nanmean</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">δ</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">Δ</span><span class="p">)</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">Δ</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">angle</span><span class="p">(</span><span class="n">δ</span><span class="p">)))</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mean shift is </span><span class="si">%0.2f</span><span class="s1"> cm, p=</span><span class="si">%0.4f</span><span class="s1">, angle </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">δ</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">angle</span><span class="p">(</span><span class="n">δ</span><span class="p">)</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">pi</span><span class="p">))</span>
-
-    <span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">iplot</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">imshow</span><span class="p">([</span><span class="n">RGBNS</span><span class="p">,</span><span class="n">RGBEW</span><span class="p">][</span><span class="n">iplot</span><span class="p">],</span><span class="n">extent</span><span class="o">=</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">extent</span><span class="p">)</span><span class="o">-</span><span class="n">m_per_pixel</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">c2p</span><span class="p">(</span><span class="n">p2c</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">*</span><span class="n">scale</span><span class="o">+</span><span class="n">z0</span><span class="p">),</span><span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">clip_on</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">j</span><span class="p">,(</span><span class="n">ss</span><span class="p">,</span><span class="n">fields</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">correlated_samples</span><span class="p">,</span><span class="n">all_fields</span><span class="p">)):</span>
-        <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="o">=</span><span class="p">[[</span><span class="n">cS</span><span class="p">,</span><span class="n">cN</span><span class="p">],[</span><span class="n">cW</span><span class="p">,</span><span class="n">cE</span><span class="p">]][</span><span class="n">iplot</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">qi</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
-            <span class="n">lines</span><span class="o">+=</span><span class="p">[</span><span class="o">*</span><span class="n">covellipse_from_points</span><span class="p">(</span><span class="n">qi</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">NaN</span><span class="p">]</span>
-        <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">c2p</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span><span class="n">zorder</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-
-    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;square&#39;</span><span class="p">)</span>
-    <span class="n">noxyaxes</span><span class="p">()</span>
-    <span class="n">ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">title</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="n">iplot</span><span class="p">],</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-    <span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">iplot</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">imshow</span><span class="p">(</span><span class="n">histogram2d</span><span class="p">(</span><span class="o">*</span><span class="n">c2p</span><span class="p">(</span><span class="n">Δ</span><span class="o">*</span><span class="mi">100</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-           <span class="n">bins</span><span class="o">=</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">101</span><span class="p">),</span><span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
-           <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray_r&#39;</span><span class="p">,</span><span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;bicubic&#39;</span><span class="p">)</span>
-    <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">c2p</span><span class="p">(</span><span class="n">covellipse_from_points</span><span class="p">(</span><span class="n">Δ</span><span class="o">*</span><span class="mi">100</span><span class="p">)),</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">MAUVE</span><span class="p">)</span>
-    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;square&#39;</span><span class="p">)</span>
-    <span class="n">noxyaxes</span><span class="p">()</span>
-    <span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
-    <span class="n">ylim</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="o">-</span><span class="mi">30</span><span class="p">)</span>
-    <span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">.25</span><span class="p">,</span><span class="mf">.75</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
-    <span class="n">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">.25</span><span class="p">,</span><span class="mf">.75</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
-    <span class="n">text</span><span class="p">(</span> <span class="mi">17</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;+15 cm&#39;</span><span class="p">,</span><span class="n">ha</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span><span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
-    <span class="n">text</span><span class="p">(</span><span class="o">-</span><span class="mi">17</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;-15 cm&#39;</span><span class="p">,</span><span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span><span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
-    <span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span><span class="s1">&#39;-15 cm&#39;</span><span class="p">,</span><span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="n">va</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
-    <span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">17</span><span class="p">,</span><span class="s1">&#39;+15 cm&#39;</span><span class="p">,</span><span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
-    <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Mean Shift</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">+</span><span class="s1">&#39;displacement heading </span><span class="si">%s</span><span class="se">\n</span><span class="s1">Δ=</span><span class="si">%0.2f</span><span class="s1"> cm p=</span><span class="si">%0.0e</span><span class="s1">&#39;</span>\
-          <span class="o">%</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="n">iplot</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span><span class="nb">abs</span><span class="p">(</span><span class="n">δ</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="n">p</span><span class="p">),</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Mean shift is 6.24 cm, p=0.0003, angle 67.712938
-Mean shift is 6.16 cm, p=0.0006, angle 15.744785
+[13](6.60e-01) loss=-1.515315e+03(done)
+σ0   = 0.103000
+β    = 0.757858
+σ0/β = 0.135909
+[5](2.00e+00) loss=-1.519079e+033(done)
+σ0   = 0.135909
+β    = 1.741101
+σ0/β = 0.078059
+[13](6.60e-01) loss=-1.491650e+03(done)
+σ0   = 0.078059
+β    = 0.757858
+σ0/β = 0.103000
+[13](6.60e-01) loss=-1.515315e+03(done)
+σ0   = 0.103000
+β    = 0.757858
+σ0/β = 0.135909
 </pre></div></div>
+</div>
+<section id="Get-sampled-confidence-intervals-for-each-direction">
+<h3>Get sampled confidence intervals for each direction<a class="headerlink" href="#Get-sampled-confidence-intervals-for-each-direction" title="Permalink to this heading"></a></h3>
+<p>The reason we fit separate models, as opposed to introducing heading as a new dimension in our Gaussian process, is that we want the resulting posteriors to be statistically independent for opposing directions. For a Gaussian process, even if the prior kernel for heading angle were to taper to zero for opposing directions, this would nor guarantee that the GP posteriors for oppsing directions are statistically independent.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[94]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">sample_heading_angles</span>
+
+<span class="n">resolution</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">nsamples</span>   <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">colorNSEW</span>  <span class="o">=</span> <span class="n">float32</span><span class="p">([</span>
+    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">1.0</span><span class="p">],</span> <span class="c1"># North color</span>
+    <span class="p">[</span><span class="mf">.91</span><span class="p">,</span><span class="mf">.61</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="c1"># South color</span>
+    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">.85</span><span class="p">,</span><span class="mf">0.3</span><span class="p">],</span> <span class="c1"># East  color</span>
+    <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span><span class="mf">.15</span><span class="p">,</span><span class="mf">0.7</span><span class="p">]</span>  <span class="c1"># West  color</span>
+<span class="p">])</span>
+<span class="n">titleNSEW</span> <span class="o">=</span> <span class="s1">&#39;North South East West&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">sample_heading_angles</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">models</span><span class="p">,</span>
+    <span class="n">fits</span><span class="p">,</span>
+    <span class="n">angleNSEW</span><span class="p">,</span>
+    <span class="n">nsamples</span>   <span class="o">=</span> <span class="n">nsamples</span><span class="p">,</span>
+    <span class="n">resolution</span> <span class="o">=</span> <span class="n">resolution</span><span class="p">,</span>
+    <span class="n">names</span>      <span class="o">=</span> <span class="n">titleNSEW</span><span class="p">,</span>
+    <span class="n">colors</span>     <span class="o">=</span> <span class="n">colorNSEW</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/example_5_heading_dependence_13_1.png" src="_images/example_5_heading_dependence_13_1.png" />
+<img alt="_images/example_5_heading_dependence_13_0.png" src="_images/example_5_heading_dependence_13_0.png" />
 </div>
 </div>
+</section>
+<section id="Save-Figure-5c">
+<h3>Save Figure 5c<a class="headerlink" href="#Save-Figure-5c" title="Permalink to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[113]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.load_data</span> <span class="kn">import</span> <span class="n">Arena</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>      <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">nanpercentile</span> <span class="k">as</span> <span class="n">pctl</span>
+
+<span class="n">cN</span><span class="p">,</span><span class="n">cS</span><span class="p">,</span><span class="n">cE</span><span class="p">,</span><span class="n">cW</span> <span class="o">=</span> <span class="n">colorNSEW</span>
+<span class="n">N</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">W</span>     <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">kde</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">]</span>
+
+<span class="n">pct</span>  <span class="o">=</span> <span class="mf">99.9</span> <span class="c1"># Saturate pixels above this</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">Arena</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">py</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">resolution</span><span class="p">)</span><span class="o">.</span><span class="n">mask</span>
+
+<span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">subplots_adjust</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">extent</span> <span class="o">=</span> <span class="n">float32</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="mi">1</span><span class="o">/</span><span class="n">L</span>
+
+<span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">RGBEW</span>  <span class="o">=</span> <span class="n">clip</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">einsum</span><span class="p">(</span>
+    <span class="s1">&#39;dc,dxy-&gt;xyc&#39;</span><span class="p">,</span>
+    <span class="mi">1</span><span class="o">-</span><span class="n">colorNSEW</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
+    <span class="n">array</span><span class="p">([</span>
+        <span class="p">(</span><span class="n">E</span><span class="o">/</span><span class="n">pctl</span><span class="p">(</span><span class="n">E</span><span class="p">,</span><span class="n">pct</span><span class="p">)),</span>
+        <span class="p">(</span><span class="n">W</span><span class="o">/</span><span class="n">pctl</span><span class="p">(</span><span class="n">W</span><span class="p">,</span><span class="n">pct</span><span class="p">))</span>
+    <span class="p">])),</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">RGBEW</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">imshow</span><span class="p">(</span><span class="n">RGBEW</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+<span class="n">noxyaxes</span><span class="p">()</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Eastward (green) vs. westward (pink)&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">.8</span><span class="p">)</span>
+
+<span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">RGBNS</span>  <span class="o">=</span> <span class="n">clip</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">einsum</span><span class="p">(</span>
+    <span class="s1">&#39;dc,dxy-&gt;xyc&#39;</span><span class="p">,</span>
+    <span class="mi">1</span><span class="o">-</span><span class="n">colorNSEW</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span>
+    <span class="n">array</span><span class="p">([</span>
+        <span class="p">(</span><span class="n">N</span><span class="o">/</span><span class="n">pctl</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">pct</span><span class="p">)),</span>
+        <span class="p">(</span><span class="n">S</span><span class="o">/</span><span class="n">pctl</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">pct</span><span class="p">))</span>
+    <span class="p">])),</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">RGBNS</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">imshow</span><span class="p">(</span><span class="n">RGBNS</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+<span class="n">noxyaxes</span><span class="p">()</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Northward (blue) vs. southward (ochre)&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">.8</span><span class="p">)</span>
+
+<span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;fig5c.svg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_5_heading_dependence_15_0.png" src="_images/example_5_heading_dependence_15_0.png" />
+</div>
+</div>
+</section>
 </section>
 </section>
 

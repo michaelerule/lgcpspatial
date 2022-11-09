@@ -55,10 +55,11 @@
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
 </ul>
@@ -176,10 +177,12 @@
 </li>
       <li><a href="lgcpspatial.plot.html#lgcpspatial.plot.circularly_smooth_colormap">circularly_smooth_colormap() (in module lgcpspatial.plot)</a>
 </li>
-      <li><a href="lgcpspatial.util.html#lgcpspatial.util.closest">closest() (in module lgcpspatial.util)</a>
+      <li><a href="lgcpspatial.load_data.html#lgcpspatial.load_data.Arena.close_to_boundary">close_to_boundary() (lgcpspatial.load_data.Arena method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lgcpspatial.util.html#lgcpspatial.util.closest">closest() (in module lgcpspatial.util)</a>
+</li>
       <li><a href="lgcpspatial.util.html#lgcpspatial.util.conv">conv() (in module lgcpspatial.util)</a>
 </li>
       <li><a href="lgcpspatial.estimators.html#lgcpspatial.estimators.convolutionalLinearGP">convolutionalLinearGP() (in module lgcpspatial.estimators)</a>
@@ -256,6 +259,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lgcpspatial.posterior.html#lgcpspatial.posterior.findpeaks">findpeaks() (in module lgcpspatial.posterior)</a>
 </li>
+      <li><a href="lgcpspatial.heading.html#lgcpspatial.heading.fit_heading_variance">fit_heading_variance() (in module lgcpspatial.heading)</a>
+</li>
       <li><a href="lgcpspatial.plot.html#lgcpspatial.plot.force_aspect">force_aspect() (in module lgcpspatial.plot)</a>
 </li>
       <li><a href="lgcpspatial.posterior.html#lgcpspatial.posterior.fraction_within_arena">fraction_within_arena() (in module lgcpspatial.posterior)</a>
@@ -285,6 +290,8 @@
       <li><a href="lgcpspatial.plot.html#lgcpspatial.plot.good_colorbar">good_colorbar() (in module lgcpspatial.plot)</a>
 </li>
       <li><a href="lgcpspatial.grid_search.html#lgcpspatial.grid_search.grid_search">grid_search() (in module lgcpspatial.grid_search)</a>
+</li>
+      <li><a href="lgcpspatial.hyperparameters.html#lgcpspatial.hyperparameters.gridsearch_optimize">gridsearch_optimize() (in module lgcpspatial.hyperparameters)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -389,6 +396,13 @@
 </li>
       </ul></li>
       <li>
+    lgcpspatial.hyperparameters
+
+      <ul>
+        <li><a href="lgcpspatial.hyperparameters.html#module-lgcpspatial.hyperparameters">module</a>
+</li>
+      </ul></li>
+      <li>
     lgcpspatial.lgcp2d
 
       <ul>
@@ -490,6 +504,8 @@
         <li><a href="lgcpspatial.grid_search.html#module-lgcpspatial.grid_search">lgcpspatial.grid_search</a>
 </li>
         <li><a href="lgcpspatial.heading.html#module-lgcpspatial.heading">lgcpspatial.heading</a>
+</li>
+        <li><a href="lgcpspatial.hyperparameters.html#module-lgcpspatial.hyperparameters">lgcpspatial.hyperparameters</a>
 </li>
         <li><a href="lgcpspatial.lgcp2d.html#module-lgcpspatial.lgcp2d">lgcpspatial.lgcp2d</a>
 </li>
@@ -646,7 +662,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="lgcpspatial.heading.html#lgcpspatial.heading.refit_hyperparameters_heading_weighted">refit_hyperparameters_heading_weighted() (in module lgcpspatial.heading)</a>
+      <li><a href="lgcpspatial.load_data.html#lgcpspatial.load_data.Arena.remove_near_boundary">remove_near_boundary() (lgcpspatial.load_data.Arena method)</a>
 </li>
       <li><a href="lgcpspatial.util.html#lgcpspatial.util.repair_small_eigenvalues">repair_small_eigenvalues() (in module lgcpspatial.util)</a>
 </li>
@@ -662,7 +678,7 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="lgcpspatial.heading.html#lgcpspatial.heading.sample_posterior_all_heading_angles">sample_posterior_all_heading_angles() (in module lgcpspatial.heading)</a>
+      <li><a href="lgcpspatial.heading.html#lgcpspatial.heading.sample_heading_angles">sample_heading_angles() (in module lgcpspatial.heading)</a>
 </li>
       <li><a href="lgcpspatial.posterior.html#lgcpspatial.posterior.sample_posterior_lograte">sample_posterior_lograte() (in module lgcpspatial.posterior)</a>
 </li>
