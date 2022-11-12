@@ -51,12 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example%201%20load%20data.html">Example 1: Load data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Example 3: Optimized hyperparameters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#Grid-search-to-find-kernel-hyperparameters-with-best-evidence-lower-bound">Grid search to find kernel hyperparameters with best evidence lower-bound</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#The-heuristic-parameters-were-close-to-optimal-in-this-case">The heuristic parameters were close to optimal in this case</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Detailed-parameter-sweep-to-visualize-for-the-paper">Detailed parameter sweep to visualize for the paper</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example 3: Optimized hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
 </ul>
@@ -384,7 +379,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.load_data</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
 <span class="n">datadir</span>  <span class="o">=</span> <span class="s1">&#39;../example data/&#39;</span>
 <span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span>
@@ -397,7 +392,7 @@ div.rendered_html tbody tr:hover {
 <section id="Grid-search-to-find-kernel-hyperparameters-with-best-evidence-lower-bound">
 <h2>Grid search to find kernel hyperparameters with best evidence lower-bound<a class="headerlink" href="#Grid-search-to-find-kernel-hyperparameters-with-best-evidence-lower-bound" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.hyperparameters</span> <span class="kn">import</span> <span class="n">gridsearch_optimize</span>
@@ -438,7 +433,7 @@ v0/β = 0.103334
 </ol>
 <p>This (negative) ELBO is also missing a <span class="math notranslate nohighlight">\(\ln(y!) = \ln\Gamma(y+1)\)</span> term from the Poisson negative log-likelihood. This doesn’t affect state or hyperparameter optimization, but it’s good to add it back for completeness.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span> <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span>
@@ -447,8 +442,6 @@ v0/β = 0.103334
 <span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>   <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">mask</span><span class="p">,</span><span class="n">mz</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">prior_mean</span>
-<span class="n">Fs</span>      <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">position_sample_rate</span>
-<span class="n">scale</span>   <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">scale</span>
 <span class="n">y</span><span class="p">,</span><span class="n">N</span>     <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">n</span>
 
 <span class="n">inbitspers</span> <span class="o">=</span> <span class="n">log2</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">*</span><span class="n">Fs</span>
@@ -473,67 +466,54 @@ v0/β = 0.103334
 <span class="n">P</span>  <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">P</span>
 <span class="n">kv</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">prior_variance</span>
 
-<span class="n">P_use</span>    <span class="o">=</span> <span class="n">P</span><span class="o">*</span><span class="mi">2</span>
-<span class="n">v0_use</span>   <span class="o">=</span> <span class="n">kv</span>
-<span class="n">model</span>    <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">mh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">vfe</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
-<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">mh</span><span class="p">,</span><span class="n">mz</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">Fs</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">scale</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+<span class="n">P_use</span>  <span class="o">=</span> <span class="n">P</span><span class="o">*</span><span class="mi">2</span>
+<span class="n">v0_use</span> <span class="o">=</span> <span class="n">kv</span>
+<span class="n">model</span>  <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+<span class="n">fit</span>    <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
 <span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: bad parameters, ELBO=</span><span class="si">%f</span><span class="s1"> bits/second&#39;</span><span class="o">%</span>\
          <span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">to_bps</span><span class="p">(</span><span class="n">vfe</span><span class="p">)))</span>
 
-<span class="n">P_use</span>    <span class="o">=</span> <span class="n">P</span>
-<span class="n">v0_use</span>   <span class="o">=</span> <span class="n">kv</span>
-<span class="n">model</span>    <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">mh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">vfe</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
-<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">mh</span><span class="p">,</span><span class="n">mz</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">Fs</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">scale</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+<span class="n">P_use</span>  <span class="o">=</span> <span class="n">P</span>
+<span class="n">v0_use</span> <span class="o">=</span> <span class="n">kv</span>
+<span class="n">model</span>  <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+<span class="n">fit</span>    <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
 <span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: heuristic parameters, ELBO=</span><span class="si">%f</span><span class="s1"> bits/second&#39;</span><span class="o">%</span>\
          <span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">to_bps</span><span class="p">(</span><span class="n">vfe</span><span class="p">)))</span>
 
-<span class="n">P_use</span>    <span class="o">=</span> <span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">v0_use</span>   <span class="o">=</span> <span class="n">kv</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">model</span>    <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">mh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">vfe</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
-<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">mh</span><span class="p">,</span><span class="n">mz</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">Fs</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">scale</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+<span class="n">P_use</span>  <span class="o">=</span> <span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">v0_use</span> <span class="o">=</span> <span class="n">kv</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">model</span>  <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+<span class="n">fit</span>    <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
 <span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: Optimised parameters, ELBO=</span><span class="si">%f</span><span class="s1"> bits/second&#39;</span><span class="o">%</span>\
          <span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">to_bps</span><span class="p">(</span><span class="n">vfe</span><span class="p">)))</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Text(0.5, 0.98, &#39;&lt;lgcpspatial.load_data.Dataset object at 0x7fa68d544280&gt;: Optimised parameters, ELBO=-0.728810 bits/second&#39;)
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_3_optimize_hyperparameters_5_1.png" src="_images/example_3_optimize_hyperparameters_5_1.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_3_optimize_hyperparameters_5_2.png" src="_images/example_3_optimize_hyperparameters_5_2.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/example_3_optimize_hyperparameters_5_3.png" src="_images/example_3_optimize_hyperparameters_5_3.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-3-645e8320e9e0&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      7</span> y<span class="ansi-blue-fg">,</span>N     <span class="ansi-blue-fg">=</span> data<span class="ansi-blue-fg">.</span>y<span class="ansi-blue-fg">,</span>data<span class="ansi-blue-fg">.</span>n
+<span class="ansi-green-intense-fg ansi-bold">      8</span>
+<span class="ansi-green-fg">----&gt; 9</span><span class="ansi-red-fg"> </span>inbitspers <span class="ansi-blue-fg">=</span> log2<span class="ansi-blue-fg">(</span>e<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">*</span>Fs
+<span class="ansi-green-intense-fg ansi-bold">     10</span> correction <span class="ansi-blue-fg">=</span> average<span class="ansi-blue-fg">(</span>lnΓ<span class="ansi-blue-fg">(</span>data<span class="ansi-blue-fg">.</span>y<span class="ansi-blue-fg">+</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>weights<span class="ansi-blue-fg">=</span>data<span class="ansi-blue-fg">.</span>n<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     11</span>
+
+<span class="ansi-red-fg">NameError</span>: name &#39;Fs&#39; is not defined
+</pre></div></div>
 </div>
 </section>
 <section id="Detailed-parameter-sweep-to-visualize-for-the-paper">
 <h2>Detailed parameter sweep to visualize for the paper<a class="headerlink" href="#Detailed-parameter-sweep-to-visualize-for-the-paper" title="Permalink to this heading"></a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[125]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.util</span> <span class="kn">import</span> <span class="n">progress_bar</span>
@@ -583,23 +563,6 @@ Text(0.5, 0.98, &#39;&lt;lgcpspatial.load_data.Dataset object at 0x7fa68d544280&
 <span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">best</span><span class="p">]</span><span class="o">+</span><span class="n">px2x</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">ylim</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">px2y</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="s1">&#39;$</span><span class="se">\\</span><span class="s1">sigma^2_0$=</span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">x</span>[best],va=&#39;bottom&#39;,fontsize=7)
 <span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;fig3b.svg&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Sweeping kernel prior variance
-Sweeping kernel period
-
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_3_optimize_hyperparameters_7_1.png" src="_images/example_3_optimize_hyperparameters_7_1.png" />
 </div>
 </div>
 </section>

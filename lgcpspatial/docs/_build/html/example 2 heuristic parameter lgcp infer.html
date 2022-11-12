@@ -380,9 +380,9 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.load_data</span> <span class="kn">import</span> <span class="n">Dataset</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>    <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span><span class="p">,</span> <span class="n">coordinate_descent</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>      <span class="kn">import</span> <span class="n">inference_summary_plot</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>   <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span><span class="p">,</span> <span class="n">coordinate_descent</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>     <span class="kn">import</span> <span class="n">inference_summary_plot</span>
 
 <span class="n">L</span>        <span class="o">=</span> <span class="mi">128</span> <span class="c1"># Grid size for position bins</span>
 <span class="n">pad</span>      <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># Edge padding (Avoids circular convolution wrap-around)</span>
@@ -403,10 +403,11 @@ div.rendered_html tbody tr:hover {
     <span class="c1"># LGCP inference using heuristic parameters</span>
     <span class="c1"># - First set up the model</span>
     <span class="c1"># - Then infer the model</span>
-    <span class="n">model</span>    <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v0</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">nll</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v0</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">fit</span>   <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    # For reference</span>
+<span class="sd">    fit = (μh,v,nll)</span>
 <span class="sd">    - μh  is in low-rank frequency space.</span>
 <span class="sd">    - v   is the marginal variances of each spatial bin</span>
 <span class="sd">    - nll is the negative log model likelihood</span>
@@ -422,17 +423,7 @@ div.rendered_html tbody tr:hover {
 <span class="sd">        σλ = sqrt(vλ)</span>
 <span class="sd">        cv = σλ/μλ</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">inference_summary_plot</span><span class="p">(</span>
-        <span class="n">model</span><span class="p">,</span>
-        <span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span>
-        <span class="n">data</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
-        <span class="n">μh</span><span class="p">,</span>
-        <span class="n">data</span><span class="o">.</span><span class="n">prior_mean</span><span class="p">,</span>
-        <span class="n">v</span><span class="p">,</span>
-        <span class="n">data</span><span class="o">.</span><span class="n">position_sample_rate</span><span class="p">,</span>
-        <span class="n">L</span><span class="p">,</span>
-        <span class="n">data</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span>
-        <span class="n">dataset</span><span class="p">)</span>
+    <span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">dataset</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

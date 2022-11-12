@@ -56,11 +56,7 @@
 <p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">simulate_data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.simulate_data.ideal_hex_grid"><code class="docutils literal notranslate"><span class="pre">ideal_hex_grid()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.simulate_data.simulate_data"><code class="docutils literal notranslate"><span class="pre">simulate_data()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
@@ -119,51 +115,8 @@
     text-align: unset;
 }
 </style>
-<section id="module-lgcpspatial.simulate_data">
-<span id="lgcpspatial-simulate-data-module"></span><h1>lgcpspatial.simulate_data module<a class="headerlink" href="#module-lgcpspatial.simulate_data" title="Permalink to this heading"></a></h1>
-<p>simulate_data.py: Routines to simulate spiking observations
-from grid fields. Used for ground-truth for inference
-routines.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="lgcpspatial.simulate_data.ideal_hex_grid">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.simulate_data.</span></span><span class="sig-name descname"><span class="pre">ideal_hex_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/simulate_data.html#ideal_hex_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.simulate_data.ideal_hex_grid" title="Permalink to this definition"></a></dt>
-<dd><p>Build a hexagonal grid by summing three cosine waves</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>L</strong> (<em>int</em>) – Rectangular binning grid size (L×L bins)</p></li>
-<li><p><strong>P</strong> (<em>positive float</em>) – Grid cell period spacing</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="lgcpspatial.simulate_data.simulate_data">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.simulate_data.</span></span><span class="sig-name descname"><span class="pre">simulate_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">13</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">α</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">μ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.09</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/simulate_data.html#simulate_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.simulate_data.simulate_data" title="Permalink to this definition"></a></dt>
-<dd><p>Simulates spiking observations from a grid cell</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>L</strong> (<em>int</em>) – Rectangular binning grid size (L×L bins)</p></li>
-<li><p><strong>P</strong> (<em>positive float</em>) – Grid cell period spacing</p></li>
-<li><p><strong>α</strong> (<em>positive float</em>) – Grid cell “sharpness”</p></li>
-<li><p><strong>μ</strong> (<em>positive float</em>) – Mean firing rate (spikes/sample)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>mask</strong> (<em>L×L np.bool</em>) – Binary mask of “in bounds” regions</p></li>
-<li><p><strong>λ0</strong> (<em>L×L np.array</em>) – “True” sampled grid firing rate</p></li>
-<li><p><strong>λ0_bg</strong> (<em>L×L np.array</em>) – Rate map with background variations</p></li>
-<li><p><strong>N</strong> (<em>L×L np.array</em>) – № visits to each spatial bin</p></li>
-<li><p><strong>K</strong> (<em>L×L np.array</em>) – № spikes recorded in each bin</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="lgcpspatial-simulate-data-module">
+<h1>lgcpspatial.simulate_data module<a class="headerlink" href="#lgcpspatial-simulate-data-module" title="Permalink to this heading"></a></h1>
 </section>
 
 

@@ -9,10 +9,10 @@ from numpy         import *
 from scipy.spatial import ConvexHull
 from numpy.linalg  import norm,LinAlgError
 
-from lgcpspatial.load_data import bin_spikes, Arena
-from lgcpspatial.lgcp2d    import chinv,chsolve,RI
-from lgcpspatial.plot      import *
-from lgcpspatial.util      import *
+from lgcpspatial.loaddata import bin_spikes, Arena
+from lgcpspatial.lgcp2d   import chinv,chsolve,RI
+from lgcpspatial.plot     import *
+from lgcpspatial.util     import *
 
 def findpeaks(q,height_threshold=-inf,r=1):
     '''

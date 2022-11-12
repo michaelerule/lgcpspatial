@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lgcpspatial.loaddata module &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
+            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>lgcpspatial.loaddata module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/lgcpspatial.loaddata.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="module-lgcpspatial.loaddata">
+<span id="lgcpspatial-loaddata-module"></span><h1>lgcpspatial.loaddata module<a class="headerlink" href="#module-lgcpspatial.loaddata" title="Permalink to this heading"></a></h1>
+<p>Routines for loading and preparing Krupic lab datasets</p>
+<p>Resolution for the camera used to record R1 is 350px/m;
+resolution for other rats (R11 and R18) was 338px/m
+Fs     = 50.0      # Sample rate of data (samples/second)</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.patch_position_data">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.loaddata.</span></span><span class="sig-name descname"><span class="pre">patch_position_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">py</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/loaddata.html#patch_position_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.loaddata.patch_position_data" title="Permalink to this definition"></a></dt>
+<dd><p>Linearly interpolate across noise/glitches in the
+position tracking.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>px</strong> (<em>np.float32</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.bin_spikes">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.loaddata.</span></span><span class="sig-name descname"><span class="pre">bin_spikes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">py</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/loaddata.html#bin_spikes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.loaddata.bin_spikes" title="Permalink to this definition"></a></dt>
+<dd><p>Bin spikes, using linear interpolation to distribute
+point mass to four nearest pixels, weighted by distance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>px</strong> (<em>np.flaot32</em>) – x location of points</p></li>
+<li><p><strong>py</strong> (<em>np.float32</em>) – y location of points</p></li>
+<li><p><strong>s</strong> (<em>np.array</em>) – spike count at each point</p></li>
+<li><p><strong>L</strong> (<em>int</em>) – number of spatial bins for the LxL grid</p></li>
+<li><p><strong>w</strong> (<em>np.float32</em>) – weights to apply to each point
+(default is None for no weigting)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Arena">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.loaddata.</span></span><span class="sig-name descname"><span class="pre">Arena</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">py</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/loaddata.html#Arena"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.loaddata.Arena" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Object describing the area visited by an animal within
+an experiment.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Arena.mask">
+<span class="sig-name descname"><span class="pre">mask</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Arena.mask" title="Permalink to this definition"></a></dt>
+<dd><p>L x L boolean matrices of grid locations within the
+experimetnal arena</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Arena.nanmask">
+<span class="sig-name descname"><span class="pre">nanmask</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Arena.nanmask" title="Permalink to this definition"></a></dt>
+<dd><p>L x L float32 array with 1 for in-bounds points and
+NaN for out-of-bounds points. Multiple array data by
+this mask before
+sending to <cite>imshow()</cite> to render out-of-bounds points
+as transparent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Arena.perimeter">
+<span class="sig-name descname"><span class="pre">perimeter</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Arena.perimeter" title="Permalink to this definition"></a></dt>
+<dd><p>NPOINTS x 2 list of points in the convex hull of the
+experimental arena
+in [0,1]² normalied coordinates</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Arena.hull">
+<span class="sig-name descname"><span class="pre">hull</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Arena.hull" title="Permalink to this definition"></a></dt>
+<dd><p>Convex Hull object describing the arena perimeter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>scipy.spatial._qhull.ConvexHull</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Arena.close_to_boundary">
+<span class="sig-name descname"><span class="pre">close_to_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/loaddata.html#Arena.close_to_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.loaddata.Arena.close_to_boundary" title="Permalink to this definition"></a></dt>
+<dd><p>Detect peaks within distance <cite>radius</cite> of the
+Arena boundary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> (<em>2 × NPOINTS np.float32</em>) – (x,y) positions of peaks to trim
+in normalized [0,1]² coordinates.</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Distance from edge to trim
+in pixels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>is_close</strong> – Boolean array indicating</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Length NPOINTS 1D np.bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Arena.remove_near_boundary">
+<span class="sig-name descname"><span class="pre">remove_near_boundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/loaddata.html#Arena.remove_near_boundary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.loaddata.Arena.remove_near_boundary" title="Permalink to this definition"></a></dt>
+<dd><p>Delete peaks that are too close to the edgs of
+an experimental arena</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> (<em>2 × NPOINTS np.float32</em>) – (x,y) positions of peaks to trim
+in normalized [0,1]² coordinates.</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Distance from edge to trim
+in pixels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>peaks</strong> – (x,y) positions of peaks further than <cite>radius</cite>
+pixels from the boundary.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>2 × NPOINTS np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.loaddata.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spikes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/loaddata.html#Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.loaddata.Dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to load and extract experimental data
+from Krupic Lab data format.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.spikes">
+<span class="sig-name descname"><span class="pre">spikes</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.spikes" title="Permalink to this definition"></a></dt>
+<dd><p>Length NSAMPLES array of spike counts at each time
+point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.extent">
+<span class="sig-name descname"><span class="pre">extent</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.extent" title="Permalink to this definition"></a></dt>
+<dd><p>(xstart,xstop,ystart,ystop) coordinates of 2D arena
+in meters. Pass this as the <cite>extent</cite> argument to
+<cite>imshow()</cite> to correctly position L x L grid in
+physical coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.scale">
+<span class="sig-name descname"><span class="pre">scale</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.scale" title="Permalink to this definition"></a></dt>
+<dd><p>Scaling factor between (px,py)∈[0,1]²
+coordinates and meters.
+px/scale = position in meters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float, units of 1/meters</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.px">
+<span class="sig-name descname"><span class="pre">px</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.px" title="Permalink to this definition"></a></dt>
+<dd><p>Normalized x-position in [0,1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.py">
+<span class="sig-name descname"><span class="pre">py</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.py" title="Permalink to this definition"></a></dt>
+<dd><p>Normalized y-position in [0,1]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.margin">
+<span class="sig-name descname"><span class="pre">margin</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.margin" title="Permalink to this definition"></a></dt>
+<dd><p>Margin padding argument passed to constructor.
+Fraction of empty space around binned data to avoid
+circular FFT wraparound. Ensure your prior kernel
+width is smaller than margin*L/2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.from_file">
+<span class="sig-name descname"><span class="pre">from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/loaddata.html#Dataset.from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.from_file" title="Permalink to this definition"></a></dt>
+<dd><p>Load a dataset, rescaling the spatial locations.</p>
+<p>We correct the head direction angles to align
+with the usual definitions of polar angles
+for (x,y) position data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<em>str</em>) – Which dataset file to load</p></li>
+<li><p><strong>margin</strong> (<em>float</em>) – Pading for circular convolution; default .1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A Dataset object prepared from the given
+grid-cell data file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.prepare">
+<span class="sig-name descname"><span class="pre">prepare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spike_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blur_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/loaddata.html#Dataset.prepare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.prepare" title="Permalink to this definition"></a></dt>
+<dd><p>Prepare dataset for further inference.
+This function bins spikes and position data, and
+heuristically estimates grid scale. It adds the
+following attributes to the Dataset object:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.L">
+<span class="sig-name descname"><span class="pre">L</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.L" title="Permalink to this definition"></a></dt>
+<dd><p>Size of L x L spatial grid for binned data.
+I’ve found that 128² grids work well and are a
+good compromise between speed, resolution, and
+numerical stability.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.arena">
+<span class="sig-name descname"><span class="pre">arena</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.arena" title="Permalink to this definition"></a></dt>
+<dd><p>Object describing binned 2D experimental arena
+shape. See the documentation of the Arena class
+for more details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lgcpspatial.loaddata.Arena" title="lgcpspatial.loaddata.Arena">Arena</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.n">
+<span class="sig-name descname"><span class="pre">n</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.n" title="Permalink to this definition"></a></dt>
+<dd><p>Length L² 1D array of total visits to each
+location. This is interpolated, so may contain
+non-integer values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.y">
+<span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.y" title="Permalink to this definition"></a></dt>
+<dd><p>Length L² 1D array of total spikes at each
+location. This is interpolated, so may contain
+non-integer values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.P">
+<span class="sig-name descname"><span class="pre">P</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.P" title="Permalink to this definition"></a></dt>
+<dd><p>Heuristic grid period from autocorrelogram</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.prior_variance">
+<span class="sig-name descname"><span class="pre">prior_variance</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.prior_variance" title="Permalink to this definition"></a></dt>
+<dd><p>Heuristic estimate of Gaussian Process prior
+kernel marginal variance. If this is bigger, the
+prior will be weighted less during Baysian
+inference. This heuristic estimate is biased;
+you should optimize the kernel hyperparameters
+using the ELBO if you want the posterior
+variance to be interpretable. See
+<cite>grid_search.py</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.bg_blur_radius">
+<span class="sig-name descname"><span class="pre">bg_blur_radius</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.bg_blur_radius" title="Permalink to this definition"></a></dt>
+<dd><p>Low-frequency spatial scale below which rate
+variations are considered background
+fluctuations and removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.kde_blur_radius">
+<span class="sig-name descname"><span class="pre">kde_blur_radius</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.kde_blur_radius" title="Permalink to this definition"></a></dt>
+<dd><p>Grid-period scale; Use this as the standard
+deviation of a Gaussian blur for a Kernel
+Density Estimator (KDE) of firing rate as a
+function of location.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.prior_mean">
+<span class="sig-name descname"><span class="pre">prior_mean</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.prior_mean" title="Permalink to this definition"></a></dt>
+<dd><p>L x L array of estimated background log-rate.
+Use this as a prior during Gaussian Process
+inference so that the calculated rate maps are
+defined in terms of grid-like structure above
+these background rate variations. This is
+calculated by Gaussian blurring the visits <cite>n</cite>
+and spike counts <cite>y</cite> with a kernel with
+standard-deviation <cite>bg_blur_radius</cite>, and taking
+the logarithm of their ratio.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.lograte_guess">
+<span class="sig-name descname"><span class="pre">lograte_guess</span></span><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.lograte_guess" title="Permalink to this definition"></a></dt>
+<dd><p>L x L array of KDE-estimated log-firing rate.
+This is calculated by blurring visits <cite>n</cite> and
+spike counts <cite>y</cite> with a Gaussian kernel with
+standard deviation <cite>kde_blur_radius</cite>, taking
+the logarithm of their ratio, and subtracting
+prior_mean.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fn</strong> (<em>str</em>) – File path to load</p></li>
+<li><p><strong>L</strong> (<em>int</em>) – Number of bins in L x L spatial grid</p></li>
+<li><p><strong>P</strong> (<em>int</em>) – Grid period; If not provided we will estimate
+this from the autocorrelogram,</p></li>
+<li><p><strong>blur_radius</strong> (<em>float</em>) – Initial KDE blur radius for heuristic period
+estimate. Default is 2.</p></li>
+<li><p><strong>spike_weights</strong> (<em>float32</em>) – Array of sample weightings of the same length
+as Dataset.spikes to use when binning.</p></li>
+<li><p><strong>doplot</strong> (<em>boolean</em>) – Whether to show a summary plot; Default: True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>A Dataset object containing spatially-binned data,</em></p></li>
+<li><p><em>Heurstic estimates of the grid scale, and initial</em></p></li>
+<li><p><em>firing-rate maps estimated using a kernel density</em></p></li>
+<li><p>estimator. See the <cite>PreparedDataset</cite> docstring for</p></li>
+<li><p><em>more detail.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.create_posthoc">
+<span class="sig-name descname"><span class="pre">create_posthoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lograte_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/loaddata.html#Dataset.create_posthoc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.create_posthoc" title="Permalink to this definition"></a></dt>
+<dd><p>Bypass normal initialization and Dataset holding
+only binned positions and rate.
+This is only used by
+<cite>example 0 hyperparameter groundtruth test.ipynb</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.reweighted">
+<span class="sig-name descname"><span class="pre">reweighted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">weights</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/loaddata.html#Dataset.reweighted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.reweighted" title="Permalink to this definition"></a></dt>
+<dd><p>Re-bin spike histogram using the provided weights</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>weights</strong> (<em>1D np.array</em>) – 1D array of spike weights of the same length
+as data.spikes.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>New dataset with spike histogram binned using
+the provided weights.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset">Dataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lgcpspatial.loaddata.Dataset.normalized_to_physical_units">
+<span class="sig-name descname"><span class="pre">normalized_to_physical_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/loaddata.html#Dataset.normalized_to_physical_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.loaddata.Dataset.normalized_to_physical_units" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a list of points from [0,1]² units to
+physical units (meters)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> (<em>np.array</em>) – array of 2D point data</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>2×NPOINTS array of points in physical units</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

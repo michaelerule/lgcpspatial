@@ -58,10 +58,7 @@
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">grid_search</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.grid_search.grid_search"><code class="docutils literal notranslate"><span class="pre">grid_search()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">grid_search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
@@ -118,56 +115,8 @@
     text-align: unset;
 }
 </style>
-<section id="module-lgcpspatial.grid_search">
-<span id="lgcpspatial-grid-search-module"></span><h1>lgcpspatial.grid_search module<a class="headerlink" href="#module-lgcpspatial.grid_search" title="Permalink to this heading"></a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="lgcpspatial.grid_search.grid_search">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.grid_search.</span></span><span class="sig-name descname"><span class="pre">grid_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pargrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/grid_search.html#grid_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.grid_search.grid_search" title="Permalink to this definition"></a></dt>
-<dd><p>Grid search hyperparameter optimization</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pargrid</strong> (<em>list</em><em> of </em><em>arrays</em>) – A list; Each element is a list of values for a given
-parameter to search over</p></li>
-<li><p><strong>evaluate</strong> (<em>function</em>) – <dl class="simple">
-<dt>Arguments:</dt><dd><dl class="simple">
-<dt>Parameters: Tuple</dt><dd><p>Parameters taken from the parameter search grid</p>
-</dd>
-<dt>State: List of arrays</dt><dd><p>Saves initial conditions (optional, default None)</p>
-</dd>
-</dl>
-</dd>
-<dt>Returns:</dt><dd><dl class="simple">
-<dt>state: the inferred model fit, in the form of a list</dt><dd><p>of floating-point numpy arrays, to be re-used as
-initial conditions for subsequent parameters.</p>
-</dd>
-<dt>likelihood: float</dt><dd><p>Scalar summary of fit quality, higher is better</p>
-</dd>
-<dt>info: object</dt><dd><p>Anything else you’d like to save</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>verbose</strong> (<em>boolean</em><em>, </em><em>default True</em>) – Whether to print progress update</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><em>best</em> – best index into parameter grid</p></li>
-<li><p><em>pars</em> – values of best parameters</p></li>
-<li><p><em>results[best]</em> – (state, likelihood, info) at best parameters.
-<cite>info</cite> is determined by the third element in the
-3-tuple return-value of the <cite>evaluate</cite> function,
-passed by the user. <cite>state</cite> is also user-defined.</p></li>
-<li><p><em>allresults</em> – All other results as an object array.
-Grid points that were not evaluated are None.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="lgcpspatial-grid-search-module">
+<h1>lgcpspatial.grid_search module<a class="headerlink" href="#lgcpspatial-grid-search-module" title="Permalink to this heading"></a></h1>
 </section>
 
 

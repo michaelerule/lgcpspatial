@@ -8,15 +8,15 @@ Submodules
    :maxdepth: 4
 
    lgcpspatial.estimators
-   lgcpspatial.grid_search
+   lgcpspatial.gridsearch
    lgcpspatial.heading
    lgcpspatial.hyperparameters
    lgcpspatial.lgcp2d
-   lgcpspatial.load_data
+   lgcpspatial.loaddata
    lgcpspatial.plot
    lgcpspatial.posterior
    lgcpspatial.savitskygolay
-   lgcpspatial.simulate_data
+   lgcpspatial.simulate
    lgcpspatial.util
 
 Module contents

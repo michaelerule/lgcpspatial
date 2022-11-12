@@ -49,12 +49,7 @@
               <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Example 1: Load data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#Load-example-data-from-matfile-and-convert-to-physical-units">Load example data from matfile and convert to physical units</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Plot-binned-data">Plot binned data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#Use-Dataset.prepare-to-inspect-data-and-guess-grid-cell-period">Use <code class="docutils literal notranslate"><span class="pre">Dataset.prepare</span></code> to inspect data and guess grid-cell period</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example 1: Load data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
@@ -381,7 +376,7 @@ div.rendered_html tbody tr:hover {
 <section id="Load-example-data-from-matfile-and-convert-to-physical-units">
 <h2>Load example data from matfile and convert to physical units<a class="headerlink" href="#Load-example-data-from-matfile-and-convert-to-physical-units" title="Permalink to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">loadmat</span>
@@ -413,12 +408,12 @@ div.rendered_html tbody tr:hover {
 <section id="Plot-binned-data">
 <h2>Plot binned data<a class="headerlink" href="#Plot-binned-data" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.load_data</span> <span class="kn">import</span> <span class="n">bin_spikes</span><span class="p">,</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span> <span class="kn">import</span> <span class="n">bin_spikes</span><span class="p">,</span> <span class="n">Dataset</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.plot</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">data</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="n">datasets</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -473,7 +468,7 @@ div.rendered_html tbody tr:hover {
 <h2>Use <code class="docutils literal notranslate"><span class="pre">Dataset.prepare</span></code> to inspect data and guess grid-cell period<a class="headerlink" href="#Use-Dataset.prepare-to-inspect-data-and-guess-grid-cell-period" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">Dataset.prepare</span></code> function loads a dataset, downsamples spike times, and bins spikes to a <span class="math notranslate nohighlight">\(L\times L\)</span> spatial grid. It also tries to estimate the grid-cell’s period using the radial autocorrelogram.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span>       <span class="o">=</span> <span class="mi">128</span> <span class="c1"># Grid size for position bins</span>

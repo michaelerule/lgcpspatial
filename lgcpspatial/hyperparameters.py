@@ -9,9 +9,41 @@ model class.
 """
 
 from numpy import *
-from lgcpspatial.grid_search import grid_search
+from lgcpspatial.gridsearch import grid_search
 from lgcpspatial.lgcp2d import DiagonalFourierLowrank
 from lgcpspatial.lgcp2d import coordinate_descent
+
+
+def period_and_prior_variance(data,**kwargs):
+    '''
+    Wrapper for `gridsearch_optimize()` that returns 
+    the optimized period and variance
+    
+    Parameters
+    ----------
+    data: lgcpspatal.loaddata.Dataset
+        Prepared dataset
+    
+    Other Parameters
+    ----------------
+    **kwargs:
+        Keyword arguments are forwaded to 
+        `gridsearch_optimize`, see the documentation for
+        `gridsearch_optimize` for more details.
+    
+    Returns
+    -------
+    period: float
+        Estimated grid-cell period in pixels
+    v0: 
+        Estiamted kernel marginal variance
+    '''
+    result = gridsearch_optimize(data,**kwargs)
+    bestindex,bestpars,bestresult,allresults = result
+    P_use  = bestpars[0]
+    v0_use = data.prior_variance/bestpars[1]
+    return P_use, v0_use
+
 
 def gridsearch_optimize(
     data,
@@ -26,7 +58,7 @@ def gridsearch_optimize(
     '''
     
     Parameters
-    --------------------------------------------------------
+    ----------
     data: load_data.Dataset
         Prepared dataset with the following attributes:
             L: posive int
@@ -37,7 +69,7 @@ def gridsearch_optimize(
                 Heuristic kernel prior zero-lag variance. 
     
     Other Parameters
-    --------------------------------------------------------
+    ----------------
     np: positive odd int; default 201
         Number of grid period values to explore
         in the grid search. 

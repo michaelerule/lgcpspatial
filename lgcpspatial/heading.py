@@ -14,14 +14,14 @@ from numpy import *
 from collections   import defaultdict
 
 from lgcpspatial.util          import *
+from lgcpspatial.plot          import *
 from lgcpspatial.savitskygolay import SGdifferentiate as ddt
-from lgcpspatial.load_data     import bin_spikes, Arena
+from lgcpspatial.loaddata      import bin_spikes, Arena
 from lgcpspatial.lgcp2d        import DiagonalFourierLowrank
 from lgcpspatial.lgcp2d        import coordinate_descent
 from lgcpspatial.posterior     import interpolate_peaks
 from lgcpspatial.posterior     import SampledConfidence
-from lgcpspatial.plot          import *
-from lgcpspatial.grid_search   import grid_search
+from lgcpspatial.gridsearch    import grid_search
 
 
 def smoothed_heading_angle(px,py,Fs=50.0,Fl=2.0):
@@ -40,21 +40,21 @@ def smoothed_heading_angle(px,py,Fs=50.0,Fl=2.0):
       - 3π/2: downwards  (southwards)
     
     Parameters
-    --------------------------------------------------------
+    ----------
     px: float32
         List of animal's location, x-coordinate
     py: float32
         List of animal's location, y-coordinate
         
     Other Parameters
-    --------------------------------------------------------
+    ----------------
     Fs: float
         Sampling rate of (px,py) position data
     Fl: float
         Low-pass cutoff frequency in Hz
         
     Returns
-    ---------------------------------------------------------------------------------------------------------
+    -------
     heading_angle: float32
         Heading angle based on the low-pass derivative 
         of position.
@@ -78,7 +78,7 @@ def get_peaks_at_heading_angles(
     data based on cosine similarity to target heading angle.
     
     Parameters
-    --------------------------------------------------------
+    ----------
     data: object
         Any object with the following attributes:
             L: float
@@ -107,13 +107,17 @@ def get_peaks_at_heading_angles(
         through southward, eastward, northward. 
     
     Other Parameters
-    --------------------------------------------------------
+    ----------------
     threshold: float
         Percentile peaks must be above to be retained.
         Should be in [0,100).
+    Fs: positive float; default 50.0
+        Sampling rate for position data
+    Fl: positive float; default 2.0
+        Low-frequency cutoff for smooothing position data
     
     Returns
-    --------------------------------------------------------
+    -------
     peaks: list
         List of 2×NPEAKS float32 arrays containing (x,y)
         locations of peaks at each of the angles specified
@@ -160,7 +164,7 @@ def match_peaks(peaks,maxd):
         - Repeat until no more edges closer than `maxd`
 
     Parameters
-    --------------------------------------------------------
+    ----------
     peaks: list
         Length NANGLES list of 2×NPEAKS float32 arrays with 
         (x,y) locations of peaks at each heading angle
@@ -169,7 +173,7 @@ def match_peaks(peaks,maxd):
         connecting them
 
     Returns
-    --------------------------------------------------------
+    -------
     edges: list
         Length NANGLES list of edge sets for each pair of 
         headings. Each list entry is a 2×NEDGES int32 array.
@@ -229,7 +233,7 @@ def pair_points(z1,z2,connection_radius):
     complex numbers.
     
     Parameters
-    --------------------------------------------------------
+    ----------
     z1: iterable
         iterable of 2D points encoded as complex numbers
     z2: iterable
@@ -238,7 +242,7 @@ def pair_points(z1,z2,connection_radius):
         Maximum radius at which to allow connections. 
         
     Returns
-    --------------------------------------------------------
+    -------
     index1: int32
         index into z1 of paired points
     index2: int32
@@ -254,7 +258,7 @@ def extract_as_paths(peaks,edges):
     Convert tracked (peaks,edges) to a list of 2D paths.
     
     Parameters
-    --------------------------------------------------------
+    ----------
     peaks: list 
         Length NANGLES list of 2xNPEAKS np.float32 arrays 
         containing (rx,ry) peak locations at a list of 
@@ -270,7 +274,7 @@ def extract_as_paths(peaks,edges):
         peaks[(i+1)%Nφ] (edge target).
         
     Returns
-    --------------------------------------------------------
+    -------
     paths: list
         List of npoints x 2 path data for each connected
         component
@@ -349,7 +353,7 @@ def link_peaks(
     heading angles. 
     
     Parameters
-    --------------------------------------------------------
+    ----------
     peaks: list
         List of 2×NPEAKS arrays containing (x,y) locations
         of identified peaks over a range of heading angles.
@@ -358,13 +362,13 @@ def link_peaks(
         at adjacent angles.
     
     Other Parameters
-    --------------------------------------------------------
+    ----------------
     max_end_distance: float
         Maximum distance allowed between endpoints
         of a tracked peak.
         
     Returns
-    --------------------------------------------------------
+    -------
     edges: list
         A graph connecting peaks putatively associated with
         the same grid field at different heading angles. 
@@ -449,7 +453,7 @@ def plot_tracked_peaks(
     angles are linspace(0,2*pi,len(peaks)+1)[:-1].
     
     Parameters
-    --------------------------------------------------------
+    ----------
     peaks: list 
         Length NANGLES list of 2xNPEAKS np.float32 arrays 
         containing (rx,ry) peak locations at a list of 
@@ -465,7 +469,7 @@ def plot_tracked_peaks(
         peaks[(i+1)%Nφ] (edge target).
         
     Other Parameters
-    --------------------------------------------------------
+    ----------------
     perim: np.float32
         NPOINTS x 2 Array of (x,y) points of the arena 
         perimeter to add to plot. Optional, default is None.
@@ -533,7 +537,7 @@ def locate_opposites(peaks,maxd,starti,edges):
        heading direction
     
     Parameters
-    --------------------------------------------------------
+    ----------
     peaks: list
         List of 2×NPEAKS float32 arrays containing (x,y)
         locations of peaks at each of the angles specified
@@ -549,7 +553,7 @@ def locate_opposites(peaks,maxd,starti,edges):
         the next adjacent direction
         
     Returns
-    --------------------------------------------------------
+    -------
     iop: int
         Index between 0 and Nφ-1 into the q list of the 
         opposite-heading fields
@@ -617,7 +621,7 @@ def plot_connection_arrow(q1,q2,op=None,**kwargs):
     Draw arrows connecting related fields from two maps. 
     
     Parameters
-    --------------------------------------------------------
+    ----------
     op: for every index in q1, corresponding index in q2
         or -1 if no connection
     q1: field centers in map 1 (as x+iy complex numbers)
@@ -647,7 +651,7 @@ def fit_heading_variance(data,model,θ,NSEW):
     less) of data are present for the different directions.
     
     Parameters
-    --------------------------------------------------------
+    ----------
     data: Dataset
     model: Model
     θ: np.float32
@@ -656,7 +660,7 @@ def fit_heading_variance(data,model,θ,NSEW):
         List of reference heading angles to recompute
         
     Returns
-    --------------------------------------------------------
+    -------
     models: list
         A list, the same length as NSEW, containing
         the models with optimized hyperparameters for each
@@ -712,7 +716,7 @@ def matched_cardinal_points(peaks,edges,indexNSEW):
     return the z+iy location of all NSEW-facing points
     
     Parameters
-    --------------------------------------------------------
+    ----------
     peaks: length N_HEADING_ANGLES list
         List of peak locations from 
         `get_peaks_at_heading_angles`
@@ -724,7 +728,7 @@ def matched_cardinal_points(peaks,edges,indexNSEW):
         directions of interest (presumed to be N,S,E,W).
         
     Returns
-    --------------------------------------------------------
+    -------
     points: np.array
         A N_COMPONENTS x len(indexNSEW) array which 
         identifies which of the peaks at these heading
@@ -764,8 +768,9 @@ def sample_heading_angles(
     names            = None,
     colors           = None):
     '''
-    Performed a detailed analysis of a range of heading
-    angles.
+    Sample confidence intervals, and plot, for a collection
+    of models fit to (North, South, East, West) heading 
+    angles. 
     
     Apply this to the lists`models` and `fits` returned by
     `fit_heading_variance(data,model,heading,angles)`.
@@ -775,7 +780,7 @@ def sample_heading_angles(
     posterior confidence intervals via sampling.
     
     Parameters
-    --------------------------------------------------------
+    ----------
     data: Dataset
     models: list
         List of N Models
@@ -785,10 +790,7 @@ def sample_heading_angles(
         List of heading directions for each model
         
     Other Parameters
-    --------------------------------------------------------
-    
-    Other Parameters
-    --------------------------------------------------------
+    ----------------
     exclusion_radius: positive float
         Region a peak must clear to be a local maximum,
         In units of pixels in the L×L grid.
@@ -847,10 +849,10 @@ def sample_heading_angles(
             prpeak_threshold = prpeak_threshold,
             pct              = 95,
             doplot           = doplot,
-            color            = colors[i],
+            color            = None if colors is None else colors[i],
             scalebar         = i==0
         ))
-        if doplot:
+        if doplot and not names is None:
             title(names[i])
             
     return samples

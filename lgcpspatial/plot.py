@@ -778,7 +778,7 @@ if not 'riley' in plt.colormaps():
 def force_aspect(aspect=1,a=None):
     '''
     Parameters
-    --------------------------------------------------------
+    ----------
     aspect : aspect ratio
     '''
     if a is None: a = plt.gca()
@@ -791,9 +791,27 @@ def force_aspect(aspect=1,a=None):
 Plotting routines specific to the GP code
 """
 
-def pscale(x,q1=0.5,q2=99.5,mask=True):
+def pscale(x,q1=0.5,q2=99.5,mask=None):
     '''
     Plot helper: Scale data by percentiles
+    
+    Parameters
+    ----------
+    x: np.float32
+    
+    Other Parameters
+    ----------------
+    q1: float in (0,1); default 0.5
+        Fraction of data below which we will set to zero.
+    q2: float in (0,1); default 0.95
+        Fraction of data above which we will set to one.
+    mask: np.bool; default None
+        Subset of points to consider 
+        
+    Returns
+    -------
+    result: np.array
+        Rescaled data
     '''
     u  = x[mask] if not mask is None else x
     u  = float32(u)
@@ -805,7 +823,8 @@ def pscale(x,q1=0.5,q2=99.5,mask=True):
 
 def showkn(k,t=''):
     '''
-    Plot helper; Shift convolution kernel to plot
+    Plot helper; Re-center a FFT convolution kernel and
+    plot it. 
     '''
     plt.imshow(fftshift(k)); axis('off'); title(t);
 
@@ -822,14 +841,36 @@ def showim(x,t='',**kwargs):
     title(t);
     
 
-def inference_summary_plot(model,mask,y,μh,μz,v,Fs,L,scale,dataset):
+def inference_summary_plot(model,fit,data,ftitle=''):
     '''
     Summarize the result of log-Gaussian process variational 
     inference in four plots.
+    
+    This function exists to simplify the example notebooks,
+    and isn't designed for more general use. 
+    
+    Parameters
+    ----------
+    model: lgcp2d.DiagonalFourierLowrank
+        Initialized model
+    fit: tuple
+        Tuple of (low-rank mean, marginal variance, loss)
+        returned by `lgcp2d.coordinate_descent()`.
+    data: loaddata.Dataset
+        Prepared dataset
+    ftitle: str
+        Figure title
     '''
-    nanmask = float32(mask)
-    nanmask[nanmask<1] = NaN
-    y = y.reshape(L,L)
+    y       = data.y
+    L       = data.L
+    mask    = data.arena.mask
+    nanmask = data.arena.nanmask
+    Fs      = data.position_sample_rate
+    scale   = data.scale
+    μz      = model.μ_0
+    μh,v,_  = fit
+    y = np.array(y).reshape(L,L)
+    v = np.array(v).ravel()
     
     cmap = matplotlib.pyplot.get_cmap('bone_r')
     
@@ -899,18 +940,33 @@ def inference_summary_plot(model,mask,y,μh,μz,v,Fs,L,scale,dataset):
                   fontsize=8,vscale=0.8,width=10,cmap=cmap)
     axis('off')
     
-    suptitle(dataset)
+    suptitle(ftitle)
     return ax
-    
-    
+
+
 def plot_convex_hull(px,py,**kwargs):
     '''
-    Make a line plot of the convex hull of points given by px and py
+    Calculate convex hull of points (px,py) and plot it.
+    
+    Parameters
+    ----------
+    px: length NPOINTS 1D np.float32
+    py: length NPOINTS 1D np.float32
+    
+    Other Parameters
+    ----------------
+    **kwargs: dict
+        Keyword arguments are forwarded to `pyplot.plot()`        
+        
+    Returns
+    -------
+    result: ConvexHull(points)
     '''
     points = array([px,py]).T
     hull   = ConvexHull(points)
     vv     = concatenate([hull.vertices,hull.vertices[:1]])
     plot(points[vv,0],points[vv,1],**kwargs)
+    return hull
 
 
 def unit_crosshairs(draw_ellipse=True,draw_cross=True):

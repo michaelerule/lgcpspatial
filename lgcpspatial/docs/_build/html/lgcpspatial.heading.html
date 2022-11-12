@@ -61,21 +61,7 @@
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">heading</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.smoothed_heading_angle"><code class="docutils literal notranslate"><span class="pre">smoothed_heading_angle()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.get_peaks_at_heading_angles"><code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.match_peaks"><code class="docutils literal notranslate"><span class="pre">match_peaks()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.pair_points"><code class="docutils literal notranslate"><span class="pre">pair_points()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.extract_as_paths"><code class="docutils literal notranslate"><span class="pre">extract_as_paths()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.link_peaks"><code class="docutils literal notranslate"><span class="pre">link_peaks()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.plot_tracked_peaks"><code class="docutils literal notranslate"><span class="pre">plot_tracked_peaks()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.locate_opposites"><code class="docutils literal notranslate"><span class="pre">locate_opposites()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.plot_connection_arrow"><code class="docutils literal notranslate"><span class="pre">plot_connection_arrow()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.fit_heading_variance"><code class="docutils literal notranslate"><span class="pre">fit_heading_variance()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.matched_cardinal_points"><code class="docutils literal notranslate"><span class="pre">matched_cardinal_points()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lgcpspatial.heading.sample_heading_angles"><code class="docutils literal notranslate"><span class="pre">sample_heading_angles()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">heading</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
@@ -207,6 +193,8 @@ Westward is 0 degrees, then rotates counterclockwise
 through southward, eastward, northward.</p></li>
 <li><p><strong>threshold</strong> (<em>float</em>) – Percentile peaks must be above to be retained.
 Should be in [0,100).</p></li>
+<li><p><strong>Fs</strong> (<em>positive float; default 50.0</em>) – Sampling rate for position data</p></li>
+<li><p><strong>Fl</strong> (<em>positive float; default 2.0</em>) – Low-frequency cutoff for smooothing position data</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -462,7 +450,7 @@ less) of data are present for the different directions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset" title="lgcpspatial.load_data.Dataset"><em>Dataset</em></a>) – </p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>Dataset</em></a>) – </p></li>
 <li><p><strong>model</strong> (<em>Model</em>) – </p></li>
 <li><p><strong>θ</strong> (<em>np.float32</em>) – Heading angles for every time sample in Dataset</p></li>
 <li><p><strong>NSEW</strong> (<em>np.float32</em>) – List of reference heading angles to recompute</p></li>
@@ -518,7 +506,8 @@ for the heading-angle-indecies specified by
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.sample_heading_angles">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">sample_heading_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclusion_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prpeak_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#sample_heading_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.sample_heading_angles" title="Permalink to this definition"></a></dt>
-<dd><p>Performed a detailed analysis of a range of heading
+<dd><p>Sample confidence intervals, and plot, for a collection
+of models fit to (North, South, East, West) heading
 angles.</p>
 <p>Apply this to the lists`models` and <cite>fits</cite> returned by
 <cite>fit_heading_variance(data,model,heading,angles)</cite>.</p>
@@ -528,7 +517,7 @@ posterior confidence intervals via sampling.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.load_data.html#lgcpspatial.load_data.Dataset" title="lgcpspatial.load_data.Dataset"><em>Dataset</em></a>) – </p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>Dataset</em></a>) – </p></li>
 <li><p><strong>models</strong> (<em>list</em>) – List of N Models</p></li>
 <li><p><strong>fits</strong> (<em>list</em>) – List of N fits returned by <cite>coordinate_descent</cite></p></li>
 <li><p><strong>angles</strong> (<em>list</em><em> of </em><em>floats</em>) – List of heading directions for each model</p></li>

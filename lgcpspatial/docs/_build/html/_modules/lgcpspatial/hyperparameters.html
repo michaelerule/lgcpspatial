@@ -100,9 +100,41 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.grid_search</span> <span class="kn">import</span> <span class="n">grid_search</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.gridsearch</span> <span class="kn">import</span> <span class="n">grid_search</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span> <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span> <span class="kn">import</span> <span class="n">coordinate_descent</span>
+
+
+<div class="viewcode-block" id="period_and_prior_variance"><a class="viewcode-back" href="../../lgcpspatial.hyperparameters.html#lgcpspatial.hyperparameters.period_and_prior_variance">[docs]</a><span class="k">def</span> <span class="nf">period_and_prior_variance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Wrapper for `gridsearch_optimize()` that returns </span>
+<span class="sd">    the optimized period and variance</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data: lgcpspatal.loaddata.Dataset</span>
+<span class="sd">        Prepared dataset</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    **kwargs:</span>
+<span class="sd">        Keyword arguments are forwaded to </span>
+<span class="sd">        `gridsearch_optimize`, see the documentation for</span>
+<span class="sd">        `gridsearch_optimize` for more details.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    period: float</span>
+<span class="sd">        Estimated grid-cell period in pixels</span>
+<span class="sd">    v0: </span>
+<span class="sd">        Estiamted kernel marginal variance</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">gridsearch_optimize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">bestindex</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span> <span class="o">=</span> <span class="n">result</span>
+    <span class="n">P_use</span>  <span class="o">=</span> <span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">v0_use</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">prior_variance</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">P_use</span><span class="p">,</span> <span class="n">v0_use</span></div>
+
 
 <div class="viewcode-block" id="gridsearch_optimize"><a class="viewcode-back" href="../../lgcpspatial.hyperparameters.html#lgcpspatial.hyperparameters.gridsearch_optimize">[docs]</a><span class="k">def</span> <span class="nf">gridsearch_optimize</span><span class="p">(</span>
     <span class="n">data</span><span class="p">,</span>
@@ -117,7 +149,7 @@
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    data: load_data.Dataset</span>
 <span class="sd">        Prepared dataset with the following attributes:</span>
 <span class="sd">            L: posive int</span>
@@ -128,7 +160,7 @@
 <span class="sd">                Heuristic kernel prior zero-lag variance. </span>
 <span class="sd">    </span>
 <span class="sd">    Other Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------------</span>
 <span class="sd">    np: positive odd int; default 201</span>
 <span class="sd">        Number of grid period values to explore</span>
 <span class="sd">        in the grid search. </span>

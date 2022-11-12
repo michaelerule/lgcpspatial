@@ -18,7 +18,7 @@ The project source can be browsed or downloaded from `github
 * :ref:`genindex`
 
 .. toctree::
-   :maxdepth: 0
+   :maxdepth: 1
    :caption: Tutorial notebooks:
    
    example 0 hyperparameter groundtruth test
@@ -29,7 +29,7 @@ The project source can be browsed or downloaded from `github
    example 5 heading dependence
    
 .. toctree::
-   :maxdepth: 0
+   :maxdepth: 1
    :caption: Modules in the lgcpspatial package:
 
    lgcp2d <lgcpspatial.lgcp2d>

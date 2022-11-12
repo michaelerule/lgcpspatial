@@ -869,7 +869,7 @@
 <div class="viewcode-block" id="force_aspect"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.force_aspect">[docs]</a><span class="k">def</span> <span class="nf">force_aspect</span><span class="p">(</span><span class="n">aspect</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    aspect : aspect ratio</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">a</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -882,9 +882,27 @@
 <span class="sd">Plotting routines specific to the GP code</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="pscale"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.pscale">[docs]</a><span class="k">def</span> <span class="nf">pscale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">q1</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">q2</span><span class="o">=</span><span class="mf">99.5</span><span class="p">,</span><span class="n">mask</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="pscale"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.pscale">[docs]</a><span class="k">def</span> <span class="nf">pscale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">q1</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">q2</span><span class="o">=</span><span class="mf">99.5</span><span class="p">,</span><span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Plot helper: Scale data by percentiles</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x: np.float32</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    q1: float in (0,1); default 0.5</span>
+<span class="sd">        Fraction of data below which we will set to zero.</span>
+<span class="sd">    q2: float in (0,1); default 0.95</span>
+<span class="sd">        Fraction of data above which we will set to one.</span>
+<span class="sd">    mask: np.bool; default None</span>
+<span class="sd">        Subset of points to consider </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    result: np.array</span>
+<span class="sd">        Rescaled data</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">u</span>  <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">mask</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">x</span>
     <span class="n">u</span>  <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
@@ -896,7 +914,8 @@
 
 <div class="viewcode-block" id="showkn"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.showkn">[docs]</a><span class="k">def</span> <span class="nf">showkn</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Plot helper; Shift convolution kernel to plot</span>
+<span class="sd">    Plot helper; Re-center a FFT convolution kernel and</span>
+<span class="sd">    plot it. </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">fftshift</span><span class="p">(</span><span class="n">k</span><span class="p">));</span> <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">);</span> <span class="n">title</span><span class="p">(</span><span class="n">t</span><span class="p">);</span></div>
 
@@ -913,14 +932,36 @@
     <span class="n">title</span><span class="p">(</span><span class="n">t</span><span class="p">);</span></div>
     
 
-<div class="viewcode-block" id="inference_summary_plot"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.inference_summary_plot">[docs]</a><span class="k">def</span> <span class="nf">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">μh</span><span class="p">,</span><span class="n">μz</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">Fs</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">scale</span><span class="p">,</span><span class="n">dataset</span><span class="p">):</span>
+<div class="viewcode-block" id="inference_summary_plot"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.inference_summary_plot">[docs]</a><span class="k">def</span> <span class="nf">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">ftitle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Summarize the result of log-Gaussian process variational </span>
 <span class="sd">    inference in four plots.</span>
+<span class="sd">    </span>
+<span class="sd">    This function exists to simplify the example notebooks,</span>
+<span class="sd">    and isn&#39;t designed for more general use. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model: lgcp2d.DiagonalFourierLowrank</span>
+<span class="sd">        Initialized model</span>
+<span class="sd">    fit: tuple</span>
+<span class="sd">        Tuple of (low-rank mean, marginal variance, loss)</span>
+<span class="sd">        returned by `lgcp2d.coordinate_descent()`.</span>
+<span class="sd">    data: loaddata.Dataset</span>
+<span class="sd">        Prepared dataset</span>
+<span class="sd">    ftitle: str</span>
+<span class="sd">        Figure title</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">nanmask</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
-    <span class="n">nanmask</span><span class="p">[</span><span class="n">nanmask</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">y</span>       <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">L</span>       <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">L</span>
+    <span class="n">mask</span>    <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span>
+    <span class="n">nanmask</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">nanmask</span>
+    <span class="n">Fs</span>      <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">position_sample_rate</span>
+    <span class="n">scale</span>   <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">scale</span>
+    <span class="n">μz</span>      <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">μ_0</span>
+    <span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">_</span>  <span class="o">=</span> <span class="n">fit</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
     
     <span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;bone_r&#39;</span><span class="p">)</span>
     
@@ -990,18 +1031,33 @@
                   <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">vscale</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
     <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
     
-    <span class="n">suptitle</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="n">suptitle</span><span class="p">(</span><span class="n">ftitle</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ax</span></div>
-    
-    
+
+
 <div class="viewcode-block" id="plot_convex_hull"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.plot_convex_hull">[docs]</a><span class="k">def</span> <span class="nf">plot_convex_hull</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Make a line plot of the convex hull of points given by px and py</span>
+<span class="sd">    Calculate convex hull of points (px,py) and plot it.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    px: length NPOINTS 1D np.float32</span>
+<span class="sd">    py: length NPOINTS 1D np.float32</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    **kwargs: dict</span>
+<span class="sd">        Keyword arguments are forwarded to `pyplot.plot()`        </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    result: ConvexHull(points)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">points</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
     <span class="n">hull</span>   <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
     <span class="n">vv</span>     <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:</span><span class="mi">1</span><span class="p">]])</span>
-    <span class="n">plot</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">vv</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">points</span><span class="p">[</span><span class="n">vv</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    <span class="n">plot</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">vv</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">points</span><span class="p">[</span><span class="n">vv</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hull</span></div>
 
 
 <div class="viewcode-block" id="unit_crosshairs"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.unit_crosshairs">[docs]</a><span class="k">def</span> <span class="nf">unit_crosshairs</span><span class="p">(</span><span class="n">draw_ellipse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">draw_cross</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
