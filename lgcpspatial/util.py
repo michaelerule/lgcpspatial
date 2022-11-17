@@ -51,22 +51,72 @@ try:
 except:
     from scipy.fftpack import *
 
-ttic = None
-def tic(msg=''):
+import time as systime
+def current_milli_time():
     '''
-    Timer routine to track performance
+    Returns the time in milliseconds
     '''
-    global ttic
-    t = time.time()*1000
-    if ttic:
-        elapsed = t-ttic
-    else:
-        elapsed = None
-    if ttic and msg: 
-        print(('Δt = %d ms'%elapsed).ljust(14)\
-              +'elapsed for '+msg)
-    ttic = t
-    return elapsed
+    return int(round(systime.time() * 1000))
+    
+__GLOBAL_TIC_TIME__ = None
+def tic(doprint=True,prefix=''):
+    ''' 
+    Similar to Matlab tic 
+    
+    Parameters
+    ----------
+    doprint: bool
+        if True, print elapsed time. Else, return it.
+    
+    Returns
+    -------
+    t: int
+        `current_milli_time()`
+    '''
+    global __GLOBAL_TIC_TIME__
+    t = current_milli_time()
+    try:
+        __GLOBAL_TIC_TIME__
+        if not __GLOBAL_TIC_TIME__ is None:
+            if doprint:
+                print(prefix,'t=%dms'%(t-__GLOBAL_TIC_TIME__))
+        elif doprint:
+            print("timing...")
+    except: 
+        if doprint: print("timing...")
+    __GLOBAL_TIC_TIME__ = current_milli_time()
+    return t
+
+def toc(doprint=True,prefix=''):
+    ''' 
+    Similar to Matlab toc 
+    
+    Parameters
+    ----------
+    doprint: bool
+        if True, print elapsed time. Else, return it.
+    prefix: str
+    
+    Returns
+    -------
+    t: number
+        Current timestamp
+    dt: number
+        Time since the last call to the tic() or toc() function.
+    '''
+    global __GLOBAL_TIC_TIME__
+    t = current_milli_time()
+    try:
+        __GLOBAL_TIC_TIME__
+        if not __GLOBAL_TIC_TIME__ is None:
+            dt = t-__GLOBAL_TIC_TIME__
+            if doprint: print(prefix,'dt=%dms'%(dt))
+            return t,dt
+        elif doprint:
+            print("havn't called tic yet?")
+    except: 
+        if doprint: print("havn't called tic yet?")
+    return t,None
 
 def progress_bar(x,N=None):
     '''
