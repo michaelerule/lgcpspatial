@@ -59,6 +59,7 @@
 <p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate.html">simulate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.loaddata.html">loaddata</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.gridsearch.html">gridsearch</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">hyperparameters</a></li>
@@ -226,7 +227,10 @@ issues with the variance iteration diverging.</p></li>
 <li><p><strong>keep_frequencies</strong> (<em>np.ndarray</em><em> or </em><em>None; default None</em>) – boolean array of frequencies to keep</p></li>
 <li><p><strong>use_common_subspace</strong> (<em>boolean</em><em>, </em><em>default False</em>) – Whether to force all models to use the same low-rank
 subspace. This can make comparison of models with
-different periods less noisy.</p></li>
+different periods less noisy. Setting this to
+<code class="docutils literal notranslate"><span class="pre">True</span></code> will force the model to use a larger
+frequency subspace suitable for all grid periods,
+and will substantially slow down inference.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

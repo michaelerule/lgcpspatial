@@ -171,7 +171,7 @@ def gridsearch_optimize(
     
     # Calculate a shared low-rank subspace
     if use_common_subspace and keep_frequencies is None:
-        keep_frequencies = np.sum(np.float32([
+        keep_frequencies = sum(float32([
             DiagonalFourierLowrank(kv,p,data,kclip=kclip).keep_frequencies
             for p in Ps]),0)>0
     

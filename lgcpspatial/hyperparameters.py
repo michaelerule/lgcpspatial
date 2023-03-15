@@ -122,7 +122,10 @@ def gridsearch_optimize(
     use_common_subspace: boolean, default False
         Whether to force all models to use the same low-rank
         subspace. This can make comparison of models with
-        different periods less noisy. 
+        different periods less noisy. Setting this to 
+        ``True`` will force the model to use a larger
+        frequency subspace suitable for all grid periods,
+        and will substantially slow down inference. 
     
     Returns
     -------

@@ -31,7 +31,7 @@ The project source can be browsed or downloaded from `github
    :caption: Modules in the lgcpspatial package:
 
    lgcp2d <lgcpspatial.lgcp2d>
-   simulatedata <lgcpspatial.simulatedata>
+   simulate <lgcpspatial.simulate>
    loaddata <lgcpspatial.loaddata>
    gridsearch <lgcpspatial.gridsearch>
    hyperparameters <lgcpspatial.hyperparameters>
