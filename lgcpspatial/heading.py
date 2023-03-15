@@ -1070,7 +1070,7 @@ def matched_cardinal_points(peaks,edges,indexNSEW):
     indexNSEW: list
         list of indecies into peaks and edges for the
         directions of interest (presumed to be N,S,E,W).
-        
+    
     Returns
     -------
     points: np.array
@@ -1130,7 +1130,7 @@ def sample_heading_angles(
         List of N fits returned by ``coordinate_descent``
     angles: list of floats
         List of heading directions for each model
-        
+    
     Other Parameters
     ----------------
     radius: positive float; default 0.45
@@ -1163,6 +1163,7 @@ def sample_heading_angles(
         List of plotting colors for each heading angle
     confidence_mode: str; default 'quadratic'
         Can be ``'quadratic'`` or ``'voronoi'``
+    
     Returns
     -------
     samples: list

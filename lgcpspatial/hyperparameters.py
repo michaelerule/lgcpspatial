@@ -221,7 +221,7 @@ def gridsearch_optimize(
         pargrid,
         evaluate_ELBO,
         verbose=verbose)
-    bestindex,bestpars,bestresult,allresults = result
+    bestindex,bestpars,bestresult,allresults,_ = result
 
     if verbose:
         print('')

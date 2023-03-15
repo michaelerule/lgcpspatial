@@ -220,7 +220,7 @@ def pixels_to_xfigureunits(n,ax=None,fig=None):
     ----------
     
     Returns
-    -------
+    --------------------------------------------------------
     '''
     if fig is None: fig = plt.gcf()
     if ax  is None: ax  = plt.gca()
@@ -237,7 +237,7 @@ def pixels_to_yfigureunits(n,ax=None,fig=None):
     ----------
     
     Returns
-    -------
+    --------------------------------------------------------
     '''
     if fig is None: fig = plt.gcf()
     if ax  is None: ax  = plt.gca()
@@ -311,7 +311,7 @@ def nudge_axis_y_pixels(dy,ax=None):
     ----------
     
     Returns
-    -------
+    --------------------------------------------------------
     '''
     if ax is None: ax=plt.gca()
     bb = ax.get_position()
@@ -330,7 +330,7 @@ def adjust_axis_height_pixels(dy,ax=None):
     ----------
     
     Returns
-    -------
+    --------------------------------------------------------
     '''
     if ax is None: ax=plt.gca()
     bb = ax.get_position()
@@ -346,7 +346,7 @@ def get_ax_size(ax=None,fig=None):
     ----------
     
     Returns
-    -------
+    --------------------------------------------------------
     '''
     if fig is None: fig = plt.gcf()
     if ax is None: ax  = plt.gca()
@@ -367,7 +367,7 @@ def yunits_to_pixels(n,ax=None,fig=None):
     ----------
     
     Returns
-    -------
+    --------------------------------------------------------
     '''
     if fig is None: fig = plt.gcf()
     if ax  is None: ax  = plt.gca()
@@ -384,7 +384,7 @@ def xunits_to_pixels(n,ax=None,fig=None):
     ----------
     
     Returns
-    -------
+    --------------------------------------------------------
     '''
     if fig is None: fig = plt.gcf()
     if ax  is None: ax  = plt.gca()
@@ -525,7 +525,7 @@ def nicey(**kwargs):
     ----------
     
     Returns
-    -------
+    --------------------------------------------------------
     '''
     if ylim()[0]<0:
         plt.yticks([plt.ylim()[0],0,plt.ylim()[1]])
@@ -541,7 +541,7 @@ def nicex(**kwargs):
     ----------
     
     Returns
-    -------
+    --------------------------------------------------------
     '''
     if xlim()[0]<0:
         plt.xticks([plt.xlim()[0],0,plt.xlim()[1]])
@@ -681,7 +681,7 @@ def pixels_to_xunits(n,ax=None,fig=None):
     ----------
     
     Returns
-    -------
+    --------------------------------------------------------
     '''
     if fig is None: fig = plt.gcf()
     if ax  is None: ax  = plt.gca()
@@ -700,7 +700,7 @@ def pixels_to_yunits(n,ax=None,fig=None):
     ----------
     
     Returns
-    -------
+    --------------------------------------------------------
     '''
     if fig is None: fig = plt.gcf()
     if ax  is None: ax  = plt.gca()
@@ -721,7 +721,7 @@ def circular_gaussian_smooth(x,sigma):
     x: 1D array-like signal
     
     Returns
-    -------
+    --------------------------------------------------------
     '''
     N = len(x)
     g = np.exp(-np.linspace(-N/2,N/2,N)**2/sigma**2)
@@ -745,7 +745,7 @@ def circularly_smooth_colormap(cm,s):
     s : smoothing radius
 
     Returns
-    -------
+    --------------------------------------------------------
     RBG : np.ndarray
         Colormap smoothed with circular boundary conditions.
     '''
