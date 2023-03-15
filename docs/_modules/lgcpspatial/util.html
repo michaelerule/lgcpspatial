@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lgcpspatial.util &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.hyperparameters.html">hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.plot.html">plot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">lgcpspatial.util</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for lgcpspatial.util</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># -*- coding: UTF-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">nested_scopes</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">generators</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">``util.py``: Miscellaneous utility functions used in the notebooks</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">errno</span>
+
+<span class="c1"># For progress bar and code timing</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>             <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>        <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># For the statistical summary function</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">pearsonr</span>
+
+<span class="c1"># used by the cinv function</span>
+<span class="kn">import</span> <span class="nn">scipy.linalg.lapack</span>
+
+<span class="c1"># Used to locate peaks in the autocorrelogram</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">find_peaks</span>
+
+<span class="c1"># Used to explicitly construct covariance matrix from a convolution kernel</span>
+<span class="c1"># (Generally we shouldn&#39;t be doing this for large problems; it&#39;s only used to</span>
+<span class="c1"># verify code on smaller problems as a sanity check)</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">circulant</span> 
+
+<span class="c1"># Used to make radially symmetric 2D kernel from 1D radial kernel</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+
+<span class="c1"># Allows us to work with linear operators without constructing them as matrices</span>
+<span class="c1"># This is very useful for large covariance priors, which may not fit in memory,</span>
+<span class="c1"># but can be calculated easily as convolution kernels using the FFT. </span>
+<span class="kn">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="kn">import</span> <span class="n">minres</span><span class="p">,</span><span class="n">LinearOperator</span>
+
+<span class="c1"># Varies depending on scipy version</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">scipy.fft</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">scipy.fftpack</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">time</span> <span class="k">as</span> <span class="nn">systime</span>
+<div class="viewcode-block" id="current_milli_time"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.current_milli_time">[docs]</a><span class="k">def</span> <span class="nf">current_milli_time</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Returns the time in milliseconds</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">systime</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span></div>
+    
+<span class="n">__GLOBAL_TIC_TIME__</span> <span class="o">=</span> <span class="kc">None</span>
+<div class="viewcode-block" id="tic"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.tic">[docs]</a><span class="k">def</span> <span class="nf">tic</span><span class="p">(</span><span class="n">doprint</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">    Similar to Matlab tic </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    doprint: bool</span>
+<span class="sd">        if True, print elapsed time. Else, return it.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    t: int</span>
+<span class="sd">        ``current_milli_time()``</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">global</span> <span class="n">__GLOBAL_TIC_TIME__</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">current_milli_time</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">__GLOBAL_TIC_TIME__</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">__GLOBAL_TIC_TIME__</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">doprint</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span><span class="s1">&#39;t=</span><span class="si">%d</span><span class="s1">ms&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">__GLOBAL_TIC_TIME__</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">doprint</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;timing...&quot;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">doprint</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;timing...&quot;</span><span class="p">)</span>
+    <span class="n">__GLOBAL_TIC_TIME__</span> <span class="o">=</span> <span class="n">current_milli_time</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">t</span></div>
+
+<div class="viewcode-block" id="toc"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.toc">[docs]</a><span class="k">def</span> <span class="nf">toc</span><span class="p">(</span><span class="n">doprint</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">    Similar to Matlab toc </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    doprint: bool</span>
+<span class="sd">        if True, print elapsed time. Else, return it.</span>
+<span class="sd">    prefix: str</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    t: number</span>
+<span class="sd">        Current timestamp</span>
+<span class="sd">    dt: number</span>
+<span class="sd">        Time since the last call to the tic() or toc() function.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">global</span> <span class="n">__GLOBAL_TIC_TIME__</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">current_milli_time</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">__GLOBAL_TIC_TIME__</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">__GLOBAL_TIC_TIME__</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">t</span><span class="o">-</span><span class="n">__GLOBAL_TIC_TIME__</span>
+            <span class="k">if</span> <span class="n">doprint</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span><span class="s1">&#39;dt=</span><span class="si">%d</span><span class="s1">ms&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">t</span><span class="p">,</span><span class="n">dt</span>
+        <span class="k">elif</span> <span class="n">doprint</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;havn&#39;t called tic yet?&quot;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">doprint</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;havn&#39;t called tic yet?&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">t</span><span class="p">,</span><span class="kc">None</span></div>
+
+<div class="viewcode-block" id="progress_bar"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.progress_bar">[docs]</a><span class="k">def</span> <span class="nf">progress_bar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Progress bar wrapper for loops</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">N</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">N</span><span class="p">)))</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="s1">&#39; </span><span class="si">%%%d</span><span class="s1">d/</span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">K</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">wait_til_ms</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">*</span><span class="mi">1000</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="n">time_ms</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">*</span><span class="mi">1000</span>
+        <span class="k">if</span> <span class="n">time_ms</span><span class="o">&gt;=</span><span class="n">wait_til_ms</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="mi">50</span><span class="o">/</span><span class="n">N</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="s1">&#39; ▏▎▍▌▋▊▉&#39;</span><span class="p">[</span><span class="nb">int</span><span class="p">((</span><span class="n">r</span><span class="o">-</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="mi">8</span><span class="p">)]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">[&#39;</span><span class="o">+</span><span class="p">(</span><span class="s1">&#39;█&#39;</span><span class="o">*</span><span class="n">k</span><span class="p">)</span><span class="o">+</span><span class="n">q</span><span class="o">+</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">*</span><span class="p">(</span><span class="mi">50</span><span class="o">-</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">+</span>
+                <span class="s1">&#39;]</span><span class="si">%3d%%</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="mi">100</span><span class="o">//</span><span class="n">N</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">pattern</span><span class="o">%</span><span class="n">i</span><span class="p">),</span>
+                <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">wait_til_ms</span> <span class="o">=</span> <span class="n">time_ms</span><span class="o">+</span><span class="mi">1000</span>
+        <span class="k">yield</span> <span class="n">x</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">*</span><span class="mi">70</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="zgrid"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.zgrid">[docs]</a><span class="k">def</span> <span class="nf">zgrid</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    2D grid coordinates as complex numbers</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">-</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">c</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">+</span><span class="n">c</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span></div>
+
+<div class="viewcode-block" id="printstats"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.printstats">[docs]</a><span class="k">def</span> <span class="nf">printstats</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Print RMSE and correlation between two rate maps</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span><span class="n">b</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">mask</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">mask</span><span class="o">.</span><span class="n">ravel</span><span class="p">()]</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">mask</span><span class="o">.</span><span class="n">ravel</span><span class="p">()]</span>
+    <span class="n">NMSE</span> <span class="o">=</span> <span class="n">mean</span><span class="p">((</span><span class="n">a</span><span class="o">-</span><span class="n">b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">mean</span><span class="p">(</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="c1">#sqrt(mean(a**2)*mean(b**2))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="o">+</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;∙ Normalized MSE: </span><span class="si">%0.1f%%</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="n">NMSE</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;∙ Pearson correlation: </span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="find"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.find">[docs]</a><span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    The old &quot;find&quot; syntax is cleaner!</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="speak"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.speak">[docs]</a><span class="k">def</span> <span class="nf">speak</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    For jupyter notebooks: trigger browser to notify when done</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    text: str</span>
+<span class="sd">        Text to peak</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Javascript</span> <span class="k">as</span> <span class="n">js</span><span class="p">,</span> <span class="n">clear_output</span>
+    <span class="c1"># Escape single quotes</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\&#39;&quot;</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">js</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">    if(window.speechSynthesis) {{</span>
+<span class="s1">        var synth = window.speechSynthesis;</span>
+<span class="s1">        synth.speak(new window.SpeechSynthesisUtterance(&#39;</span><span class="si">{text}</span><span class="s1">&#39;));</span>
+<span class="s1">    }}</span>
+<span class="s1">    &#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)))</span></div>
+
+<div class="viewcode-block" id="notify"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.notify">[docs]</a><span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="n">what</span><span class="o">=</span><span class="s1">&#39;attention&#39;</span><span class="p">):</span>
+    <span class="c1">#os.system(&quot;echo -n &#39;\a&#39;&quot;)</span>
+    <span class="n">speak</span><span class="p">(</span><span class="n">what</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_edges"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.get_edges">[docs]</a><span class="k">def</span> <span class="nf">get_edges</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span><span class="n">pad_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Assuming a binary signal, get the start and stop times </span>
+<span class="sd">    of each treatch of &quot;1s&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    signal : 1-dimensional array-like</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    pad_edges : True</span>
+<span class="sd">        Should we treat blocks that start or stop at the </span>
+<span class="sd">        beginning or end of the signal as valid?</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    2xN array of bin start and stop indecies</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[],[]])</span>
+    <span class="k">if</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">signal</span><span class="p">)))</span><span class="o">==</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;signal should be bool or int∈{0,1};&#39;</span><span class="o">+</span>
+            <span class="s1">&#39; (using ~ on an int array?)&#39;</span><span class="p">)</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bool8</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+    <span class="n">starts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span><span class="o">==</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">stops</span>  <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span><span class="o">==-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pad_edges</span><span class="p">:</span>
+        <span class="c1"># Add artificial start/stop time to incomplete blocks</span>
+        <span class="k">if</span> <span class="n">signal</span><span class="p">[</span><span class="mi">0</span> <span class="p">]:</span> <span class="n">starts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>   <span class="o">+</span> <span class="n">starts</span>
+        <span class="k">if</span> <span class="n">signal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">stops</span>  <span class="o">=</span> <span class="n">stops</span> <span class="o">+</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Remove incomplete blocks</span>
+        <span class="k">if</span> <span class="n">signal</span><span class="p">[</span><span class="mi">0</span> <span class="p">]:</span> <span class="n">stops</span>  <span class="o">=</span> <span class="n">stops</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">signal</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="n">starts</span> <span class="o">=</span> <span class="n">starts</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">starts</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">stops</span><span class="p">)])</span></div>
+
+<div class="viewcode-block" id="interpolate_NaN"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.interpolate_NaN">[docs]</a><span class="k">def</span> <span class="nf">interpolate_NaN</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Fill in NaN (missing) data in a one-dimensional </span>
+<span class="sd">    timeseries via linear interpolation.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">s</span><span class="p">,</span><span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">get_edges</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">u</span><span class="p">))):</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> 
+            <span class="n">u</span><span class="p">[:</span><span class="n">e</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">e</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">e</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">):</span> 
+            <span class="n">u</span><span class="p">[</span><span class="n">s</span><span class="p">:]</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">s</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">u</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
+            <span class="n">u</span><span class="p">[</span><span class="n">s</span><span class="p">:</span><span class="n">e</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">e</span><span class="o">-</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1">#assert all(isfinite(u[s:e]))</span>
+    <span class="c1">#assert all(isfinite(u))</span>
+    <span class="n">u</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">u</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">u</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">u</span></div>
+
+<div class="viewcode-block" id="onehot"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.onehot">[docs]</a><span class="k">def</span> <span class="nf">onehot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    x: int23</span>
+<span class="sd">        List of non-negative indecies that are 1</span>
+<span class="sd">    N: int32</span>
+<span class="sd">        Length of desired vector</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">scalar</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">])</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">scalar</span><span class="o">=</span><span class="kc">True</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">T</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+    <span class="n">result</span><span class="p">[</span><span class="n">arange</span><span class="p">(</span><span class="n">T</span><span class="p">),</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">scalar</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+        
+        
+<div class="viewcode-block" id="slog"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.slog">[docs]</a><span class="k">def</span> <span class="nf">slog</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">minrate</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="n">rtype</span><span class="o">=</span><span class="n">float32</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Safe log function; Avoids numeric overflow by clipping</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">log</span><span class="p">(</span><span class="n">maximum</span><span class="p">(</span><span class="n">minrate</span><span class="p">,</span><span class="n">x</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="is_in_hull"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.is_in_hull">[docs]</a><span class="k">def</span> <span class="nf">is_in_hull</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="n">hull</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Determine if the list of points P lies inside the hull</span>
+<span class="sd">    credit: https://stackoverflow.com/a/52405173/900749</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    P: points</span>
+<span class="sd">    hull: Convex Hull object</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    isInHull: Length NPOINTS 1D np.bool</span>
+<span class="sd">        Array of booleans indicating which points are within</span>
+<span class="sd">        the convex hull.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">P</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">P</span><span class="p">),</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">c2p</span><span class="p">(</span><span class="n">p2c</span><span class="p">(</span><span class="n">P</span><span class="p">))</span><span class="o">.</span><span class="n">T</span> <span class="c1"># lazy code reuse: ensure array shape</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">hull</span><span class="o">.</span><span class="n">equations</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">hull</span><span class="o">.</span><span class="n">equations</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]]))</span>
+    <span class="n">isInHull</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">P</span><span class="p">))</span><span class="o">&lt;=</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">))),</span>
+        <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">isInHull</span></div>
+<span class="w">    </span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">------------------------------------------------------------</span>
+<span class="sd">Routines for Gaussian blurs, FFT-based convolutions and </span>
+<span class="sd">autocorrelation, constructing radially-symmetric kernels, </span>
+<span class="sd">and common types of linear operators.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="blurkernel"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.blurkernel">[docs]</a><span class="k">def</span> <span class="nf">blurkernel</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">σ</span><span class="p">,</span><span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    1D Gaussian blur convolution kernel    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    L: int</span>
+<span class="sd">        Size of L×L spatial domain</span>
+<span class="sd">    σ: positive float</span>
+<span class="sd">        kernel radius exp(-x²/σ) (standard deviation in x </span>
+<span class="sd">        and y ×⎷2)</span>
+<span class="sd">    normalize: boolean</span>
+<span class="sd">        Whether to make kernel sum to 1</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">σ</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span> 
+        <span class="n">k</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">k</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="blurkernel2D"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.blurkernel2D">[docs]</a><span class="k">def</span> <span class="nf">blurkernel2D</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">σ</span><span class="p">,</span><span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    2D Gaussian blur convolution kernel    </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    L: Size of L×L spatial domain</span>
+<span class="sd">    σ: kernel radius exp(-x²/σ) (standard deviation in x and y ×⎷2)</span>
+<span class="sd">    normalize: boolean; whether to make kernel sum to 1</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">blurkernel</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">σ</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">outer</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span> 
+        <span class="n">k</span> <span class="o">/=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">k</span></div>
+
+<div class="viewcode-block" id="conv"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.conv">[docs]</a><span class="k">def</span> <span class="nf">conv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">K</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Compute circular 2D convolution using FFT</span>
+<span class="sd">    Kernel K should already be fourier-transformed</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    x: 2D array</span>
+<span class="sd">    K: Fourier-transformed convolution kernel</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">ifft2</span><span class="p">(</span><span class="n">fft2</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span><span class="o">*</span><span class="n">K</span><span class="p">)</span><span class="o">.</span><span class="n">real</span></div>
+
+<div class="viewcode-block" id="blur"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.blur">[docs]</a><span class="k">def</span> <span class="nf">blur</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">σ</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    2D Gaussian blur via fft</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    x: 2D np.array</span>
+<span class="sd">    σ: float</span>
+<span class="sd">        kernel radius exp(-x²/σ) (standard deviation in x and y ×⎷2)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">kern</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">blurkernel</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">σ</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">outer</span><span class="p">(</span><span class="n">kern</span><span class="p">,</span><span class="n">kern</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="zeromean"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.zeromean">[docs]</a><span class="k">def</span> <span class="nf">zeromean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Mean-center data, accounting for masked-out regions</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    x: L×L 2D np.array</span>
+<span class="sd">    mask: L×L np.bool</span>
+<span class="sd">        Binary mask of &quot;in bounds&quot; regions </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">]))</span><span class="o">*</span><span class="n">mask</span></div>
+
+<div class="viewcode-block" id="fft_acorr"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.fft_acorr">[docs]</a><span class="k">def</span> <span class="nf">fft_acorr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">window</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Zero-lag normalized to match signal variance</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    x: L×L 2D np.array</span>
+<span class="sd">    mask: L×L np.bool</span>
+<span class="sd">        Binary mask of &quot;in bounds&quot; regions </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">mask</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span>
+        <span class="n">x</span>    <span class="o">=</span> <span class="n">zeromean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">mask</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">x</span>    <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">L</span>    <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Calculate autocorrelation using FFT</span>
+    <span class="k">if</span> <span class="n">window</span><span class="p">:</span>
+        <span class="c1"># Window attenuates boundary artefacts</span>
+        <span class="c1"># </span>
+        <span class="n">win</span> <span class="o">=</span> <span class="n">hanning</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">win</span> <span class="o">=</span> <span class="n">outer</span><span class="p">(</span><span class="n">win</span><span class="p">,</span><span class="n">win</span><span class="p">)</span>
+        <span class="n">psd</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fft2</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">win</span><span class="p">))</span><span class="o">/</span><span class="n">L</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">psd</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">fft2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">/</span><span class="n">L</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">acr</span>  <span class="o">=</span> <span class="n">fftshift</span><span class="p">(</span><span class="n">ifft2</span><span class="p">(</span><span class="n">psd</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">mask</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Adjust peak for effects of mask, window</span>
+        <span class="n">acr</span>  <span class="o">=</span> <span class="n">acr</span><span class="o">*</span><span class="n">var</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">acr</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">acr</span></div>
+
+<div class="viewcode-block" id="radial_average"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.radial_average">[docs]</a><span class="k">def</span> <span class="nf">radial_average</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Get radial autocorrelation by averaging 2D </span>
+<span class="sd">    autocorrelogram</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    y: np.float32</span>
+<span class="sd">        2D LxL array of firing-rate spatial autocorrelogram.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span> <span class="ow">and</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;y should be a square np.array&#39;</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">coords</span> <span class="o">=</span> <span class="n">zgrid</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">int32</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">coords</span><span class="p">))</span> <span class="c1"># Radial distance</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="o">==</span><span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">concatenate</span><span class="p">([</span><span class="n">a</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span></div>
+
+<div class="viewcode-block" id="radial_acorr"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.radial_acorr">[docs]</a><span class="k">def</span> <span class="nf">radial_acorr</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">mask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Autocorrelation as a function of distance</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">radial_average</span><span class="p">(</span><span class="n">fft_acorr</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">mask</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="fft_upsample_1D"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.fft_upsample_1D">[docs]</a><span class="k">def</span> <span class="nf">fft_upsample_1D</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">factor</span><span class="o">=</span><span class="mi">4</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Upsample 1D array using the FFT</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">n</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">n2</span> <span class="o">=</span> <span class="n">n</span><span class="o">*</span><span class="n">factor</span>
+    <span class="n">f</span>  <span class="o">=</span> <span class="n">fftshift</span><span class="p">(</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">*</span><span class="n">hanning</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">f2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n2</span><span class="p">))</span>
+    <span class="n">r0</span> <span class="o">=</span> <span class="p">(</span><span class="n">n2</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="o">-</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">0</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+    <span class="n">f2</span><span class="p">[</span><span class="n">r0</span><span class="p">:</span><span class="n">r0</span><span class="o">+</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">ifft</span><span class="p">(</span><span class="n">fftshift</span><span class="p">(</span><span class="n">f2</span><span class="p">)))</span><span class="o">*</span><span class="n">factor</span></div>
+
+<div class="viewcode-block" id="acorr_peak"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.acorr_peak">[docs]</a><span class="k">def</span> <span class="nf">acorr_peak</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">F</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Identify the first peak in an autocorrelogram at non-</span>
+<span class="sd">    zero lag. </span>
+<span class="sd">    </span>
+<span class="sd">    This routine uses FFT-based sinc() upsampling to</span>
+<span class="sd">    interpolate the location of peaks. The upsampling</span>
+<span class="sd">    factor is set by ``F``, and defaults to 6. </span>
+<span class="sd">    </span>
+<span class="sd">    If there are *no* peaks at nonzero lag, this routine</span>
+<span class="sd">    returns ``nan``.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    r: 1D np.float32</span>
+<span class="sd">        Autocorrelogram. The signal should be symmetric</span>
+<span class="sd">        around array index ``len(r)//2``.</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    F: positive int; default 6</span>
+<span class="sd">        Upsampling ratio.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    period: float</span>
+<span class="sd">        Index of first autocorrelogram peak at nonzero</span>
+<span class="sd">        lag, in units of samples of ``r``. </span>
+<span class="sd">        If there are *no* peaks at nonzero lag, this routine</span>
+<span class="sd">        returns ``nan``.</span>
+<span class="sd">    upsampled_autocorrelogram: 1D np.float32</span>
+<span class="sd">        Length ``len(r) × F`` sinc-upsampled autocorrelogram.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="n">fft_upsample_1D</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">F</span><span class="p">)</span>
+    <span class="n">peaks</span> <span class="o">=</span> <span class="n">find_peaks</span><span class="p">(</span><span class="n">r2</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">r2</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">:])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span><span class="o">/</span><span class="n">F</span><span class="p">,</span><span class="n">r2</span>
+    <span class="k">return</span> <span class="n">NaN</span><span class="p">,</span><span class="n">r2</span></div>
+    
+<div class="viewcode-block" id="acorr_trough"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.acorr_trough">[docs]</a><span class="k">def</span> <span class="nf">acorr_trough</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">F</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    sinc upsample at ×F resolution to get distance to first </span>
+<span class="sd">    *trough* (compare to ``acorr_peak()``)</span>
+<span class="sd">    </span>
+<span class="sd">    This routine uses FFT-based sinc() upsampling to</span>
+<span class="sd">    interpolate the location of peaks. The upsampling</span>
+<span class="sd">    factor is set by ``F``, and defaults to 6. </span>
+<span class="sd">    </span>
+<span class="sd">    If there are *no* troughs at nonzero lag, this </span>
+<span class="sd">    routine returns ``nan``.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    r: 1D np.float32</span>
+<span class="sd">        Autocorrelogram. The signal should be symmetric</span>
+<span class="sd">        around array index ``len(r)//2``.</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    F: positive int; default 6</span>
+<span class="sd">        Upsampling ratio.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    period: float</span>
+<span class="sd">        Index of first autocorrelogram trough at nonzero</span>
+<span class="sd">        lag, in units of samples of ``r``. </span>
+<span class="sd">        If there are *no* troughs at nonzero lag, this </span>
+<span class="sd">        routine returns ``nan``.</span>
+<span class="sd">    upsampled_autocorrelogram: 1D np.float32</span>
+<span class="sd">        Length ``len(r) × F`` sinc-upsampled autocorrelogram.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="n">fft_upsample_1D</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">F</span><span class="p">)</span>
+    <span class="n">troughs</span> <span class="o">=</span> <span class="n">find_peaks</span><span class="p">(</span><span class="o">-</span><span class="n">r2</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">r2</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">:])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">troughs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">troughs</span><span class="p">)</span><span class="o">/</span><span class="n">F</span><span class="p">,</span><span class="n">r2</span>
+    <span class="k">return</span> <span class="n">NaN</span><span class="p">,</span><span class="n">r2</span></div>
+
+<div class="viewcode-block" id="kernel_to_covariance"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.kernel_to_covariance">[docs]</a><span class="k">def</span> <span class="nf">kernel_to_covariance</span><span class="p">(</span><span class="n">kern</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Explicitly construct covariance matrix from a </span>
+<span class="sd">    convolution kernel (Generally we shouldn&#39;t be doing this</span>
+<span class="sd">    for large problems; it&#39;s only used to verify code</span>
+<span class="sd">    on smaller problems as a sanity check)</span>
+<span class="sd">    </span>
+<span class="sd">    Covariance is a doubly block-circulant matrix Use </span>
+<span class="sd">    np.circulant to build locks, then copy with shift to </span>
+<span class="sd">    make 2D block-circulant matrix.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">argmax</span><span class="p">(</span><span class="n">kern</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">kern</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">circulant</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">kern</span><span class="p">])</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">roll</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">i</span><span class="o">*</span><span class="n">L</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="repair_small_eigenvalues"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.repair_small_eigenvalues">[docs]</a><span class="k">def</span> <span class="nf">repair_small_eigenvalues</span><span class="p">(</span><span class="n">kern</span><span class="p">,</span><span class="n">mineig</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Kernel must be positive; fix small eigenvalues</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">assert</span><span class="p">(</span><span class="n">argmax</span><span class="p">(</span><span class="n">kern</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">kfft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fft2</span><span class="p">(</span><span class="n">kern</span><span class="p">))</span>
+    <span class="n">keig</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">kfft</span><span class="p">)</span>
+    <span class="n">υmin</span> <span class="o">=</span> <span class="n">mineig</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">keig</span><span class="p">)</span>
+    <span class="n">zero</span> <span class="o">=</span> <span class="n">keig</span><span class="o">&lt;</span><span class="n">υmin</span>
+    <span class="n">kfft</span><span class="p">[</span><span class="n">zero</span><span class="p">]</span> <span class="o">=</span> <span class="n">υmin</span>
+    <span class="n">kern</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">ifft2</span><span class="p">(</span><span class="n">maximum</span><span class="p">(</span><span class="n">υmin</span><span class="p">,</span><span class="n">kfft</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">kern</span></div>
+
+<div class="viewcode-block" id="solveGP"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.solveGP">[docs]</a><span class="k">def</span> <span class="nf">solveGP</span><span class="p">(</span><span class="n">kern</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">τe</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span><span class="n">reg</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Minimum residual solver is fast</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">kern</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">kern</span> <span class="o">=</span> <span class="n">repair_small_eigenvalues</span><span class="p">(</span><span class="n">kern</span><span class="p">,</span><span class="n">reg</span><span class="p">)</span>
+    <span class="n">knft</span> <span class="o">=</span> <span class="n">fft2</span><span class="p">(</span><span class="n">kern</span><span class="p">)</span>
+    <span class="n">τy</span>   <span class="o">=</span> <span class="n">τe</span><span class="o">*</span><span class="n">zeromean</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">mask</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">Στy</span>  <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">τy</span><span class="p">,</span><span class="n">knft</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">Hv</span>   <span class="o">=</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span><span class="n">conv</span><span class="p">(</span><span class="n">τe</span><span class="o">*</span><span class="n">v</span><span class="p">,</span><span class="n">knft</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="o">+</span> <span class="n">v</span>
+    <span class="n">ΣτεI</span> <span class="o">=</span> <span class="n">LinearOperator</span><span class="p">((</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span><span class="n">Hv</span><span class="p">,</span><span class="n">Hv</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">μ</span>    <span class="o">=</span> <span class="n">minres</span><span class="p">(</span><span class="n">ΣτεI</span><span class="p">,</span><span class="n">Στy</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">μ</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span> <span class="o">+</span> <span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="n">mask</span><span class="o">.</span><span class="n">ravel</span><span class="p">()])</span></div>
+
+<div class="viewcode-block" id="mirrorpad"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.mirrorpad">[docs]</a><span class="k">def</span> <span class="nf">mirrorpad</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">pad</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Reflect boundary for convolution.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">y</span><span class="p">[:</span><span class="n">pad</span><span class="p">,</span> <span class="p">:]</span><span class="o">=</span><span class="n">flipud</span><span class="p">(</span><span class="n">y</span><span class="p">[</span> <span class="n">pad</span><span class="p">:</span> <span class="n">pad</span><span class="o">*</span><span class="mi">2</span><span class="p">,:])</span>
+    <span class="n">y</span><span class="p">[:,</span> <span class="p">:</span><span class="n">pad</span><span class="p">]</span><span class="o">=</span><span class="n">fliplr</span><span class="p">(</span><span class="n">y</span><span class="p">[:,</span> <span class="n">pad</span><span class="p">:</span> <span class="n">pad</span><span class="o">*</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="n">pad</span><span class="p">:,:]</span><span class="o">=</span><span class="n">flipud</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="n">pad</span><span class="o">*</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">,:])</span>
+    <span class="n">y</span><span class="p">[:,</span><span class="o">-</span><span class="n">pad</span><span class="p">:]</span><span class="o">=</span><span class="n">fliplr</span><span class="p">(</span><span class="n">y</span><span class="p">[:,</span><span class="o">-</span><span class="n">pad</span><span class="o">*</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="n">pad</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">y</span></div>
+
+<div class="viewcode-block" id="radial_kernel"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.radial_kernel">[docs]</a><span class="k">def</span> <span class="nf">radial_kernel</span><span class="p">(</span><span class="n">rk</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Make radially symmetric 2D kernel from 1D radial kernel</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    as: 1D np.array</span>
+<span class="sd">        1D kernel that will be used to generate radially</span>
+<span class="sd">        symmetric 2D kernel.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">rk</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">coords</span> <span class="o">=</span> <span class="n">zgrid</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">r</span>    <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
+    <span class="n">kern</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span><span class="p">),</span><span class="n">rk</span><span class="p">[</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span><span class="p">:],</span><span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">bounds_error</span><span class="o">=</span><span class="mi">0</span><span class="p">)(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fftshift</span><span class="p">(</span><span class="n">kern</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="zerolag"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.zerolag">[docs]</a><span class="k">def</span> <span class="nf">zerolag</span><span class="p">(</span><span class="n">ac</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate true zero-lag variance via quadratic </span>
+<span class="sd">    interpolation.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    as: 1D np.array</span>
+<span class="sd">        Autocorrelation</span>
+<span class="sd">    r: int</span>
+<span class="sd">        Samples in the vicinity of the zero-lag correlation</span>
+<span class="sd">        to mask out and replace with a quadratic </span>
+<span class="sd">        interpolation.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">ac</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">ac</span><span class="p">[</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span><span class="o">-</span><span class="n">r</span><span class="p">:</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">r</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">polyfit</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">v</span><span class="o">!=</span><span class="n">r</span><span class="p">],</span><span class="n">z</span><span class="p">[</span><span class="n">v</span><span class="o">!=</span><span class="n">r</span><span class="p">],</span><span class="mi">2</span><span class="p">)</span><span class="nd">@array</span><span class="p">([</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="op"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.op">[docs]</a><span class="k">def</span> <span class="nf">op</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="n">Av</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Construct a symmetric linear operator from a function </span>
+<span class="sd">    which computes the product of said operator with a </span>
+<span class="sd">    vector. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    M: int</span>
+<span class="sd">        Dimension of operator</span>
+<span class="sd">    Av: f:R^M→R^M </span>
+<span class="sd">        linear operator acting on length M vectors</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">LinearOperator</span><span class="p">((</span><span class="n">M</span><span class="p">,)</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="n">Av</span><span class="p">,</span><span class="n">Av</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cop"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.cop">[docs]</a><span class="k">def</span> <span class="nf">cop</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Construct a convolution operator</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    k: array; convolution kernel Fourier transform. </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">prod</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">op</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span><span class="n">conv</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="diagop"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.diagop">[docs]</a><span class="k">def</span> <span class="nf">diagop</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Construct a diagonal operator</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    d: vector; diagonal of matrix operator</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">op</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span><span class="n">v</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">*</span><span class="n">d</span><span class="p">)</span></div>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">------------------------------------------------------------</span>
+<span class="sd">Routines for working with the Hartley transform. </span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="dx_op"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.dx_op">[docs]</a><span class="k">def</span> <span class="nf">dx_op</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    2D finite difference in the 1st coordinate</span>
+<span class="sd">    {-.5,0,.5}</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    L: positive integer</span>
+<span class="sd">        The size of the 2D L×L grid</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    dx: shape (L,L) float32 array</span>
+<span class="sd">        Discrete derivative in the x (column) direction.</span>
+<span class="sd">        Use with e.g. FFT convolve.</span>
+<span class="sd">        Transpose to get dy.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">dx</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">=</span> <span class="mf">.5</span>
+    <span class="n">dx</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=-</span><span class="mf">.5</span>
+    <span class="k">return</span> <span class="n">dx</span></div>
+
+<div class="viewcode-block" id="hessian_2D"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.hessian_2D">[docs]</a><span class="k">def</span> <span class="nf">hessian_2D</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Get Hessian at all points</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    q: shape (L,L) ndarray</span>
+<span class="sd">        2D spatial function for which to compute Hessian</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    hessian: shape (L,L,2,2)</span>
+<span class="sd">        2×2 Hessian in (x,y) for all points in L×L grid q</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">dx</span>  <span class="o">=</span> <span class="n">dx_op</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">fx</span>  <span class="o">=</span> <span class="n">fft2</span><span class="p">(</span><span class="n">dx</span><span class="p">)</span>
+    <span class="n">fy</span>  <span class="o">=</span> <span class="n">fft2</span><span class="p">(</span><span class="n">dx</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">dxx</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">fx</span><span class="o">*</span><span class="n">fx</span><span class="p">)</span>
+    <span class="n">dxy</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">fy</span><span class="o">*</span><span class="n">fx</span><span class="p">)</span>
+    <span class="n">dyy</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">fy</span><span class="o">*</span><span class="n">fy</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">array</span><span class="p">([[</span><span class="n">dxx</span><span class="p">,</span><span class="n">dxy</span><span class="p">],[</span><span class="n">dxy</span><span class="p">,</span><span class="n">dyy</span><span class="p">]])</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="h2f_2d_truncated"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.h2f_2d_truncated">[docs]</a><span class="k">def</span> <span class="nf">h2f_2d_truncated</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">use2d</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Convert from 2D truncated low-rank Hartley </span>
+<span class="sd">    representation to full-rank Fourier representation.</span>
+<span class="sd">    </span>
+<span class="sd">    The Hartley transform is Re[F(x)] + Im[F(x)] where F is</span>
+<span class="sd">    the unitary Fourier transform. In the 2D FT of real-</span>
+<span class="sd">    valued signals, nonzero frequency components have</span>
+<span class="sd">    rotational symmetry. The real components equal</span>
+<span class="sd">    themselves after a 180 degree rotation of the</span>
+<span class="sd">    coefficient matrix. The imaginary components equal</span>
+<span class="sd">    their negative after a 180 degree rotation. From this</span>
+<span class="sd">    we can recover Fourier coefficients from the Hartley</span>
+<span class="sd">    transform. The components with zero frequency behave as</span>
+<span class="sd">    the 1D fourier transform.</span>
+<span class="sd">    </span>
+<span class="sd">    Or just</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    u: shape (R,...) float32 ndarray</span>
+<span class="sd">        Array where the first dimension is the vector of </span>
+<span class="sd">        low-rank Hartley transform coefficients; Operation</span>
+<span class="sd">        is broadcast over remaining dimensions</span>
+<span class="sd">    L: positive int</span>
+<span class="sd">        The size of the original 2D L×L spatial grid</span>
+<span class="sd">    use2d: shape (L,L) boolean ndarray</span>
+<span class="sd">        Indicator mask of which of 2D Fourier/Hartley </span>
+<span class="sd">        coefficients were retained in the low-dimensional </span>
+<span class="sd">        representation. Get this from model.use2d</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fx.T: shape (L,L,...) complex64 ndarray</span>
+<span class="sd">        Low-rank Fourier-space representation of u.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+        
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">+</span><span class="n">u</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">f1</span><span class="p">[</span><span class="n">use2d</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
+    <span class="n">f2</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="n">f1</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">f2</span><span class="p">[</span><span class="mi">0</span> <span class="p">,</span><span class="mi">0</span> <span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">f1</span><span class="p">[</span><span class="mi">0</span> <span class="p">,</span><span class="mi">0</span> <span class="p">,</span><span class="o">...</span><span class="p">]</span>
+    <span class="n">f2</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span><span class="mi">1</span><span class="p">:,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">f1</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span><span class="mi">1</span><span class="p">:,</span><span class="o">...</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">,::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>
+    <span class="n">f2</span><span class="p">[</span><span class="mi">0</span> <span class="p">,</span><span class="mi">1</span><span class="p">:,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">f1</span><span class="p">[</span><span class="mi">0</span> <span class="p">,</span><span class="mi">1</span><span class="p">:,</span><span class="o">...</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>
+    <span class="n">f2</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span><span class="mi">0</span> <span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">f1</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span><span class="mi">0</span> <span class="p">,</span><span class="o">...</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>
+    <span class="n">u2</span> <span class="o">=</span> <span class="n">f2</span><span class="p">[</span><span class="n">use2d</span><span class="p">,</span><span class="o">...</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">u</span><span class="o">+</span><span class="n">u2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="p">(</span><span class="n">u</span><span class="o">-</span><span class="n">u2</span><span class="p">))</span><span class="o">*</span><span class="mf">0.5</span></div>
+    <span class="c1">#fx = ((f1+f2) + 1j*(f1-f2))*.5</span>
+    <span class="c1">#return fx[use2d,...]</span>
+
+<div class="viewcode-block" id="f2h_2d_truncated"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.f2h_2d_truncated">[docs]</a><span class="k">def</span> <span class="nf">f2h_2d_truncated</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">use2d</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Convert from full 2D spatial fourier space to truncated</span>
+<span class="sd">    low-D Hartley space representation. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x: shape (L,L,...) complex64 ndarray</span>
+<span class="sd">        Low-D Fourier coefficients</span>
+<span class="sd">    use2d: shape (L,L) boolean ndarray</span>
+<span class="sd">        Indicator mask of which of 2D Fourier/Hartley </span>
+<span class="sd">        coefficients were retained in the low-dimensional </span>
+<span class="sd">        representation. Get this from model.use2d</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    xh: shape (R,...) float32 ndarray</span>
+<span class="sd">        Low-D (retaining R components) Hartley transform.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1">#x = x[use2d,...]</span>
+    <span class="k">return</span> <span class="n">float32</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">imag</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="h_conv2d_truncated"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.h_conv2d_truncated">[docs]</a><span class="k">def</span> <span class="nf">h_conv2d_truncated</span><span class="p">(</span><span class="n">hk</span><span class="p">,</span><span class="n">hx</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">use2d</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Apply a 2D FFT convolution on data (and kernel) packed </span>
+<span class="sd">    as a low-rank (R) Hartley transform (float32).</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hk: shape (R,) float32 ndarray</span>
+<span class="sd">        Truncated (R&lt;L²) 2D Hartley transform of the kernel. </span>
+<span class="sd">    hx: shape (R,...) float32 ndarray</span>
+<span class="sd">        Truncated (R&lt;L²) 2D Hartley transform of the data.</span>
+<span class="sd">        Operation is broadcast over trailing dimensions.</span>
+<span class="sd">    L: positive int</span>
+<span class="sd">        The size of the original 2D L×L spatial grid</span>
+<span class="sd">    use2d: shape (L,L) boolean ndarray</span>
+<span class="sd">        Indicator mask of which of 2D Fourier/Hartley </span>
+<span class="sd">        coefficients were retained in the low-dimensional </span>
+<span class="sd">        representation. Get this from model.use2d</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    shape (R,...) float32 ndarray</span>
+<span class="sd">        Convolved result low-rank Hartley representation.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">fk</span> <span class="o">=</span> <span class="n">h2f_2d_truncated</span><span class="p">(</span><span class="n">hk</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">use2d</span><span class="p">)</span>
+    <span class="n">fx</span> <span class="o">=</span> <span class="n">h2f_2d_truncated</span><span class="p">(</span><span class="n">hx</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">use2d</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">f2h_2d_truncated</span><span class="p">((</span><span class="n">fk</span><span class="o">.</span><span class="n">T</span><span class="o">*</span><span class="n">fx</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">use2d</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="pdist"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.pdist">[docs]</a><span class="k">def</span> <span class="nf">pdist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Pairwise distances between two lists of scalars</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">*</span><span class="n">a</span><span class="p">])</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">*</span><span class="n">b</span><span class="p">])</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">-</span><span class="n">b</span><span class="p">[</span><span class="kc">None</span><span class="p">,:])</span></div>
+
+
+<div class="viewcode-block" id="ensure_dir"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.ensure_dir">[docs]</a><span class="k">def</span> <span class="nf">ensure_dir</span><span class="p">(</span><span class="n">dirname</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ensure that a named directory exists; if it does not,</span>
+<span class="sd">    attempt to create it.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dirname : str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirname</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EEXIST</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="make_rebroadcast_slice"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.make_rebroadcast_slice">[docs]</a><span class="k">def</span> <span class="nf">make_rebroadcast_slice</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">naxes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;x.shape=&#39;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;naxes=&#39;</span><span class="p">,</span><span class="n">naxes</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">axis</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">axis</span><span class="o">=</span><span class="n">naxes</span><span class="o">+</span><span class="n">axis</span>
+    <span class="k">if</span> <span class="n">axis</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">theslice</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="bp">Ellipsis</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">axis</span><span class="o">==</span><span class="n">naxes</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">theslice</span> <span class="o">=</span> <span class="p">(</span><span class="bp">Ellipsis</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">axis</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">naxes</span> <span class="o">-</span> <span class="n">a</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">theslice</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">s_</span><span class="p">[:],)</span><span class="o">*</span><span class="n">a</span> <span class="o">+</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">s_</span><span class="p">[:],)</span><span class="o">*</span><span class="n">b</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;axis=&#39;</span><span class="p">,</span><span class="n">axis</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">theslice</span> </div>
+
+
+<div class="viewcode-block" id="zscore"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.zscore">[docs]</a><span class="k">def</span> <span class="nf">zscore</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">regularization</span><span class="o">=</span><span class="mf">1e-30</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">ignore_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Z-scores data, defaults to the first axis.</span>
+<span class="sd">    A regularization factor is added to the standard </span>
+<span class="sd">    deviation to preven numerical instability when the </span>
+<span class="sd">    standard deviation is extremely small. The default </span>
+<span class="sd">    regularization is 1e-30.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    x:</span>
+<span class="sd">        Array-like real-valued signal.</span>
+<span class="sd">    axis: </span>
+<span class="sd">        Axis to zscore; default is 0.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    x: np.ndarray</span>
+<span class="sd">        (x-mean(x))/std(x)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">zeromean</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span><span class="n">ignore_nan</span><span class="o">=</span><span class="n">ignore_nan</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="n">theslice</span> <span class="o">=</span> <span class="n">make_rebroadcast_slice</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+    <span class="n">ss</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanstd</span> <span class="k">if</span> <span class="n">ignore_nan</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">)(</span><span class="n">x</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span><span class="o">+</span><span class="n">regularization</span></div>
+
+
+<div class="viewcode-block" id="unitscale"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.unitscale">[docs]</a><span class="k">def</span> <span class="nf">unitscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Rescales ``signal`` so that its minimum is 0 and its maximum is 1.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    signal (np.array): real-valued signal</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    signal: np.array</span>
+<span class="sd">        Rescaled signal-min(signal)/(max(signal)-min(signal))</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">signal</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">axis</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Old behavior</span>
+        <span class="n">signal</span><span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+        <span class="n">signal</span><span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">signal</span>
+    <span class="c1"># New behavior</span>
+    <span class="n">theslice</span> <span class="o">=</span> <span class="n">make_rebroadcast_slice</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
+    <span class="n">signal</span><span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)[</span><span class="n">theslice</span><span class="p">]</span>
+    <span class="n">signal</span><span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)[</span><span class="n">theslice</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">signal</span></div>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">------------------------------------------------------------</span>
+<span class="sd">Routines for working with 2D points</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="p2c"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.p2c">[docs]</a><span class="k">def</span> <span class="nf">p2c</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Convert a point in terms of a length-2 iterable into </span>
+<span class="sd">    a complex number.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p: iterable</span>
+<span class="sd">        Iterable with two elements for ``x`` and ``y``</span>
+<span class="sd">        coordinates. In turn, ``x`` and ``y`` should have</span>
+<span class="sd">        the same shape. </span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    z: np.complex64</span>
+<span class="sd">        ``z = x + 1j*y``</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">*</span><span class="n">p</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">iscomplex</span><span class="p">(</span><span class="n">p</span><span class="p">)):</span> <span class="k">return</span> <span class="n">p</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">int32</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span>
+            <span class="s1">&#39;``p2c`` expected an array with at least one axis&#39;</span>
+            <span class="s1">&#39; length 2, corresponding to the ``x`` and ``y``&#39;</span>
+            <span class="s1">&#39; coordinates. Instead, received an array with&#39;</span>
+            <span class="s1">&#39; shape </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">,))</span>
+
+    <span class="n">which</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">int32</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">which</span><span class="p">,</span>
+        <span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">({</span><span class="o">*</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">))}</span><span class="o">-</span><span class="p">{</span><span class="n">which</span><span class="p">})))</span>
+    <span class="k">return</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="c2p"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.c2p">[docs]</a><span class="k">def</span> <span class="nf">c2p</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">    Convert complex point to tuple</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">complex64</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">z</span><span class="p">)):</span>
+        <span class="n">z</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">z</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">z</span><span class="o">.</span><span class="n">real</span><span class="p">,</span><span class="n">z</span><span class="o">.</span><span class="n">imag</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="to_xypoint"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.to_xypoint">[docs]</a><span class="k">def</span> <span class="nf">to_xypoint</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Convert possible complex (x,y) point intoformation</span>
+<span class="sd">    into float32 (x,y) points.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    z: np.complex64</span>
+<span class="sd">        Array of (x,y) points encoded as x+iy complex64</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    np.float32</span>
+<span class="sd">        (x,y) poiny array with shape 2 × z.shape</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">iscomplex</span><span class="p">(</span><span class="n">z</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">complex64</span><span class="p">([</span><span class="n">z</span><span class="o">.</span><span class="n">real</span><span class="p">,</span><span class="n">z</span><span class="o">.</span><span class="n">imag</span><span class="p">])</span>
+    <span class="c1"># Possibly already a point? </span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;This looks like a scalar, not a point&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">z</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">int32</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span><span class="o">!=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="p">(</span><span class="s1">&#39;Expected exactly one length-2 axis for (x,y)&#39;</span><span class="o">+</span>
+             <span class="s1">&#39;points, got shape </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">,))</span>
+    <span class="n">which</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">int32</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">other</span> <span class="o">=</span> <span class="p">{</span><span class="o">*</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">shape</span><span class="p">))}</span><span class="o">-</span><span class="p">{</span><span class="n">which</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">z</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">which</span><span class="p">,</span><span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">other</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="closest"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.closest">[docs]</a><span class="k">def</span> <span class="nf">closest</span><span class="p">(</span><span class="n">point</span><span class="p">,</span><span class="n">otherpoints</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="n">inf</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Find nearest (x,y) point witin a collection of </span>
+<span class="sd">    other points, with maximum distance ``radius``</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    point: np.float32 with shape 2</span>
+<span class="sd">        (x,y) point to match</span>
+<span class="sd">    otherpoints: np.float32 with shape 2×NPOINTS</span>
+<span class="sd">        List of (x,y) points to compare</span>
+<span class="sd">    radius: float</span>
+<span class="sd">        Maximum allowed distance</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    imatch: int</span>
+<span class="sd">        index into otherpoints of the match, or None</span>
+<span class="sd">        if there is no match within radius</span>
+<span class="sd">    xymatch: np.float32 with shape 2</span>
+<span class="sd">        (x,y) coordinates of closestmatch</span>
+<span class="sd">    distance: float</span>
+<span class="sd">        distance to match, or NaN if no match</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">radius</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Error, radius should be positive&#39;</span><span class="p">)</span>
+    <span class="n">point</span>       <span class="o">=</span> <span class="n">to_xypoint</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+    <span class="n">otherpoints</span> <span class="o">=</span> <span class="n">to_xypoint</span><span class="p">(</span><span class="n">otherpoints</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">point</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="p">(</span><span class="mi">2</span><span class="p">,):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Expected (x,y) point as 1st argument&#39;</span><span class="p">)</span>
+    <span class="n">otherpoints</span> <span class="o">=</span> <span class="n">otherpoints</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+        <span class="mi">2</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">otherpoints</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+    
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">point</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">otherpoints</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">nearest</span>   <span class="o">=</span> <span class="n">argmin</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
+    <span class="n">distance</span>  <span class="o">=</span> <span class="n">distances</span><span class="p">[</span><span class="n">nearest</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">distance</span><span class="o">&lt;=</span><span class="n">radius</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">nearest</span><span class="p">,</span> <span class="n">otherpoints</span><span class="p">[:,</span><span class="n">nearest</span><span class="p">],</span> <span class="n">distance</span>
+    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span><span class="n">full</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">NaN</span><span class="p">,</span><span class="s1">&#39;f&#39;</span><span class="p">),</span><span class="n">NaN</span></div>
+
+<div class="viewcode-block" id="paired_distances"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.paired_distances">[docs]</a><span class="k">def</span> <span class="nf">paired_distances</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate pairwise distances between two sets of </span>
+<span class="sd">    (x,y) points encoded as x+iy complex numbers</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    z1: 1D np.complex64 </span>
+<span class="sd">        List of x+iy points</span>
+<span class="sd">    z2: 1D np.complex64 </span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    distance: np.float32 with shape z1.shape+z2.shape</span>
+<span class="sd">        Array of paired distances</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">z1</span><span class="p">,</span><span class="n">z2</span> <span class="o">=</span> <span class="n">p2c</span><span class="p">(</span><span class="n">z1</span><span class="p">),</span><span class="n">p2c</span><span class="p">(</span><span class="n">z2</span><span class="p">)</span>
+    <span class="n">s1</span><span class="p">,</span><span class="n">s2</span> <span class="o">=</span> <span class="n">z1</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">z2</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">z1</span><span class="p">,</span><span class="n">z2</span> <span class="o">=</span> <span class="n">z1</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span><span class="n">z2</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">distance</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">z1</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">-</span><span class="n">z2</span><span class="p">[</span><span class="kc">None</span><span class="p">,:])</span>
+    <span class="k">return</span> <span class="n">distance</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">s1</span><span class="o">+</span><span class="n">s2</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="pair_neighbors"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.pair_neighbors">[docs]</a><span class="k">def</span> <span class="nf">pair_neighbors</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="n">inf</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    z1: 1D np.complex64 </span>
+<span class="sd">        List of x+iy points</span>
+<span class="sd">    z2: 1D np.complex64 </span>
+<span class="sd">        List of x+iy points</span>
+<span class="sd">    radius: float, default ``inf``</span>
+<span class="sd">        Maximum connection distance</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    edges: NPOINTS × 2 np.int32</span>
+<span class="sd">        Indecies (i,j) into point lists (z1,z2) of pairs</span>
+<span class="sd">    points: NPOINTS × 2 np.complex64</span>
+<span class="sd">        x+iy points from (z1,x2) pairs</span>
+<span class="sd">    delta: NPOINTS np.float32:</span>
+<span class="sd">        List of distances for each pair</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">radius</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Radius should be positive&#39;</span><span class="p">)</span>
+        
+    <span class="n">z1</span><span class="p">,</span><span class="n">z2</span> <span class="o">=</span> <span class="n">p2c</span><span class="p">(</span><span class="n">z1</span><span class="p">),</span><span class="n">p2c</span><span class="p">(</span><span class="n">z2</span><span class="p">)</span>
+    <span class="n">n1</span><span class="p">,</span><span class="n">n2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">z1</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">z2</span><span class="p">)</span>
+    <span class="n">distance</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">z1</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">-</span><span class="n">z2</span><span class="p">[</span><span class="kc">None</span><span class="p">,:])</span>
+    <span class="n">unused1</span><span class="p">,</span><span class="n">unused2</span> <span class="o">=</span> <span class="p">{</span><span class="o">*</span><span class="n">arange</span><span class="p">(</span><span class="n">n1</span><span class="p">)},{</span><span class="o">*</span><span class="n">arange</span><span class="p">(</span><span class="n">n2</span><span class="p">)}</span>
+    <span class="n">paired</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">unused1</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">unused2</span><span class="p">):</span>
+        <span class="c1"># useID → pointID</span>
+        <span class="n">ix1</span> <span class="o">=</span> <span class="n">int32</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">unused1</span><span class="p">)))</span>
+        <span class="n">ix2</span> <span class="o">=</span> <span class="n">int32</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">unused2</span><span class="p">)))</span>
+        <span class="c1"># useID → z</span>
+        <span class="n">zz1</span> <span class="o">=</span> <span class="n">z1</span><span class="p">[</span><span class="n">ix1</span><span class="p">]</span>
+        <span class="n">zz2</span> <span class="o">=</span> <span class="n">z2</span><span class="p">[</span><span class="n">ix2</span><span class="p">]</span>
+        <span class="c1"># useID → nearest useID</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">distance</span><span class="p">[</span><span class="n">ix1</span><span class="p">,:][:,</span><span class="n">ix2</span><span class="p">]</span>
+        <span class="n">neighbors1to2</span> <span class="o">=</span> <span class="n">argmin</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">neighbors2to1</span> <span class="o">=</span> <span class="n">argmin</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># </span>
+        <span class="n">ok1</span>   <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ix1</span><span class="p">))</span> <span class="o">==</span> <span class="n">neighbors2to1</span><span class="p">[</span><span class="n">neighbors1to2</span><span class="p">]</span>
+        <span class="n">ok2</span>   <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ix2</span><span class="p">))</span> <span class="o">==</span> <span class="n">neighbors1to2</span><span class="p">[</span><span class="n">neighbors2to1</span><span class="p">]</span>
+        <span class="n">e1to2</span> <span class="o">=</span> <span class="p">{</span><span class="o">*</span><span class="nb">zip</span><span class="p">(</span><span class="n">ix1</span><span class="p">[</span><span class="n">ok1</span><span class="p">],</span><span class="n">ix2</span><span class="p">[</span><span class="n">neighbors1to2</span><span class="p">[</span><span class="n">ok1</span><span class="p">]])}</span>
+        <span class="n">e2to1</span> <span class="o">=</span> <span class="p">{</span><span class="o">*</span><span class="nb">zip</span><span class="p">(</span><span class="n">ix1</span><span class="p">[</span><span class="n">neighbors2to1</span><span class="p">[</span><span class="n">ok2</span><span class="p">]],</span><span class="n">ix2</span><span class="p">[</span><span class="n">ok2</span><span class="p">])}</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">e1to2</span><span class="o">-</span><span class="n">e2to1</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span>
+        <span class="n">used1</span><span class="p">,</span><span class="n">used2</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">set</span><span class="p">,</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">e1to2</span><span class="p">))</span>
+        <span class="n">unused1</span> <span class="o">-=</span> <span class="n">used1</span>
+        <span class="n">unused2</span> <span class="o">-=</span> <span class="n">used2</span>
+        <span class="n">paired</span> <span class="o">|=</span> <span class="n">e1to2</span>
+
+    <span class="n">a</span><span class="p">,</span><span class="n">b</span>   <span class="o">=</span> <span class="n">int32</span><span class="p">([</span><span class="o">*</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">paired</span><span class="p">)])</span>
+    <span class="n">pairs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">z1</span><span class="p">[</span><span class="n">a</span><span class="p">],</span><span class="n">z2</span><span class="p">[</span><span class="n">b</span><span class="p">]])</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pairs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">pairs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">keep</span>  <span class="o">=</span> <span class="n">delta</span><span class="o">&lt;</span><span class="n">radius</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">int32</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">edges</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">keep</span><span class="p">],</span> <span class="n">pairs</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">keep</span><span class="p">],</span> <span class="n">delta</span><span class="p">[</span><span class="n">keep</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="bootstrap_in_blocks"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.bootstrap_in_blocks">[docs]</a><span class="k">def</span> <span class="nf">bootstrap_in_blocks</span><span class="p">(</span>
+    <span class="n">variables</span><span class="p">,</span>
+    <span class="n">blocklength</span><span class="p">,</span>
+    <span class="n">nsamples</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Chop dataset into blocks, then re-compose it, </span>
+<span class="sd">    sampling these blocks randomly with replacement. </span>
+<span class="sd">    </span>
+<span class="sd">    This is used to compute bootstrap confidence intervals.</span>
+<span class="sd">    </span>
+<span class="sd">    If ``blocklength`` doesn&#39;t evenly divide the number of </span>
+<span class="sd">    time samples, then we include an extra block, but </span>
+<span class="sd">    truncate the resulting timeseries to match the length</span>
+<span class="sd">    of the original data. </span>
+<span class="sd">    </span>
+<span class="sd">    This casts all ``variables`` to ``np.float32``.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    variables: list of np.float32</span>
+<span class="sd">        List of arrays. </span>
+<span class="sd">        The first dimension of each array is time samples </span>
+<span class="sd">        and should be the same length for all variables.</span>
+<span class="sd">    blocklength: int</span>
+<span class="sd">        Length of blocks for block-bootstrap-resample</span>
+<span class="sd">        </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    nsamples: positive int; default 1</span>
+<span class="sd">        Number of bootstrap samples to generate. </span>
+<span class="sd">    replace: boolean; default True</span>
+<span class="sd">        Whether to sample with or without replacement.</span>
+<span class="sd">        Setting this to false implements a shuffle test,</span>
+<span class="sd">        rather than a bootstrap. </span>
+<span class="sd">    seed: int or None; default None</span>
+<span class="sd">        If not ``None``, use ``seed`` to set the state of </span>
+<span class="sd">        ``np.random``</span>
+<span class="sd">        If ``None``, continue with current state.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    result: list of np.float32</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># Validate arguments</span>
+    <span class="n">blocklength</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">blocklength</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">blocklength</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span>
+            <span class="s1">&#39;Block length should be &gt;1, got </span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="o">%</span><span class="n">blocklength</span><span class="p">)</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">]</span>
+    <span class="n">ntimes</span>    <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">}</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">ntimes</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span>
+        <span class="s1">&#39;Expected all variables to have the same shape, got&#39;</span>
+        <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="p">[</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">variables</span><span class="p">)])</span>
+    <span class="n">ntimes</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">ntimes</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">seed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+            
+    <span class="k">if</span> <span class="n">replace</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        If sampling with replacement, we draw an extra</span>
+<span class="sd">        sample then truncate.</span>
+<span class="sd">        If blocklen doesn&#39;t evenly divide ntimes, the</span>
+<span class="sd">        final partial block is skipped. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># Separate data into blocks</span>
+        <span class="n">nblocks</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ntimes</span><span class="o">//</span><span class="n">blocklength</span><span class="p">)</span>
+        <span class="n">blocks</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nblocks</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nblocks</span><span class="p">):</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">blocklength</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">+</span><span class="n">blocklength</span>
+            <span class="n">blocks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="n">a</span><span class="p">:</span><span class="n">b</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">]</span>
+        <span class="c1"># Re-sample with replacement</span>
+        <span class="k">def</span> <span class="nf">sample</span><span class="p">():</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nblocks</span><span class="p">),</span>
+                <span class="n">nblocks</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">replace</span><span class="o">=</span><span class="n">replace</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[:</span><span class="n">ntimes</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> 
+                    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">blocks</span><span class="p">[</span><span class="n">p</span><span class="p">])]</span>
+    
+    <span class="k">else</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        If permuting (sampling without replacement), </span>
+<span class="sd">        we leave the final partial block and shuffle</span>
+<span class="sd">        it. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># Separate data into blocks</span>
+        <span class="n">nblocks</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ntimes</span><span class="o">//</span><span class="n">blocklength</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">blocks</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">nblocks</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nblocks</span><span class="p">):</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="n">blocklength</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">+</span><span class="n">blocklength</span>
+            <span class="n">blocks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="n">a</span><span class="p">:</span><span class="n">b</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">]</span>
+        <span class="c1"># Re-sample with replacement</span>
+        <span class="k">def</span> <span class="nf">sample</span><span class="p">():</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nblocks</span><span class="p">),</span>
+                <span class="n">nblocks</span><span class="p">,</span>
+                <span class="n">replace</span><span class="o">=</span><span class="n">replace</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+                    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">blocks</span><span class="p">[</span><span class="n">p</span><span class="p">])]</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">sample</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsamples</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="assign_to_regions"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.assign_to_regions">[docs]</a><span class="k">def</span> <span class="nf">assign_to_regions</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span><span class="n">points</span><span class="p">,</span><span class="n">maxd</span><span class="o">=</span><span class="n">inf</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Assign 2D ``points`` to Voronoi ``regions``, returning </span>
+<span class="sd">    the indecies into ``regions`` for each point in </span>
+<span class="sd">    ``points``.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    regions: 2 × NREGIONS np.float32</span>
+<span class="sd">        (x,y) coordinates of Vornoi region centers</span>
+<span class="sd">    points: 2 × NPOINTS np.float32</span>
+<span class="sd">        (x,y) points to assign to regions</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    indecies: NPOINTS np.int32</span>
+<span class="sd">        Index into ``regions`` for each point    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">regions</span>  <span class="o">=</span> <span class="n">concatenate</span><span class="p">([[</span><span class="n">inf</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="n">j</span><span class="p">)],</span><span class="n">p2c</span><span class="p">(</span><span class="n">regions</span><span class="p">)])</span>
+    <span class="n">points</span>   <span class="o">=</span> <span class="n">p2c</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+    <span class="n">distance</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">regions</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">-</span><span class="n">points</span><span class="p">[</span><span class="kc">None</span><span class="p">,:])</span>
+    <span class="n">distance</span><span class="p">[</span><span class="n">distance</span><span class="o">&gt;</span><span class="n">maxd</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanargmin</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">matches</span><span class="o">-</span><span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="collect_in_regions"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.collect_in_regions">[docs]</a><span class="k">def</span> <span class="nf">collect_in_regions</span><span class="p">(</span>
+    <span class="n">regions</span><span class="p">,</span>
+    <span class="n">points</span><span class="p">,</span>
+    <span class="n">return_indecies</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Bin points to Voronoi regions, returning a list of</span>
+<span class="sd">    (x,y) points in each region.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    regions: 2×NREGIONS np.float32</span>
+<span class="sd">        (x,y) coordinates of Vornoi region centers</span>
+<span class="sd">    points: 2×NPOINTS np.float32</span>
+<span class="sd">        (x,y) points to assign to regions</span>
+<span class="sd">        </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    return_indecies: boolean; default False</span>
+<span class="sd">        Whether to additionally return the index</span>
+<span class="sd">        into the ``NPOINTS`` assigned to each region</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    allocated: list</span>
+<span class="sd">        Length ``NREGIONS`` list of 2 × NPOINTSINREGION</span>
+<span class="sd">        np.float32 arrays</span>
+<span class="sd">    indecies: list</span>
+<span class="sd">        **Returned only if ``return_indecies=True``;**</span>
+<span class="sd">        Length ``NREGIONS`` list of NPOINTSINREGION</span>
+<span class="sd">        np.int32 arrays, each containing the indecies </span>
+<span class="sd">        into the length-``NPOINTS`` array assigned to</span>
+<span class="sd">        each region in ``regions``.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">assign_to_regions</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span><span class="n">points</span><span class="p">)</span>
+    <span class="n">assigned</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">points</span><span class="p">[:,</span><span class="n">i</span><span class="o">==</span><span class="n">j</span><span class="p">]</span> 
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">regions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="k">if</span> <span class="n">return_indecies</span><span class="p">:</span>
+        <span class="n">indecies</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="n">j</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">regions</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="k">return</span> <span class="n">assigned</span><span class="p">,</span> <span class="n">indecies</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">assigned</span></div>
+
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+<div class="viewcode-block" id="gaussian_from_points"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.gaussian_from_points">[docs]</a><span class="k">def</span> <span class="nf">gaussian_from_points</span><span class="p">(</span><span class="n">points</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Get the mean and (sample) covariance of a point cloud. </span>
+<span class="sd">    </span>
+<span class="sd">    Note: we suppress warnings here because returning NaNs</span>
+<span class="sd">    for an empty point set is entirely reasonable, and </span>
+<span class="sd">    simplifies code elsewhere. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    points: NDIM × NPOINTS np.float32</span>
+<span class="sd">        Point data.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    μ: NDIM np.float32</span>
+<span class="sd">        Mean</span>
+<span class="sd">    Σ: NDIM × NDIM np.float32</span>
+<span class="sd">        Sample covariance</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+            <span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;invalid value encountered in divide&#39;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+            <span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;Mean of empty slice.&#39;</span><span class="p">)</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="n">ndim</span><span class="p">,</span> <span class="n">npoints</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">μ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">points</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">Δ</span> <span class="o">=</span> <span class="n">points</span> <span class="o">-</span> <span class="n">μ</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span>
+        <span class="n">Σ</span> <span class="o">=</span> <span class="p">(</span><span class="n">Δ</span><span class="nd">@Δ</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">npoints</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">μ</span><span class="p">,</span><span class="n">Σ</span></div>
+
+
+<span class="kn">import</span> <span class="nn">lgcpspatial.plot</span>
+<div class="viewcode-block" id="collect_gaussians"><a class="viewcode-back" href="../../lgcpspatial.util.html#lgcpspatial.util.collect_gaussians">[docs]</a><span class="k">def</span> <span class="nf">collect_gaussians</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Return the mean and covariance of points within </span>
+<span class="sd">    each Voronoi region. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    regions: 2×NREGIONS np.float32</span>
+<span class="sd">        (x,y) coordinates of Vornoi region centers</span>
+<span class="sd">    points: 2×NPOINTS np.float32</span>
+<span class="sd">        (x,y) points to assign to regions</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    means: NFIELDS×2 np.float32</span>
+<span class="sd">    sigmas: NFIELDS×2×2 np.float32</span>
+<span class="sd">    ellipses: np.float32</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">means</span><span class="p">,</span><span class="n">sigmas</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span>
+        <span class="n">gaussian_from_points</span><span class="p">,</span>
+        <span class="n">collect_in_regions</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+    <span class="p">)])</span>
+    <span class="c1"># Collect all ellipses to plot </span>
+    <span class="n">ellipses</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">_means</span><span class="p">,</span><span class="n">_sigmas</span> <span class="o">=</span> <span class="p">[],[]</span> <span class="c1"># μ,Σ, dropping ones with NaN</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">mu</span><span class="p">,</span><span class="n">sigma</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">means</span><span class="p">,</span><span class="n">sigmas</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">sigma</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">mu</span><span class="p">)):</span>
+            <span class="c1"># Prepare covariance ellipse for plotting</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">lgcpspatial</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">covariance_crosshairs</span><span class="p">(</span>
+                <span class="n">sigma</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">p</span><span class="o">=</span><span class="mf">.95</span><span class="p">,</span>
+                <span class="n">draw_cross</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">+</span> <span class="n">mu</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span>
+            <span class="n">ellipses</span> <span class="o">+=</span><span class="p">[</span><span class="o">*</span><span class="n">z</span><span class="o">.</span><span class="n">T</span><span class="p">]</span><span class="o">+</span><span class="p">[(</span><span class="n">NaN</span><span class="p">,</span><span class="n">NaN</span><span class="p">)]</span>
+            <span class="n">_means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
+            <span class="n">_sigmas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span>
+    <span class="n">ellipses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">ellipses</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">_means</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">_sigmas</span><span class="p">),</span> <span class="n">ellipses</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lgcpspatial.estimators &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.hyperparameters.html">hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.plot.html">plot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">lgcpspatial.estimators</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for lgcpspatial.estimators</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># -*- coding: UTF-8 -*-</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">with_statement</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">nested_scopes</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">generators</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">estimators.py: Histogram and Kernel density estimators. </span>
+<span class="sd">These provide a comparison for Gaussian process methods as </span>
+<span class="sd">well as heuristic initializers.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Load matlab-like namespace and helper routines</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.util</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="estimate_period_via_autocorrelation"><a class="viewcode-back" href="../../lgcpspatial.estimators.html#lgcpspatial.estimators.estimate_period_via_autocorrelation">[docs]</a><span class="k">def</span> <span class="nf">estimate_period_via_autocorrelation</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">res</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate grid period using autocorrelation</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    N: 2D np.array</span>
+<span class="sd">        Number of visits to each location</span>
+<span class="sd">    K: 2D np.array</span>
+<span class="sd">        Number of spikes observed at each location</span>
+<span class="sd">    mask: L×L 2D np.array</span>
+<span class="sd">        boolean mask for &quot;in bounds&quot; regions to analyze</span>
+<span class="sd">    res: int</span>
+<span class="sd">        small positive integer; Upsampling resolution; </span>
+<span class="sd">        default is 5x</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    P: positive float</span>
+<span class="sd">        Estimated grid period in pixels</span>
+<span class="sd">    Δs: 1D np.array</span>
+<span class="sd">        Bin separations for upsampled radial autocorrelation</span>
+<span class="sd">    acup: 1D np.array</span>
+<span class="sd">        Upsampled radial autocorrelation</span>
+<span class="sd">    acorr2: L×L 2D np.array</span>
+<span class="sd">        2D autocorrelogram</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">N</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="n">L</span> <span class="ow">and</span> <span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;N and K should be L×L square arrays&#39;</span><span class="p">)</span>
+    <span class="n">λhat</span>   <span class="o">=</span> <span class="n">kde</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">L</span><span class="o">/</span><span class="mi">75</span><span class="p">)</span>         <span class="c1"># Small blur for initial esitmate</span>
+    <span class="n">acorr2</span> <span class="o">=</span> <span class="n">fft_acorr</span><span class="p">(</span><span class="n">λhat</span><span class="p">,</span><span class="n">mask</span><span class="p">)</span>   <span class="c1"># Get 2D autocorrelation</span>
+    <span class="n">acorrR</span> <span class="o">=</span> <span class="n">radial_average</span><span class="p">(</span><span class="n">acorr2</span><span class="p">)</span> <span class="c1"># Get radial autocorrelation</span>
+    <span class="n">P</span><span class="p">,</span><span class="n">acup</span> <span class="o">=</span> <span class="n">acorr_peak</span><span class="p">(</span><span class="n">acorrR</span><span class="p">,</span><span class="n">res</span><span class="p">)</span> <span class="c1"># Distance to first peak in bins </span>
+    <span class="n">Δs</span>     <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">L</span><span class="o">*</span><span class="n">res</span><span class="p">)</span><span class="o">-</span><span class="mf">.5</span><span class="o">/</span><span class="n">res</span> <span class="c1"># Subsampled grid spacing</span>
+    <span class="k">return</span> <span class="n">P</span><span class="p">,</span> <span class="n">Δs</span><span class="p">,</span> <span class="n">acup</span><span class="p">,</span> <span class="n">acorr2</span></div>
+
+<div class="viewcode-block" id="biased_rate"><a class="viewcode-back" href="../../lgcpspatial.estimators.html#lgcpspatial.estimators.biased_rate">[docs]</a><span class="k">def</span> <span class="nf">biased_rate</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">rho</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span><span class="n">gamma</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">    Regularized per-bin rate estimate. This divides the </span>
+<span class="sd">    spike count by the number of visits, with a small </span>
+<span class="sd">    regularization parameter to prevent division by zero. </span>
+<span class="sd">    </span>
+<span class="sd">    This estimator is not very good, and you shouldn&#39;t use </span>
+<span class="sd">    it; It&#39;s provided as a straw-man to show how much better</span>
+<span class="sd">    the other estimators are.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    N: 2D np.array</span>
+<span class="sd">        Number of visits to each location</span>
+<span class="sd">    K: 2D np.array</span>
+<span class="sd">        Number of spikes observed at each location</span>
+<span class="sd">    rho: float</span>
+<span class="sd">        Regularization: small parameter to add to N </span>
+<span class="sd">        to avoid ÷0</span>
+<span class="sd">    gamma: float</span>
+<span class="sd">        Bias parameter; defaults to 0.5</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    2D array: Regularized (biased) estimate of firing rate in each bin</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">alpha</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">alpha</span><span class="o">=</span><span class="nb">sum</span><span class="p">(</span><span class="n">K</span><span class="p">)</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">K</span><span class="o">+</span><span class="n">rho</span><span class="o">*</span><span class="n">alpha</span><span class="o">+</span><span class="n">gamma</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">rho</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="n">rho</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="kde"><a class="viewcode-back" href="../../lgcpspatial.estimators.html#lgcpspatial.estimators.kde">[docs]</a><span class="k">def</span> <span class="nf">kde</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span><span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Estimate rate using Gaussian KDE smoothing. This is </span>
+<span class="sd">    better than estimating the rate using a binned </span>
+<span class="sd">    histogram, but worse than a Gaussian-Process estimator. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    N: 2D np.array</span>
+<span class="sd">        Number of visits to each location</span>
+<span class="sd">    K: 2D np.array</span>
+<span class="sd">        Number of spikes observed at each location</span>
+<span class="sd">    sigma: float</span>
+<span class="sd">        kernel radius exp(-x²/sigma) (standard deviation </span>
+<span class="sd">        in x and y ×⎷2)</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    2D array: KDE rate estimate of firing rate in each bin</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">biased_rate</span><span class="p">(</span><span class="n">blur</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">sigma</span><span class="p">),</span><span class="n">blur</span><span class="p">(</span><span class="n">K</span><span class="p">,</span><span class="n">sigma</span><span class="p">),</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">N</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">sigma</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">blur</span><span class="p">(</span><span class="n">K</span><span class="p">,</span><span class="n">sigma</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="o">.</span><span class="n">ravel</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">biased_rate</span><span class="p">(</span><span class="n">N</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">K</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="linearGP"><a class="viewcode-back" href="../../lgcpspatial.estimators.html#lgcpspatial.estimators.linearGP">[docs]</a><span class="k">def</span> <span class="nf">linearGP</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span><span class="n">reg</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Linear Gaussian process rate map. This is a linear (not </span>
+<span class="sd">    log-linear) model.</span>
+<span class="sd">    </span>
+<span class="sd">    Error are approximated. The average firing rate of the</span>
+<span class="sd">    cell is calculated, and the per-timepoint measurement</span>
+<span class="sd">    error is assumed to equal this. Multiple visits to the</span>
+<span class="sd">    same location improve reduce measurement error</span>
+<span class="sd">    proportionaly.</span>
+<span class="sd">    </span>
+<span class="sd">    It is not recommended for inferring firing-rate maps,</span>
+<span class="sd">    but it is a fast example of GP inference on a 2D arena</span>
+<span class="sd">    which may be instructive. </span>
+<span class="sd">    </span>
+<span class="sd">    This uses the Minimum residual solver, which is fast,</span>
+<span class="sd">    and only requires a function which can compute Hessian-</span>
+<span class="sd">    vector products. This can be done quickly with circulant</span>
+<span class="sd">    (convolutional) covariance priors using the FFT. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    N: 2D np.array</span>
+<span class="sd">        Number of visits to each location</span>
+<span class="sd">    K: 2D np.array</span>
+<span class="sd">        Number of spikes observed at each location</span>
+<span class="sd">    sigma: float</span>
+<span class="sd">        kernel radius exp(-x²/sigma) (standard deviation </span>
+<span class="sd">        in x and y ×⎷2)</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    rate: 2D np.array </span>
+<span class="sd">        GP rate estimate of firing rate in each bin</span>
+<span class="sd">    kern: 2D np.array </span>
+<span class="sd">        Prior covariance kernel used for inference</span>
+<span class="sd">    y: 2D np.array </span>
+<span class="sd">        Binned rates (K/N) used as observations</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">N</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="n">L</span> <span class="ow">and</span> <span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;N and K should be L×L square arrays&#39;</span><span class="p">)</span>
+    <span class="c1"># Prepare error model for GP</span>
+    <span class="n">ε0</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">K</span><span class="p">)</span><span class="o">/</span><span class="n">mean</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="c1"># variance per measurement</span>
+    <span class="n">τe</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">/</span><span class="n">ε0</span>    <span class="c1"># precision per bin</span>
+    <span class="c1"># Build 2D kernel for the prior</span>
+    <span class="c1"># Scale kernel height to match data variance (heuristic)</span>
+    <span class="n">k1</span>   <span class="o">=</span> <span class="n">blurkernel</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">sigma</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">y</span>    <span class="o">=</span> <span class="n">nan_to_num</span><span class="p">(</span><span class="n">K</span><span class="o">/</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">kern</span> <span class="o">=</span> <span class="n">outer</span><span class="p">(</span><span class="n">k1</span><span class="p">,</span><span class="n">k1</span><span class="p">)</span><span class="o">*</span><span class="n">var</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+    <span class="n">kern</span> <span class="o">=</span> <span class="n">repair_small_eigenvalues</span><span class="p">(</span><span class="n">kern</span><span class="p">,</span><span class="n">reg</span><span class="p">)</span>
+    <span class="n">knft</span> <span class="o">=</span> <span class="n">fft2</span><span class="p">(</span><span class="n">kern</span><span class="p">)</span>
+    <span class="n">τy</span>   <span class="o">=</span> <span class="n">τe</span><span class="o">*</span><span class="n">zeromean</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">mask</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">sigmaτy</span>  <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">τy</span><span class="p">,</span><span class="n">knft</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">sigmaτεI</span> <span class="o">=</span> <span class="n">op</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span><span class="n">conv</span><span class="p">(</span><span class="n">τe</span><span class="o">*</span><span class="n">v</span><span class="p">,</span><span class="n">knft</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="o">+</span> <span class="n">v</span><span class="p">)</span>
+    <span class="n">μ</span>    <span class="o">=</span> <span class="n">minres</span><span class="p">(</span><span class="n">sigmaτεI</span><span class="p">,</span><span class="n">sigmaτy</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">μ</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span> <span class="o">+</span> <span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">]),</span> <span class="n">kern</span><span class="p">,</span> <span class="n">y</span></div>
+
+<div class="viewcode-block" id="convolutionalLinearGP"><a class="viewcode-back" href="../../lgcpspatial.estimators.html#lgcpspatial.estimators.convolutionalLinearGP">[docs]</a><span class="k">def</span> <span class="nf">convolutionalLinearGP</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span><span class="n">reg</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Special case of a linear Gaussian process (see </span>
+<span class="sd">    ``linearGP``) which can be calculated extremely quickly. </span>
+<span class="sd">    </span>
+<span class="sd">    This is not recommended for inferring firing rate maps, </span>
+<span class="sd">    but rather to provide an instructive example of how GP </span>
+<span class="sd">    inference relates to simpler KDE smoothers.</span>
+<span class="sd">    </span>
+<span class="sd">    This assumes that the measurement error is spatially </span>
+<span class="sd">    uniform. This is assumption is wrong, but the </span>
+<span class="sd">    computational simpicity and  connection to the KDE </span>
+<span class="sd">    estimate are instructive.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    N (2D np.array): Number of visits to each location</span>
+<span class="sd">    K (2D np.array): Number of spikes observed at each location</span>
+<span class="sd">    sigma (float): kernel radius exp(-x²/sigma) (standard deviation in x and y ×⎷2)</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    λcnv (2D np.array): GP rate estimate of firing rate in each bin</span>
+<span class="sd">    gft (2D np.array): Fourier transform of computed convolution kernel</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">N</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="n">L</span> <span class="ow">and</span> <span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;N and K should be L×L square arrays&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pad</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pad</span>  <span class="o">=</span> <span class="n">L</span><span class="o">*</span><span class="mi">1</span><span class="o">//</span><span class="mi">10</span>
+    <span class="n">ε0</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">K</span><span class="p">)</span><span class="o">/</span><span class="n">mean</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="c1"># variance per measurement</span>
+    <span class="n">τe</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">/</span><span class="n">ε0</span>    <span class="c1"># precision per bin</span>
+    <span class="c1"># Build 2D kernel for the prior</span>
+    <span class="c1"># Scale kernel height to match data variance (heuristic)</span>
+    <span class="n">k1</span>   <span class="o">=</span> <span class="n">blurkernel</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">sigma</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">y</span>    <span class="o">=</span> <span class="n">nan_to_num</span><span class="p">(</span><span class="n">K</span><span class="o">/</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">kern</span> <span class="o">=</span> <span class="n">outer</span><span class="p">(</span><span class="n">k1</span><span class="p">,</span><span class="n">k1</span><span class="p">)</span><span class="o">*</span><span class="n">var</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+    <span class="n">kern</span> <span class="o">=</span> <span class="n">repair_small_eigenvalues</span><span class="p">(</span><span class="n">kern</span><span class="p">,</span><span class="n">reg</span><span class="p">)</span>
+    <span class="n">knft</span> <span class="o">=</span> <span class="n">fft2</span><span class="p">(</span><span class="n">kern</span><span class="p">)</span>
+    <span class="n">τy</span>   <span class="o">=</span> <span class="n">τe</span><span class="o">*</span><span class="n">zeromean</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">mask</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="c1"># Uniform measurement error ⇒ GP = convolution</span>
+    <span class="n">μτ</span>   <span class="o">=</span> <span class="n">mean</span><span class="p">((</span><span class="n">N</span><span class="o">/</span><span class="n">ε0</span><span class="p">)[</span><span class="n">mask</span><span class="p">])</span>
+    <span class="n">kft</span>  <span class="o">=</span> <span class="n">fft2</span><span class="p">(</span><span class="n">kern</span><span class="p">)</span>
+    <span class="n">gft</span>  <span class="o">=</span> <span class="p">(</span><span class="n">kft</span><span class="o">*</span><span class="n">μτ</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">kft</span><span class="o">*</span><span class="n">μτ</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">y</span>    <span class="o">=</span> <span class="n">mirrorpad</span><span class="p">(</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">K</span><span class="o">/</span><span class="n">N</span><span class="p">),</span><span class="n">pad</span><span class="p">)</span>
+    <span class="n">μy</span>   <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+    <span class="n">λcnv</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">μy</span><span class="p">,</span><span class="n">gft</span><span class="p">)</span><span class="o">+</span><span class="n">μy</span>
+    <span class="k">return</span> <span class="n">λcnv</span><span class="p">,</span> <span class="n">gft</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

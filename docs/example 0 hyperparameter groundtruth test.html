@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example 0: Ground truth &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Example 1: Load data" href="example%201%20load%20data.html" />
+    <link rel="prev" title="Variational Log-Gaussian Point-Process Methods for Grid Cells" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Example 0: Ground truth</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/example 0 hyperparameter groundtruth test.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars and line breaks on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+    white-space: pre;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="Example-0:-Ground-truth">
+<h1>Example 0: Ground truth<a class="headerlink" href="#Example-0:-Ground-truth" title="Permalink to this heading"></a></h1>
+<p>In this example, we will test inference on simulated data.</p>
+<section id="Simulate-a-grid-map-with-known-parameters">
+<h2>Simulate a grid map with known parameters<a class="headerlink" href="#Simulate-a-grid-map-with-known-parameters" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.simulate</span> <span class="kn">import</span> <span class="n">simulate_data</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>     <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">L</span>   <span class="o">=</span> <span class="mi">128</span>       <span class="c1"># Grid size</span>
+<span class="n">P0</span>  <span class="o">=</span> <span class="n">L</span><span class="o">/</span><span class="mi">8</span>       <span class="c1"># Grid spacing</span>
+<span class="n">α</span>   <span class="o">=</span> <span class="mf">0.5</span>       <span class="c1"># Grid &quot;sharpness&quot;</span>
+<span class="n">μ</span>   <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="mi">5</span><span class="o">/</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="c1"># Mean firing rate (spikes per sample)</span>
+<span class="n">pad</span> <span class="o">=</span> <span class="mf">0.1</span>       <span class="c1"># Edge padding (Avoids circular convolution wrap-around)</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">simulate_data(L=128,P=13,α=0.5,μ=0.09)</span>
+<span class="sd">Simulates spiking observations from a grid cell</span>
+
+<span class="sd">Parameters</span>
+<span class="sd">----------</span>
+<span class="sd">L: Rectangular binning grid size (L×L bins)</span>
+<span class="sd">P: Grid cell period spacing</span>
+<span class="sd">α: Grid cell &quot;sharpness&quot;</span>
+<span class="sd">μ: Mean firing rate (spikes per sample)</span>
+
+<span class="sd">Returns</span>
+<span class="sd">-------</span>
+<span class="sd">mask : L×L binary mask of &quot;in bounds&quot; regions</span>
+<span class="sd">λ0   : L×L array; &quot;True&quot; sampled grid firing rate</span>
+<span class="sd">λ0_bg: L×L array; Grid firing rate corrupted by background rate variations</span>
+<span class="sd">N    : L×L array; Number of visits to each spatial bin</span>
+<span class="sd">K    : L×L array; Number of spikes recorded in each spatial bin</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="n">mask</span><span class="p">,</span><span class="n">λ0</span><span class="p">,</span><span class="n">λ0_bg</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="n">simulate_data</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">P0</span><span class="p">,</span><span class="n">α</span><span class="p">,</span><span class="n">μ</span><span class="p">)</span>
+
+<span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+<span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">);</span> <span class="n">showim</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span><span class="s1">&#39;Environmet&#39;</span>   <span class="p">)</span>
+<span class="n">subplot</span><span class="p">(</span><span class="mi">132</span><span class="p">);</span> <span class="n">showim</span><span class="p">(</span><span class="n">λ0</span>  <span class="p">,</span><span class="s1">&#39;True rate&#39;</span>    <span class="p">)</span>
+<span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">);</span> <span class="n">showim</span><span class="p">(</span><span class="n">K</span>   <span class="p">,</span><span class="s1">&#39;Binned Spikes&#39;</span><span class="p">)</span>
+
+<span class="n">datasetname</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;simulated_data_L</span><span class="si">%d</span><span class="s1">_P</span><span class="si">%d</span><span class="s1">_α</span><span class="si">%.2f</span><span class="s1">_μ</span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">P0</span><span class="p">,</span><span class="n">α</span><span class="p">,</span><span class="n">μ</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_0_hyperparameter_groundtruth_test_2_0.png" src="_images/example_0_hyperparameter_groundtruth_test_2_0.png" />
+</div>
+</div>
+</section>
+<section id="Heuristic-parameters">
+<h2>Heuristic parameters<a class="headerlink" href="#Heuristic-parameters" title="Permalink to this heading"></a></h2>
+<p><strong>Always inspect the heuristic initialization.</strong> If something goes wrong here, grid search will likely also fail.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.util</span>       <span class="kn">import</span> <span class="n">blur</span><span class="p">,</span> <span class="n">fft_acorr</span><span class="p">,</span> <span class="n">radial_average</span><span class="p">,</span> <span class="n">find_peaks</span><span class="p">,</span> <span class="n">slog</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span>          <span class="kn">import</span> <span class="n">j0</span><span class="p">,</span> <span class="n">jn_zeros</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.estimators</span> <span class="kn">import</span> <span class="n">kde</span>
+
+<span class="k">def</span> <span class="nf">guess_period_from_autocorrelation</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">exclude_radius</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">window</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="c1"># Estimate the period from the peaks/troughs of autocorrelatogram</span>
+    <span class="c1"># assuming ideal grid kernel (Bessel function J0)</span>
+    <span class="c1"># Exclude points close to zero lag, which may be noisy</span>
+    <span class="n">autocorrelation</span> <span class="o">=</span> <span class="n">fft_acorr</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+    <span class="n">radial_autocorr</span> <span class="o">=</span> <span class="n">radial_average</span><span class="p">(</span><span class="n">autocorrelation</span><span class="p">)</span>
+    <span class="n">radial_autocorr</span> <span class="o">=</span> <span class="n">radial_autocorr</span><span class="p">[</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="n">exclude_radius</span><span class="p">:]</span>
+    <span class="n">peaks</span>    <span class="o">=</span> <span class="n">find_peaks</span><span class="p">(</span> <span class="n">radial_autocorr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">exclude_radius</span>
+    <span class="n">troughs</span>  <span class="o">=</span> <span class="n">find_peaks</span><span class="p">(</span><span class="o">-</span><span class="n">radial_autocorr</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">exclude_radius</span>
+    <span class="n">peak</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">peaks</span>  <span class="p">)</span>
+    <span class="n">trough</span>   <span class="o">=</span> <span class="n">argmin</span><span class="p">(</span><span class="n">radial_autocorr</span><span class="p">)</span><span class="o">+</span><span class="n">exclude_radius</span>
+    <span class="n">P_trough</span> <span class="o">=</span> <span class="n">trough</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="n">jn_zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">P_peak</span>   <span class="o">=</span> <span class="n">peak</span>  <span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="n">jn_zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">P_hat</span>    <span class="o">=</span> <span class="p">(</span><span class="n">P_peak</span><span class="o">+</span><span class="n">P_trough</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+    <span class="n">lo</span>       <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">radial_autocorr</span><span class="p">)</span>
+    <span class="n">hi</span>       <span class="o">=</span> <span class="n">radial_autocorr</span><span class="p">[</span><span class="n">peak</span><span class="o">-</span><span class="n">exclude_radius</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">P_trough</span><span class="p">,</span><span class="n">P_peak</span><span class="p">,</span><span class="n">P_hat</span><span class="p">,</span><span class="n">lo</span><span class="p">,</span><span class="n">hi</span><span class="p">,</span><span class="n">trough</span><span class="p">,</span><span class="n">peak</span>
+
+<span class="c1"># Calculate mean rate per bin without triggering div 0 warnings</span>
+<span class="n">zeros</span>    <span class="o">=</span> <span class="n">N</span><span class="o">&lt;=</span><span class="mf">0.0</span>
+<span class="n">N</span><span class="p">[</span><span class="n">zeros</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">y</span>        <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">K</span><span class="o">/</span><span class="n">N</span><span class="p">)</span>
+<span class="n">y</span><span class="p">[</span><span class="n">zeros</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># Mask to use with imshow</span>
+<span class="n">nanmask</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+<span class="n">nanmask</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span>
+
+<span class="c1"># Smooth slightly to prevent noisy peaks</span>
+<span class="n">σ</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">ysmooth1</span> <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">K</span><span class="p">,</span><span class="n">σ</span><span class="p">)</span><span class="o">/</span><span class="n">blur</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">σ</span><span class="p">)</span>
+<span class="n">P_trough</span><span class="p">,</span><span class="n">P_peak</span><span class="p">,</span><span class="n">P_hat</span><span class="p">,</span><span class="n">lo1</span><span class="p">,</span><span class="n">hi1</span><span class="p">,</span><span class="n">trough1</span><span class="p">,</span><span class="n">peak1</span> <span class="o">=</span> <span class="n">guess_period_from_autocorrelation</span><span class="p">(</span><span class="n">ysmooth1</span><span class="p">,</span><span class="n">window</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">autocorrelation2</span> <span class="o">=</span> <span class="n">fft_acorr</span><span class="p">(</span><span class="n">ysmooth1</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">window</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">radial_autocorr2</span> <span class="o">=</span> <span class="n">radial_average</span><span class="p">(</span><span class="n">autocorrelation2</span><span class="p">)</span>
+
+<span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Plot smoothed y</span>
+<span class="n">subplot2grid</span><span class="p">(</span><span class="n">grid</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">imshow</span><span class="p">(</span><span class="n">ysmooth1</span><span class="o">*</span><span class="n">nanmask</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Firing rates&#39;</span><span class="p">)</span>
+<span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;spike/sample&#39;</span><span class="p">)</span>
+<span class="c1"># Plot the autocorrelation (mask out zero lag)</span>
+<span class="n">subplot2grid</span><span class="p">(</span><span class="n">grid</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">autocorrelation2</span><span class="p">)</span>
+<span class="n">u</span><span class="p">[</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span><span class="n">L</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span>
+<span class="n">imshow</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;2D autocorrelogram&#39;</span><span class="p">)</span>
+<span class="c1"># Plot the radial autocorrelation</span>
+<span class="n">subplot2grid</span><span class="p">(</span><span class="n">grid</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">colspan</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">radial_autocorr2</span><span class="p">)</span>
+<span class="n">rightaxis</span><span class="p">()</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Δ (bins)&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;spike²/sample²&#39;</span><span class="p">)</span>
+<span class="n">ylim</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">lo1</span><span class="p">,</span><span class="mi">10</span><span class="o">*</span><span class="n">hi1</span><span class="p">)</span>
+<span class="n">axhline</span><span class="p">(</span><span class="n">lo1</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">axhline</span><span class="p">(</span><span class="n">hi1</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">axvline</span><span class="p">(</span><span class="n">trough1</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">RUST</span><span class="p">)</span>
+<span class="n">axvline</span><span class="p">(</span><span class="n">peak1</span>  <span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">TEAL</span><span class="p">)</span>
+
+<span class="n">μy</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+<span class="n">μz</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="n">μy</span><span class="p">)</span>
+
+<span class="c1"># Get location of trough and peak of ideal (bessel) autocorrelogram</span>
+<span class="c1"># Get height of function at these locations (height at zero is 1)</span>
+<span class="c1"># Use covariance of log-Gaussian to predict peak heights</span>
+<span class="c1"># Get the ratio of these peak heights to use in calibration</span>
+<span class="c1"># Iterate to guess the scale</span>
+<span class="n">observed</span> <span class="o">=</span> <span class="n">hi1</span><span class="o">-</span><span class="n">lo1</span>
+<span class="n">s</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">for</span> <span class="n">iters</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">μz</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="n">μy</span><span class="p">)</span><span class="o">-</span><span class="n">s</span><span class="o">/</span><span class="mi">2</span>
+    <span class="n">v1</span><span class="p">,</span><span class="n">v2</span> <span class="o">=</span> <span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">j0</span><span class="p">(</span><span class="n">jn_zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">s</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">μz</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">*</span> <span class="n">observed</span><span class="o">/</span><span class="p">(</span><span class="n">v2</span><span class="o">-</span><span class="n">v1</span><span class="p">)</span>
+<span class="c1"># Plot calibrated &quot;ideal grid&quot; kernel (exponentiated)</span>
+<span class="c1"># This uses the moments of the multivariate log-Gaussian</span>
+<span class="n">x</span>    <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span>
+<span class="n">Σ</span>    <span class="o">=</span> <span class="n">j0</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="n">P_hat</span><span class="p">)</span><span class="o">*</span><span class="n">s</span>
+<span class="n">expΣ</span> <span class="o">=</span> <span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">Σ</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span> <span class="n">μy</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">expΣ</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">expΣ</span><span class="p">)</span> <span class="o">+</span> <span class="n">lo1</span><span class="p">)</span>
+<span class="n">tight_layout</span><span class="p">()</span>
+
+<span class="c1"># Precompute variables; Passed as globals to jac/hess</span>
+<span class="n">fgσ</span>  <span class="o">=</span> <span class="n">P_hat</span><span class="o">/</span><span class="n">pi</span>       <span class="c1"># In units of linear-bins</span>
+<span class="n">bgσ</span>  <span class="o">=</span> <span class="n">fgσ</span><span class="o">*</span><span class="mi">5</span>          <span class="c1"># In units of linear-bins</span>
+<span class="n">λh</span>   <span class="o">=</span> <span class="n">kde</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">fgσ</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">rho</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span><span class="n">gamma</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># KDE estimated rate</span>
+<span class="n">λbg</span>  <span class="o">=</span> <span class="n">kde</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">bgσ</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">rho</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">,</span><span class="n">gamma</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Background rate</span>
+<span class="n">lλh</span>  <span class="o">=</span> <span class="n">slog</span><span class="p">(</span><span class="n">λh</span><span class="p">)</span>       <span class="c1"># Log rate</span>
+<span class="n">μz</span>   <span class="o">=</span> <span class="n">slog</span><span class="p">(</span><span class="n">λbg</span><span class="p">)</span>      <span class="c1"># Log background</span>
+<span class="n">z0</span>   <span class="o">=</span> <span class="n">lλh</span> <span class="o">-</span> <span class="n">μz</span>       <span class="c1"># Foreground log rate</span>
+
+<span class="c1"># Initial guess for kernel height</span>
+<span class="c1"># Standard kernel normalized to zero-lag autocorrelation = 1</span>
+<span class="c1"># s and σ0 should be similar, they both scale the Bessel autocorrelation of the log-rate</span>
+<span class="n">σ1</span>   <span class="o">=</span> <span class="n">var</span><span class="p">(</span><span class="n">z0</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+<span class="n">σ0</span>   <span class="o">=</span> <span class="n">s</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Period (bins) estimated from trough:&#39;</span><span class="p">,</span><span class="n">P_trough</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Period (bins) estimated from peak:  &#39;</span><span class="p">,</span><span class="n">P_peak</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Period (bins) average:              &#39;</span><span class="p">,</span><span class="n">P_hat</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;True      period:  </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">P0</span>)
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Heuristic period:  </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">P_hat</span>)
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;True log-variance: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">var</span>(slog(λ0)[mask]))
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scale (variance):  </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">σ1</span>)
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scale (Bessel):    </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">σ0</span>)
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Period (bins) estimated from trough: 14.758091618797616
+Period (bins) estimated from peak:   15.225262725584749
+Period (bins) average:               14.991677172191181
+True      period:  16.0
+Heuristic period:  14.991677172191181
+True log-variance: 0.3835029
+Scale (variance):  0.09588305
+Scale (Bessel):    0.5063957437730227
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_0_hyperparameter_groundtruth_test_4_1.png" src="_images/example_0_hyperparameter_groundtruth_test_4_1.png" />
+</div>
+</div>
+</section>
+<section id="Infer-rate-map-using-heuristic-parameters">
+<h2>Infer rate map using heuristic parameters<a class="headerlink" href="#Infer-rate-map-using-heuristic-parameters" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">Arena</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>   <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span><span class="p">,</span> <span class="n">coordinate_descent</span>
+
+<span class="n">P</span>     <span class="o">=</span> <span class="n">P_hat</span>
+<span class="n">data</span>  <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">create_posthoc</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">lograte_guess</span><span class="o">=</span><span class="n">μz</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">arena</span> <span class="o">=</span> <span class="n">Arena</span><span class="o">.</span><span class="n">from_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">position_sample_rate</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Hz, but this is fictional for simulated data</span>
+<span class="n">data</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="mf">.5</span> <span class="c1"># 1/Meters, but again: fictional</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">σ0</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+<span class="n">fit</span>   <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span> <span class="c1"># (μh,v,vfe)</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">datasetname</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_0_hyperparameter_groundtruth_test_6_0.png" src="_images/example_0_hyperparameter_groundtruth_test_6_0.png" />
+</div>
+</div>
+</section>
+<section id="Identify-optimal-parameters-via-grid-search">
+<h2>Identify optimal parameters via grid search<a class="headerlink" href="#Identify-optimal-parameters-via-grid-search" title="Permalink to this heading"></a></h2>
+<p>See <code class="docutils literal notranslate"><span class="pre">example</span> <span class="pre">3</span> <span class="pre">optimize</span> <span class="pre">hyperparameters.ipynb</span></code> for more details.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.gridsearch</span> <span class="kn">import</span> <span class="n">grid_search</span>
+
+<span class="n">modelargs</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;L&#39;</span><span class="p">:</span><span class="n">L</span><span class="p">,</span><span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="n">N</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="n">y</span><span class="p">,</span>
+    <span class="s1">&#39;lograte_guess&#39;</span><span class="p">:</span><span class="n">z0</span><span class="p">,</span>
+    <span class="s1">&#39;prior_mean&#39;</span><span class="p">:</span><span class="n">μz</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">evaluate_ELBO</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span><span class="n">state</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">modelargs</span>
+    <span class="n">p</span><span class="p">,</span><span class="n">β</span>     <span class="o">=</span> <span class="n">parameters</span>
+    <span class="n">model</span>   <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">σ0</span><span class="o">/</span><span class="n">β</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="o">**</span><span class="n">modelargs</span><span class="p">)</span>
+    <span class="n">μ</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">μh</span>  <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span><span class="o">*</span><span class="mi">3</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">state</span>
+    <span class="n">μ0</span>      <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">μ</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="nd">@μ</span>
+    <span class="n">Σ0</span>      <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">v</span><span class="o">*</span><span class="mf">0.5</span>
+    <span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">nl</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">μ0</span><span class="p">,</span><span class="n">Σ0</span><span class="p">)</span>
+    <span class="n">μ</span>       <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@μh</span>
+    <span class="n">state</span>   <span class="o">=</span> <span class="n">μ</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">μh</span>
+    <span class="n">ELBO</span>    <span class="o">=</span> <span class="o">-</span><span class="n">nl</span>
+    <span class="k">return</span> <span class="n">state</span><span class="p">,</span> <span class="n">ELBO</span><span class="p">,</span> <span class="n">model</span>
+
+<span class="c1"># Prepare hyperparameter grid</span>
+<span class="n">rP</span> <span class="o">=</span> <span class="mi">2</span>   <span class="c1"># Range (ratio) to search for optimal period</span>
+<span class="n">rβ</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Range (ratio) to search for optimal kernel height</span>
+<span class="n">NP</span> <span class="o">=</span> <span class="mi">101</span> <span class="c1"># Period search grid resolution</span>
+<span class="n">Nβ</span> <span class="o">=</span> <span class="mi">101</span> <span class="c1"># Kernel height search grid resolutions</span>
+<span class="n">Ps</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">P</span><span class="o">/</span><span class="n">rP</span><span class="p">),</span><span class="n">log</span><span class="p">(</span><span class="n">P</span><span class="o">*</span><span class="n">rP</span><span class="p">),</span><span class="n">NP</span><span class="p">)))</span>
+<span class="n">βs</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">rβ</span><span class="p">),</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">*</span><span class="n">rβ</span><span class="p">),</span><span class="n">Nβ</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">pargrid</span> <span class="o">=</span> <span class="p">[</span><span class="n">Ps</span><span class="p">,</span><span class="n">βs</span><span class="p">]</span>
+
+<span class="c1"># Run overall grid search</span>
+<span class="n">bestindex</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span> <span class="o">=</span> <span class="n">grid_search</span><span class="p">(</span><span class="n">pargrid</span><span class="p">,</span><span class="n">evaluate_ELBO</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Heuristic parameters&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;P  = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">P</span>)
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;σ² = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">σ0</span>)
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Optimized parameters:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;P  = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">bestpars</span>[0])
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;σ² = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">σ0</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;True parameters:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;P  = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">P0</span>)
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;σ² = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">var</span>(slog(λ0)[mask]))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[50,12](1.50e+01,5.75e+00) loss=2.294728e+04(done)
+
+Heuristic parameters
+P  = 14.991677
+σ² = 0.506396
+
+Optimized parameters:
+P  = 14.785282
+σ² = 0.088001
+
+True parameters:
+P  = 16.000000
+σ² = 0.383503
+</pre></div></div>
+</div>
+</section>
+<section id="Infer-rate-map-at-optimized-parameters">
+<h2>Infer rate map at optimized parameters<a class="headerlink" href="#Infer-rate-map-at-optimized-parameters" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">P_use</span>  <span class="o">=</span> <span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">σ0_use</span> <span class="o">=</span> <span class="n">σ0</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">model</span>  <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">σ0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span><span class="o">**</span><span class="n">modelargs</span><span class="p">)</span>
+<span class="n">fit</span>    <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">datasetname</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_0_hyperparameter_groundtruth_test_10_0.png" src="_images/example_0_hyperparameter_groundtruth_test_10_0.png" />
+</div>
+</div>
+</section>
+<section id="Check-accuracy-of-inferred-rates-relative-to-ground-truth">
+<h2>Check accuracy of inferred rates relative to ground truth<a class="headerlink" href="#Check-accuracy-of-inferred-rates-relative-to-ground-truth" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">fit</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">pz</span> <span class="o">=</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@μh</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">+</span><span class="n">μz</span>
+<span class="n">μλ</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">pz</span><span class="o">+</span><span class="n">v</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">mλ</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">pz</span><span class="p">)</span>
+<span class="n">λ</span>  <span class="o">=</span> <span class="n">λ0_bg</span>
+
+<span class="k">def</span> <span class="nf">square_limits</span><span class="p">(</span><span class="n">limit</span><span class="p">):</span>
+    <span class="n">xlim</span><span class="p">(</span><span class="o">*</span><span class="n">limit</span><span class="p">)</span>
+    <span class="n">ylim</span><span class="p">(</span><span class="o">*</span><span class="n">limit</span><span class="p">)</span>
+    <span class="n">plot</span><span class="p">(</span><span class="n">limit</span><span class="p">,</span><span class="n">limit</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">force_aspect</span><span class="p">()</span>
+    <span class="n">nicexy</span><span class="p">()</span>
+    <span class="n">xlim</span><span class="p">(</span><span class="o">*</span><span class="n">limit</span><span class="p">)</span>
+    <span class="n">ylim</span><span class="p">(</span><span class="o">*</span><span class="n">limit</span><span class="p">)</span>
+
+<span class="n">figure</span><span class="p">(</span><span class="mi">0</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mi">140</span><span class="p">)</span>
+
+<span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">scatter</span><span class="p">(</span><span class="n">λ</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">μλ</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">simpleaxis</span><span class="p">()</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;True rate&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Inferred rate&#39;</span><span class="p">)</span>
+<span class="n">square_limits</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">25</span><span class="p">])</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">slog</span><span class="p">(</span><span class="n">λ</span><span class="p">)</span>
+
+<span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">scatter</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">pz</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">simpleaxis</span><span class="p">()</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;True log-rate&#39;</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Inferred log-rate&#39;</span><span class="p">)</span>
+<span class="n">square_limits</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+
+<span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_0_hyperparameter_groundtruth_test_12_0.png" src="_images/example_0_hyperparameter_groundtruth_test_12_0.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Variational Log-Gaussian Point-Process Methods for Grid Cells" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example%201%20load%20data.html" class="btn btn-neutral float-right" title="Example 1: Load data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

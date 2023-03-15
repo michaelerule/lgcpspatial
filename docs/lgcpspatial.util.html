@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lgcpspatial.util module &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="lgcpspatial.plot module" href="lgcpspatial.plot.html" />
+    <link rel="prev" title="lgcpspatial.estimators module" href="lgcpspatial.estimators.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.estimators.html">estimators</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.plot.html">plot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">lgcpspatial.util module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/lgcpspatial.util.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="module-lgcpspatial.util">
+<span id="lgcpspatial-util-module"></span><h1>lgcpspatial.util module<a class="headerlink" href="#module-lgcpspatial.util" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.current_milli_time">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">current_milli_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#current_milli_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.current_milli_time" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the time in milliseconds</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.tic">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">tic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doprint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#tic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.tic" title="Permalink to this definition"></a></dt>
+<dd><p>Similar to Matlab tic</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>doprint</strong> (<em>bool</em>) – if True, print elapsed time. Else, return it.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>t</strong> – <code class="docutils literal notranslate"><span class="pre">current_milli_time()</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.toc">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">toc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doprint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#toc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.toc" title="Permalink to this definition"></a></dt>
+<dd><p>Similar to Matlab toc</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>doprint</strong> (<em>bool</em>) – if True, print elapsed time. Else, return it.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>t</strong> (<em>number</em>) – Current timestamp</p></li>
+<li><p><strong>dt</strong> (<em>number</em>) – Time since the last call to the tic() or toc() function.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.progress_bar">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">progress_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#progress_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.progress_bar" title="Permalink to this definition"></a></dt>
+<dd><p>Progress bar wrapper for loops</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.zgrid">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">zgrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#zgrid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.zgrid" title="Permalink to this definition"></a></dt>
+<dd><p>2D grid coordinates as complex numbers</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.printstats">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">printstats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#printstats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.printstats" title="Permalink to this definition"></a></dt>
+<dd><p>Print RMSE and correlation between two rate maps</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.find">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#find"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.find" title="Permalink to this definition"></a></dt>
+<dd><p>The old “find” syntax is cleaner!</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.speak">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">speak</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#speak"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.speak" title="Permalink to this definition"></a></dt>
+<dd><p>For jupyter notebooks: trigger browser to notify when done</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – Text to peak</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.notify">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">notify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">what</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'attention'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#notify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.notify" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.get_edges">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">get_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_edges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#get_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.get_edges" title="Permalink to this definition"></a></dt>
+<dd><p>Assuming a binary signal, get the start and stop times
+of each treatch of “1s”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>1-dimensional array-like</em>) – </p></li>
+<li><p><strong>pad_edges</strong> (<em>True</em>) – Should we treat blocks that start or stop at the
+beginning or end of the signal as valid?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>2xN array of bin start and stop indecies</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.interpolate_NaN">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">interpolate_NaN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#interpolate_NaN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.interpolate_NaN" title="Permalink to this definition"></a></dt>
+<dd><p>Fill in NaN (missing) data in a one-dimensional
+timeseries via linear interpolation.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.onehot">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">onehot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#onehot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.onehot" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int23</em>) – List of non-negative indecies that are 1</p></li>
+<li><p><strong>N</strong> (<em>int32</em>) – Length of desired vector</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.slog">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">slog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minrate=1e-10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtype=&lt;class</span> <span class="pre">'numpy.float32'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#slog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.slog" title="Permalink to this definition"></a></dt>
+<dd><p>Safe log function; Avoids numeric overflow by clipping</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.is_in_hull">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">is_in_hull</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hull</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#is_in_hull"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.is_in_hull" title="Permalink to this definition"></a></dt>
+<dd><p>Determine if the list of points P lies inside the hull
+credit: <a class="reference external" href="https://stackoverflow.com/a/52405173/900749">https://stackoverflow.com/a/52405173/900749</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>P</strong> (<em>points</em>) – </p></li>
+<li><p><strong>hull</strong> (<em>Convex Hull object</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>isInHull</strong> – Array of booleans indicating which points are within
+the convex hull.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Length NPOINTS 1D np.bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.blurkernel">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">blurkernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">σ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#blurkernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.blurkernel" title="Permalink to this definition"></a></dt>
+<dd><p>1D Gaussian blur convolution kernel</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>L</strong> (<em>int</em>) – Size of L×L spatial domain</p></li>
+<li><p><strong>σ</strong> (<em>positive float</em>) – kernel radius exp(-x²/σ) (standard deviation in x
+and y ×⎷2)</p></li>
+<li><p><strong>normalize</strong> (<em>boolean</em>) – Whether to make kernel sum to 1</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.blurkernel2D">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">blurkernel2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">σ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#blurkernel2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.blurkernel2D" title="Permalink to this definition"></a></dt>
+<dd><p>2D Gaussian blur convolution kernel</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>L</strong> (<em>Size</em><em> of </em><em>L×L spatial domain</em>) – </p></li>
+<li><p><strong>σ</strong> (<em>kernel radius exp</em><em>(</em><em>-x²/σ</em><em>) </em><em>(</em><em>standard deviation in x and y ×⎷2</em><em>)</em>) – </p></li>
+<li><p><strong>normalize</strong> (<em>boolean; whether to make kernel sum to 1</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.conv">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">conv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#conv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.conv" title="Permalink to this definition"></a></dt>
+<dd><p>Compute circular 2D convolution using FFT
+Kernel K should already be fourier-transformed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>2D array</em>) – </p></li>
+<li><p><strong>K</strong> (<em>Fourier-transformed convolution kernel</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.blur">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">blur</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">σ</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#blur"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.blur" title="Permalink to this definition"></a></dt>
+<dd><p>2D Gaussian blur via fft</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>2D np.array</em>) – </p></li>
+<li><p><strong>σ</strong> (<em>float</em>) – kernel radius exp(-x²/σ) (standard deviation in x and y ×⎷2)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.zeromean">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">zeromean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#zeromean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.zeromean" title="Permalink to this definition"></a></dt>
+<dd><p>Mean-center data, accounting for masked-out regions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>L×L 2D np.array</em>) – </p></li>
+<li><p><strong>mask</strong> (<em>L×L np.bool</em>) – Binary mask of “in bounds” regions</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.fft_acorr">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">fft_acorr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#fft_acorr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.fft_acorr" title="Permalink to this definition"></a></dt>
+<dd><p>Zero-lag normalized to match signal variance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>L×L 2D np.array</em>) – </p></li>
+<li><p><strong>mask</strong> (<em>L×L np.bool</em>) – Binary mask of “in bounds” regions</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.radial_average">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">radial_average</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#radial_average"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.radial_average" title="Permalink to this definition"></a></dt>
+<dd><p>Get radial autocorrelation by averaging 2D
+autocorrelogram</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>np.float32</em>) – 2D LxL array of firing-rate spatial autocorrelogram.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.radial_acorr">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">radial_acorr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#radial_acorr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.radial_acorr" title="Permalink to this definition"></a></dt>
+<dd><p>Autocorrelation as a function of distance</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.fft_upsample_1D">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">fft_upsample_1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#fft_upsample_1D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.fft_upsample_1D" title="Permalink to this definition"></a></dt>
+<dd><p>Upsample 1D array using the FFT</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.acorr_peak">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">acorr_peak</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#acorr_peak"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.acorr_peak" title="Permalink to this definition"></a></dt>
+<dd><p>Identify the first peak in an autocorrelogram at non-
+zero lag.</p>
+<p>This routine uses FFT-based sinc() upsampling to
+interpolate the location of peaks. The upsampling
+factor is set by <code class="docutils literal notranslate"><span class="pre">F</span></code>, and defaults to 6.</p>
+<p>If there are <em>no</em> peaks at nonzero lag, this routine
+returns <code class="docutils literal notranslate"><span class="pre">nan</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>1D np.float32</em>) – Autocorrelogram. The signal should be symmetric
+around array index <code class="docutils literal notranslate"><span class="pre">len(r)//2</span></code>.</p></li>
+<li><p><strong>F</strong> (<em>positive int; default 6</em>) – Upsampling ratio.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>period</strong> (<em>float</em>) – Index of first autocorrelogram peak at nonzero
+lag, in units of samples of <code class="docutils literal notranslate"><span class="pre">r</span></code>.
+If there are <em>no</em> peaks at nonzero lag, this routine
+returns <code class="docutils literal notranslate"><span class="pre">nan</span></code>.</p></li>
+<li><p><strong>upsampled_autocorrelogram</strong> (<em>1D np.float32</em>) – Length <code class="docutils literal notranslate"><span class="pre">len(r)</span> <span class="pre">×</span> <span class="pre">F</span></code> sinc-upsampled autocorrelogram.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.acorr_trough">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">acorr_trough</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#acorr_trough"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.acorr_trough" title="Permalink to this definition"></a></dt>
+<dd><p>sinc upsample at ×F resolution to get distance to first
+<em>trough</em> (compare to <code class="docutils literal notranslate"><span class="pre">acorr_peak()</span></code>)</p>
+<p>This routine uses FFT-based sinc() upsampling to
+interpolate the location of peaks. The upsampling
+factor is set by <code class="docutils literal notranslate"><span class="pre">F</span></code>, and defaults to 6.</p>
+<p>If there are <em>no</em> troughs at nonzero lag, this
+routine returns <code class="docutils literal notranslate"><span class="pre">nan</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>r</strong> (<em>1D np.float32</em>) – Autocorrelogram. The signal should be symmetric
+around array index <code class="docutils literal notranslate"><span class="pre">len(r)//2</span></code>.</p></li>
+<li><p><strong>F</strong> (<em>positive int; default 6</em>) – Upsampling ratio.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>period</strong> (<em>float</em>) – Index of first autocorrelogram trough at nonzero
+lag, in units of samples of <code class="docutils literal notranslate"><span class="pre">r</span></code>.
+If there are <em>no</em> troughs at nonzero lag, this
+routine returns <code class="docutils literal notranslate"><span class="pre">nan</span></code>.</p></li>
+<li><p><strong>upsampled_autocorrelogram</strong> (<em>1D np.float32</em>) – Length <code class="docutils literal notranslate"><span class="pre">len(r)</span> <span class="pre">×</span> <span class="pre">F</span></code> sinc-upsampled autocorrelogram.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.kernel_to_covariance">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">kernel_to_covariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kern</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#kernel_to_covariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.kernel_to_covariance" title="Permalink to this definition"></a></dt>
+<dd><p>Explicitly construct covariance matrix from a
+convolution kernel (Generally we shouldn’t be doing this
+for large problems; it’s only used to verify code
+on smaller problems as a sanity check)</p>
+<p>Covariance is a doubly block-circulant matrix Use
+np.circulant to build locks, then copy with shift to
+make 2D block-circulant matrix.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.repair_small_eigenvalues">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">repair_small_eigenvalues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mineig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#repair_small_eigenvalues"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.repair_small_eigenvalues" title="Permalink to this definition"></a></dt>
+<dd><p>Kernel must be positive; fix small eigenvalues</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.solveGP">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">solveGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">τe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#solveGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.solveGP" title="Permalink to this definition"></a></dt>
+<dd><p>Minimum residual solver is fast</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.mirrorpad">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">mirrorpad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#mirrorpad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.mirrorpad" title="Permalink to this definition"></a></dt>
+<dd><p>Reflect boundary for convolution.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.radial_kernel">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">radial_kernel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rk</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#radial_kernel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.radial_kernel" title="Permalink to this definition"></a></dt>
+<dd><p>Make radially symmetric 2D kernel from 1D radial kernel</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>as</strong> (<em>1D np.array</em>) – 1D kernel that will be used to generate radially
+symmetric 2D kernel.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.zerolag">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">zerolag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#zerolag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.zerolag" title="Permalink to this definition"></a></dt>
+<dd><p>Estimate true zero-lag variance via quadratic
+interpolation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>as</strong> (<em>1D np.array</em>) – Autocorrelation</p></li>
+<li><p><strong>r</strong> (<em>int</em>) – Samples in the vicinity of the zero-lag correlation
+to mask out and replace with a quadratic
+interpolation.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.op">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Av</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#op"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.op" title="Permalink to this definition"></a></dt>
+<dd><p>Construct a symmetric linear operator from a function
+which computes the product of said operator with a
+vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>M</strong> (<em>int</em>) – Dimension of operator</p></li>
+<li><p><strong>Av</strong> (<em>f:R^M→R^M</em>) – linear operator acting on length M vectors</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.cop">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">cop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#cop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.cop" title="Permalink to this definition"></a></dt>
+<dd><p>Construct a convolution operator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>k</strong> (<em>array; convolution kernel Fourier transform.</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.diagop">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">diagop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#diagop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.diagop" title="Permalink to this definition"></a></dt>
+<dd><p>Construct a diagonal operator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>d</strong> (<em>vector; diagonal</em><em> of </em><em>matrix operator</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.dx_op">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">dx_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#dx_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.dx_op" title="Permalink to this definition"></a></dt>
+<dd><p>2D finite difference in the 1st coordinate
+{-.5,0,.5}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>L</strong> (<em>positive integer</em>) – The size of the 2D L×L grid</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>dx</strong> – Discrete derivative in the x (column) direction.
+Use with e.g. FFT convolve.
+Transpose to get dy.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>shape (L,L) float32 array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.hessian_2D">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">hessian_2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#hessian_2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.hessian_2D" title="Permalink to this definition"></a></dt>
+<dd><p>Get Hessian at all points</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>q</strong> (<em>shape</em><em> (</em><em>L</em><em>,</em><em>L</em><em>) </em><em>ndarray</em>) – 2D spatial function for which to compute Hessian</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>hessian</strong> – 2×2 Hessian in (x,y) for all points in L×L grid q</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>shape (L,L,2,2)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.h2f_2d_truncated">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">h2f_2d_truncated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use2d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#h2f_2d_truncated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.h2f_2d_truncated" title="Permalink to this definition"></a></dt>
+<dd><p>Convert from 2D truncated low-rank Hartley
+representation to full-rank Fourier representation.</p>
+<p>The Hartley transform is Re[F(x)] + Im[F(x)] where F is
+the unitary Fourier transform. In the 2D FT of real-
+valued signals, nonzero frequency components have
+rotational symmetry. The real components equal
+themselves after a 180 degree rotation of the
+coefficient matrix. The imaginary components equal
+their negative after a 180 degree rotation. From this
+we can recover Fourier coefficients from the Hartley
+transform. The components with zero frequency behave as
+the 1D fourier transform.</p>
+<p>Or just</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u</strong> (<em>shape</em><em> (</em><em>R</em><em>,</em><em>...</em><em>) </em><em>float32 ndarray</em>) – Array where the first dimension is the vector of
+low-rank Hartley transform coefficients; Operation
+is broadcast over remaining dimensions</p></li>
+<li><p><strong>L</strong> (<em>positive int</em>) – The size of the original 2D L×L spatial grid</p></li>
+<li><p><strong>use2d</strong> (<em>shape</em><em> (</em><em>L</em><em>,</em><em>L</em><em>) </em><em>boolean ndarray</em>) – Indicator mask of which of 2D Fourier/Hartley
+coefficients were retained in the low-dimensional
+representation. Get this from model.use2d</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fx.T</strong> – Low-rank Fourier-space representation of u.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>shape (L,L,…) complex64 ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.f2h_2d_truncated">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">f2h_2d_truncated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use2d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#f2h_2d_truncated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.f2h_2d_truncated" title="Permalink to this definition"></a></dt>
+<dd><p>Convert from full 2D spatial fourier space to truncated
+low-D Hartley space representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>shape</em><em> (</em><em>L</em><em>,</em><em>L</em><em>,</em><em>...</em><em>) </em><em>complex64 ndarray</em>) – Low-D Fourier coefficients</p></li>
+<li><p><strong>use2d</strong> (<em>shape</em><em> (</em><em>L</em><em>,</em><em>L</em><em>) </em><em>boolean ndarray</em>) – Indicator mask of which of 2D Fourier/Hartley
+coefficients were retained in the low-dimensional
+representation. Get this from model.use2d</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>xh</strong> – Low-D (retaining R components) Hartley transform.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>shape (R,…) float32 ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.h_conv2d_truncated">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">h_conv2d_truncated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use2d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#h_conv2d_truncated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.h_conv2d_truncated" title="Permalink to this definition"></a></dt>
+<dd><p>Apply a 2D FFT convolution on data (and kernel) packed
+as a low-rank (R) Hartley transform (float32).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hk</strong> (<em>shape</em><em> (</em><em>R</em><em>,</em><em>) </em><em>float32 ndarray</em>) – Truncated (R&lt;L²) 2D Hartley transform of the kernel.</p></li>
+<li><p><strong>hx</strong> (<em>shape</em><em> (</em><em>R</em><em>,</em><em>...</em><em>) </em><em>float32 ndarray</em>) – Truncated (R&lt;L²) 2D Hartley transform of the data.
+Operation is broadcast over trailing dimensions.</p></li>
+<li><p><strong>L</strong> (<em>positive int</em>) – The size of the original 2D L×L spatial grid</p></li>
+<li><p><strong>use2d</strong> (<em>shape</em><em> (</em><em>L</em><em>,</em><em>L</em><em>) </em><em>boolean ndarray</em>) – Indicator mask of which of 2D Fourier/Hartley
+coefficients were retained in the low-dimensional
+representation. Get this from model.use2d</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Convolved result low-rank Hartley representation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>shape (R,…) float32 ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.pdist">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">pdist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#pdist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.pdist" title="Permalink to this definition"></a></dt>
+<dd><p>Pairwise distances between two lists of scalars</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.ensure_dir">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">ensure_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#ensure_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.ensure_dir" title="Permalink to this definition"></a></dt>
+<dd><p>Ensure that a named directory exists; if it does not,
+attempt to create it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dirname</strong> (<em>str</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.make_rebroadcast_slice">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">make_rebroadcast_slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#make_rebroadcast_slice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.make_rebroadcast_slice" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.zscore">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">zscore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regularization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#zscore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.zscore" title="Permalink to this definition"></a></dt>
+<dd><p>Z-scores data, defaults to the first axis.
+A regularization factor is added to the standard
+deviation to preven numerical instability when the
+standard deviation is extremely small. The default
+regularization is 1e-30.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – Array-like real-valued signal.</p></li>
+<li><p><strong>axis</strong> – Axis to zscore; default is 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>x</strong> – (x-mean(x))/std(x)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.unitscale">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">unitscale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#unitscale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.unitscale" title="Permalink to this definition"></a></dt>
+<dd><p>Rescales <code class="docutils literal notranslate"><span class="pre">signal</span></code> so that its minimum is 0 and its maximum is 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>(</strong><strong>np.array</strong><strong>)</strong> (<em>signal</em>) – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>signal</strong> – Rescaled signal-min(signal)/(max(signal)-min(signal))</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.p2c">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">p2c</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#p2c"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.p2c" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a point in terms of a length-2 iterable into
+a complex number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>p</strong> (<em>iterable</em>) – Iterable with two elements for <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>
+coordinates. In turn, <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> should have
+the same shape.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>z</strong> – <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">1j*y</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.complex64</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.c2p">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">c2p</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#c2p"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.c2p" title="Permalink to this definition"></a></dt>
+<dd><p>Convert complex point to tuple</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.to_xypoint">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">to_xypoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#to_xypoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.to_xypoint" title="Permalink to this definition"></a></dt>
+<dd><p>Convert possible complex (x,y) point intoformation
+into float32 (x,y) points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>z</strong> (<em>np.complex64</em>) – Array of (x,y) points encoded as x+iy complex64</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(x,y) poiny array with shape 2 × z.shape</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.closest">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">closest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">otherpoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#closest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.closest" title="Permalink to this definition"></a></dt>
+<dd><p>Find nearest (x,y) point witin a collection of
+other points, with maximum distance <code class="docutils literal notranslate"><span class="pre">radius</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>point</strong> (<em>np.float32 with shape 2</em>) – (x,y) point to match</p></li>
+<li><p><strong>otherpoints</strong> (<em>np.float32 with shape 2×NPOINTS</em>) – List of (x,y) points to compare</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Maximum allowed distance</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>imatch</strong> (<em>int</em>) – index into otherpoints of the match, or None
+if there is no match within radius</p></li>
+<li><p><strong>xymatch</strong> (<em>np.float32 with shape 2</em>) – (x,y) coordinates of closestmatch</p></li>
+<li><p><strong>distance</strong> (<em>float</em>) – distance to match, or NaN if no match</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.paired_distances">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">paired_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#paired_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.paired_distances" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate pairwise distances between two sets of
+(x,y) points encoded as x+iy complex numbers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>z1</strong> (<em>1D np.complex64</em>) – List of x+iy points</p></li>
+<li><p><strong>z2</strong> (<em>1D np.complex64</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>distance</strong> – Array of paired distances</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.float32 with shape z1.shape+z2.shape</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.pair_neighbors">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">pair_neighbors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#pair_neighbors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.pair_neighbors" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>z1</strong> (<em>1D np.complex64</em>) – List of x+iy points</p></li>
+<li><p><strong>z2</strong> (<em>1D np.complex64</em>) – List of x+iy points</p></li>
+<li><p><strong>radius</strong> (float, default <code class="docutils literal notranslate"><span class="pre">inf</span></code>) – Maximum connection distance</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>edges</strong> (<em>NPOINTS × 2 np.int32</em>) – Indecies (i,j) into point lists (z1,z2) of pairs</p></li>
+<li><p><strong>points</strong> (<em>NPOINTS × 2 np.complex64</em>) – x+iy points from (z1,x2) pairs</p></li>
+<li><p><strong>delta</strong> (<em>NPOINTS np.float32:</em>) – List of distances for each pair</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.bootstrap_in_blocks">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">bootstrap_in_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocklength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#bootstrap_in_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.bootstrap_in_blocks" title="Permalink to this definition"></a></dt>
+<dd><p>Chop dataset into blocks, then re-compose it,
+sampling these blocks randomly with replacement.</p>
+<p>This is used to compute bootstrap confidence intervals.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">blocklength</span></code> doesn’t evenly divide the number of
+time samples, then we include an extra block, but
+truncate the resulting timeseries to match the length
+of the original data.</p>
+<p>This casts all <code class="docutils literal notranslate"><span class="pre">variables</span></code> to <code class="docutils literal notranslate"><span class="pre">np.float32</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variables</strong> (<em>list</em><em> of </em><em>np.float32</em>) – List of arrays.
+The first dimension of each array is time samples
+and should be the same length for all variables.</p></li>
+<li><p><strong>blocklength</strong> (<em>int</em>) – Length of blocks for block-bootstrap-resample</p></li>
+<li><p><strong>nsamples</strong> (<em>positive int; default 1</em>) – Number of bootstrap samples to generate.</p></li>
+<li><p><strong>replace</strong> (<em>boolean; default True</em>) – Whether to sample with or without replacement.
+Setting this to false implements a shuffle test,
+rather than a bootstrap.</p></li>
+<li><p><strong>seed</strong> (<em>int</em><em> or </em><em>None; default None</em>) – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, use <code class="docutils literal notranslate"><span class="pre">seed</span></code> to set the state of
+<code class="docutils literal notranslate"><span class="pre">np.random</span></code>
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, continue with current state.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>result</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of np.float32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.assign_to_regions">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">assign_to_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#assign_to_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.assign_to_regions" title="Permalink to this definition"></a></dt>
+<dd><p>Assign 2D <code class="docutils literal notranslate"><span class="pre">points</span></code> to Voronoi <code class="docutils literal notranslate"><span class="pre">regions</span></code>, returning
+the indecies into <code class="docutils literal notranslate"><span class="pre">regions</span></code> for each point in
+<code class="docutils literal notranslate"><span class="pre">points</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>regions</strong> (<em>2 × NREGIONS np.float32</em>) – (x,y) coordinates of Vornoi region centers</p></li>
+<li><p><strong>points</strong> (<em>2 × NPOINTS np.float32</em>) – (x,y) points to assign to regions</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>indecies</strong> – Index into <code class="docutils literal notranslate"><span class="pre">regions</span></code> for each point</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>NPOINTS np.int32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.collect_in_regions">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">collect_in_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_indecies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#collect_in_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.collect_in_regions" title="Permalink to this definition"></a></dt>
+<dd><p>Bin points to Voronoi regions, returning a list of
+(x,y) points in each region.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>regions</strong> (<em>2×NREGIONS np.float32</em>) – (x,y) coordinates of Vornoi region centers</p></li>
+<li><p><strong>points</strong> (<em>2×NPOINTS np.float32</em>) – (x,y) points to assign to regions</p></li>
+<li><p><strong>return_indecies</strong> (<em>boolean; default False</em>) – Whether to additionally return the index
+into the <code class="docutils literal notranslate"><span class="pre">NPOINTS</span></code> assigned to each region</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>allocated</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NREGIONS</span></code> list of 2 × NPOINTSINREGION
+np.float32 arrays</p></li>
+<li><p><strong>indecies</strong> (<em>list</em>) – <strong>Returned only if ``return_indecies=True``;</strong>
+Length <code class="docutils literal notranslate"><span class="pre">NREGIONS</span></code> list of NPOINTSINREGION
+np.int32 arrays, each containing the indecies
+into the length-<code class="docutils literal notranslate"><span class="pre">NPOINTS</span></code> array assigned to
+each region in <code class="docutils literal notranslate"><span class="pre">regions</span></code>.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.gaussian_from_points">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">gaussian_from_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#gaussian_from_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.gaussian_from_points" title="Permalink to this definition"></a></dt>
+<dd><p>Get the mean and (sample) covariance of a point cloud.</p>
+<p>Note: we suppress warnings here because returning NaNs
+for an empty point set is entirely reasonable, and
+simplifies code elsewhere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>points</strong> (<em>NDIM × NPOINTS np.float32</em>) – Point data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>μ</strong> (<em>NDIM np.float32</em>) – Mean</p></li>
+<li><p><strong>Σ</strong> (<em>NDIM × NDIM np.float32</em>) – Sample covariance</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.util.collect_gaussians">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.util.</span></span><span class="sig-name descname"><span class="pre">collect_gaussians</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">regions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/util.html#collect_gaussians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.util.collect_gaussians" title="Permalink to this definition"></a></dt>
+<dd><p>Return the mean and covariance of points within
+each Voronoi region.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>regions</strong> (<em>2×NREGIONS np.float32</em>) – (x,y) coordinates of Vornoi region centers</p></li>
+<li><p><strong>points</strong> (<em>2×NPOINTS np.float32</em>) – (x,y) points to assign to regions</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>means</strong> (<em>NFIELDS×2 np.float32</em>)</p></li>
+<li><p><strong>sigmas</strong> (<em>NFIELDS×2×2 np.float32</em>)</p></li>
+<li><p><strong>ellipses</strong> (<em>np.float32</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lgcpspatial.estimators.html" class="btn btn-neutral float-left" title="lgcpspatial.estimators module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lgcpspatial.plot.html" class="btn btn-neutral float-right" title="lgcpspatial.plot module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

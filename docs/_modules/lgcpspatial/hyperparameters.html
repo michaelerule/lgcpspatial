@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>lgcpspatial.hyperparameters &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                5
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorial notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../example%200%20hyperparameter%20groundtruth%20test.html">Example 0: Ground truth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%201%20load%20data.html">Example 1: Load data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%202%20heuristic%20parameter%20lgcp%20infer.html">Example 2: Heuristic hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%203%20optimize%20hyperparameters.html">Example 3: Optimized hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%204%20confidence%20intervals.html">Example 4: Confidence intervals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.hyperparameters.html">hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.estimators.html">estimators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.util.html">util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.plot.html">plot</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Fast Log-Gaussian Point-Process Methods for Grid Cells</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">lgcpspatial.hyperparameters</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for lgcpspatial.hyperparameters</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># -*- coding: UTF-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">hyperparameters.py: </span>
+
+<span class="sd">Wrapper for using grid search for optimizing the prior </span>
+<span class="sd">kernel&#39;s hyperparamters for the DiagonalFourierLowrank</span>
+<span class="sd">model class.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.gridsearch</span> <span class="kn">import</span> <span class="n">grid_search</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span> <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span> <span class="kn">import</span> <span class="n">coordinate_descent</span>
+
+
+<div class="viewcode-block" id="period_and_prior_variance"><a class="viewcode-back" href="../../lgcpspatial.hyperparameters.html#lgcpspatial.hyperparameters.period_and_prior_variance">[docs]</a><span class="k">def</span> <span class="nf">period_and_prior_variance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Wrapper for ``gridsearch_optimize()`` that returns </span>
+<span class="sd">    the optimized period and variance</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data: lgcpspatal.loaddata.Dataset</span>
+<span class="sd">        Prepared dataset</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    **kwargs:</span>
+<span class="sd">        Keyword arguments are forwaded to </span>
+<span class="sd">        ``gridsearch_optimize``, see the documentation for</span>
+<span class="sd">        ``gridsearch_optimize`` for more details.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    period: float</span>
+<span class="sd">        Estimated grid-cell period in pixels</span>
+<span class="sd">    v0: </span>
+<span class="sd">        Estiamted kernel marginal variance</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">gridsearch_optimize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">bestindex</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span> <span class="o">=</span> <span class="n">result</span>
+    <span class="n">P_use</span>  <span class="o">=</span> <span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">v0_use</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">prior_variance</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">P_use</span><span class="p">,</span> <span class="n">v0_use</span></div>
+
+
+<div class="viewcode-block" id="gridsearch_optimize"><a class="viewcode-back" href="../../lgcpspatial.hyperparameters.html#lgcpspatial.hyperparameters.gridsearch_optimize">[docs]</a><span class="k">def</span> <span class="nf">gridsearch_optimize</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="mi">201</span><span class="p">,</span> <span class="c1"># Period search grid resolution</span>
+    <span class="n">nv</span> <span class="o">=</span> <span class="mi">201</span><span class="p">,</span> <span class="c1"># Kernel height search grid resolutions</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>   <span class="c1"># Range (ratio) to search for optimal period</span>
+    <span class="n">rv</span> <span class="o">=</span> <span class="mi">150</span><span class="p">,</span> <span class="c1"># Range (ratio) to search for optimal kernel height</span>
+    <span class="n">kclip</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">variance_attenuate</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span> 
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data: load_data.Dataset</span>
+<span class="sd">        Prepared dataset with the following attributes:</span>
+<span class="sd">            L: posive int</span>
+<span class="sd">                Size of L×L spatial grid, in bins</span>
+<span class="sd">            P: postive float</span>
+<span class="sd">                Grid cell&#39;s heuristic period, units of bins</span>
+<span class="sd">            prior_variance: positive float</span>
+<span class="sd">                Heuristic kernel prior zero-lag variance. </span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    np: positive odd int; default 201</span>
+<span class="sd">        Number of grid period values to explore</span>
+<span class="sd">        in the grid search. </span>
+<span class="sd">    nv: positive odd int; default 201</span>
+<span class="sd">        Number of prior marginal variance values to explore</span>
+<span class="sd">        in the grid search. </span>
+<span class="sd">    rp: float &gt;1.0; default 4</span>
+<span class="sd">        Ratio above and below the provided ``dataset.P`` </span>
+<span class="sd">        grid cell period to explore. </span>
+<span class="sd">        This will explore ``np`` periods evenly spaced on</span>
+<span class="sd">        a logarithmic scale between ``dataset.P/rp`` and</span>
+<span class="sd">        ``dataset.P*rp``.</span>
+<span class="sd">    rv float &gt;1.0; default 150 </span>
+<span class="sd">        Ratio above and below the provided ``dataset.P`` </span>
+<span class="sd">        grid cell period to explore. </span>
+<span class="sd">        This will explore ``nv`` periods evenly spaced on</span>
+<span class="sd">        a logarithmic scale between </span>
+<span class="sd">        ``dataset.prior_variance/rv`` and</span>
+<span class="sd">        ``dataset.prior_variance*rv``.</span>
+<span class="sd">    kclip: int, default 3</span>
+<span class="sd">        Bessel zero to clip the grid-cell kernel at. </span>
+<span class="sd">            - 3: Nearest-neighbor grid order</span>
+<span class="sd">                Kernel will expect positive correlations</span>
+<span class="sd">                between adjacent grid feilds separated by</span>
+<span class="sd">                the cell&#39;s period</span>
+<span class="sd">            - 2: Field-repulsion at grid scale only</span>
+<span class="sd">                Kernel will contain a local bump at the</span>
+<span class="sd">                typical grid field scale, as well as an </span>
+<span class="sd">                inhibitory surround at the same width. </span>
+<span class="sd">            - 1: Characteristic smoothness scale only </span>
+<span class="sd">                (Reduces kernel to ~Gaussian bump at the </span>
+<span class="sd">                 size of the average grid field). </span>
+<span class="sd">            - &gt;3: Larger numbers correspond to stronger</span>
+<span class="sd">                assumptions of long-range order.</span>
+<span class="sd">    variance_attenuate: float, default 0.5</span>
+<span class="sd">        We recycle the estiamte of the posterior variance</span>
+<span class="sd">        between successive evaluations of the grid search.</span>
+<span class="sd">        This can reduce the number of iterations needed </span>
+<span class="sd">        to converge. However, there is risk of isntabiltiy</span>
+<span class="sd">        if the posterior marginal variance is initially </span>
+<span class="sd">        too large. This fraction multiplies the variance</span>
+<span class="sd">        carried-over from nearby parameters. Set this to</span>
+<span class="sd">        a smaller number (I suggest 0) if you run into </span>
+<span class="sd">        issues with the variance iteration diverging.</span>
+<span class="sd">    verbose: boolean, default True</span>
+<span class="sd">        Whether to print progress update</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    bestindex: </span>
+<span class="sd">        best index into parameter grid</span>
+<span class="sd">    bestpars: </span>
+<span class="sd">        values of best parameters</span>
+<span class="sd">    bestresult]: </span>
+<span class="sd">        (state, likelihood, info) at best parameters.</span>
+<span class="sd">        ``info`` is determined by the third element in the</span>
+<span class="sd">        3-tuple return-value of the ``evaluate`` function,</span>
+<span class="sd">        passed by the user. ``state`` is also user-defined.</span>
+<span class="sd">    allresults: </span>
+<span class="sd">        All other results as an object array.</span>
+<span class="sd">        Grid points that were not evaluated are None.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="c1"># Verify arguments</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="p">)</span>
+    <span class="n">nv</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nv</span><span class="p">)</span>
+    <span class="n">rp</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>
+    <span class="n">rv</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span>
+        <span class="s1">&#39;Number of search points for grid period ``np`` &#39;</span>
+        <span class="s1">&#39;should be a positive odd integer, got </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="n">np</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nv</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span>
+        <span class="s1">&#39;Number of search points for grid period ``nv`` &#39;</span>
+        <span class="s1">&#39;should be a positive odd integer, got </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="n">nv</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">%</span><span class="mi">2</span><span class="p">:</span> <span class="n">np</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">nv</span><span class="o">%</span><span class="mi">2</span><span class="p">:</span> <span class="n">nv</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="k">if</span> <span class="n">rv</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span>
+        <span class="s1">&#39;Ratio for variance search ``rv`` should be &gt;1.0, &#39;</span>
+        <span class="s1">&#39;got </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="n">rv</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rp</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span>
+        <span class="s1">&#39;Ratio for period search ``rp`` should be &gt;1.0, &#39;</span>
+        <span class="s1">&#39;got </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="n">rp</span><span class="p">)</span>
+    
+    <span class="c1"># Start with heuristic kernel parameters</span>
+    <span class="n">P</span>  <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">P</span>
+    <span class="n">kv</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">prior_variance</span>
+    
+    <span class="c1"># Prepare hyperparameter grid</span>
+    <span class="n">Ps</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">P</span><span class="o">/</span><span class="n">rp</span><span class="p">),</span><span class="n">log</span><span class="p">(</span><span class="n">P</span><span class="o">*</span><span class="n">rp</span><span class="p">),</span><span class="n">np</span><span class="p">)))</span>
+    <span class="n">βs</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">rv</span><span class="p">),</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">*</span><span class="n">rv</span><span class="p">),</span><span class="n">nv</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">pargrid</span> <span class="o">=</span> <span class="p">[</span><span class="n">Ps</span><span class="p">,</span><span class="n">βs</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">evaluate_ELBO</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span><span class="n">state</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function to tell grid search know which parameters </span>
+<span class="sd">        are good.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Parameters: tuple</span>
+<span class="sd">            Parameters taken from the parameter search grid</span>
+<span class="sd">        State: List of arrays; default None</span>
+<span class="sd">            Saves initial conditions</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        state: the inferred model fit, in the form of a list </span>
+<span class="sd">            of floating-point numpy arrays, to be re-used as </span>
+<span class="sd">            initial conditions for subsequent parameters.</span>
+<span class="sd">        log likelihood: float</span>
+<span class="sd">            Scalar summary of fit quality, higher is better</span>
+<span class="sd">        info: object</span>
+<span class="sd">            Anything else you&#39;d like to save</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">p</span><span class="p">,</span><span class="n">β</span>     <span class="o">=</span> <span class="n">parameters</span>
+        <span class="n">μ</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">mh</span>  <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span><span class="o">*</span><span class="mi">3</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">state</span>
+        <span class="n">model</span>   <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span>
+            <span class="n">kv</span><span class="o">/</span><span class="n">β</span><span class="p">,</span>
+            <span class="n">p</span><span class="p">,</span>
+            <span class="n">data</span><span class="p">,</span><span class="n">kclip</span><span class="o">=</span><span class="n">kclip</span><span class="p">)</span>
+        <span class="n">μ0</span>      <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">μ</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="nd">@μ</span>
+        <span class="n">v0</span>      <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">v</span><span class="o">*</span><span class="n">variance_attenuate</span>
+        <span class="n">mh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">nl</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">μ0</span><span class="p">,</span><span class="n">v0</span><span class="p">)</span>
+        <span class="n">μ</span>       <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@mh</span> 
+        <span class="n">state</span>   <span class="o">=</span> <span class="n">μ</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">mh</span>
+        <span class="n">loglike</span> <span class="o">=</span> <span class="o">-</span><span class="n">nl</span>
+        <span class="k">return</span> <span class="n">state</span><span class="p">,</span> <span class="n">loglike</span><span class="p">,</span> <span class="n">model</span>
+
+    <span class="c1"># Run overall grid search</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">grid_search</span><span class="p">(</span>
+        <span class="n">pargrid</span><span class="p">,</span>
+        <span class="n">evaluate_ELBO</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+    <span class="n">bestindex</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span> <span class="o">=</span> <span class="n">result</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Heuristic parameters&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;P  = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">P</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;v0 = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">kv</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Optimized parameters:&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;P    = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;β    = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;v0/β = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">kv</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020–2022, M. E. Rule; P. Chaudhuri-Vayalambrone.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
