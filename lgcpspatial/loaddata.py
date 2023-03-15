@@ -9,9 +9,8 @@ resolution for other rats (R11 and R18) was 338px/m
 Fs     = 50.0      # Sample rate of data (samples/second)
 """
 
-datadir = "/home/mer49/Dropbox (Cambridge University)/OLeary_notebooks/gp/"
-
 import os
+import warnings
 import numpy             as np
 import matplotlib        as mpl
 import matplotlib.pyplot as plt
@@ -100,24 +99,33 @@ class Arena:
     an experiment.
     
     Attributes
-    --------------------------------------------------------
+    ----------
     mask: np.bool
-        L x L boolean matrices of grid locations within the 
+        L × L boolean matrices of grid locations within the 
         experimetnal arena
     nanmask: np.float32
-        L x L float32 array with 1 for in-bounds points and 
+        L × L float32 array with 1 for in-bounds points and 
         NaN for out-of-bounds points. Multiple array data by
         this mask before 
-        sending to `imshow()` to render out-of-bounds points
+        sending to ``imshow()`` to render out-of-bounds points
         as transparent.
     perimeter: np.float32
-        NPOINTS x 2 list of points in the convex hull of the 
+        NPOINTS × 2 list of points in the convex hull of the 
         experimental arena
         in [0,1]² normalied coordinates        
     hull: scipy.spatial._qhull.ConvexHull
         Convex Hull object describing the arena perimeter
     '''
-    def __init__(self,px,py,L,
+    def __init__(self,*args,**kwargs):
+        if '__from_mask' in kwargs:
+            Arena._init_from_mask(self,*args,**kwargs)
+        elif '__from_perimeter' in kwargs:
+            Arena._init_from_perimeter(self,*args,**kwargs)
+        else:
+            Arena._init_from_points(self,*args,**kwargs)
+    
+    
+    def _init_from_points(self,px,py,L,
                  resolution=1,
                  radius=1.5,
                  thr=0.1):
@@ -126,7 +134,7 @@ class Arena:
         locations
 
         Parameters
-        ----------------------------------------------------
+        ----------
         px: np.float32
             NPOINTS ndarray
             X coordinates of points in [0,1]
@@ -138,7 +146,7 @@ class Arena:
             Number of spatial bins (e.g. 128)
 
         Other Parameters
-        ----------------------------------------------------
+        ----------------
         resolution: positive integer
             Upsampling factor
             Defaults to 1
@@ -151,12 +159,12 @@ class Arena:
             the boundary.
 
         Returns
-        ----------------------------------------------------
+        -------
         arena: Arena
             An Arena object containing a LxL boolean array 
-            `mask`, a NPOINTSx2 array of perimeter points
-            `perimenter`, and a 
-            `scipy.spatial._qhull.ConvexHull` object `hull`; 
+            ``mask``, a NPOINTSx2 array of perimeter points
+            ``perimenter``, and a 
+            ``scipy.spatial._qhull.ConvexHull`` object ``hull``; 
         '''
         
         # Encircle points in a convex hull
@@ -176,7 +184,7 @@ class Arena:
         # Find points within this grid inside convex hull
         mask  = is_in_hull(grdp,hull).reshape(Lr,Lr)
         
-        # Extent the mask to add a margin
+        # Extend the mask to add a margin
         mask  = blur(mask,radius)>thr
         
         # Recalculate hull to include extended mask
@@ -189,30 +197,85 @@ class Arena:
         self.mask = mask
         self.perimeter = points[verts]
         self.hull = hull
+        self.nanmask = float32(mask)
+        self.nanmask[self.nanmask<1] = NaN
+    
+    
+    def _init_from_mask(self,mask,resolution=None,radius=None,**kwargs):
         
+        self.mask = mask
+        L = mask.shape[0]
+        
+        # Recalculate hull to include extended mask
+        py,px = np.array(np.where(mask))/L
+        points= np.array([px,py]).T
+        hull  = ConvexHull(points)
+        verts = np.concatenate(
+            [hull.vertices,hull.vertices[:1]])
+        
+        self.mask = mask
+        self.perimeter = points[verts]
+        self.hull = hull
         self.nanmask = float32(mask)
         self.nanmask[self.nanmask<1] = NaN
         
+        if not resolution is None:
+            # Generate discrete grid at desired resolution
+            Lr   = L*resolution
+            grdp = linspace(0,1,Lr+1+Lr)[1::2]
+            grdp = array([
+                grdp[None,:]*ones((Lr,Lr)),
+                grdp[:,None]*ones((Lr,Lr))])
+            grdp  = grdp.reshape(2,(Lr)**2).T
+
+            # Find points within this grid inside convex hull
+            mask  = is_in_hull(grdp,hull).reshape(Lr,Lr)
+
+            if not radius is None:
+                # Extend the mask to add a margin
+                mask  = blur(mask,radius)>thr
+
+            # Recalculate hull to include extended mask
+            py,px = array(where(mask))/(Lr)
+            points= array([px,py]).T
+            hull  = ConvexHull(points)
+            verts = concatenate(
+                [hull.vertices,hull.vertices[:1]])
+
+            self.mask = mask
+            self.perimeter = points[verts]
+            self.hull      = hull
+            self.nanmask   = float32(mask)
+            self.nanmask[self.nanmask<1] = NaN
+    
+    
+    def from_mask(mask,**kwargs):
+        return Arena(mask,__from_mask=True,**kwargs)
+    
         
-    def close_to_boundary(self, peaks, radius):
+    def distance_to_boundary(self, peaks):
         '''
-        Detect peaks within distance `radius` of the 
-        Arena boundary. 
+        Measure the distance of a point within this
+        Arena's convex hull, and the boundary (the
+        convex hull). 
+        
+        This is calculated in a fairly crude way: 
+        brute force search for the closest out of
+        bounds point on the L × L grid. 
 
         Parameters
         ----------------------------------------------------
         peaks: 2 × NPOINTS np.float32  
-            (x,y) positions of peaks to trim 
-            in normalized [0,1]² coordinates.
-        radius: float
-            Distance from edge to trim
-            in pixels
-
+            (x,y) positions of points to test.
+        
         Returns
         ----------------------------------------------------
         is_close: Length NPOINTS 1D np.bool
             Boolean array indicating 
+        
         '''
+        peaks = np.float32(peaks)
+        
         if np.any(peaks<0) or np.any(peaks>1):
             raise ValueError(
                 'Expected peaks to be 2×NPOINTS np.float32 '
@@ -223,16 +286,38 @@ class Arena:
         zpeaks  = [1,1j]@peaks
         D  = abs(zpeaks[:,None]-outside[None,:])
         D  = np.min(D,1)
-        return D<radius/L
+        return D
+    
+        
+    def close_to_boundary(self, peaks, radius):
+        '''
+        Detect peaks within distance ``radius`` of the 
+        Arena boundary. 
+
+        Parameters
+        ----------
+        peaks: 2 × NPOINTS np.float32  
+            (x,y) positions of peaks to trim 
+            in normalized [0,1]² coordinates.
+        radius: float
+            Distance from edge *in pixels*.
+
+        Returns
+        -------
+        is_close: Length NPOINTS 1D np.bool
+            Boolean array indicating 
+        '''
+        L  = self.mask.shape[0]
+        return self.distance_to_boundary(peaks)<radius/L
     
     
     def remove_near_boundary(self, peaks, radius):
         '''
         Delete peaks that are too close to the edgs of
-        an experimental arena
+        an experimental arena.
 
         Parameters
-        ----------------------------------------------------
+        ----------
         peaks: 2 × NPOINTS np.float32  
             (x,y) positions of peaks to trim 
             in normalized [0,1]² coordinates.
@@ -241,13 +326,17 @@ class Arena:
             in pixels
 
         Returns
-        ----------------------------------------------------
+        -------
         peaks: 2 × NPOINTS np.float32  
-            (x,y) positions of peaks further than `radius`
+            (x,y) positions of peaks further than ``radius``
             pixels from the boundary.      
         '''
         ok = ~self.close_to_boundary(peaks,radius)
         return peaks[:,ok]
+    
+    
+    def contains(self,P):
+        return lgcpspatial.util.is_in_hull(P,self.hull)
         
 class Dataset:
     '''
@@ -261,8 +350,8 @@ class Dataset:
         point.
     extent: tuple
         (xstart,xstop,ystart,ystop) coordinates of 2D arena 
-        in meters. Pass this as the `extent` argument to 
-        `imshow()` to correctly position L x L grid in 
+        in meters. Pass this as the ``extent`` argument to 
+        ``imshow()`` to correctly position L × L grid in 
         physical coordinates.  
     scale: float, units of 1/meters 
         Scaling factor between (px,py)∈[0,1]²
@@ -342,8 +431,8 @@ class Dataset:
             grid-cell data file. 
         '''
         # Retrieve data from file
-        data = loadmat(dataset,squeeze_me=True)
-        dataset              = dataset
+        data    = loadmat(dataset,squeeze_me=True)
+        dataset = dataset
         
         for varname in ('xy dir pos_sample_rate '
                         'pixels_per_m spikes_times '
@@ -365,7 +454,7 @@ class Dataset:
         head_direction_deg = (-head_direction_deg + 180)%360
         
         if len(spike_times_samples)==0:
-            raise ValueError('The `spikes_times` variable '
+            warnings.warn('The `spikes_times` variable '
                 'for file %s appears to be empty.'%dataset)
 
         # Convert units
@@ -404,12 +493,15 @@ class Dataset:
         data.NSAMPLES             = NSAMPLES
         return data
 
-    def prepare(self,L,
-                P=None,
-                spike_weights=None,
-                blur_radius=2,
-                doplot=False
-               ):
+    def prepare(
+        self,
+        L,
+        P=None,
+        spike_weights=None,
+        blur_radius=2,
+        doplot=False,
+        arena_only=False
+        ):
         '''
         Prepare dataset for further inference.
         This function bins spikes and position data, and 
@@ -417,9 +509,9 @@ class Dataset:
         following attributes to the Dataset object:
 
         Attributes
-        ----------------------------------------------------
+        ----------
         L: int
-            Size of L x L spatial grid for binned data.
+            Size of L × L spatial grid for binned data.
             I've found that 128² grids work well and are a
             good compromise between speed, resolution, and 
             numerical stability.
@@ -445,7 +537,7 @@ class Dataset:
             you should optimize the kernel hyperparameters
             using the ELBO if you want the posterior
             variance to be interpretable. See
-            `grid_search.py`. 
+            ``grid_search.py``. 
         bg_blur_radius: float
             Low-frequency spatial scale below which rate
             variations are considered background
@@ -456,50 +548,58 @@ class Dataset:
             Density Estimator (KDE) of firing rate as a
             function of location.
         prior_mean: np.float32
-            L x L array of estimated background log-rate. 
+            L × L array of estimated background log-rate. 
             Use this as a prior during Gaussian Process 
             inference so that the calculated rate maps are
             defined in terms of grid-like structure above
             these background rate variations. This is
-            calculated by Gaussian blurring the visits `n`
-            and spike counts `y` with a kernel with
-            standard-deviation `bg_blur_radius`, and taking
+            calculated by Gaussian blurring the visits ``n``
+            and spike counts ``y`` with a kernel with
+            standard-deviation ``bg_blur_radius``, and taking
             the logarithm of their ratio.
         lograte_guess: np.float32
-            L x L array of KDE-estimated log-firing rate.
-            This is calculated by blurring visits `n` and
-            spike counts `y` with a Gaussian kernel with
-            standard deviation `kde_blur_radius`, taking 
+            L × L array of KDE-estimated log-firing rate.
+            This is calculated by blurring visits ``n`` and
+            spike counts ``y`` with a Gaussian kernel with
+            standard deviation ``kde_blur_radius``, taking 
             the logarithm of their ratio, and subtracting
             prior_mean.
 
         Parameters
-        ----------------------------------------------------
+        ----------
         fn: str
             File path to load
         L: int
-            Number of bins in L x L spatial grid
+            Number of bins in L × L spatial grid
 
         Other Parameters
-        ----------------------------------------------------
-        P: int
+        ----------------
+        P: int; default None
             Grid period; If not provided we will estimate
             this from the autocorrelogram,
-        blur_radius: float
+        blur_radius: float; default 2
             Initial KDE blur radius for heuristic period
-            estimate. Default is 2. 
-        spike_weights: float32
+            estimate.
+        spike_weights: np.float32; default None
             Array of sample weightings of the same length
             as Dataset.spikes to use when binning.
-        doplot: boolean
-            Whether to show a summary plot; Default: True.
+        doplot: boolean; default True
+            Whether to show a summary plot
+        arena_only: boolean; default False
+            Prepare binned position and arena information
+            only. Useful if you want to use this code
+            for something that is not a grid cell. The
+            following attributes will remain absent:
+            ``P``, ``bg_blur_radius``, ``prior_mean``, 
+            ``kde_blur_radius``, ``lograte_guess``, 
+            ``prior_variance``.
 
         Returns
-        ----------------------------------------------------
+        -------
         A Dataset object containing spatially-binned data,
         Heurstic estimates of the grid scale, and initial 
         firing-rate maps estimated using a kernel density 
-        estimator. See the `PreparedDataset` docstring for 
+        estimator. See the ``PreparedDataset`` docstring for 
         more detail. 
         '''
         # Bin spikes
@@ -510,36 +610,71 @@ class Dataset:
                          w=spike_weights) 
         zeros    = N<=0.0
         N[zeros] = 1
-        y        = float32(K/N)
-        y[zeros] = 0
+        Y        = float32(K/N)
+        Y[zeros] = 0
+        n        = N.ravel()                  # s/bin
+        y        = Y.ravel()                  # spikes/s/bin
+        self.L=L
+        self.n=n
+        self.y=y
 
         # Prepare mask using the convex hull
         arena = Arena(self.px,self.py,L)
+        self.arena=arena
+        
+        # This is helpful
+        perimeter_meters = arena.perimeter/self.scale \
+            + [self.extent[0],self.extent[2]]
+        arena.perimeter_meters = perimeter_meters
+        
+        # Don't bother
+        if arena_only: 
+            return self
 
         # Calibrate grid scale
-        λhat   = blur(y,blur_radius) # spikes/second
+        λhat   = blur(Y,blur_radius)      # spikes/second
         acorr2 = fft_acorr(λhat,arena.mask) # 2D autocorr.
-        acorrR = radial_average(acorr2) # radial autocorr.
-        res    = 50                     # Subsample res.
+        acorrR = radial_average(acorr2)   # radial autocorr.
+        res    = 50                       # Subsample res.
         if P is None:
             # № bins to 1st peak
             P,acup = acorr_peak(acorrR,res) 
-            #if isnan(P):
-            #    raise AssertionError('Could not detect grid '
-            #        'period. Is the period too large? Is '
-            #        'this a place cell?')
-            # Get peiod from peak assuming bessel Jo
-            P  *= 2*pi/jn_zeros(1,2)[-1]
+            # Get period from peak assuming bessel Jo
+            P  *= 2*np.pi/jn_zeros(1,2)[-1]
+            
+            if isnan(P):
+                warnings.warn(
+                    'Could not detect grid period using '
+                    'autocorrelogram peaks. Is the period '
+                    'too large? Is this a place cell? '
+                    'I will try to use the trough instead.'
+                )
+                P,acup = acorr_trough(acorrR,res) 
+                # Get period from peak assuming bessel Jo
+                P *= 2*np.pi/jn_zeros(1,1)[-1]
+                if isnan(P):
+                    warnings.warn(
+                        'Heuristic detection of grid-cell '
+                        'period using peaks/troughs in the '
+                        'autocorrelogram failed; Check '
+                        'that this is really a grid cell '
+                        'and that the data can resolve '
+                        'its periodicity. For high grid '
+                        'resolutions (large ``L``) relative'
+                        ' to the grid scale, it may also '
+                        'be useful to increase the '
+                        'argument ``blur_radius`` to '
+                        '``Dataset.prepare()`` (the default'
+                        ' is 2).'
+                    )
         elif doplot:
             _,acup = acorr_peak(acorrR,res)
             
         # Precompute variables
         kde_blur_radius = P/pi              # bins
         bg_blur_radius  = kde_blur_radius*5 # bins
-        n    = N.ravel()                    # s/bin
-        y    = y.ravel()                    # spikes/s/bin
-        λhat = kde(N,K,kde_blur_radius)    # KDE rate
-        λbg  = kde(N,K,bg_blur_radius)     # Bkgnd rate
+        λhat = kde(N,K,kde_blur_radius)     # KDE rate
+        λbg  = kde(N,K,bg_blur_radius)      # Bkgnd rate
         lλh  = slog(λhat)                   # Log rate
         prior_mean    = slog(λbg)           # Log bkgnd
         lograte_guess = lλh - prior_mean    # Fgnd lograte
@@ -597,39 +732,43 @@ class Dataset:
             sca(ax[7]); colorbar(label='spike²/sample²')
             figurebox(color='w')
 
-        assert all(isfinite(P))
-        assert all(isfinite(N))
-        assert all(isfinite(K))
-        assert all(isfinite(λhat))
-        assert all(isfinite(λbg))
+        if not all(isfinite(N)):
+            warnings.warn(
+                'Some visit counts (N) are not finite')
+        if not all(isfinite(K)):
+            warnings.warn(
+                'Some spike counts (K) are not finite')
+        if not all(isfinite(λhat)):
+            warnings.warn(
+                'Some rates (λhat=K/N) are not finite')
+        if not all(isfinite(λbg)):
+            warnings.warn(
+                'Some background rate (λbg) values '
+                'are not finite')
         
-        self.L=L
-        self.n=n
-        self.y=y
         self.P=P
-        self.arena=arena
         self.bg_blur_radius  = bg_blur_radius
         self.prior_mean      = prior_mean
         self.kde_blur_radius = kde_blur_radius
         self.lograte_guess   = lograte_guess
         self.prior_variance  = prior_variance
         
-        # This is helpful
-        perimeter_meters = arena.perimeter/self.scale \
-            + [self.extent[0],self.extent[2]]
-        arena.perimeter_meters = perimeter_meters
-        
         return self
     
-    def create_posthoc(L,n,y,
-                       prior_mean=0,
-                       lograte_guess=None
-                      ):
+    def create_posthoc(
+        L,n,y,
+        prior_mean=0,
+        lograte_guess=None
+        ):
         '''
         Bypass normal initialization and Dataset holding 
         only binned positions and rate. 
         This is only used by 
-        `example 0 hyperparameter groundtruth test.ipynb`
+        ``example 0 hyperparameter groundtruth test.ipynb``
+        
+        The resulting object has the prepared values
+        ``(n,y,prior_mean,lograte_guess,L)`` only, 
+        and lacks the ``(px,py,spikes)`` raw data fields. 
         '''
         n = float32(n).ravel()
         y = float32(y).ravel()
@@ -648,13 +787,13 @@ class Dataset:
         Re-bin spike histogram using the provided weights
         
         Parameters
-        ----------------------------------------------------
+        ----------
         weights: 1D np.array
             1D array of spike weights of the same length
             as data.spikes.
             
         Returns
-        ----------------------------------------------------
+        -------
         Dataset:
             New dataset with spike histogram binned using
             the provided weights.
@@ -663,7 +802,6 @@ class Dataset:
         if not weights.shape==self.spikes.shape:
             raise ValueError('list of weights should be '
                 'the same length as Dataset.spikes.')
-            
         N,K = map(ravel,bin_spikes(
             self.px,
             self.py,
@@ -683,12 +821,12 @@ class Dataset:
         physical units (meters)
 
         Parameters
-        ----------------------------------------------------
+        ----------
         p: np.array
             array of 2D point data
 
         Returns
-        ----------------------------------------------------
+        -------
         np.array: 
             2×NPOINTS array of points in physical units
         '''
@@ -704,7 +842,7 @@ class Dataset:
                 'direction contains (x,y) points for '+
                 'shape %s')%(p.shape,))
         if np.any(p<0) or np.any(p>1):
-            raise ValueError('Expected points in [0,1]², but '+
+            raise ValueError('Expected points in [0,1]²; '+
                 'point data contained values outside this.')
         p = p/data.scale + [data.extent[0],data.extent[2]]
         return p.T

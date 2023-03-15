@@ -22,9 +22,7 @@ import numpy as np
 
 def SGOrd(m,fc,fs):
     '''
-    
     Compute polynomial order for Savitsky-Golay filter
-    
     
     Fc = (N+1)/(3.2M-4.6)
     For fixed M, Fc

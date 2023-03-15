@@ -22,13 +22,17 @@ def grid_search(
     evaluate: function
         Arguments:
             Parameters: Tuple
-                Parameters taken from the parameter search grid
+                Parameters taken from the parameter search 
+                grid
             State: List of arrays
-                Saves initial conditions (optional, default None)
+                Saves initial conditions 
+                (optional, default None)
         Returns:
-            state: the inferred model fit, in the form of a list 
-                of floating-point numpy arrays, to be re-used as 
-                initial conditions for subsequent parameters.
+            state: 
+                the inferred model fit, in the form of a 
+                list of floating-point numpy arrays, to be 
+                re-used as initial conditions for 
+                subsequent parameters.
             likelihood: float
                 Scalar summary of fit quality, higher is better
             info: object
@@ -47,9 +51,9 @@ def grid_search(
         values of best parameters
     results[best]: 
         (state, likelihood, info) at best parameters.
-        `info` is determined by the third element in the
-        3-tuple return-value of the `evaluate` function,
-        passed by the user. `state` is also user-defined.
+        ``info`` is determined by the third element in the
+        3-tuple return-value of the ``evaluate`` function,
+        passed by the user. ``state`` is also user-defined.
     allresults: 
         All other results as an object array.
         Grid points that were not evaluated are None.

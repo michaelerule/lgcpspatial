@@ -9,7 +9,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 """
-`util.py`: Miscellaneous utility functions used in the notebooks
+``util.py``: Miscellaneous utility functions used in the notebooks
 """
 
 import os
@@ -71,7 +71,7 @@ def tic(doprint=True,prefix=''):
     Returns
     -------
     t: int
-        `current_milli_time()`
+        ``current_milli_time()``
     '''
     global __GLOBAL_TIC_TIME__
     t = current_milli_time()
@@ -125,6 +125,7 @@ def progress_bar(x,N=None):
     if N is None:
         x = list(x)
         N = len(x)
+        if N<=0: return None
     K = int(np.floor(np.log10(N)))+1
     pattern = ' %%%dd/%d'%(K,N)
     wait_til_ms = time.time()*1000
@@ -138,7 +139,7 @@ def progress_bar(x,N=None):
                 ']%3d%%'%(i*100//N)+(pattern%i),
                 end='',
                 flush=True)
-            wait_til_ms = time_ms+250
+            wait_til_ms = time_ms+1000
         yield x
     print('\r'+' '*70+'\r',end='',flush=True)
 
@@ -278,7 +279,6 @@ def onehot(x,N=None):
     return result
         
         
-        
 def slog(x,minrate = 1e-10, rtype=float32):
     '''
     Safe log function; Avoids numeric overflow by clipping
@@ -292,16 +292,17 @@ def is_in_hull(P,hull):
     credit: https://stackoverflow.com/a/52405173/900749
     
     Parameters
-    --------------------------------------------------------
+    ----------
     P: points
     hull: Convex Hull object
     
     Returns
-    --------------------------------------------------------
+    -------
     isInHull: Length NPOINTS 1D np.bool
         Array of booleans indicating which points are within
         the convex hull.
     '''
+    if np.size(P)<=0: return np.empty(np.shape(P),bool)
     P = c2p(p2c(P)).T # lazy code reuse: ensure array shape
     A = hull.equations[:,0:-1]
     b = np.transpose(np.array([hull.equations[:,-1]]))
@@ -323,7 +324,7 @@ def blurkernel(L,σ,normalize=False):
     1D Gaussian blur convolution kernel    
     
     Parameters
-    --------------------------------------------------------
+    ----------
     L: int
         Size of L×L spatial domain
     σ: positive float
@@ -332,10 +333,10 @@ def blurkernel(L,σ,normalize=False):
     normalize: boolean
         Whether to make kernel sum to 1
     '''
-    k = exp(-(arange(-L//2,L//2)/σ)**2)
+    k = np.exp(-(np.arange(-L//2,L//2)/σ)**2)
     if normalize: 
-        k /= sum(k)
-    return fftshift(k)
+        k /= np.sum(k)
+    return np.fft.fftshift(k)
 
 def blurkernel2D(L,σ,normalize=False):
     '''
@@ -461,8 +462,36 @@ def fft_upsample_1D(x,factor=4):
 
 def acorr_peak(r,F=6):
     '''
-    sinc upsample at ×F resolution to get distance to first
-    peak
+    Identify the first peak in an autocorrelogram at non-
+    zero lag. 
+    
+    This routine uses FFT-based sinc() upsampling to
+    interpolate the location of peaks. The upsampling
+    factor is set by ``F``, and defaults to 6. 
+    
+    If there are *no* peaks at nonzero lag, this routine
+    returns ``nan``.
+    
+    Parameters
+    ----------
+    r: 1D np.float32
+        Autocorrelogram. The signal should be symmetric
+        around array index ``len(r)//2``.
+    
+    Other Parameters
+    ----------------
+    F: positive int; default 6
+        Upsampling ratio.
+        
+    Returns
+    -------
+    period: float
+        Index of first autocorrelogram peak at nonzero
+        lag, in units of samples of ``r``. 
+        If there are *no* peaks at nonzero lag, this routine
+        returns ``nan``.
+    upsampled_autocorrelogram: 1D np.float32
+        Length ``len(r) × F`` sinc-upsampled autocorrelogram.
     '''
     r2 = fft_upsample_1D(r,F)
     peaks = find_peaks(r2[len(r2)//2:])[0]
@@ -473,12 +502,40 @@ def acorr_peak(r,F=6):
 def acorr_trough(r,F=6):
     '''
     sinc upsample at ×F resolution to get distance to first 
-    peak
+    *trough* (compare to ``acorr_peak()``)
+    
+    This routine uses FFT-based sinc() upsampling to
+    interpolate the location of peaks. The upsampling
+    factor is set by ``F``, and defaults to 6. 
+    
+    If there are *no* troughs at nonzero lag, this 
+    routine returns ``nan``.
+    
+    Parameters
+    ----------
+    r: 1D np.float32
+        Autocorrelogram. The signal should be symmetric
+        around array index ``len(r)//2``.
+    
+    Other Parameters
+    ----------------
+    F: positive int; default 6
+        Upsampling ratio.
+        
+    Returns
+    -------
+    period: float
+        Index of first autocorrelogram trough at nonzero
+        lag, in units of samples of ``r``. 
+        If there are *no* troughs at nonzero lag, this 
+        routine returns ``nan``.
+    upsampled_autocorrelogram: 1D np.float32
+        Length ``len(r) × F`` sinc-upsampled autocorrelogram.
     '''
     r2 = fft_upsample_1D(r,F)
     troughs = find_peaks(-r2[len(r2)//2:])[0]
     if len(troughs):
-        return min(troughs)/F*2,r2
+        return min(troughs)/F,r2
     return NaN,r2
 
 def kernel_to_covariance(kern):
@@ -642,12 +699,12 @@ def hessian_2D(q):
     Get Hessian at all points
     
     Parameters
-    --------------------------------------------------------
+    ----------
     q: shape (L,L) ndarray
         2D spatial function for which to compute Hessian
     
     Returns
-    --------------------------------------------------------
+    -------
     hessian: shape (L,L,2,2)
         2×2 Hessian in (x,y) for all points in L×L grid q
     '''
@@ -678,7 +735,7 @@ def h2f_2d_truncated(u,L,use2d):
     Or just
     
     Parameters
-    --------------------------------------------------------
+    ----------
     u: shape (R,...) float32 ndarray
         Array where the first dimension is the vector of 
         low-rank Hartley transform coefficients; Operation
@@ -691,7 +748,7 @@ def h2f_2d_truncated(u,L,use2d):
         representation. Get this from model.use2d
     
     Returns
-    --------------------------------------------------------
+    -------
     fx.T: shape (L,L,...) complex64 ndarray
         Low-rank Fourier-space representation of u.
     '''
@@ -714,7 +771,7 @@ def f2h_2d_truncated(x,use2d):
     low-D Hartley space representation. 
     
     Parameters
-    --------------------------------------------------------
+    ----------
     x: shape (L,L,...) complex64 ndarray
         Low-D Fourier coefficients
     use2d: shape (L,L) boolean ndarray
@@ -723,7 +780,7 @@ def f2h_2d_truncated(x,use2d):
         representation. Get this from model.use2d
     
     Returns
-    --------------------------------------------------------
+    -------
     xh: shape (R,...) float32 ndarray
         Low-D (retaining R components) Hartley transform.
     '''
@@ -736,7 +793,7 @@ def h_conv2d_truncated(hk,hx,L,use2d):
     as a low-rank (R) Hartley transform (float32).
     
     Parameters
-    --------------------------------------------------------
+    ----------
     hk: shape (R,) float32 ndarray
         Truncated (R<L²) 2D Hartley transform of the kernel. 
     hx: shape (R,...) float32 ndarray
@@ -750,7 +807,7 @@ def h_conv2d_truncated(hk,hx,L,use2d):
         representation. Get this from model.use2d
         
     Returns
-    --------------------------------------------------------
+    -------
     shape (R,...) float32 ndarray
         Convolved result low-rank Hartley representation.
     '''
@@ -763,6 +820,8 @@ def pdist(a,b):
     '''
     Pairwise distances between two lists of scalars
     '''
+    a = np.array([*a])
+    b = np.array([*b])
     return abs(a[:,None]-b[None,:])
 
 
@@ -772,7 +831,7 @@ def ensure_dir(dirname):
     attempt to create it.
     
     Parameters
-    --------------------------------------------------------
+    ----------
     dirname : str
     """
     try:
@@ -834,7 +893,7 @@ def zscore(x,axis=0,regularization=1e-30,verbose=False,ignore_nan=True):
 
 def unitscale(signal,axis=None):
     '''
-    Rescales `signal` so that its minimum is 0 and its maximum is 1.
+    Rescales ``signal`` so that its minimum is 0 and its maximum is 1.
 
     Parameters
     --------------------------------------------------------
@@ -857,6 +916,7 @@ def unitscale(signal,axis=None):
     signal/= np.nanmax(signal,axis=axis)[theslice]
     return signal
 
+
 """
 ------------------------------------------------------------
 Routines for working with 2D points
@@ -865,23 +925,45 @@ Routines for working with 2D points
 def p2c(p):
     '''
     Convert a point in terms of a length-2 iterable into 
-    a complex number
+    a complex number.
+    
+    Parameters
+    ----------
+    p: iterable
+        Iterable with two elements for ``x`` and ``y``
+        coordinates. In turn, ``x`` and ``y`` should have
+        the same shape. 
+        
+    Returns
+    -------
+    z: np.complex64
+        ``z = x + 1j*y``
     '''
-    p = np.array(p)
+    p = np.array([*p])
     if np.any(np.iscomplex(p)): return p
+
     if not np.any(int32(p.shape)==2):
-        raise ValueError('Shape %s not (x,y)'%(p.shape,))
+        raise ValueError((
+            '``p2c`` expected an array with at least one axis'
+            ' length 2, corresponding to the ``x`` and ``y``'
+            ' coordinates. Instead, received an array with'
+            ' shape %s')%(p.shape,))
+
     which = np.where(int32(p.shape)==2)[0][0]
     p = p.transpose(which,
         *sorted(list({*arange(len(p.shape))}-{which})))
     return p[0]+1j*p[1]
 
+
 def c2p(z):
     ''' 
     Convert complex point to tuple
     '''
-    z = np.array(z)
+    z = np.complex64(z)
+    if np.any(np.isnan(z)):
+        z[np.isnan(z)] = np.NaN*(1+1j)
     return np.array([z.real,z.imag])
+
 
 def to_xypoint(z):
     '''
@@ -916,10 +998,11 @@ def to_xypoint(z):
     other = {*arange(len(z.shape))}-{which}
     return z.transpose(which,*sorted(list(other)))
 
+
 def closest(point,otherpoints,radius=inf):
     '''
     Find nearest (x,y) point witin a collection of 
-    other points, with maximum distance `radius`
+    other points, with maximum distance ``radius``
     
     Parameters
     --------------------------------------------------------
@@ -990,7 +1073,7 @@ def pair_neighbors(z1,z2,radius=inf):
         List of x+iy points
     z2: 1D np.complex64 
         List of x+iy points
-    radius: float, default `inf`
+    radius: float, default ``inf``
         Maximum connection distance
     
     Returns
@@ -1039,3 +1122,261 @@ def pair_neighbors(z1,z2,radius=inf):
     keep  = delta<radius
     edges = int32([a,b])
     return edges.T[keep], pairs.T[keep], delta[keep]
+
+
+
+def bootstrap_in_blocks(
+    variables,
+    blocklength,
+    nsamples=1,
+    replace=True,
+    seed=None):
+    '''
+    Chop dataset into blocks, then re-compose it, 
+    sampling these blocks randomly with replacement. 
+    
+    This is used to compute bootstrap confidence intervals.
+    
+    If ``blocklength`` doesn't evenly divide the number of 
+    time samples, then we include an extra block, but 
+    truncate the resulting timeseries to match the length
+    of the original data. 
+    
+    This casts all ``variables`` to ``np.float32``.
+    
+    Parameters
+    ----------
+    variables: list of np.float32
+        List of arrays. 
+        The first dimension of each array is time samples 
+        and should be the same length for all variables.
+    blocklength: int
+        Length of blocks for block-bootstrap-resample
+        
+    Other Parameters
+    ----------------
+    nsamples: positive int; default 1
+        Number of bootstrap samples to generate. 
+    replace: boolean; default True
+        Whether to sample with or without replacement.
+        Setting this to false implements a shuffle test,
+        rather than a bootstrap. 
+    seed: int or None; default None
+        If not ``None``, use ``seed`` to set the state of 
+        ``np.random``
+        If ``None``, continue with current state.
+        
+    Returns
+    -------
+    result: list of np.float32
+    '''
+
+    # Validate arguments
+    blocklength = int(blocklength)
+    if blocklength<=1:
+        raise ValueError((
+            'Block length should be >1, got %d')
+            %blocklength)
+    variables = [np.float32(v) for v in variables]
+    ntimes    = {v.shape[0] for v in variables}
+    if not len(ntimes)==1:
+        raise ValueError((
+        'Expected all variables to have the same shape, got'
+        '%s')%[*map(np.shape,variables)])
+    ntimes = [*ntimes][0]
+
+    if not seed is None:
+        np.random.seed(seed)
+            
+    if replace:
+        '''
+        If sampling with replacement, we draw an extra
+        sample then truncate.
+        If blocklen doesn't evenly divide ntimes, the
+        final partial block is skipped. 
+        '''
+        # Separate data into blocks
+        nblocks = int(ntimes//blocklength)
+        blocks  = np.empty(nblocks,dtype=object)
+        for i in range(nblocks):
+            a = i*blocklength
+            b = a+blocklength
+            blocks[i] = [v[a:b,...] for v in variables]
+        # Re-sample with replacement
+        def sample():
+            p = np.random.choice(
+                np.arange(nblocks),
+                nblocks+1,
+                replace=replace)
+            return [np.concatenate(v,axis=0)[:ntimes,...] 
+                    for v in zip(*blocks[p])]
+    
+    else:
+        '''
+        If permuting (sampling without replacement), 
+        we leave the final partial block and shuffle
+        it. 
+        '''
+        # Separate data into blocks
+        nblocks = int(ntimes//blocklength)+1
+        blocks  = np.empty(nblocks,dtype=object)
+        for i in range(nblocks):
+            a = i*blocklength
+            b = a+blocklength
+            blocks[i] = [v[a:b,...] for v in variables]
+        # Re-sample with replacement
+        def sample():
+            p = np.random.choice(
+                np.arange(nblocks),
+                nblocks,
+                replace=replace)
+            return [np.concatenate(v,axis=0) 
+                    for v in zip(*blocks[p])]
+
+    return [sample() for i in range(nsamples)]
+
+
+def assign_to_regions(regions,points,maxd=inf):
+    '''
+    Assign 2D ``points`` to Voronoi ``regions``, returning 
+    the indecies into ``regions`` for each point in 
+    ``points``.
+    
+    Parameters
+    ----------
+    regions: 2 × NREGIONS np.float32
+        (x,y) coordinates of Vornoi region centers
+    points: 2 × NPOINTS np.float32
+        (x,y) points to assign to regions
+        
+    Returns
+    -------
+    indecies: NPOINTS np.int32
+        Index into ``regions`` for each point    
+    '''
+    regions  = concatenate([[inf*(1+1j)],p2c(regions)])
+    points   = p2c(points)
+    distance = abs(regions[:,None]-points[None,:])
+    distance[distance>maxd] = np.inf
+    matches = np.nanargmin(distance,0)
+    return matches-1
+
+
+def collect_in_regions(
+    regions,
+    points,
+    return_indecies=False):
+    '''
+    Bin points to Voronoi regions, returning a list of
+    (x,y) points in each region.
+    
+    Parameters
+    ----------
+    regions: 2×NREGIONS np.float32
+        (x,y) coordinates of Vornoi region centers
+    points: 2×NPOINTS np.float32
+        (x,y) points to assign to regions
+        
+    Other Parameters
+    ----------------
+    return_indecies: boolean; default False
+        Whether to additionally return the index
+        into the ``NPOINTS`` assigned to each region
+    
+    Returns
+    -------
+    allocated: list
+        Length ``NREGIONS`` list of 2 × NPOINTSINREGION
+        np.float32 arrays
+    indecies: list
+        **Returned only if ``return_indecies=True``;**
+        Length ``NREGIONS`` list of NPOINTSINREGION
+        np.int32 arrays, each containing the indecies 
+        into the length-``NPOINTS`` array assigned to
+        each region in ``regions``.
+    '''
+    i = assign_to_regions(regions,points)
+    assigned = [
+        points[:,i==j] 
+        for j in range(regions.shape[1])]
+    if return_indecies:
+        indecies = [
+            np.where(i==j)[0]
+            for j in range(regions.shape[1])]
+        return assigned, indecies
+    else:
+        return assigned
+
+
+import warnings
+def gaussian_from_points(points):
+    '''
+    Get the mean and (sample) covariance of a point cloud. 
+    
+    Note: we suppress warnings here because returning NaNs
+    for an empty point set is entirely reasonable, and 
+    simplifies code elsewhere. 
+    
+    Parameters
+    ----------
+    points: NDIM × NPOINTS np.float32
+        Point data.
+        
+    Returns
+    -------
+    μ: NDIM np.float32
+        Mean
+    Σ: NDIM × NDIM np.float32
+        Sample covariance
+    '''
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            'ignore', r'invalid value encountered in divide')
+        warnings.filterwarnings(
+            'ignore', r'Mean of empty slice.')
+        points = np.float32(points)
+        ndim, npoints = points.shape
+        μ = np.mean(points,1)
+        Δ = points - μ[:,None]
+        Σ = (Δ@Δ.T)/(npoints-1)
+        return μ,Σ
+
+
+import lgcpspatial.plot
+def collect_gaussians(regions, s):
+    '''
+    Return the mean and covariance of points within 
+    each Voronoi region. 
+    
+    Parameters
+    ----------
+    regions: 2×NREGIONS np.float32
+        (x,y) coordinates of Vornoi region centers
+    points: 2×NPOINTS np.float32
+        (x,y) points to assign to regions
+    
+    Returns
+    -------
+    means: NFIELDS×2 np.float32
+    sigmas: NFIELDS×2×2 np.float32
+    ellipses: np.float32
+    '''
+    means,sigmas = zip(*[*map(
+        gaussian_from_points,
+        collect_in_regions(regions, s)
+    )])
+    # Collect all ellipses to plot 
+    ellipses = []
+    _means,_sigmas = [],[] # μ,Σ, dropping ones with NaN
+    for i,(mu,sigma) in enumerate(zip(means,sigmas)):
+        if all(isfinite(sigma)) and all(isfinite(mu)):
+            # Prepare covariance ellipse for plotting
+            z = lgcpspatial.plot.covariance_crosshairs(
+                sigma/2,
+                p=.95,
+                draw_cross=False) + mu[:,None]
+            ellipses +=[*z.T]+[(NaN,NaN)]
+            _means.append(mu)
+            _sigmas.append(sigma)
+    ellipses = np.float32(ellipses).T
+    return np.float32(_means), np.float32(_sigmas), ellipses

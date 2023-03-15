@@ -9,7 +9,8 @@ from __future__ import unicode_literals
 from __future__ import print_function
 """
 estimators.py: Histogram and Kernel density estimators. 
-These provide a comparison for Gaussian process methods as well as heuristic initializers
+These provide a comparison for Gaussian process methods as 
+well as heuristic initializers.
 """
 
 # Load matlab-like namespace and helper routines
@@ -174,7 +175,7 @@ def linearGP(N,K,sigma,mask,tol=1e-4,reg=1e-5):
 def convolutionalLinearGP(N,K,sigma,mask,pad=None,tol=1e-4,reg=1e-5):
     '''
     Special case of a linear Gaussian process (see 
-    `linearGP`) which can be calculated extremely quickly. 
+    ``linearGP``) which can be calculated extremely quickly. 
     
     This is not recommended for inferring firing rate maps, 
     but rather to provide an instructive example of how GP 

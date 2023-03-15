@@ -16,7 +16,7 @@ from lgcpspatial.lgcp2d import coordinate_descent
 
 def period_and_prior_variance(data,**kwargs):
     '''
-    Wrapper for `gridsearch_optimize()` that returns 
+    Wrapper for ``gridsearch_optimize()`` that returns 
     the optimized period and variance
     
     Parameters
@@ -28,8 +28,8 @@ def period_and_prior_variance(data,**kwargs):
     ----------------
     **kwargs:
         Keyword arguments are forwaded to 
-        `gridsearch_optimize`, see the documentation for
-        `gridsearch_optimize` for more details.
+        ``gridsearch_optimize``, see the documentation for
+        ``gridsearch_optimize`` for more details.
     
     Returns
     -------
@@ -77,18 +77,18 @@ def gridsearch_optimize(
         Number of prior marginal variance values to explore
         in the grid search. 
     rp: float >1.0; default 4
-        Ratio above and below the provided `dataset.P` 
+        Ratio above and below the provided ``dataset.P`` 
         grid cell period to explore. 
-        This will explore `np` periods evenly spaced on
-        a logarithmic scale between `dataset.P/rp` and
-        `dataset.P*rp`.
+        This will explore ``np`` periods evenly spaced on
+        a logarithmic scale between ``dataset.P/rp`` and
+        ``dataset.P*rp``.
     rv float >1.0; default 150 
-        Ratio above and below the provided `dataset.P` 
+        Ratio above and below the provided ``dataset.P`` 
         grid cell period to explore. 
-        This will explore `nv` periods evenly spaced on
+        This will explore ``nv`` periods evenly spaced on
         a logarithmic scale between 
-        `dataset.prior_variance/rv` and
-        `dataset.prior_variance*rv`.
+        ``dataset.prior_variance/rv`` and
+        ``dataset.prior_variance*rv``.
     kclip: int, default 3
         Bessel zero to clip the grid-cell kernel at. 
             - 3: Nearest-neighbor grid order
@@ -125,9 +125,9 @@ def gridsearch_optimize(
         values of best parameters
     bestresult]: 
         (state, likelihood, info) at best parameters.
-        `info` is determined by the third element in the
-        3-tuple return-value of the `evaluate` function,
-        passed by the user. `state` is also user-defined.
+        ``info`` is determined by the third element in the
+        3-tuple return-value of the ``evaluate`` function,
+        passed by the user. ``state`` is also user-defined.
     allresults: 
         All other results as an object array.
         Grid points that were not evaluated are None.
@@ -139,18 +139,18 @@ def gridsearch_optimize(
     rp = float(rp)
     rv = float(rv)
     if np<=0: raise ValueError((
-        'Number of search points for grid period `np` '
+        'Number of search points for grid period ``np`` '
         'should be a positive odd integer, got %s')%np)
     if nv<=0: raise ValueError((
-        'Number of search points for grid period `nv` '
+        'Number of search points for grid period ``nv`` '
         'should be a positive odd integer, got %s')%nv)
     if not np%2: np+=1
     if not nv%2: nv+=1
     if rv<=1: raise ValueError((
-        'Ratio for variance search `rv` should be >1.0, '
+        'Ratio for variance search ``rv`` should be >1.0, '
         'got %s')%rv)
     if rp<=1: raise ValueError((
-        'Ratio for period search `rp` should be >1.0, '
+        'Ratio for period search ``rp`` should be >1.0, '
         'got %s')%rp)
     
     # Start with heuristic kernel parameters

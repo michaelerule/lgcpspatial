@@ -3,7 +3,7 @@
 
 """
 plot.py: A subset of plotting helpers copied from 
-`neurotools/graphics/plot`, and some new helper routines to reduce 
+``neurotools/graphics/plot``, and some new helper routines to reduce 
 notebook clutter
 """
 
@@ -17,8 +17,8 @@ from matplotlib.pyplot import *
 
 import scipy.stats
 import scipy.linalg
-from   scipy.spatial  import ConvexHull
-from lgcpspatial.util import c2p,p2c
+from scipy.spatial  import ConvexHull
+from .util import c2p,p2c
 
 SMALL  = 7
 MEDIUM = 8
@@ -194,7 +194,7 @@ def noy():
 def noxyaxes():
     '''
     Hide all aspects of x and y axes. 
-    See `nox`, `noy`, and `noaxis`
+    See ``nox``, ``noy``, and ``noaxis``
     '''
     nox()
     noy()
@@ -465,6 +465,9 @@ def xscalebar(xcenter,xlength,label,y=None,color='k',fontsize=9,ax=None):
     
 
 def arrow_between(A,B,size=None):
+    '''
+    Draw a solid arrow between two axes    
+    '''
     draw()
     fig = plt.gcf()
 
@@ -511,8 +514,9 @@ def arrow_between(A,B,size=None):
         py = cy*scale + (ax0+ax1+bx0+bx1)/4
         polygon = Polygon(array([py,px]).T,facecolor=BLACK)#,transform=tt)
         fig.patches.append(polygon)
-       
- 
+#
+
+
 def nicey(**kwargs):
     '''
     Mark only the min/max value of y axis
@@ -547,7 +551,7 @@ def nicex(**kwargs):
 
 def nicexy(xby=None,yby=None,**kwargs):
     '''
-    Mark only the min/max value of y/y axis. See `nicex` and `nicey`
+    Mark only the min/max value of y/y axis. See ``nicex`` and ``nicey``
     '''
     nicex(by=xby,**kwargs)
     nicey(by=yby,**kwargs)
@@ -709,7 +713,7 @@ px2y = pixels_to_yunits
 def circular_gaussian_smooth(x,sigma):
     '''
     Smooth signal x with gaussian of standard deviation 
-    `sigma`, circularly wrapped using Fourier transform.
+    ``sigma``, circularly wrapped using Fourier transform.
     
     Parameters
     --------------------------------------------------------
@@ -752,10 +756,9 @@ def circularly_smooth_colormap(cm,s):
     R = circular_gaussian_smooth(R,s)
     G = circular_gaussian_smooth(G,s)
     B = circular_gaussian_smooth(B,s)
-    RGB = np.array([R,G,B]).T
-    #return np.array([np.fft.fftshift(c) for c in RGB.T]).T
-    return RGB
+    return np.array([R,G,B]).T
 
+# Colors inspired by Bridget Riley's "Gather"
 colors = [VIOLET,
           MAUVE,
           RUST,
@@ -775,6 +778,28 @@ if not 'riley0' in plt.colormaps():
 if not 'riley' in plt.colormaps():
     plt.register_cmap(name='riley', cmap=riley)
 
+
+# Colors for North South East West Plots
+cW = [0.9,.05,0.6] # Magenta
+cS = [1.0,0.5,0.0] # Orange
+cE = [0.1,.95,0.4] # Bright green
+cN = [0.4,0.5,1.0] # Azure
+colorNSEW = float32([cN,cS,cE,cW])
+
+# New circular map matching defined colors
+# Order should be W S E N to match plot.riley
+# Soften these slightly by averaging w. riley
+cardinal0 = mpl.colors.LinearSegmentedColormap.from_list(
+    'cardinal0',[cW,cS,cE,cN,cW])
+xx = np.linspace(0,1,1000)
+cardinal  = mpl.colors.LinearSegmentedColormap.from_list(
+    'cardinal',0.52*(riley(xx)[:,:3]+circularly_smooth_colormap(
+    np.array(cardinal0(xx))[:,:3],45)))
+if not 'cardinal' in plt.colormaps():
+    plt.register_cmap(name='cardinal', cmap=cardinal)
+cardinal
+
+    
 def force_aspect(aspect=1,a=None):
     '''
     Parameters
@@ -847,7 +872,7 @@ def inference_summary_plot(model,fit,data,ftitle=''):
     inference in four plots.
     
     This function exists to simplify the example notebooks,
-    and isn't designed for more general use. 
+    and isn't designed for general use. 
     
     Parameters
     ----------
@@ -855,7 +880,7 @@ def inference_summary_plot(model,fit,data,ftitle=''):
         Initialized model
     fit: tuple
         Tuple of (low-rank mean, marginal variance, loss)
-        returned by `lgcp2d.coordinate_descent()`.
+        returned by ``lgcp2d.coordinate_descent()``.
     data: loaddata.Dataset
         Prepared dataset
     ftitle: str
@@ -867,22 +892,22 @@ def inference_summary_plot(model,fit,data,ftitle=''):
     nanmask = data.arena.nanmask
     Fs      = data.position_sample_rate
     scale   = data.scale
-    μz      = model.μ_0
+    μz      = data.prior_mean
     μh,v,_  = fit
     y = np.array(y).reshape(L,L)
     v = np.array(v).ravel()
     
-    cmap = matplotlib.pyplot.get_cmap('bone_r')
-    
     # Convert from frequency to spatial coordinates and add back prior mean
     μ  = model.F.T@μh+μz.ravel()
-    μλ = exp(μ+v/2).reshape(L,L)*Fs
-    vλ = (exp(2*μ + v)*(exp(v)-1)).reshape(L,L)*Fs**2
-    σλ = sqrt(vλ)
+    μλ = np.exp(μ+v/2).reshape(L,L)*Fs
+    vλ = (np.exp(2*μ + v)*(np.exp(v)-1)).reshape(L,L)*Fs**2
+    σλ = np.sqrt(vλ)
     cv = σλ/μλ
-
+    
+    cmap = matplotlib.pyplot.get_cmap('bone_r')
+    
     figure(figsize=(9,2.5),dpi=120)
-    subplots_adjust(left=0.0,right=0.95,top=.78)
+    subplots_adjust(left=0.0,right=0.95,top=.8,wspace=0.8)
     ax={}
 
     ax[1]=subplot(141)
@@ -893,13 +918,11 @@ def inference_summary_plot(model,fit,data,ftitle=''):
     im = plt.imshow(toshow,vmin=vmin,vmax=vmax,cmap=cmap)
     title('Rate histogram "y"',pad=0,fontsize=12)
     axis('off')
-
     # Add a scale bar
     x0 = where(any(mask,axis=0))[0][0]
     x1 = x0 + scale*(L+1)
     y0 = where(any(mask,axis=1))[0][0]-L//25
     xscalebar((x0+x1)/2,x1-x0,'1 m',y=y0)
-    
     # Add color bar with marker for neurons mean-rate
     cax = good_colorbar(vmin,vmax,title='Hz',
                         fontsize=8,vscale=0.8,width=10,cmap=cmap)
@@ -908,35 +931,55 @@ def inference_summary_plot(model,fit,data,ftitle=''):
     axhline(μy,color='w',lw=0.8)
     text(xlim()[1]+.6,μy,r'$\langle y \rangle$=%0.2f'%μy,va='center',fontsize=7)
 
+    
+    ax[3]=subplot(143)
+    #vmin,vmax = nanpercentile(μλ[mask],[.5,99.5])
+    #vmin = floor(vmin*10)/10
+    #vmax = ceil (vmax*10)/10
+    q = .5/data.L
+    plt.imshow(
+        μλ.reshape(L,L)*nanmask,
+        vmin=vmin,
+        vmax=vmax,
+        cmap=cmap,
+        extent=(0-q,1-q)*2)
+    plt.plot(*data.arena.perimeter.T,lw=2,color='w')
+    title('Posterior mean $\\langle \lambda\\rangle$',pad=0,fontsize=12)
+    good_colorbar(vmin,vmax,title='Hz',
+                  fontsize=8,vscale=0.8,width=10,cmap=cmap)
+    axis('off')
+
     ax[2]=subplot(142)
     toshow = 10*log10(exp(μ-μz.ravel())).reshape(L,L)*nanmask
     vmin,vmax = nanpercentile(toshow,[.25,99.75])
     vmin = floor(vmin*10)/10
     vmax = ceil (vmax*10)/10
-    im = plt.imshow(toshow,vmin=vmin,vmax=vmax,cmap=cmap)
+    im = plt.imshow(
+        toshow,
+        vmin=vmin,
+        vmax=vmax,
+        cmap=cmap,
+        extent=(0-q,1-q)*2)
+    plt.plot(*data.arena.perimeter.T,lw=2,color='w')
     title('Posterior mean (Δ log-rate)',pad=0,fontsize=12)
     axis('off')
     good_colorbar(vmin,vmax,title='ΔdB from background',
                   fontsize=8,vscale=0.8,width=10,labelpad=30,cmap=cmap)
-    
-    ax[3]=subplot(143)
-    vmin,vmax = nanpercentile(μλ[mask],[.5,99.5])
-    vmin = floor(vmin*10)/10
-    vmax = ceil (vmax*10)/10
-    plt.imshow(μλ.reshape(L,L)*nanmask,vmin=vmin,vmax=vmax,cmap=cmap)
-    title('Posterior mean $\\langle \lambda\\rangle$',pad=0,fontsize=12)
-    good_colorbar(vmin,vmax,title='Hz',
-                  fontsize=8,vscale=0.8,width=10,cmap=cmap)
-    axis('off')
     
     ax[4]=subplot(144)
     toshow = cv*nanmask
     vmin,vmax = nanpercentile(toshow,[.5,99.5])
     vmin = floor(vmin*100)/100
     vmax = ceil (vmax*100)/100
-    im = plt.imshow(toshow,vmin=vmin,vmax=vmax,cmap=cmap)
+    im = plt.imshow(
+        toshow,
+        vmin=vmin,
+        vmax=vmax,
+        cmap=cmap,
+        extent=(0-q,1-q)*2)
+    plt.plot(*data.arena.perimeter.T,lw=2,color='w')
     title('Marginal c.v. of λ (σ/μ)',pad=0,fontsize=12)
-    good_colorbar(vmin,vmax,title='Normalized units',
+    good_colorbar(vmin,vmax,title='σ/μ',
                   fontsize=8,vscale=0.8,width=10,cmap=cmap)
     axis('off')
     
@@ -956,7 +999,7 @@ def plot_convex_hull(px,py,**kwargs):
     Other Parameters
     ----------------
     **kwargs: dict
-        Keyword arguments are forwarded to `pyplot.plot()`        
+        Keyword arguments are forwarded to ``pyplot.plot()``        
         
     Returns
     -------
@@ -991,7 +1034,7 @@ def unit_crosshairs(draw_ellipse=True,draw_cross=True):
 def covellipse_from_points(q,**kwargs):
     '''
     Helper to construct covariance ellipse from 
-    collection of 2D points `q` encoded as complex numbers.
+    collection of 2D points ``q`` encoded as complex numbers.
     '''
     q = q[isfinite(q)]
     pxy = c2p(q)
@@ -1022,7 +1065,7 @@ def covariance_crosshairs(
     - Transform crosshairs into covariance basis
 
     Parameters
-    --------------------------------------------------------
+    ----------
     S: 2D covariance matrix
     p: fraction of data ellipse should enclose
     draw_ellipse: whether to draw the ellipse
@@ -1034,7 +1077,7 @@ def covariance_crosshairs(
         significance for a 1-tailed test in any direction.
     
     Returns
-    --------------------------------------------------------
+    -------
     path: np.float32
         2×NPOINTS array of (x,y) path data for plotting
     
@@ -1174,16 +1217,46 @@ def good_colorbar(vmin=None,
     return cax
 
 def draw_compass(
-    xy0=1.1+.65j,r=0.03,cmap_fn=riley,delta=18):
+    xy0=1.1+.65j,
+    r=0.03,
+    cmap_fn=riley,
+    delta=18):
     '''
     Draw a hue-wheel compass rose.
+    Equivalent of "colorbar" for polar data.
+    
+    This uses plot-coordinates for drawing, and assumes
+    that the plot's aspect-ratio is equal. 
+
+
+    This is designed to be used with the ``riley`` 
+    colormap from ``lgcpspatial.plot``. This map starts at 
+    mauve, continues through rust, olive, blue, before 
+    circling back to mauve. We use these color–direction
+    conventions: 
+    
+     - North: blue/azure/cyan
+     - South: red/rust
+     - East:  green/olive
+     - West:  purple/mauve/magenta
+    
+    For comatibility, then, the direction ordering
+    for the colormap parameter ``color`` should be
+    
+        {West, South, East, North}
+
     
     Parameters
     --------------------------------------------------------
-    xy0: center of compass encoded as x+iy complex number
-    r: size of compass, defaults to 0.03
-    cmap_fn: circular colormap to use for compass
-    delta: displacement of lab
+    xy0: np.complex64
+        Center of compass encoded as x+iy complex number.
+    r: positive float; default 0.03
+        Size of compass (radius of circle).
+    cmap_fn: matplotlib.colors.Colormap
+        circular colormap to use for compass.
+    delta: positive float
+        Radial spacing for NSEW labels relative to the
+        color wheel. 
     '''
     y0,y1 = ylim()
     flip = -1 if y1<y0 else 1
@@ -1211,3 +1284,135 @@ if not 'roma' in plt.colormaps():
     plt.register_cmap(name='roma', cmap=roma)
 if not 'roma_r' in plt.colormaps():
     plt.register_cmap(name='roma_r', cmap=roma_r)
+
+    
+############################################################
+############################################################
+############################################################
+############################################################
+
+from .util import is_in_hull
+def tracking_match_plot(
+    data,
+    centroids, 
+    paths,
+    fieldcolor=MAUVE
+    ):
+    ok = {*where(
+        is_in_hull(centroids,data.arena.hull)
+    )[0]}
+    ok = sorted(list(ok))
+    scatter(*centroids[:,ok],facecolor=(0,)*4,edgecolor=fieldcolor,lw=0.5,s=150)
+    for i,c in enumerate(centroids.T):
+        if not i in ok: continue
+        tx,ty = c
+        text(tx,ty,str(i),ha='center',va='center',color=fieldcolor,fontsize=8)
+    for i,p in enumerate(paths):
+        plot(*p.T,color='k',lw=.6)
+        center = c2p(nanmean(p2c(p)))
+        #scatter(*center,marker='x',lw=.5,color='r')
+        tx,ty = center
+        text(tx+px2x(10),ty+px2y(10),str(i))
+
+    plot(*data.arena.perimeter.T,color='k')
+    noxyaxes()
+    xlim(0,1)
+    ylim(0,1)
+    force_aspect()
+    
+def shiftplot(
+    z1,s1,z2,s2,
+    centers = None,
+    zscore = True,
+    scale = 0.01,
+    draw_ellipse = True,
+    draw_lines = True,
+    line_color = 'r',
+    line_width = 1.0,
+    **kwargs
+    ):
+    s  = s1 + s2
+    kwargs = {'color':'k','lw':.6,**kwargs}
+    lines = []
+    ellipses = []
+    for ii,(si,za,zb) in enumerate(zip(s,z1,z2)):
+        if not np.all(np.isfinite(si)): continue
+        if centers is None:
+            z0 = (za+zb)/2
+        else:
+            z0 = centers[ii]
+        if zscore:
+            delta = get_whitener(si)@(zb-za)*scale
+            cxy = covariance_crosshairs(eye(2),draw_cross=False)*scale
+        else:
+            delta = zb-za
+            cxy = covariance_crosshairs(si,draw_cross=False)
+        cxy += z0[:,None]
+        
+        lines.extend(float32([z0-delta,z0+delta]))
+        lines.append([NaN,NaN])
+        ellipses.extend(cxy.T)
+        ellipses.append([NaN,NaN])
+    if draw_lines:
+        plot(*float32(lines).T,color=line_color,lw=line_width)
+    if draw_ellipse:
+        plot(*float32(ellipses).T,**kwargs)
+    xlim(0,1)
+    ylim(0,1)
+    force_aspect()
+    noxyaxes()
+
+import lgcpspatial
+def colored_shift_density_images(
+    data, 
+    NSEW_densities, 
+    pct  = 99.9 # Saturate pixels above this
+    ):
+    '''
+    Prepare colored (North - South) and (East - West)
+    peak density shift images.
+    
+    Parameters
+    ----------
+    data: lgcpspatial.loaddata.Dataset
+        Prepared dataset object.
+    NSEW_densities: list
+        Length 4 list of [N,S,E,W] results, each containing
+        a ``(L*resolution)×(L*resolution)`` smoothed 
+        peak-density map.
+    
+    Other Parameters
+    ----------------
+    pct: float ∈(0,100); default 99.9
+        Percentile of maximum saturation.
+    
+    Returns
+    -------
+    RGBNS:
+        Rendered RGB values for NS plot
+    RGBEW:
+        Rendered RGB values for EW plot
+    '''
+    
+    # Unpack reference result
+    L = data.L
+    N,S,E,W = NSEW_densities
+    
+    LL = N.shape[0]
+    resolution = LL//L
+    
+    mask = lgcpspatial.loaddata.Arena(data.px,data.py,L,resolution).mask
+
+    colors  = 1.-array([cE,cW])
+    RGBEW   = 1.-clip(einsum('dc,dxy->xyc',colors,
+        array([
+            (E/np.percentile(E,pct)),
+            (W/np.percentile(W,pct))])),0,1)
+    RGBEW[~mask,...] = 1
+    colors  = 1.-array([cN,cS])
+    RGBNS   = 1.-clip(einsum('dc,dxy->xyc',colors,
+        array([
+            (N/np.percentile(N,pct)),
+            (S/np.percentile(S,pct))])),0,1)
+    RGBNS[~mask,...] = 1
+    return RGBNS, RGBEW
