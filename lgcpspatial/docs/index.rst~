@@ -6,14 +6,12 @@
 Variational Log-Gaussian Point-Process Methods for Grid Cells
 =============================================================
 
-Add project description to index.rst
-
 This project depends on `numpy 
 <http://www.numpy.org/>`_ and `scipy
 <https://www.scipy.org/>`_. 
 
 The project source can be browsed or downloaded from `github
-<https://github.com/michaelerule/neurotools>`_.
+<https://github.com/michaelerule/lgcpspatial>`_.
 
 * :ref:`genindex`
 
@@ -35,7 +33,7 @@ The project source can be browsed or downloaded from `github
    lgcp2d <lgcpspatial.lgcp2d>
    simulate_data <lgcpspatial.simulate_data>
    load_data <lgcpspatial.load_data>
-   grid_search <lgcpspatial.grid_search>
+   gridsearch <lgcpspatial.gridsearch>
    hyperparameters <lgcpspatial.hyperparameters>
    posterior <lgcpspatial.posterior>
    heading <lgcpspatial.heading>
