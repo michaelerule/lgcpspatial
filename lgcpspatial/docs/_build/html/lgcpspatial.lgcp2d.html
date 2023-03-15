@@ -120,30 +120,6 @@
 </style>
 <section id="module-lgcpspatial.lgcp2d">
 <span id="lgcpspatial-lgcp2d-module"></span><h1>lgcpspatial.lgcp2d module<a class="headerlink" href="#module-lgcpspatial.lgcp2d" title="Permalink to this heading"></a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">CoordinateDescentResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">μh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#CoordinateDescentResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.h">
-<span class="sig-name descname"><span class="pre">μh</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.h" title="Permalink to this definition"></a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.v">
-<span class="sig-name descname"><span class="pre">v</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.v" title="Permalink to this definition"></a></dt>
-<dd><p>Alias for field number 1</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.loss">
-<span class="sig-name descname"><span class="pre">loss</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.loss" title="Permalink to this definition"></a></dt>
-<dd><p>Alias for field number 2</p>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.coordinate_descent">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">coordinate_descent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialmean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialcov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxmeaniter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxvariter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showprogress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#coordinate_descent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.coordinate_descent" title="Permalink to this definition"></a></dt>
@@ -635,6 +611,31 @@ complex-valued array</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">CoordinateDescentResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">μh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#CoordinateDescentResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<p>Posterior mean in low-rank spatial frequency subspace.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.h">
+<span class="sig-name descname"><span class="pre">μh</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.h" title="Permalink to this definition"></a></dt>
+<dd><p>Posterior marginal log-rate variances in each spatial bin.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.v">
+<span class="sig-name descname"><span class="pre">v</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.v" title="Permalink to this definition"></a></dt>
+<dd><p>Value of the loss function.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.loss" title="Permalink to this definition"></a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>

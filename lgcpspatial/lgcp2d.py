@@ -13,13 +13,9 @@ from   scipy.sparse.linalg import LinearOperator
 from   scipy.sparse.linalg import minres
 from   scipy.special       import j0,jn_zeros
 from   scipy.linalg        import solve_triangular as stri 
+from   typing              import NamedTuple
 
 
-from typing import NamedTuple
-class CoordinateDescentResult(NamedTuple):
-    μh:np.ndarray
-    v:np.ndarray
-    loss:np.ndarray
 
 def coordinate_descent(gp,
     initialmean  = None,
@@ -1097,3 +1093,17 @@ def _precision(x,copy=False):
     except ValueError:
         pass
     return (*map(_precision,x),)
+
+class CoordinateDescentResult(NamedTuple):
+    '''
+    Posterior mean in low-rank spatial frequency subspace.
+    '''
+    μh:np.ndarray
+    '''
+    Posterior marginal log-rate variances in each spatial bin.
+    '''
+    v:np.ndarray
+    '''
+    Value of the loss function.
+    '''
+    loss:np.ndarray

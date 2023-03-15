@@ -6,14 +6,12 @@
 Variational Log-Gaussian Point-Process Methods for Grid Cells
 =============================================================
 
-Add project description to index.rst
-
 This project depends on `numpy 
 <http://www.numpy.org/>`_ and `scipy
 <https://www.scipy.org/>`_. 
 
 The project source can be browsed or downloaded from `github
-<https://github.com/michaelerule/neurotools>`_.
+<https://github.com/michaelerule/lgcpspatial>`_.
 
 * :ref:`genindex`
 
