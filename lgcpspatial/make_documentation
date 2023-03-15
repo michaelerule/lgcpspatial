@@ -11,4 +11,4 @@ sphinx-apidoc -fe -o . ../
 make clean html
 cd ../
 
-rsync -avzru "./docs/_build/html/*" "../docs/"
+rsync -avzru "./docs/_build/html/" "../docs"
