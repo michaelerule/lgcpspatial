@@ -58,7 +58,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
@@ -216,7 +215,7 @@
     <span class="n">pars</span> <span class="o">=</span> <span class="p">[</span><span class="n">pr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">pr</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pargrid</span><span class="p">,</span><span class="n">best</span><span class="p">)]</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(done)&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">GridsearchResult</span><span class="p">(</span><span class="n">best</span><span class="p">,</span><span class="n">pars</span><span class="p">,</span><span class="n">results</span><span class="p">[</span><span class="n">best</span><span class="p">],</span><span class="n">results</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">GridsearchResult</span><span class="p">(</span><span class="n">best</span><span class="p">,</span><span class="n">pars</span><span class="p">,</span><span class="n">results</span><span class="p">[</span><span class="n">best</span><span class="p">],</span><span class="n">results</span><span class="p">,</span><span class="n">pargrid</span><span class="p">)</span></div>
     
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span>
 <div class="viewcode-block" id="GridsearchResult"><a class="viewcode-back" href="../../lgcpspatial.gridsearch.html#lgcpspatial.gridsearch.GridsearchResult">[docs]</a><span class="k">class</span> <span class="nc">GridsearchResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
@@ -239,7 +238,11 @@
 <span class="sd">    All other results as an object array.</span>
 <span class="sd">    Grid points that were not evaluated are None.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">allresults</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span></div>
+    <span class="n">allresults</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Parameter grid that has been searched</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">pargrid</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span></div>
 
 
 

@@ -58,7 +58,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
@@ -288,7 +287,7 @@
         <span class="n">whitenoise</span>    <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>  <span class="c1"># White noise kernel </span>
         <span class="n">dc</span>            <span class="o">=</span> <span class="mf">1e3</span><span class="p">,</span>  <span class="c1"># DC kernel variance</span>
         <span class="n">mintol</span>        <span class="o">=</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="c1"># tolerance</span>
-        <span class="n">use2d</span>         <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">keep_frequencies</span>         <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">component_threshold_percent</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
         <span class="n">kclip</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>    <span class="c1"># J0 zero to truncate kernel</span>
         <span class="p">):</span>
@@ -369,7 +368,7 @@
 <span class="sd">            generally incompatable with the approach of</span>
 <span class="sd">            using a low-rank subspace in the frequency</span>
 <span class="sd">            domain to speed things up. We apply white noise</span>
-<span class="sd">            AFTER selecting the low -rank subspace. This is</span>
+<span class="sd">            AFTER selecting the low-rank subspace. This is</span>
 <span class="sd">            a bit wrong, but still might have its uses. </span>
 <span class="sd">        dc: float&gt;0</span>
 <span class="sd">            A kernel hyperparameter: Amount of DC variance</span>
@@ -380,11 +379,11 @@
 <span class="sd">        mintol: float&gt;0</span>
 <span class="sd">            The tolerance used in the minimum residual</span>
 <span class="sd">            algorithm. The default is 1e-6</span>
-<span class="sd">        use2d:</span>
+<span class="sd">        keep_frequencies:</span>
 <span class="sd">            A boolean array indicating which spatial</span>
-<span class="sd">            frequency components to use. If this is none,</span>
-<span class="sd">            use2d is calculated using</span>
-<span class="sd">            ``component_threshold_percent``</span>
+<span class="sd">            frequency components to use. If this is </span>
+<span class="sd">            ``None``, ``keep_frequencies`` is calculated </span>
+<span class="sd">            using ``component_threshold_percent``.</span>
 <span class="sd">        component_threshold_percent: float &gt;0 &lt;100</span>
 <span class="sd">            We determine which frequency components to keep</span>
 <span class="sd">            by finding the (nonzero) frequency with the</span>
@@ -456,11 +455,11 @@
         <span class="c1"># - Define operator F for converting to/from low-rank space</span>
         <span class="n">thr</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Kf</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
                    <span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">component_threshold_percent</span> 
-        <span class="k">if</span> <span class="n">use2d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">use2d</span>  <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Kf</span><span class="p">)</span><span class="o">&gt;</span><span class="n">thr</span>
-            <span class="n">use2d</span>  <span class="o">=</span> <span class="n">use2d</span> <span class="o">|</span> <span class="n">use2d</span><span class="o">.</span><span class="n">T</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">use2d</span> <span class="o">=</span> <span class="n">use2d</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">use2d</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">keep_frequencies</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">keep_frequencies</span>  <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Kf</span><span class="p">)</span><span class="o">&gt;</span><span class="n">thr</span>
+            <span class="n">keep_frequencies</span>  <span class="o">=</span> <span class="n">keep_frequencies</span> <span class="o">|</span> <span class="n">keep_frequencies</span><span class="o">.</span><span class="n">T</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_frequencies</span> <span class="o">=</span> <span class="n">keep_frequencies</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">keep_frequencies</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">F</span> <span class="o">=</span> <span class="n">LinearOperator</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span><span class="n">L</span><span class="o">*</span><span class="n">L</span><span class="p">),</span>
                                 <span class="n">matvec</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Fu</span><span class="p">,</span>
                                 <span class="n">rmatvec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ftu</span><span class="p">,</span>
@@ -480,12 +479,12 @@
         <span class="c1"># these 1D convolutions. The following lines find</span>
         <span class="c1"># the nonempty rows, which we retain after the first</span>
         <span class="c1"># 1D FFT. </span>
-        <span class="n">use</span>   <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">use2d</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span> <span class="c1"># Used idxs in LxL array</span>
-        <span class="n">use1d</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">use2d</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>   <span class="c1"># Indecies to use along L</span>
+        <span class="n">use</span>   <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">keep_frequencies</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span> <span class="c1"># Used idxs in LxL array</span>
+        <span class="n">use1d</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">keep_frequencies</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>   <span class="c1"># Indecies to use along L</span>
         <span class="n">R1d</span>   <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">use1d</span><span class="p">)</span>          <span class="c1"># Number of 1D components</span>
         <span class="c1"># figure out which components in the retained </span>
         <span class="c1"># rows/columns are actually used</span>
-        <span class="n">usecut</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">use2d</span><span class="p">[:,</span><span class="n">use1d</span><span class="p">][</span><span class="n">use1d</span><span class="p">,:])</span> 
+        <span class="n">usecut</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">keep_frequencies</span><span class="p">[:,</span><span class="n">use1d</span><span class="p">][</span><span class="n">use1d</span><span class="p">,:])</span> 
         <span class="c1"># Indecies into cropped 2D</span>
         
         <span class="c1"># - Finally, we build the reduced-rank semi-</span>
@@ -510,8 +509,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Kf</span> <span class="o">=</span> <span class="n">Kf</span>
         
         <span class="c1"># Convolutions and preconditioner in low-rank space</span>
-        <span class="n">K</span>  <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">Kf</span><span class="p">[</span><span class="n">use2d</span><span class="p">])</span>
-        <span class="n">Λ</span>  <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">Kf</span><span class="p">[</span><span class="n">use2d</span><span class="p">])</span>
+        <span class="n">K</span>  <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">Kf</span><span class="p">[</span><span class="n">keep_frequencies</span><span class="p">])</span>
+        <span class="n">Λ</span>  <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">Kf</span><span class="p">[</span><span class="n">keep_frequencies</span><span class="p">])</span>
         <span class="n">M</span>  <span class="o">=</span> <span class="n">op</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">M_helper</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">K</span> <span class="o">=</span> <span class="n">K</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Λ</span> <span class="o">=</span> <span class="n">Λ</span>
@@ -532,7 +531,7 @@
         <span class="c1"># Workaround: stash in tuple. </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cached</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">γn</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">bg</span><span class="p">,</span>
                        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="p">,</span>
-                       <span class="bp">self</span><span class="o">.</span><span class="n">use2d</span><span class="p">,</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">keep_frequencies</span><span class="p">,</span>
                        <span class="bp">self</span><span class="o">.</span><span class="n">F</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Λ</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">h2e</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>    </div>
 
 <div class="viewcode-block" id="DiagonalFourierLowrank.Fu"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.Fu">[docs]</a>    <span class="k">def</span> <span class="nf">Fu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
@@ -542,9 +541,9 @@
 <span class="sd">        transpose of Ftu (below).</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">L</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span>
-        <span class="n">use2d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">use2d</span>
+        <span class="n">keep_frequencies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_frequencies</span>
         <span class="k">return</span> <span class="n">RI</span><span class="p">(</span><span class="n">fft2</span><span class="p">(</span><span class="n">rtype</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">),</span>
-                       <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span><span class="p">)[</span><span class="n">use2d</span><span class="p">])</span></div>
+                       <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span><span class="p">)[</span><span class="n">keep_frequencies</span><span class="p">])</span></div>
     
 <div class="viewcode-block" id="DiagonalFourierLowrank.Ftu"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.Ftu">[docs]</a>    <span class="k">def</span> <span class="nf">Ftu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
@@ -553,9 +552,9 @@
 <span class="sd">        of Fu(u).</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">L</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span>
-        <span class="n">use2d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">use2d</span>
+        <span class="n">keep_frequencies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_frequencies</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">+</span><span class="n">u</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)</span>
-        <span class="n">x</span><span class="p">[</span><span class="n">use2d</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">keep_frequencies</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
         <span class="k">return</span> <span class="n">RI</span><span class="p">(</span><span class="n">fft2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span>
                        <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;ortho&#39;</span><span class="p">,</span>
                        <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
@@ -633,7 +632,7 @@
         <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
             <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
             <span class="n">posterior_marginal_variances</span><span class="p">)</span>
-        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
+        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">keep_frequencies</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
         <span class="n">μ</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@μh</span>
         <span class="k">return</span> <span class="n">μ</span><span class="p">,</span> <span class="n">_exp</span><span class="p">(</span><span class="n">μ</span> <span class="o">+</span> <span class="n">initialmean</span> <span class="o">+</span> <span class="n">v</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span></div>
         
@@ -664,7 +663,7 @@
         <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
             <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
             <span class="n">posterior_marginal_variances</span><span class="p">)</span>
-        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
+        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">keep_frequencies</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
         <span class="n">μ</span><span class="p">,</span><span class="n">λ</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rates_from_lowrank</span><span class="p">(</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
         <span class="n">q</span>  <span class="o">=</span> <span class="n">γn</span><span class="o">*</span><span class="n">λ</span>
         <span class="n">x</span>  <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">h2e</span>
@@ -705,7 +704,7 @@
         <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
             <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
             <span class="n">posterior_marginal_variances</span><span class="p">)</span>
-        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
+        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">keep_frequencies</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
         <span class="n">μ</span><span class="p">,</span><span class="n">λ</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rates_from_lowrank</span><span class="p">(</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
         <span class="n">q</span>  <span class="o">=</span> <span class="n">γn</span><span class="o">*</span><span class="n">λ</span>
         <span class="n">x</span>  <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">h2e</span>
@@ -778,14 +777,14 @@
         <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
             <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
             <span class="n">posterior_marginal_variances</span><span class="p">)</span>
-        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
+        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">keep_frequencies</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
         <span class="n">μ</span><span class="p">,</span><span class="n">λ</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rates_from_lowrank</span><span class="p">(</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
         <span class="n">q</span>  <span class="o">=</span> <span class="n">γn</span><span class="o">*</span><span class="n">λ</span>
         <span class="n">x</span>  <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">h2e</span>
         <span class="n">A</span>  <span class="o">=</span> <span class="n">chinv</span><span class="p">(</span><span class="n">diag</span><span class="p">(</span><span class="n">Λ</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span><span class="nd">@x</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
         
         <span class="c1">#X  = zeros((L,L,R),dtype=rtype)</span>
-        <span class="c1">#X[use2d] = A.T</span>
+        <span class="c1">#X[keep_frequencies] = A.T</span>
         <span class="c1">#DF = RI(fft2(X,axes=(0,1),</span>
         <span class="c1">#             norm=&#39;ortho&#39;)).reshape(L**2,R).T</span>
         
@@ -822,7 +821,7 @@
         <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
             <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
             <span class="n">posterior_marginal_variances</span><span class="p">)</span>
-        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
+        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">keep_frequencies</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
         <span class="n">μ</span><span class="p">,</span><span class="n">λ</span>  <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">rates_from_lowrank</span><span class="p">(</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
         <span class="n">q</span>    <span class="o">=</span>  <span class="n">γn</span><span class="o">*</span><span class="n">λ</span>
         <span class="n">x</span>    <span class="o">=</span>  <span class="n">sqrt</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)[</span><span class="kc">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">h2e</span>
@@ -873,7 +872,7 @@
         <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
             <span class="n">lowrank_posterior_mean</span><span class="p">,</span>
             <span class="n">posterior_marginal_variances</span><span class="p">)</span>
-        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
+        <span class="n">γn</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">initialmean</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">keep_frequencies</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">Λ</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cached</span>
         <span class="n">μ</span><span class="p">,</span><span class="n">λ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rates_from_lowrank</span><span class="p">(</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
         <span class="n">γnλ</span> <span class="o">=</span> <span class="n">γn</span><span class="o">*</span><span class="n">λ</span>
         <span class="n">J</span>   <span class="o">=</span> <span class="n">Λ</span><span class="o">*</span><span class="n">μh</span> <span class="o">+</span> <span class="n">F</span><span class="o">@</span><span class="p">(</span><span class="n">γnλ</span><span class="o">-</span><span class="n">γn</span><span class="o">*</span><span class="n">y</span><span class="p">)</span>

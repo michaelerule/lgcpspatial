@@ -58,7 +58,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
@@ -145,13 +144,13 @@
     <span class="n">nv</span> <span class="o">=</span> <span class="mi">201</span><span class="p">,</span> <span class="c1"># Kernel height search grid resolutions</span>
     <span class="n">rp</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>   <span class="c1"># Range (ratio) to search for optimal period</span>
     <span class="n">rv</span> <span class="o">=</span> <span class="mi">150</span><span class="p">,</span> <span class="c1"># Range (ratio) to search for optimal kernel height</span>
-    <span class="n">kclip</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-    <span class="n">variance_attenuate</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
-    <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">use2d</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="c1"># </span>
+    <span class="n">kclip</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">variance_attenuate</span>  <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">verbose</span>             <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">keep_frequencies</span>    <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+    <span class="n">use_common_subspace</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span> 
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    data: load_data.Dataset</span>
@@ -211,6 +210,12 @@
 <span class="sd">        issues with the variance iteration diverging.</span>
 <span class="sd">    verbose: boolean, default True</span>
 <span class="sd">        Whether to print progress update</span>
+<span class="sd">    keep_frequencies: np.ndarray or None; default None</span>
+<span class="sd">        boolean array of frequencies to keep</span>
+<span class="sd">    use_common_subspace: boolean, default False</span>
+<span class="sd">        Whether to force all models to use the same low-rank</span>
+<span class="sd">        subspace. This can make comparison of models with</span>
+<span class="sd">        different periods less noisy. </span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -257,6 +262,12 @@
     <span class="n">βs</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">rv</span><span class="p">),</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">*</span><span class="n">rv</span><span class="p">),</span><span class="n">nv</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">pargrid</span> <span class="o">=</span> <span class="p">[</span><span class="n">Ps</span><span class="p">,</span><span class="n">βs</span><span class="p">]</span>
     
+    <span class="c1"># Calculate a shared low-rank subspace</span>
+    <span class="k">if</span> <span class="n">use_common_subspace</span> <span class="ow">and</span> <span class="n">keep_frequencies</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">keep_frequencies</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">float32</span><span class="p">([</span>
+            <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">kv</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">kclip</span><span class="o">=</span><span class="n">kclip</span><span class="p">)</span><span class="o">.</span><span class="n">keep_frequencies</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">Ps</span><span class="p">]),</span><span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span>
+    
     <span class="k">def</span> <span class="nf">evaluate_ELBO</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span><span class="n">state</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Function to tell grid search know which parameters </span>
@@ -284,7 +295,9 @@
         <span class="n">model</span>   <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span>
             <span class="n">kv</span><span class="o">/</span><span class="n">β</span><span class="p">,</span>
             <span class="n">p</span><span class="p">,</span>
-            <span class="n">data</span><span class="p">,</span><span class="n">kclip</span><span class="o">=</span><span class="n">kclip</span><span class="p">,</span><span class="n">use2d</span><span class="o">=</span><span class="n">use2d</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">,</span>
+            <span class="n">kclip</span><span class="o">=</span><span class="n">kclip</span><span class="p">,</span>
+            <span class="n">keep_frequencies</span><span class="o">=</span><span class="n">keep_frequencies</span><span class="p">)</span>
         <span class="n">μ0</span>      <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">μ</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="nd">@μ</span>
         <span class="n">v0</span>      <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">v</span><span class="o">*</span><span class="n">variance_attenuate</span>
         <span class="n">mh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">nl</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">μ0</span><span class="p">,</span><span class="n">v0</span><span class="p">)</span>

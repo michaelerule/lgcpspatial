@@ -122,7 +122,7 @@ def grid_search(
     pars = [pr[i] for pr,i in zip(pargrid,best)]
     if verbose:
         print('(done)')
-    return GridsearchResult(best,pars,results[best],results)
+    return GridsearchResult(best,pars,results[best],results,pargrid)
     
 from typing import NamedTuple
 class GridsearchResult(NamedTuple):
@@ -146,6 +146,10 @@ class GridsearchResult(NamedTuple):
     Grid points that were not evaluated are None.
     '''
     allresults: np.ndarray
+    '''
+    Parameter grid that has been searched
+    '''
+    pargrid: np.ndarray
 
 
 

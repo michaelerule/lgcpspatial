@@ -51,13 +51,13 @@ def gridsearch_optimize(
     nv = 201, # Kernel height search grid resolutions
     rp = 4,   # Range (ratio) to search for optimal period
     rv = 150, # Range (ratio) to search for optimal kernel height
-    kclip=3,
-    variance_attenuate = 0.5,
-    verbose = True,
-    use2d = None, # 
+    kclip = 3,
+    variance_attenuate  = 0.5,
+    verbose             = True,
+    keep_frequencies    = None, 
+    use_common_subspace = True,
     ): 
     '''
-    
     Parameters
     ----------
     data: load_data.Dataset
@@ -117,6 +117,12 @@ def gridsearch_optimize(
         issues with the variance iteration diverging.
     verbose: boolean, default True
         Whether to print progress update
+    keep_frequencies: np.ndarray or None; default None
+        boolean array of frequencies to keep
+    use_common_subspace: boolean, default False
+        Whether to force all models to use the same low-rank
+        subspace. This can make comparison of models with
+        different periods less noisy. 
     
     Returns
     -------
@@ -163,6 +169,12 @@ def gridsearch_optimize(
     βs = float32(exp(linspace(log(1/rv),log(1*rv),nv))[::-1])
     pargrid = [Ps,βs]
     
+    # Calculate a shared low-rank subspace
+    if use_common_subspace and keep_frequencies is None:
+        keep_frequencies = sum(float32([
+            DiagonalFourierLowrank(kv,p,data,kclip=kclip).keep_frequencies
+            for p in Ps]),0)>0
+    
     def evaluate_ELBO(parameters,state):
         '''
         Function to tell grid search know which parameters 
@@ -190,7 +202,9 @@ def gridsearch_optimize(
         model   = DiagonalFourierLowrank(
             kv/β,
             p,
-            data,kclip=kclip,use2d=use2d)
+            data,
+            kclip=kclip,
+            keep_frequencies=keep_frequencies)
         μ0      = None if μ is None else model.F@μ
         v0      = None if v is None else v*variance_attenuate
         mh,v,nl = coordinate_descent(model,μ0,v0)

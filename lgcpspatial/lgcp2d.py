@@ -194,7 +194,7 @@ class DiagonalFourierLowrank:
         whitenoise    = 0.0,  # White noise kernel 
         dc            = 1e3,  # DC kernel variance
         mintol        = 1e-6, # tolerance
-        use2d         = None,
+        keep_frequencies         = None,
         component_threshold_percent = 10.0,
         kclip=3,    # J0 zero to truncate kernel
         ):
@@ -275,7 +275,7 @@ class DiagonalFourierLowrank:
             generally incompatable with the approach of
             using a low-rank subspace in the frequency
             domain to speed things up. We apply white noise
-            AFTER selecting the low -rank subspace. This is
+            AFTER selecting the low-rank subspace. This is
             a bit wrong, but still might have its uses. 
         dc: float>0
             A kernel hyperparameter: Amount of DC variance
@@ -286,11 +286,11 @@ class DiagonalFourierLowrank:
         mintol: float>0
             The tolerance used in the minimum residual
             algorithm. The default is 1e-6
-        use2d:
+        keep_frequencies:
             A boolean array indicating which spatial
-            frequency components to use. If this is none,
-            use2d is calculated using
-            ``component_threshold_percent``
+            frequency components to use. If this is 
+            ``None``, ``keep_frequencies`` is calculated 
+            using ``component_threshold_percent``.
         component_threshold_percent: float >0 <100
             We determine which frequency components to keep
             by finding the (nonzero) frequency with the
@@ -362,11 +362,11 @@ class DiagonalFourierLowrank:
         # - Define operator F for converting to/from low-rank space
         thr = array(sorted(abs(Kf).ravel())
                    )[-2]/component_threshold_percent 
-        if use2d is None:
-            use2d  = abs(Kf)>thr
-            use2d  = use2d | use2d.T
-        self.use2d = use2d
-        self.R = sum(use2d)
+        if keep_frequencies is None:
+            keep_frequencies  = abs(Kf)>thr
+            keep_frequencies  = keep_frequencies | keep_frequencies.T
+        self.keep_frequencies = keep_frequencies
+        self.R = sum(keep_frequencies)
         self.F = LinearOperator((self.R,L*L),
                                 matvec  = self.Fu,
                                 rmatvec = self.Ftu,
@@ -386,12 +386,12 @@ class DiagonalFourierLowrank:
         # these 1D convolutions. The following lines find
         # the nonempty rows, which we retain after the first
         # 1D FFT. 
-        use   = find(use2d.ravel()) # Used idxs in LxL array
-        use1d = any(use2d,axis=0)   # Indecies to use along L
+        use   = find(keep_frequencies.ravel()) # Used idxs in LxL array
+        use1d = any(keep_frequencies,axis=0)   # Indecies to use along L
         R1d   = sum(use1d)          # Number of 1D components
         # figure out which components in the retained 
         # rows/columns are actually used
-        usecut = find(use2d[:,use1d][use1d,:]) 
+        usecut = find(keep_frequencies[:,use1d][use1d,:]) 
         # Indecies into cropped 2D
         
         # - Finally, we build the reduced-rank semi-
@@ -416,8 +416,8 @@ class DiagonalFourierLowrank:
         self.Kf = Kf
         
         # Convolutions and preconditioner in low-rank space
-        K  = rtype(Kf[use2d])
-        Λ  = rtype(1/Kf[use2d])
+        K  = rtype(Kf[keep_frequencies])
+        Λ  = rtype(1/Kf[keep_frequencies])
         M  = op(self.R,self.M_helper)
         self.K = K
         self.Λ = Λ
@@ -438,7 +438,7 @@ class DiagonalFourierLowrank:
         # Workaround: stash in tuple. 
         self.cached = (self.γn,self.y,self.bg,
                        self.L,self.R,
-                       self.use2d,
+                       self.keep_frequencies,
                        self.F,self.Λ,self.h2e,self.M)    
 
     def Fu(self,u):
@@ -448,9 +448,9 @@ class DiagonalFourierLowrank:
         transpose of Ftu (below).
         '''
         L     = self.L
-        use2d = self.use2d
+        keep_frequencies = self.keep_frequencies
         return RI(fft2(rtype(u).reshape(L,L),
-                       norm='ortho')[use2d])
+                       norm='ortho')[keep_frequencies])
     
     def Ftu(self,u):
         '''
@@ -459,9 +459,9 @@ class DiagonalFourierLowrank:
         of Fu(u).
         '''
         L     = self.L
-        use2d = self.use2d
+        keep_frequencies = self.keep_frequencies
         x = zeros((L,L)+u.shape[1:],dtype=rtype)
-        x[use2d,...] = u
+        x[keep_frequencies,...] = u
         return RI(fft2(x,
                        norm='ortho',
                        axes=(0,1))
@@ -539,7 +539,7 @@ class DiagonalFourierLowrank:
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
             posterior_marginal_variances)
-        γn,y,initialmean,L,R,use2d,F,Λ,h2e,M = self.cached
+        γn,y,initialmean,L,R,keep_frequencies,F,Λ,h2e,M = self.cached
         μ = F.T@μh
         return μ, _exp(μ + initialmean + v/2)
         
@@ -570,7 +570,7 @@ class DiagonalFourierLowrank:
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
             posterior_marginal_variances)
-        γn,y,initialmean,L,R,use2d,F,Λ,h2e,M = self.cached
+        γn,y,initialmean,L,R,keep_frequencies,F,Λ,h2e,M = self.cached
         μ,λ= self.rates_from_lowrank(μh,v)
         q  = γn*λ
         x  = sqrt(q, dtype=rtype)[None,:]*h2e
@@ -611,7 +611,7 @@ class DiagonalFourierLowrank:
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
             posterior_marginal_variances)
-        γn,y,initialmean,L,R,use2d,F,Λ,h2e,M = self.cached
+        γn,y,initialmean,L,R,keep_frequencies,F,Λ,h2e,M = self.cached
         μ,λ= self.rates_from_lowrank(μh,v)
         q  = γn*λ
         x  = sqrt(q, dtype=rtype)[None,:]*h2e
@@ -684,14 +684,14 @@ class DiagonalFourierLowrank:
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
             posterior_marginal_variances)
-        γn,y,initialmean,L,R,use2d,F,Λ,h2e,M = self.cached
+        γn,y,initialmean,L,R,keep_frequencies,F,Λ,h2e,M = self.cached
         μ,λ= self.rates_from_lowrank(μh,v)
         q  = γn*λ
         x  = sqrt(q, dtype=rtype)[None,:]*h2e
         A  = chinv(diag(Λ) + x@x.T)
         
         #X  = zeros((L,L,R),dtype=rtype)
-        #X[use2d] = A.T
+        #X[keep_frequencies] = A.T
         #DF = RI(fft2(X,axes=(0,1),
         #             norm='ortho')).reshape(L**2,R).T
         
@@ -728,7 +728,7 @@ class DiagonalFourierLowrank:
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
             posterior_marginal_variances)
-        γn,y,initialmean,L,R,use2d,F,Λ,h2e,M = self.cached
+        γn,y,initialmean,L,R,keep_frequencies,F,Λ,h2e,M = self.cached
         μ,λ  =  self.rates_from_lowrank(μh,v)
         q    =  γn*λ
         x    =  sqrt(q, dtype=rtype)[None,:]*h2e
@@ -779,7 +779,7 @@ class DiagonalFourierLowrank:
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
             posterior_marginal_variances)
-        γn,y,initialmean,L,R,use2d,F,Λ,h2e,M = self.cached
+        γn,y,initialmean,L,R,keep_frequencies,F,Λ,h2e,M = self.cached
         μ,λ = self.rates_from_lowrank(μh,v)
         γnλ = γn*λ
         J   = Λ*μh + F@(γnλ-γn*y)
