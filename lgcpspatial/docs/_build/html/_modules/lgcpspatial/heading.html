@@ -179,6 +179,7 @@
 <span class="sd">    heading_angle: np.float32</span>
 <span class="sd">        Heading angle based on the low-pass derivative </span>
 <span class="sd">        of position.</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">dx</span> <span class="o">=</span> <span class="n">ddt</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">Fs</span><span class="o">/</span><span class="n">Fl</span><span class="o">*</span><span class="mi">4</span><span class="p">),</span><span class="n">Fl</span><span class="p">,</span><span class="n">Fs</span><span class="p">)</span>
     <span class="n">dy</span> <span class="o">=</span> <span class="n">ddt</span><span class="p">(</span><span class="n">py</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">Fs</span><span class="o">/</span><span class="n">Fl</span><span class="o">*</span><span class="mi">4</span><span class="p">),</span><span class="n">Fl</span><span class="p">,</span><span class="n">Fs</span><span class="p">)</span>
@@ -395,6 +396,7 @@
 <span class="sd">             (the node source of this edge)</span>
 <span class="sd">          - ``b`` is the index into ``peaks[(i+1)%Nφ]`` </span>
 <span class="sd">            (the node target of this edge).</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">q</span>  <span class="o">=</span> <span class="p">[</span><span class="n">p2c</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
     <span class="n">Nφ</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
@@ -648,7 +650,7 @@
 <span class="sd">    max_end_distance: float</span>
 <span class="sd">        Maximum distance allowed between endpoints</span>
 <span class="sd">        of a tracked peak.</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    edges: list</span>
@@ -667,7 +669,7 @@
 <span class="sd">        (the node source of this edge);</span>
 <span class="sd">        ``b`` is the index into ``peaks[(i+1)%Nφ]`` </span>
 <span class="sd">        (the node target of this edge).</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">edges</span> <span class="o">=</span> <span class="n">match_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">maxd</span><span class="p">)</span>    
@@ -806,7 +808,7 @@
 <span class="sd">        edge set i, index a is the index into peaks[i] (edge </span>
 <span class="sd">        source) and index b is the index into </span>
 <span class="sd">        peaks[(i+1)%Nφ] (edge target).</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
 <span class="sd">    perim: np.float32</span>
@@ -826,6 +828,7 @@
 <span class="sd">        Hide the axis</span>
 <span class="sd">    **kwargs:</span>
 <span class="sd">        Forwarded to ``plot()``</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="c1"># Argument validation</span>
@@ -963,7 +966,7 @@
 <span class="sd">        lenghth ``NANGLES`` list of ``2×NCONNECTED`` edge sets </span>
 <span class="sd">        containing indecies into the point sets (source) and</span>
 <span class="sd">        targets in  the next adjacent direction.</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    iop: int (scalar)</span>
@@ -977,7 +980,7 @@
 <span class="sd">        (or -1 is no match exists).</span>
 <span class="sd">    dd: float32</span>
 <span class="sd">        Distance to matched peak, or NaN it not matched.</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">q</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@pk</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
     <span class="n">Nφ</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>

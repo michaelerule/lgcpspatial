@@ -85,6 +85,7 @@ def smoothed_heading_angle(px,py,Fs=50.0,Fl=2.0):
     heading_angle: np.float32
         Heading angle based on the low-pass derivative 
         of position.
+    
     '''
     dx = ddt(px,int(Fs/Fl*4),Fl,Fs)
     dy = ddt(py,int(Fs/Fl*4),Fl,Fs)
@@ -301,6 +302,7 @@ def match_peaks(peaks,maxd):
              (the node source of this edge)
           - ``b`` is the index into ``peaks[(i+1)%Nφ]`` 
             (the node target of this edge).
+    
     '''
     q  = [p2c(pk) for pk in peaks]
     Nφ = len(q)
@@ -554,7 +556,7 @@ def link_peaks(
     max_end_distance: float
         Maximum distance allowed between endpoints
         of a tracked peak.
-        
+    
     Returns
     -------
     edges: list
@@ -573,7 +575,7 @@ def link_peaks(
         (the node source of this edge);
         ``b`` is the index into ``peaks[(i+1)%Nφ]`` 
         (the node target of this edge).
-        
+    
     '''
 
     edges = match_peaks(peaks,maxd)    
@@ -712,7 +714,7 @@ def plot_tracked_peaks(
         edge set i, index a is the index into peaks[i] (edge 
         source) and index b is the index into 
         peaks[(i+1)%Nφ] (edge target).
-        
+    
     Other Parameters
     ----------------
     perim: np.float32
@@ -732,6 +734,7 @@ def plot_tracked_peaks(
         Hide the axis
     **kwargs:
         Forwarded to ``plot()``
+    
     '''
     
     # Argument validation
@@ -869,7 +872,7 @@ def locate_opposites(peaks,maxd,starti,edges):
         lenghth ``NANGLES`` list of ``2×NCONNECTED`` edge sets 
         containing indecies into the point sets (source) and
         targets in  the next adjacent direction.
-        
+    
     Returns
     -------
     iop: int (scalar)
@@ -883,7 +886,7 @@ def locate_opposites(peaks,maxd,starti,edges):
         (or -1 is no match exists).
     dd: float32
         Distance to matched peak, or NaN it not matched.
-        
+    
     '''
     q = [[1,1j]@pk for pk in peaks]
     Nφ = len(q)
