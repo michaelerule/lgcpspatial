@@ -872,7 +872,7 @@ def inference_summary_plot(model,fit,data,ftitle=''):
     inference in four plots.
     
     This function exists to simplify the example notebooks,
-    and isn't designed for general use. 
+    it is not for general use. 
     
     Parameters
     ----------

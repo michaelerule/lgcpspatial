@@ -4,7 +4,7 @@
 """
 plot.py: Some plotting helpers copied from 
 ``neurotools.graphics.plot``, and some new 
-routines to reduce notebook clutter
+routines to reduce notebook clutter.
 """
 
 import os
@@ -872,7 +872,7 @@ def inference_summary_plot(model,fit,data,ftitle=''):
     inference in four plots.
     
     This function exists to simplify the example notebooks,
-    and isn't designed for general use. 
+    and isn't for general use. 
     
     Parameters
     ----------
