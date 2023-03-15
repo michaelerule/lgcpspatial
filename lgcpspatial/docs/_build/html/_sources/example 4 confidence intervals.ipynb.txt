@@ -5,7 +5,13 @@
    "id": "7c4c2b9a-2d8b-4f94-b1cd-d3d13331fa08",
    "metadata": {},
    "source": [
-    "# Example 4: Confidence intervals"
+    "# Example 4: Confidence intervals\n",
+    "\n",
+    "This example approximates confidence intervals for peak location using either sampling within each grid-field's Voronoi region, or a Quadratic approximation at the peak. \n",
+    "\n",
+    "Neuron `r2405_051216b_cell1816` was recorded by Dr. Marius Bauza and the Krupic lab; they have kindly shared this data to evaluate these GP methods. Please cite their work as\n",
+    "\n",
+    "> Krupic J, Bauza M, Burton S, O’Keefe J. Local transformations of the hippocampal cognitive map. Science. 2018 Mar 9;359(6380):1143-6."
    ]
   },
   {

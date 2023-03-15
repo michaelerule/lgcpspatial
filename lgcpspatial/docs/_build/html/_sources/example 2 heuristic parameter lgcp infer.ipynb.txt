@@ -13,7 +13,11 @@
    "id": "2b4c76f1-e98d-4e85-a453-70528b2b49f3",
    "metadata": {},
    "source": [
-    "We will use heuristic parameters to infer the posterior log-rate from an example dataset. The period of the grid can be inferred reasonably well from the radial autocorrelogram. The height of the kernel, reflecting the overall prior variance (uncertainty), is more difficult to infer. This heuristic estiamte of the prior variance is suitable for finding the locations of grid fields, but one should optimize it using the evidence lower bound (example 3) in order to get an interpretable posterior."
+    "We will use heuristic parameters to infer the posterior log-rate from an example dataset. The period of the grid can be inferred reasonably well from the radial autocorrelogram. The height of the kernel, reflecting the overall prior variance (uncertainty), is more difficult to infer. This heuristic estiamte of the prior variance is suitable for finding the locations of grid fields, but one should optimize it using the evidence lower bound (example 3) in order to get an interpretable posterior.\n",
+    "\n",
+    "Neuron `r2405_051216b_cell1816` was recorded by Dr. Marius Bauza and the Krupic lab; they have kindly shared this data to evaluate these GP methods. Please cite their work as\n",
+    "\n",
+    "> Krupic J, Bauza M, Burton S, O’Keefe J. Local transformations of the hippocampal cognitive map. Science. 2018 Mar 9;359(6380):1143-6."
    ]
   },
   {

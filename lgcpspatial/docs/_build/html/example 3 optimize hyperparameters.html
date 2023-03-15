@@ -377,8 +377,15 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="Example-3:-Optimized-hyperparameters">
 <h1>Example 3: Optimized hyperparameters<a class="headerlink" href="#Example-3:-Optimized-hyperparameters" title="Permalink to this heading"></a></h1>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<p>In this example, we optimize the period and variance of the GP prior using the evidence lower bound.</p>
+<p>Neuron <code class="docutils literal notranslate"><span class="pre">r2405_051216b_cell1816</span></code> was recorded by Dr. Marius Bauza and the Krupic lab; they have kindly shared this data to evaluate these GP methods. Please cite their work as</p>
+<blockquote>
+<div><p>Krupic J, Bauza M, Burton S, O’Keefe J. Local transformations of the hippocampal cognitive map. Science. 2018 Mar 9;359(6380):1143-6.</p>
+</div></blockquote>
+<section id="Grid-search-to-find-kernel-hyperparameters-with-best-evidence-lower-bound">
+<h2>Grid search to find kernel hyperparameters with best evidence lower-bound<a class="headerlink" href="#Grid-search-to-find-kernel-hyperparameters-with-best-evidence-lower-bound" title="Permalink to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -389,16 +396,8 @@ div.rendered_html tbody tr:hover {
 <span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;r2405_051216b_cell1816.mat&#39;</span><span class="p">,</span>
 <span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<section id="Grid-search-to-find-kernel-hyperparameters-with-best-evidence-lower-bound">
-<h2>Grid search to find kernel hyperparameters with best evidence lower-bound<a class="headerlink" href="#Grid-search-to-find-kernel-hyperparameters-with-best-evidence-lower-bound" title="Permalink to this heading"></a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.hyperparameters</span> <span class="kn">import</span> <span class="n">gridsearch_optimize</span>
+
+<span class="kn">from</span> <span class="nn">lgcpspatial.hyperparameters</span> <span class="kn">import</span> <span class="n">gridsearch_optimize</span>
 
 <span class="c1"># Load a dataset</span>
 <span class="n">L</span>      <span class="o">=</span> <span class="mi">128</span> <span class="c1"># Grid size for position bins</span>
@@ -505,21 +504,21 @@ v0/β = 0.410991
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/example_3_optimize_hyperparameters_5_0.png" src="_images/example_3_optimize_hyperparameters_5_0.png" />
+<img alt="_images/example_3_optimize_hyperparameters_4_0.png" src="_images/example_3_optimize_hyperparameters_4_0.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/example_3_optimize_hyperparameters_5_1.png" src="_images/example_3_optimize_hyperparameters_5_1.png" />
+<img alt="_images/example_3_optimize_hyperparameters_4_1.png" src="_images/example_3_optimize_hyperparameters_4_1.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/example_3_optimize_hyperparameters_5_2.png" src="_images/example_3_optimize_hyperparameters_5_2.png" />
+<img alt="_images/example_3_optimize_hyperparameters_4_2.png" src="_images/example_3_optimize_hyperparameters_4_2.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
