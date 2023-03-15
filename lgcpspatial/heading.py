@@ -1271,7 +1271,6 @@ def sample_heading_angles(
         
         if doplot and names is not None:
             title(names[i])
-            
     return samples
 
 
