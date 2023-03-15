@@ -54,7 +54,6 @@ def gridsearch_optimize(
     kclip=3,
     variance_attenuate = 0.5,
     verbose = True,
-    use2d = None, # 
     ): 
     '''
     
@@ -190,7 +189,7 @@ def gridsearch_optimize(
         model   = DiagonalFourierLowrank(
             kv/β,
             p,
-            data,kclip=kclip,use2d=use2d)
+            data,kclip=kclip)
         μ0      = None if μ is None else model.F@μ
         v0      = None if v is None else v*variance_attenuate
         mh,v,nl = coordinate_descent(model,μ0,v0)

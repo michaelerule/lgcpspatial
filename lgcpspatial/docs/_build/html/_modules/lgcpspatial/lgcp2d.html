@@ -94,7 +94,6 @@
   <h1>Source code for lgcpspatial.lgcp2d</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/python</span>
 <span class="c1"># -*- coding: UTF-8 -*-</span>
-
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">numpy</span>             <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>        <span class="k">as</span> <span class="nn">mpl</span>
@@ -109,8 +108,6 @@
 <span class="kn">from</span>   <span class="nn">scipy.linalg</span>        <span class="kn">import</span> <span class="n">solve_triangular</span> <span class="k">as</span> <span class="n">stri</span> 
 <span class="kn">from</span>   <span class="nn">typing</span>              <span class="kn">import</span> <span class="n">NamedTuple</span>
 
-
-
 <div class="viewcode-block" id="coordinate_descent"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.coordinate_descent">[docs]</a><span class="k">def</span> <span class="nf">coordinate_descent</span><span class="p">(</span><span class="n">gp</span><span class="p">,</span>
     <span class="n">initialmean</span>  <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">initialcov</span>   <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -123,12 +120,12 @@
 <span class="sd">    Abstract mean/variance coordinate descent subroutine</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    gp: Model</span>
 <span class="sd">        Gaussian-Process model instance. </span>
 <span class="sd">        </span>
 <span class="sd">    Other Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    initialmean: np.float32</span>
 <span class="sd">        Initial guess for mean, in whatever format</span>
 <span class="sd">        gp expects for calculating derivatives.</span>
@@ -157,7 +154,7 @@
 <span class="sd">        progress.</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    -------</span>
 <span class="sd">    μ: np.float32</span>
 <span class="sd">        Posterior mean, in whatever format is used by ``gp``.</span>
 <span class="sd">    Σ: np.float32</span>
@@ -227,7 +224,7 @@
 <span class="sd">    ``diagonal_fourier_lowrank``.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    L: int&gt;1</span>
 <span class="sd">        This should be an integer describing the number of </span>
 <span class="sd">        spatial bins used to prepare n, y, lograte_guess,</span>
@@ -239,7 +236,7 @@
 <span class="sd">        units of bins on the L×L grid. </span>
 <span class="sd">        </span>
 <span class="sd">    Other Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    k: int&gt;0</span>
 <span class="sd">        Which Bessel function zero to truncate the kernel at. </span>
 <span class="sd">        1: central lobe only, no periodicity</span>
@@ -486,8 +483,8 @@
         <span class="n">use</span>   <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">use2d</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span> <span class="c1"># Used idxs in LxL array</span>
         <span class="n">use1d</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">use2d</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>   <span class="c1"># Indecies to use along L</span>
         <span class="n">R1d</span>   <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">use1d</span><span class="p">)</span>          <span class="c1"># Number of 1D components</span>
-        <span class="c1"># figure out which components in the retained rows/columns </span>
-        <span class="c1"># are actually used</span>
+        <span class="c1"># figure out which components in the retained </span>
+        <span class="c1"># rows/columns are actually used</span>
         <span class="n">usecut</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">use2d</span><span class="p">[:,</span><span class="n">use1d</span><span class="p">][</span><span class="n">use1d</span><span class="p">,:])</span> 
         <span class="c1"># Indecies into cropped 2D</span>
         
@@ -814,7 +811,7 @@
 <span class="sd">         - Confirm R = L²-D is the correct normalization.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        lowrank_posterior_mean: np.array</span>
 <span class="sd">            Posterior mean in low-rank spatial-frequency </span>
 <span class="sd">            space. Size model.R float32 or float64</span>
@@ -856,7 +853,7 @@
 <span class="sd">          - M is computed from the prior and is constant</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        lowrank_posterior_mean: np.array</span>
 <span class="sd">            Posterior mean in low-rank spatial-frequency </span>
 <span class="sd">            space. Size model.R float32 or float64</span>
@@ -865,7 +862,7 @@
 <span class="sd">            domain. Size L² float32 or float64</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        -------</span>
 <span class="sd">        J: np.array</span>
 <span class="sd">            Jacobian</span>
 <span class="sd">        Hv: function</span>
@@ -892,7 +889,7 @@
 <span class="sd">        Update posterior mean using Newton-Raphson</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        lowrank_posterior_mean: np.array</span>
 <span class="sd">            Posterior mean in low-rank spatial-frequency </span>
 <span class="sd">            space. Size model.R float32 or float64</span>
@@ -901,7 +898,7 @@
 <span class="sd">            domain. Size L² float32 or float64</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        -------</span>
 <span class="sd">        Δμ: np.array</span>
 <span class="sd">            Newton-Raphson update to the posterior mean</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -925,7 +922,7 @@
 <span class="sd">        point iteration</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        lowrank_posterior_mean: np.array</span>
 <span class="sd">            Posterior mean in low-rank spatial-frequency </span>
 <span class="sd">            space. Size model.R float32 or float64</span>
@@ -934,7 +931,7 @@
 <span class="sd">            domain. Size L² float32 or float64</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        -------</span>
 <span class="sd">        Δv: np.array</span>
 <span class="sd">            Fixed-point iteration update to the marginal </span>
 <span class="sd">            variances</span>
@@ -1033,11 +1030,11 @@
 <span class="sd">    Safe exponential function: Clip to avoid under/overflow</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    x: np.float32</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    -------</span>
 <span class="sd">    np.float32</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="o">-</span><span class="n">bound</span><span class="p">,</span><span class="n">bound</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">rtype</span><span class="p">)</span>
@@ -1049,12 +1046,12 @@
 <span class="sd">    via Choleskey factorization. </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    A: np.array</span>
 <span class="sd">        Square, positive-definite matrix</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    -------</span>
 <span class="sd">    ln(|A|): np.array</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
@@ -1069,11 +1066,11 @@
 <span class="sd">    complex-valued array</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    x: np.complex64</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    -------</span>
 <span class="sd">    np.float32</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">rtype</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="o">+</span><span class="n">x</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span></div>
@@ -1086,14 +1083,14 @@
 <span class="sd">    triangle as NxN matrix</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    M: np.array</span>
 <span class="sd">    k: int</span>
 <span class="sd">        Row dimension of the array for which the returned </span>
 <span class="sd">        indices will be valid. (See ``numpy.tril_indices``)</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    -------</span>
 <span class="sd">    np.array</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
@@ -1119,7 +1116,7 @@
 <span class="sd">    Univariate Gaussian probability density</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    mu : float, scalar or array-like </span>
 <span class="sd">        Mean(s) of distribution(s)</span>
 <span class="sd">    sigma : float, scalar or array-like </span>
@@ -1155,9 +1152,8 @@
     <span class="s1">&#39;64&#39;</span> <span class="p">:(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span>   <span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">),</span>
     <span class="s1">&#39;128&#39;</span><span class="p">:(</span><span class="n">np</span><span class="o">.</span><span class="n">longdouble</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">longcomplex</span><span class="p">),</span>
 <span class="p">}</span>
-<span class="n">nbits</span> <span class="o">=</span> <span class="s1">&#39;32&#39;</span>
-<span class="n">rtype</span> <span class="o">=</span> <span class="n">float32</span>
-<span class="n">ctype</span> <span class="o">=</span> <span class="n">complex64</span>
+<span class="n">nbits</span> <span class="o">=</span> <span class="s1">&#39;64&#39;</span>
+<span class="n">rtype</span><span class="p">,</span> <span class="n">ctype</span> <span class="o">=</span> <span class="n">typesizes</span><span class="p">[</span><span class="n">nbits</span><span class="p">]</span>
 <span class="k">def</span> <span class="nf">_set_precision</span><span class="p">(</span><span class="n">bits</span><span class="p">):</span>
     <span class="k">global</span> <span class="n">nbits</span><span class="p">,</span> <span class="n">rtype</span><span class="p">,</span> <span class="n">ctype</span>
     <span class="n">bits</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">bits</span>

@@ -1247,7 +1247,7 @@ def draw_compass(
 
     
     Parameters
-    --------------------------------------------------------
+    ----------
     xy0: np.complex64
         Center of compass encoded as x+iy complex number.
     r: positive float; default 0.03

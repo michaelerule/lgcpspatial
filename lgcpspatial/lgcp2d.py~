@@ -389,8 +389,8 @@ class DiagonalFourierLowrank:
         use   = find(use2d.ravel()) # Used idxs in LxL array
         use1d = any(use2d,axis=0)   # Indecies to use along L
         R1d   = sum(use1d)          # Number of 1D components
-        # figure out which components in the retained 
-        # rows/columns are actually used
+        # figure out which components in the retained rows/columns 
+        # are actually used
         usecut = find(use2d[:,use1d][use1d,:]) 
         # Indecies into cropped 2D
         

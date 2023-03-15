@@ -609,7 +609,7 @@ class Dataset:
         y        = Y.ravel()                  # spikes/s/bin
         self.L=L
         self.n=n
-        self.k=K.ravel()
+        self.k=k
         self.y=y
 
         # Prepare mask using the convex hull

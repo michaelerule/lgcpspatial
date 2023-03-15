@@ -148,6 +148,7 @@
     <span class="n">kclip</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
     <span class="n">variance_attenuate</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
     <span class="n">verbose</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">use2d</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="c1"># </span>
     <span class="p">):</span> 
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    </span>
@@ -199,7 +200,7 @@
 <span class="sd">            - &gt;3: Larger numbers correspond to stronger</span>
 <span class="sd">                assumptions of long-range order.</span>
 <span class="sd">    variance_attenuate: float, default 0.5</span>
-<span class="sd">        We recycle the estiamte of the posterior variance</span>
+<span class="sd">        We recycle the estimate of the posterior variance</span>
 <span class="sd">        between successive evaluations of the grid search.</span>
 <span class="sd">        This can reduce the number of iterations needed </span>
 <span class="sd">        to converge. However, there is risk of isntabiltiy</span>
@@ -212,7 +213,7 @@
 <span class="sd">        Whether to print progress update</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    -------</span>
 <span class="sd">    bestindex: </span>
 <span class="sd">        best index into parameter grid</span>
 <span class="sd">    bestpars: </span>
@@ -283,7 +284,7 @@
         <span class="n">model</span>   <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span>
             <span class="n">kv</span><span class="o">/</span><span class="n">β</span><span class="p">,</span>
             <span class="n">p</span><span class="p">,</span>
-            <span class="n">data</span><span class="p">,</span><span class="n">kclip</span><span class="o">=</span><span class="n">kclip</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">,</span><span class="n">kclip</span><span class="o">=</span><span class="n">kclip</span><span class="p">,</span><span class="n">use2d</span><span class="o">=</span><span class="n">use2d</span><span class="p">)</span>
         <span class="n">μ0</span>      <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">μ</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="nd">@μ</span>
         <span class="n">v0</span>      <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">v</span><span class="o">*</span><span class="n">variance_attenuate</span>
         <span class="n">mh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">nl</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">μ0</span><span class="p">,</span><span class="n">v0</span><span class="p">)</span>
