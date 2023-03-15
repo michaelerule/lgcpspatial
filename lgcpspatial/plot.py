@@ -2,9 +2,9 @@
 # -*- coding: UTF-8 -*-
 
 """
-plot.py: A subset of plotting helpers copied from 
-``neurotools/graphics/plot``, and some new helper routines to reduce 
-notebook clutter
+plot.py: Some plotting helpers copied from 
+``neurotools.graphics.plot``, and some new 
+routines to reduce notebook clutter.
 """
 
 import os
