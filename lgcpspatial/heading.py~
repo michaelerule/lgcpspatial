@@ -563,15 +563,14 @@ def link_peaks(
         returned by ``match_peaks``, but edges from peaks that
         aren't tracked unambiguously over a range of heading 
         angles have been removed.
-        
-        This is a length ``NANGLES`` list of edge sets for 
+         - This is a length ``NANGLES`` list of edge sets for 
         each pair of headings.
-        Each list entry is a 2×NEDGES int32 array.
-        containing pairs of indecies (a,b):
-        ``a`` is the index into peaks[i]
-        (the node source of this edge);
-        ``b`` is the index into ``peaks[(i+1)%Nφ]`` 
-        (the node target of this edge).
+         - Each list entry is a 2×NEDGES int32 array.
+           - This contains pairs of indecies (a,b).
+             - ``a`` is the index into peaks[i]
+               (the node source of this edge)
+            - ``b`` is the index into ``peaks[(i+1)%Nφ]`` 
+              (the node target of this edge).
         
     '''
 

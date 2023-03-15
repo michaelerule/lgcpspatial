@@ -431,31 +431,14 @@ The format is the same as the result
 returned by <code class="docutils literal notranslate"><span class="pre">match_peaks</span></code>, but edges from peaks that
 aren’t tracked unambiguously over a range of heading
 angles have been removed.</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>This is a length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for</p></li>
-</ul>
-</div></blockquote>
-<dl>
-<dt>each pair of headings.</dt><dd><ul>
-<li><p>Each list entry is a 2×NEDGES int32 array.
-- This contains pairs of indecies (a,b).</p>
-<blockquote>
-<div><blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> is the index into peaks[i]
-(the node source of this edge)</p></li>
-</ul>
-</div></blockquote>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> is the index into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code>
-(the node target of this edge).</p></li>
-</ul>
-</div></blockquote>
-</li>
-</ul>
-</dd>
-</dl>
+<p>This is a length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for
+each pair of headings.
+Each list entry is a 2×NEDGES int32 array.
+containing pairs of indecies (a,b):
+<code class="docutils literal notranslate"><span class="pre">a</span></code> is the index into peaks[i]
+(the node source of this edge);
+<code class="docutils literal notranslate"><span class="pre">b</span></code> is the index into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code>
+(the node target of this edge).</p>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
