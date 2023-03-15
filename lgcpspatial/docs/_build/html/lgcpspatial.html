@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>lgcpspatial package &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -28,15 +27,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -78,8 +81,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>lgcpspatial package</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">lgcpspatial package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/lgcpspatial.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -137,6 +140,12 @@
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.match_peaks"><code class="docutils literal notranslate"><span class="pre">match_peaks()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.pair_points"><code class="docutils literal notranslate"><span class="pre">pair_points()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.extract_as_paths"><code class="docutils literal notranslate"><span class="pre">extract_as_paths()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.PathInfo"><code class="docutils literal notranslate"><span class="pre">PathInfo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.PathInfo.path"><code class="docutils literal notranslate"><span class="pre">PathInfo.path</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.PathInfo.centroid"><code class="docutils literal notranslate"><span class="pre">PathInfo.centroid</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.path_information"><code class="docutils literal notranslate"><span class="pre">path_information()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.link_peaks"><code class="docutils literal notranslate"><span class="pre">link_peaks()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.plot_tracked_peaks"><code class="docutils literal notranslate"><span class="pre">plot_tracked_peaks()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.locate_opposites"><code class="docutils literal notranslate"><span class="pre">locate_opposites()</span></code></a></li>
@@ -144,6 +153,8 @@
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.fit_heading_variance"><code class="docutils literal notranslate"><span class="pre">fit_heading_variance()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.matched_cardinal_points"><code class="docutils literal notranslate"><span class="pre">matched_cardinal_points()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.sample_heading_angles"><code class="docutils literal notranslate"><span class="pre">sample_heading_angles()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.match_with_tracked_peaks"><code class="docutils literal notranslate"><span class="pre">match_with_tracked_peaks()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.heading.html#lgcpspatial.heading.maybe_aliased"><code class="docutils literal notranslate"><span class="pre">maybe_aliased()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">lgcpspatial.hyperparameters module</a><ul>
@@ -152,9 +163,16 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcpspatial.lgcp2d module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult"><code class="docutils literal notranslate"><span class="pre">CoordinateDescentResult</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult.h"><code class="docutils literal notranslate"><span class="pre">CoordinateDescentResult.μh</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult.v"><code class="docutils literal notranslate"><span class="pre">CoordinateDescentResult.v</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult.loss"><code class="docutils literal notranslate"><span class="pre">CoordinateDescentResult.loss</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.coordinate_descent"><code class="docutils literal notranslate"><span class="pre">coordinate_descent()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.make_kernel_ft"><code class="docutils literal notranslate"><span class="pre">make_kernel_ft()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.update_cached"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.update_cached()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.Fu"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.Fu()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.Ftu"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.Ftu()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.initialmean"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.initialmean()</span></code></a></li>
@@ -162,6 +180,7 @@
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.M_helper"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.M_helper()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.check_arguments"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.check_arguments()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.rates_from_lowrank"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.rates_from_lowrank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.low_rank_likelihood_precision"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.low_rank_likelihood_precision()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.low_rank_cholesky"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.low_rank_cholesky()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.low_rank_covariance"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.low_rank_covariance()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.covariance_diagonal"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.covariance_diagonal()</span></code></a></li>
@@ -169,6 +188,7 @@
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.JHvM"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.JHvM()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.mean_update"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.mean_update()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.variance_update"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.variance_update()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank.load_new_data"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank.load_new_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.chinv"><code class="docutils literal notranslate"><span class="pre">chinv()</span></code></a></li>
@@ -186,8 +206,11 @@
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.nanmask"><code class="docutils literal notranslate"><span class="pre">Arena.nanmask</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.perimeter"><code class="docutils literal notranslate"><span class="pre">Arena.perimeter</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.hull"><code class="docutils literal notranslate"><span class="pre">Arena.hull</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.from_mask"><code class="docutils literal notranslate"><span class="pre">Arena.from_mask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.distance_to_boundary"><code class="docutils literal notranslate"><span class="pre">Arena.distance_to_boundary()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.close_to_boundary"><code class="docutils literal notranslate"><span class="pre">Arena.close_to_boundary()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.remove_near_boundary"><code class="docutils literal notranslate"><span class="pre">Arena.remove_near_boundary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.contains"><code class="docutils literal notranslate"><span class="pre">Arena.contains()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a><ul>
@@ -262,6 +285,9 @@
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.plot.html#lgcpspatial.plot.covariance_crosshairs"><code class="docutils literal notranslate"><span class="pre">covariance_crosshairs()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.plot.html#lgcpspatial.plot.good_colorbar"><code class="docutils literal notranslate"><span class="pre">good_colorbar()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.plot.html#lgcpspatial.plot.draw_compass"><code class="docutils literal notranslate"><span class="pre">draw_compass()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.plot.html#lgcpspatial.plot.tracking_match_plot"><code class="docutils literal notranslate"><span class="pre">tracking_match_plot()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.plot.html#lgcpspatial.plot.shiftplot"><code class="docutils literal notranslate"><span class="pre">shiftplot()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.plot.html#lgcpspatial.plot.colored_shift_density_images"><code class="docutils literal notranslate"><span class="pre">colored_shift_density_images()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">lgcpspatial.posterior module</a><ul>
@@ -273,10 +299,26 @@
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.interpolate_peaks"><code class="docutils literal notranslate"><span class="pre">interpolate_peaks()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.get_peak_density"><code class="docutils literal notranslate"><span class="pre">get_peak_density()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.sample_posterior_lograte"><code class="docutils literal notranslate"><span class="pre">sample_posterior_lograte()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.PosteriorSample"><code class="docutils literal notranslate"><span class="pre">PosteriorSample</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.SampledConfidence"><code class="docutils literal notranslate"><span class="pre">SampledConfidence</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.PosteriorSample"><code class="docutils literal notranslate"><span class="pre">PosteriorSample</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.PosteriorSample.density"><code class="docutils literal notranslate"><span class="pre">PosteriorSample.density</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.PosteriorSample.pfield"><code class="docutils literal notranslate"><span class="pre">PosteriorSample.pfield</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.PosteriorSample.peaks"><code class="docutils literal notranslate"><span class="pre">PosteriorSample.peaks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.PosteriorSample.totals"><code class="docutils literal notranslate"><span class="pre">PosteriorSample.totals</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.PosteriorSample.means"><code class="docutils literal notranslate"><span class="pre">PosteriorSample.means</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.PosteriorSample.sigmas"><code class="docutils literal notranslate"><span class="pre">PosteriorSample.sigmas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.PosteriorSample.nearest"><code class="docutils literal notranslate"><span class="pre">PosteriorSample.nearest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.PosteriorSample.kde"><code class="docutils literal notranslate"><span class="pre">PosteriorSample.kde</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.SampledConfidence"><code class="docutils literal notranslate"><span class="pre">SampledConfidence</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.SampledConfidence.samples"><code class="docutils literal notranslate"><span class="pre">SampledConfidence.samples</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.SampledConfidence.ellipses"><code class="docutils literal notranslate"><span class="pre">SampledConfidence.ellipses</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.SampledConfidence.gaussians"><code class="docutils literal notranslate"><span class="pre">SampledConfidence.gaussians</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticConfidence"><code class="docutils literal notranslate"><span class="pre">QuadraticConfidence</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticConfidenceJoint"><code class="docutils literal notranslate"><span class="pre">QuadraticConfidenceJoint</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticExponentialConfidence"><code class="docutils literal notranslate"><span class="pre">QuadraticExponentialConfidence</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.fraction_within_arena"><code class="docutils literal notranslate"><span class="pre">fraction_within_arena()</span></code></a></li>
 </ul>
 </li>
@@ -302,7 +344,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.util.html">lgcpspatial.util module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.current_milli_time"><code class="docutils literal notranslate"><span class="pre">current_milli_time()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.tic"><code class="docutils literal notranslate"><span class="pre">tic()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.toc"><code class="docutils literal notranslate"><span class="pre">toc()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.progress_bar"><code class="docutils literal notranslate"><span class="pre">progress_bar()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.zgrid"><code class="docutils literal notranslate"><span class="pre">zgrid()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.printstats"><code class="docutils literal notranslate"><span class="pre">printstats()</span></code></a></li>
@@ -350,6 +394,11 @@
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.closest"><code class="docutils literal notranslate"><span class="pre">closest()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.paired_distances"><code class="docutils literal notranslate"><span class="pre">paired_distances()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.pair_neighbors"><code class="docutils literal notranslate"><span class="pre">pair_neighbors()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.bootstrap_in_blocks"><code class="docutils literal notranslate"><span class="pre">bootstrap_in_blocks()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.assign_to_regions"><code class="docutils literal notranslate"><span class="pre">assign_to_regions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.collect_in_regions"><code class="docutils literal notranslate"><span class="pre">collect_in_regions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.gaussian_from_points"><code class="docutils literal notranslate"><span class="pre">gaussian_from_points()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.util.html#lgcpspatial.util.collect_gaussians"><code class="docutils literal notranslate"><span class="pre">collect_gaussians()</span></code></a></li>
 </ul>
 </li>
 </ul>

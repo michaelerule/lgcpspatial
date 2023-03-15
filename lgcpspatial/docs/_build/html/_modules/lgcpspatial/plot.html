@@ -10,10 +10,9 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -27,15 +26,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -77,9 +80,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>lgcpspatial.plot</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">lgcpspatial.plot</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -94,7 +97,7 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">plot.py: A subset of plotting helpers copied from </span>
-<span class="sd">`neurotools/graphics/plot`, and some new helper routines to reduce </span>
+<span class="sd">``neurotools/graphics/plot``, and some new helper routines to reduce </span>
 <span class="sd">notebook clutter</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -108,8 +111,8 @@
 
 <span class="kn">import</span> <span class="nn">scipy.stats</span>
 <span class="kn">import</span> <span class="nn">scipy.linalg</span>
-<span class="kn">from</span>   <span class="nn">scipy.spatial</span>  <span class="kn">import</span> <span class="n">ConvexHull</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.util</span> <span class="kn">import</span> <span class="n">c2p</span><span class="p">,</span><span class="n">p2c</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span>  <span class="kn">import</span> <span class="n">ConvexHull</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">c2p</span><span class="p">,</span><span class="n">p2c</span>
 
 <span class="n">SMALL</span>  <span class="o">=</span> <span class="mi">7</span>
 <span class="n">MEDIUM</span> <span class="o">=</span> <span class="mi">8</span>
@@ -174,7 +177,7 @@
     
 
 <div class="viewcode-block" id="simpleaxis"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.simpleaxis">[docs]</a><span class="k">def</span> <span class="nf">simpleaxis</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Only draw the bottom and left axis lines</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -190,7 +193,7 @@
     
 
 <div class="viewcode-block" id="rightaxis"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.rightaxis">[docs]</a><span class="k">def</span> <span class="nf">rightaxis</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Only draw the bottom and right axis lines.</span>
 <span class="sd">    Move y axis to the right.</span>
 <span class="sd">    </span>
@@ -208,7 +211,7 @@
 
 
 <div class="viewcode-block" id="simpleraxis"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.simpleraxis">[docs]</a><span class="k">def</span> <span class="nf">simpleraxis</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Only draw the left y axis, nothing else</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -225,7 +228,7 @@
 
 
 <div class="viewcode-block" id="simpleraxis2"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.simpleraxis2">[docs]</a><span class="k">def</span> <span class="nf">simpleraxis2</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Only draw the left y axis, nothing else</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -242,7 +245,7 @@
     
 
 <div class="viewcode-block" id="noaxis"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.noaxis">[docs]</a><span class="k">def</span> <span class="nf">noaxis</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Hide all axes</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -267,7 +270,7 @@
 
 
 <div class="viewcode-block" id="nox"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.nox">[docs]</a><span class="k">def</span> <span class="nf">nox</span><span class="p">():</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Hide x-axis</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
@@ -275,7 +278,7 @@
 
 
 <div class="viewcode-block" id="noy"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.noy">[docs]</a><span class="k">def</span> <span class="nf">noy</span><span class="p">():</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Hide y-axis</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
@@ -283,9 +286,9 @@
 
 
 <div class="viewcode-block" id="noxyaxes"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.noxyaxes">[docs]</a><span class="k">def</span> <span class="nf">noxyaxes</span><span class="p">():</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Hide all aspects of x and y axes. </span>
-<span class="sd">    See `nox`, `noy`, and `noaxis`</span>
+<span class="sd">    See ``nox``, ``noy``, and ``noaxis``</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">nox</span><span class="p">()</span>
     <span class="n">noy</span><span class="p">()</span>
@@ -303,7 +306,7 @@
 
 
 <div class="viewcode-block" id="pixels_to_xfigureunits"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.pixels_to_xfigureunits">[docs]</a><span class="k">def</span> <span class="nf">pixels_to_xfigureunits</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts a measurement in pixels to units of the current</span>
 <span class="sd">    figure width scale</span>
 <span class="sd">    </span>
@@ -320,7 +323,7 @@
 
 
 <div class="viewcode-block" id="pixels_to_yfigureunits"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.pixels_to_yfigureunits">[docs]</a><span class="k">def</span> <span class="nf">pixels_to_yfigureunits</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts a measurement in pixels to units of the current</span>
 <span class="sd">    figure height scale</span>
 <span class="sd">    </span>
@@ -337,7 +340,7 @@
     
 
 <div class="viewcode-block" id="nudge_axis_left"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.nudge_axis_left">[docs]</a><span class="k">def</span> <span class="nf">nudge_axis_left</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Moves the left x-axis limit, keeping the right limit intact. </span>
 <span class="sd">    This changes the width of the plot.</span>
 
@@ -356,7 +359,7 @@
     
 
 <div class="viewcode-block" id="nudge_axis_right"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.nudge_axis_right">[docs]</a><span class="k">def</span> <span class="nf">nudge_axis_right</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Moves the right x-axis limit, keeping the left limit intact. </span>
 <span class="sd">    This changes the width of the plot.</span>
 
@@ -375,7 +378,7 @@
     
 
 <div class="viewcode-block" id="nudge_axis_x"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.nudge_axis_x">[docs]</a><span class="k">def</span> <span class="nf">nudge_axis_x</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    This does not change the width of the axis</span>
 
 <span class="sd">    Parameters</span>
@@ -393,7 +396,7 @@
     
 
 <div class="viewcode-block" id="nudge_axis_y_pixels"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.nudge_axis_y_pixels">[docs]</a><span class="k">def</span> <span class="nf">nudge_axis_y_pixels</span><span class="p">(</span><span class="n">dy</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    moves axis dy pixels.</span>
 <span class="sd">    Direction of dy may depend on axis orientation.</span>
 <span class="sd">    Does not change axis height.</span>
@@ -412,7 +415,7 @@
     
 
 <div class="viewcode-block" id="adjust_axis_height_pixels"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.adjust_axis_height_pixels">[docs]</a><span class="k">def</span> <span class="nf">adjust_axis_height_pixels</span><span class="p">(</span><span class="n">dy</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    resize axis by dy pixels.</span>
 <span class="sd">    Direction of dy may depends on axis orientation.</span>
 <span class="sd">    Does not change the baseline position of axis.</span>
@@ -430,7 +433,7 @@
     
 
 <div class="viewcode-block" id="get_ax_size"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.get_ax_size">[docs]</a><span class="k">def</span> <span class="nf">get_ax_size</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Gets tha axis size in figure-relative units</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -451,7 +454,7 @@
 
 
 <div class="viewcode-block" id="yunits_to_pixels"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.yunits_to_pixels">[docs]</a><span class="k">def</span> <span class="nf">yunits_to_pixels</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts a measurement in units of the current y-axis to pixels</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -468,7 +471,7 @@
 
 
 <div class="viewcode-block" id="xunits_to_pixels"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.xunits_to_pixels">[docs]</a><span class="k">def</span> <span class="nf">xunits_to_pixels</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts a measurement in units of the current x-axis to pixels</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -485,7 +488,7 @@
     
 
 <div class="viewcode-block" id="yscalebar"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.yscalebar">[docs]</a><span class="k">def</span> <span class="nf">yscalebar</span><span class="p">(</span><span class="n">ycenter</span><span class="p">,</span><span class="n">yheight</span><span class="p">,</span><span class="n">label</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">side</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Add vertical scale bar to plot</span>
 <span class="sd">    </span>
 <span class="sd">    Other Parameters</span>
@@ -524,7 +527,7 @@
 
 
 <div class="viewcode-block" id="xscalebar"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.xscalebar">[docs]</a><span class="k">def</span> <span class="nf">xscalebar</span><span class="p">(</span><span class="n">xcenter</span><span class="p">,</span><span class="n">xlength</span><span class="p">,</span><span class="n">label</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Add horizontal scale bar to plot</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -556,6 +559,9 @@
     
 
 <div class="viewcode-block" id="arrow_between"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.arrow_between">[docs]</a><span class="k">def</span> <span class="nf">arrow_between</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Draw a solid arrow between two axes    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">draw</span><span class="p">()</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
 
@@ -602,10 +608,11 @@
         <span class="n">py</span> <span class="o">=</span> <span class="n">cy</span><span class="o">*</span><span class="n">scale</span> <span class="o">+</span> <span class="p">(</span><span class="n">ax0</span><span class="o">+</span><span class="n">ax1</span><span class="o">+</span><span class="n">bx0</span><span class="o">+</span><span class="n">bx1</span><span class="p">)</span><span class="o">/</span><span class="mi">4</span>
         <span class="n">polygon</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="n">py</span><span class="p">,</span><span class="n">px</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">facecolor</span><span class="o">=</span><span class="n">BLACK</span><span class="p">)</span><span class="c1">#,transform=tt)</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">polygon</span><span class="p">)</span></div>
-       
- 
+<span class="c1">#</span>
+
+
 <div class="viewcode-block" id="nicey"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.nicey">[docs]</a><span class="k">def</span> <span class="nf">nicey</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Mark only the min/max value of y axis</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -621,7 +628,7 @@
 
 
 <div class="viewcode-block" id="nicex"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.nicex">[docs]</a><span class="k">def</span> <span class="nf">nicex</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Mark only the min/max value of x axis</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -637,8 +644,8 @@
 
 
 <div class="viewcode-block" id="nicexy"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.nicexy">[docs]</a><span class="k">def</span> <span class="nf">nicexy</span><span class="p">(</span><span class="n">xby</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">yby</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Mark only the min/max value of y/y axis. See `nicex` and `nicey`</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Mark only the min/max value of y/y axis. See ``nicex`` and ``nicey``</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">nicex</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">xby</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">nicey</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">yby</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
@@ -657,7 +664,7 @@
     <span class="n">shrink</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
     <span class="n">labelpad</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Matplotlib&#39;s colorbar function is bad. </span>
 <span class="sd">    This is less bad.</span>
 <span class="sd">    r&#39;$\mathrm{\mu V}^2$&#39;</span>
@@ -743,7 +750,7 @@
     <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">bold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    --------------------------------------------------------</span>
 <span class="sd">    x : label</span>
@@ -760,7 +767,7 @@
     
 
 <div class="viewcode-block" id="pixels_to_xunits"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.pixels_to_xunits">[docs]</a><span class="k">def</span> <span class="nf">pixels_to_xunits</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts a measurement in pixels to units of the current x-axis</span>
 <span class="sd">    scale</span>
 <span class="sd">    </span>
@@ -779,7 +786,7 @@
 
 
 <div class="viewcode-block" id="pixels_to_yunits"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.pixels_to_yunits">[docs]</a><span class="k">def</span> <span class="nf">pixels_to_yunits</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts a measurement in pixels to units of the current y-axis</span>
 <span class="sd">    scale</span>
 <span class="sd">    </span>
@@ -798,9 +805,9 @@
 
 
 <div class="viewcode-block" id="circular_gaussian_smooth"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.circular_gaussian_smooth">[docs]</a><span class="k">def</span> <span class="nf">circular_gaussian_smooth</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">sigma</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Smooth signal x with gaussian of standard deviation </span>
-<span class="sd">    `sigma`, circularly wrapped using Fourier transform.</span>
+<span class="sd">    ``sigma``, circularly wrapped using Fourier transform.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    --------------------------------------------------------</span>
@@ -819,7 +826,7 @@
 
 
 <div class="viewcode-block" id="circularly_smooth_colormap"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.circularly_smooth_colormap">[docs]</a><span class="k">def</span> <span class="nf">circularly_smooth_colormap</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span><span class="n">s</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Smooth a colormap with cirular boundary conditions</span>
 
 <span class="sd">    s: sigma, standard dev of gaussian smoothing kernel in </span>
@@ -843,10 +850,9 @@
     <span class="n">R</span> <span class="o">=</span> <span class="n">circular_gaussian_smooth</span><span class="p">(</span><span class="n">R</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
     <span class="n">G</span> <span class="o">=</span> <span class="n">circular_gaussian_smooth</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
     <span class="n">B</span> <span class="o">=</span> <span class="n">circular_gaussian_smooth</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
-    <span class="n">RGB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">R</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">B</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
-    <span class="c1">#return np.array([np.fft.fftshift(c) for c in RGB.T]).T</span>
-    <span class="k">return</span> <span class="n">RGB</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">R</span><span class="p">,</span><span class="n">G</span><span class="p">,</span><span class="n">B</span><span class="p">])</span><span class="o">.</span><span class="n">T</span></div>
 
+<span class="c1"># Colors inspired by Bridget Riley&#39;s &quot;Gather&quot;</span>
 <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">VIOLET</span><span class="p">,</span>
           <span class="n">MAUVE</span><span class="p">,</span>
           <span class="n">RUST</span><span class="p">,</span>
@@ -866,8 +872,30 @@
 <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;riley&#39;</span> <span class="ow">in</span> <span class="n">plt</span><span class="o">.</span><span class="n">colormaps</span><span class="p">():</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">register_cmap</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;riley&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">riley</span><span class="p">)</span>
 
+
+<span class="c1"># Colors for North South East West Plots</span>
+<span class="n">cW</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span><span class="mf">.05</span><span class="p">,</span><span class="mf">0.6</span><span class="p">]</span> <span class="c1"># Magenta</span>
+<span class="n">cS</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]</span> <span class="c1"># Orange</span>
+<span class="n">cE</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">.95</span><span class="p">,</span><span class="mf">0.4</span><span class="p">]</span> <span class="c1"># Bright green</span>
+<span class="n">cN</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">1.0</span><span class="p">]</span> <span class="c1"># Azure</span>
+<span class="n">colorNSEW</span> <span class="o">=</span> <span class="n">float32</span><span class="p">([</span><span class="n">cN</span><span class="p">,</span><span class="n">cS</span><span class="p">,</span><span class="n">cE</span><span class="p">,</span><span class="n">cW</span><span class="p">])</span>
+
+<span class="c1"># New circular map matching defined colors</span>
+<span class="c1"># Order should be W S E N to match plot.riley</span>
+<span class="c1"># Soften these slightly by averaging w. riley</span>
+<span class="n">cardinal0</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
+    <span class="s1">&#39;cardinal0&#39;</span><span class="p">,[</span><span class="n">cW</span><span class="p">,</span><span class="n">cS</span><span class="p">,</span><span class="n">cE</span><span class="p">,</span><span class="n">cN</span><span class="p">,</span><span class="n">cW</span><span class="p">])</span>
+<span class="n">xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">cardinal</span>  <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
+    <span class="s1">&#39;cardinal&#39;</span><span class="p">,</span><span class="mf">0.52</span><span class="o">*</span><span class="p">(</span><span class="n">riley</span><span class="p">(</span><span class="n">xx</span><span class="p">)[:,:</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="n">circularly_smooth_colormap</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cardinal0</span><span class="p">(</span><span class="n">xx</span><span class="p">))[:,:</span><span class="mi">3</span><span class="p">],</span><span class="mi">45</span><span class="p">)))</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;cardinal&#39;</span> <span class="ow">in</span> <span class="n">plt</span><span class="o">.</span><span class="n">colormaps</span><span class="p">():</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">register_cmap</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;cardinal&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cardinal</span><span class="p">)</span>
+<span class="n">cardinal</span>
+
+    
 <div class="viewcode-block" id="force_aspect"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.force_aspect">[docs]</a><span class="k">def</span> <span class="nf">force_aspect</span><span class="p">(</span><span class="n">aspect</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    aspect : aspect ratio</span>
@@ -876,14 +904,14 @@
     <span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
     <span class="n">y1</span><span class="p">,</span><span class="n">y2</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
     <span class="n">a</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">x2</span><span class="o">-</span><span class="n">x1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">y2</span><span class="o">-</span><span class="n">y1</span><span class="p">))</span><span class="o">/</span><span class="n">aspect</span><span class="p">)</span></div>
-    
-    
+<span class="w">    </span>
+<span class="w">    </span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Plotting routines specific to the GP code</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="pscale"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.pscale">[docs]</a><span class="k">def</span> <span class="nf">pscale</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">q1</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">q2</span><span class="o">=</span><span class="mf">99.5</span><span class="p">,</span><span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Plot helper: Scale data by percentiles</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -913,7 +941,7 @@
     
 
 <div class="viewcode-block" id="showkn"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.showkn">[docs]</a><span class="k">def</span> <span class="nf">showkn</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Plot helper; Re-center a FFT convolution kernel and</span>
 <span class="sd">    plot it. </span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -921,7 +949,7 @@
 
 
 <div class="viewcode-block" id="showim"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.showim">[docs]</a><span class="k">def</span> <span class="nf">showim</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Plot helper: Show image with title, no axes</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> 
@@ -933,12 +961,12 @@
     
 
 <div class="viewcode-block" id="inference_summary_plot"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.inference_summary_plot">[docs]</a><span class="k">def</span> <span class="nf">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">ftitle</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Summarize the result of log-Gaussian process variational </span>
 <span class="sd">    inference in four plots.</span>
 <span class="sd">    </span>
 <span class="sd">    This function exists to simplify the example notebooks,</span>
-<span class="sd">    and isn&#39;t designed for more general use. </span>
+<span class="sd">    and isn&#39;t designed for general use. </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -946,7 +974,7 @@
 <span class="sd">        Initialized model</span>
 <span class="sd">    fit: tuple</span>
 <span class="sd">        Tuple of (low-rank mean, marginal variance, loss)</span>
-<span class="sd">        returned by `lgcp2d.coordinate_descent()`.</span>
+<span class="sd">        returned by ``lgcp2d.coordinate_descent()``.</span>
 <span class="sd">    data: loaddata.Dataset</span>
 <span class="sd">        Prepared dataset</span>
 <span class="sd">    ftitle: str</span>
@@ -958,22 +986,22 @@
     <span class="n">nanmask</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">nanmask</span>
     <span class="n">Fs</span>      <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">position_sample_rate</span>
     <span class="n">scale</span>   <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">scale</span>
-    <span class="n">μz</span>      <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">μ_0</span>
+    <span class="n">μz</span>      <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">prior_mean</span>
     <span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">_</span>  <span class="o">=</span> <span class="n">fit</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
     
-    <span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;bone_r&#39;</span><span class="p">)</span>
-    
     <span class="c1"># Convert from frequency to spatial coordinates and add back prior mean</span>
     <span class="n">μ</span>  <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@μh</span><span class="o">+</span><span class="n">μz</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-    <span class="n">μλ</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">μ</span><span class="o">+</span><span class="n">v</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">Fs</span>
-    <span class="n">vλ</span> <span class="o">=</span> <span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">μ</span> <span class="o">+</span> <span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">Fs</span><span class="o">**</span><span class="mi">2</span>
-    <span class="n">σλ</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">vλ</span><span class="p">)</span>
+    <span class="n">μλ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">μ</span><span class="o">+</span><span class="n">v</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">Fs</span>
+    <span class="n">vλ</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">μ</span> <span class="o">+</span> <span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">Fs</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">σλ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">vλ</span><span class="p">)</span>
     <span class="n">cv</span> <span class="o">=</span> <span class="n">σλ</span><span class="o">/</span><span class="n">μλ</span>
-
+    
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;bone_r&#39;</span><span class="p">)</span>
+    
     <span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mf">2.5</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
-    <span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">right</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span><span class="n">top</span><span class="o">=</span><span class="mf">.78</span><span class="p">)</span>
+    <span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">right</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span><span class="n">top</span><span class="o">=</span><span class="mf">.8</span><span class="p">,</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">=</span><span class="p">{}</span>
 
     <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">subplot</span><span class="p">(</span><span class="mi">141</span><span class="p">)</span>
@@ -984,13 +1012,11 @@
     <span class="n">im</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">toshow</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
     <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Rate histogram &quot;y&quot;&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
     <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
-
     <span class="c1"># Add a scale bar</span>
     <span class="n">x0</span> <span class="o">=</span> <span class="n">where</span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">x1</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">scale</span><span class="o">*</span><span class="p">(</span><span class="n">L</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">y0</span> <span class="o">=</span> <span class="n">where</span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">L</span><span class="o">//</span><span class="mi">25</span>
     <span class="n">xscalebar</span><span class="p">((</span><span class="n">x0</span><span class="o">+</span><span class="n">x1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">,</span><span class="s1">&#39;1 m&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">y0</span><span class="p">)</span>
-    
     <span class="c1"># Add color bar with marker for neurons mean-rate</span>
     <span class="n">cax</span> <span class="o">=</span> <span class="n">good_colorbar</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Hz&#39;</span><span class="p">,</span>
                         <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">vscale</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
@@ -999,35 +1025,55 @@
     <span class="n">axhline</span><span class="p">(</span><span class="n">μy</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
     <span class="n">text</span><span class="p">(</span><span class="n">xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mf">.6</span><span class="p">,</span><span class="n">μy</span><span class="p">,</span><span class="sa">r</span><span class="s1">&#39;$\langle y \rangle$=</span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">μy</span><span class="p">,</span><span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 
+    
+    <span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="n">subplot</span><span class="p">(</span><span class="mi">143</span><span class="p">)</span>
+    <span class="c1">#vmin,vmax = nanpercentile(μλ[mask],[.5,99.5])</span>
+    <span class="c1">#vmin = floor(vmin*10)/10</span>
+    <span class="c1">#vmax = ceil (vmax*10)/10</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="mf">.5</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">L</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+        <span class="n">μλ</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">nanmask</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="o">-</span><span class="n">q</span><span class="p">,</span><span class="mi">1</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Posterior mean $</span><span class="se">\\</span><span class="s1">langle \lambda</span><span class="se">\\</span><span class="s1">rangle$&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">good_colorbar</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Hz&#39;</span><span class="p">,</span>
+                  <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">vscale</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
     <span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">subplot</span><span class="p">(</span><span class="mi">142</span><span class="p">)</span>
     <span class="n">toshow</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">μ</span><span class="o">-</span><span class="n">μz</span><span class="o">.</span><span class="n">ravel</span><span class="p">()))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">nanmask</span>
     <span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span> <span class="o">=</span> <span class="n">nanpercentile</span><span class="p">(</span><span class="n">toshow</span><span class="p">,[</span><span class="mf">.25</span><span class="p">,</span><span class="mf">99.75</span><span class="p">])</span>
     <span class="n">vmin</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">vmin</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span>
     <span class="n">vmax</span> <span class="o">=</span> <span class="n">ceil</span> <span class="p">(</span><span class="n">vmax</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span>
-    <span class="n">im</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">toshow</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+        <span class="n">toshow</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="o">-</span><span class="n">q</span><span class="p">,</span><span class="mi">1</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
     <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Posterior mean (Δ log-rate)&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
     <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
     <span class="n">good_colorbar</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ΔdB from background&#39;</span><span class="p">,</span>
                   <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">vscale</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">labelpad</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
-    
-    <span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="n">subplot</span><span class="p">(</span><span class="mi">143</span><span class="p">)</span>
-    <span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span> <span class="o">=</span> <span class="n">nanpercentile</span><span class="p">(</span><span class="n">μλ</span><span class="p">[</span><span class="n">mask</span><span class="p">],[</span><span class="mf">.5</span><span class="p">,</span><span class="mf">99.5</span><span class="p">])</span>
-    <span class="n">vmin</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">vmin</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span>
-    <span class="n">vmax</span> <span class="o">=</span> <span class="n">ceil</span> <span class="p">(</span><span class="n">vmax</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">μλ</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">nanmask</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
-    <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Posterior mean $</span><span class="se">\\</span><span class="s1">langle \lambda</span><span class="se">\\</span><span class="s1">rangle$&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-    <span class="n">good_colorbar</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Hz&#39;</span><span class="p">,</span>
-                  <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">vscale</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
-    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
     
     <span class="n">ax</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">=</span><span class="n">subplot</span><span class="p">(</span><span class="mi">144</span><span class="p">)</span>
     <span class="n">toshow</span> <span class="o">=</span> <span class="n">cv</span><span class="o">*</span><span class="n">nanmask</span>
     <span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span> <span class="o">=</span> <span class="n">nanpercentile</span><span class="p">(</span><span class="n">toshow</span><span class="p">,[</span><span class="mf">.5</span><span class="p">,</span><span class="mf">99.5</span><span class="p">])</span>
     <span class="n">vmin</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">vmin</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span>
     <span class="n">vmax</span> <span class="o">=</span> <span class="n">ceil</span> <span class="p">(</span><span class="n">vmax</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span>
-    <span class="n">im</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">toshow</span><span class="p">,</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+        <span class="n">toshow</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+        <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="o">-</span><span class="n">q</span><span class="p">,</span><span class="mi">1</span><span class="o">-</span><span class="n">q</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
     <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Marginal c.v. of λ (σ/μ)&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-    <span class="n">good_colorbar</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Normalized units&#39;</span><span class="p">,</span>
+    <span class="n">good_colorbar</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span><span class="n">vmax</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;σ/μ&#39;</span><span class="p">,</span>
                   <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">vscale</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
     <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
     
@@ -1036,7 +1082,7 @@
 
 
 <div class="viewcode-block" id="plot_convex_hull"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.plot_convex_hull">[docs]</a><span class="k">def</span> <span class="nf">plot_convex_hull</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate convex hull of points (px,py) and plot it.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -1047,7 +1093,7 @@
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
 <span class="sd">    **kwargs: dict</span>
-<span class="sd">        Keyword arguments are forwarded to `pyplot.plot()`        </span>
+<span class="sd">        Keyword arguments are forwarded to ``pyplot.plot()``        </span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1061,7 +1107,7 @@
 
 
 <div class="viewcode-block" id="unit_crosshairs"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.unit_crosshairs">[docs]</a><span class="k">def</span> <span class="nf">unit_crosshairs</span><span class="p">(</span><span class="n">draw_ellipse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">draw_cross</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">lines</span>  <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="n">draw_ellipse</span><span class="p">:</span>
@@ -1080,9 +1126,9 @@
 
     
 <div class="viewcode-block" id="covellipse_from_points"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.covellipse_from_points">[docs]</a><span class="k">def</span> <span class="nf">covellipse_from_points</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Helper to construct covariance ellipse from </span>
-<span class="sd">    collection of 2D points `q` encoded as complex numbers.</span>
+<span class="sd">    collection of 2D points ``q`` encoded as complex numbers.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="n">isfinite</span><span class="p">(</span><span class="n">q</span><span class="p">)]</span>
     <span class="n">pxy</span> <span class="o">=</span> <span class="n">c2p</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
@@ -1098,7 +1144,7 @@
     <span class="n">draw_ellipse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">draw_cross</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;2D&#39;</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    For 2D Gaussians these are the confidence intervals</span>
 <span class="sd">    </span>
 <span class="sd">        p   | sigma</span>
@@ -1113,7 +1159,7 @@
 <span class="sd">    - Transform crosshairs into covariance basis</span>
 
 <span class="sd">    Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    S: 2D covariance matrix</span>
 <span class="sd">    p: fraction of data ellipse should enclose</span>
 <span class="sd">    draw_ellipse: whether to draw the ellipse</span>
@@ -1125,7 +1171,7 @@
 <span class="sd">        significance for a 1-tailed test in any direction.</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    -------</span>
 <span class="sd">    path: np.float32</span>
 <span class="sd">        2×NPOINTS array of (x,y) path data for plotting</span>
 <span class="sd">    </span>
@@ -1165,7 +1211,7 @@
     <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">vscale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
     <span class="n">va</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Matplotlib&#39;s colorbar function is pretty bad. </span>
 <span class="sd">    This is less bad.</span>
 <span class="sd">    r&#39;$\mathrm{\mu V}^2$&#39;</span>
@@ -1265,16 +1311,46 @@
     <span class="k">return</span> <span class="n">cax</span></div>
 
 <div class="viewcode-block" id="draw_compass"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.draw_compass">[docs]</a><span class="k">def</span> <span class="nf">draw_compass</span><span class="p">(</span>
-    <span class="n">xy0</span><span class="o">=</span><span class="mf">1.1</span><span class="o">+</span><span class="mf">.65</span><span class="n">j</span><span class="p">,</span><span class="n">r</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span><span class="n">cmap_fn</span><span class="o">=</span><span class="n">riley</span><span class="p">,</span><span class="n">delta</span><span class="o">=</span><span class="mi">18</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="n">xy0</span><span class="o">=</span><span class="mf">1.1</span><span class="o">+</span><span class="mf">.65</span><span class="n">j</span><span class="p">,</span>
+    <span class="n">r</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>
+    <span class="n">cmap_fn</span><span class="o">=</span><span class="n">riley</span><span class="p">,</span>
+    <span class="n">delta</span><span class="o">=</span><span class="mi">18</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Draw a hue-wheel compass rose.</span>
+<span class="sd">    Equivalent of &quot;colorbar&quot; for polar data.</span>
+<span class="sd">    </span>
+<span class="sd">    This uses plot-coordinates for drawing, and assumes</span>
+<span class="sd">    that the plot&#39;s aspect-ratio is equal. </span>
+
+
+<span class="sd">    This is designed to be used with the ``riley`` </span>
+<span class="sd">    colormap from ``lgcpspatial.plot``. This map starts at </span>
+<span class="sd">    mauve, continues through rust, olive, blue, before </span>
+<span class="sd">    circling back to mauve. We use these color–direction</span>
+<span class="sd">    conventions: </span>
+<span class="sd">    </span>
+<span class="sd">     - North: blue/azure/cyan</span>
+<span class="sd">     - South: red/rust</span>
+<span class="sd">     - East:  green/olive</span>
+<span class="sd">     - West:  purple/mauve/magenta</span>
+<span class="sd">    </span>
+<span class="sd">    For comatibility, then, the direction ordering</span>
+<span class="sd">    for the colormap parameter ``color`` should be</span>
+<span class="sd">    </span>
+<span class="sd">        {West, South, East, North}</span>
+
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    --------------------------------------------------------</span>
-<span class="sd">    xy0: center of compass encoded as x+iy complex number</span>
-<span class="sd">    r: size of compass, defaults to 0.03</span>
-<span class="sd">    cmap_fn: circular colormap to use for compass</span>
-<span class="sd">    delta: displacement of lab</span>
+<span class="sd">    xy0: np.complex64</span>
+<span class="sd">        Center of compass encoded as x+iy complex number.</span>
+<span class="sd">    r: positive float; default 0.03</span>
+<span class="sd">        Size of compass (radius of circle).</span>
+<span class="sd">    cmap_fn: matplotlib.colors.Colormap</span>
+<span class="sd">        circular colormap to use for compass.</span>
+<span class="sd">    delta: positive float</span>
+<span class="sd">        Radial spacing for NSEW labels relative to the</span>
+<span class="sd">        color wheel. </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">y0</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="n">ylim</span><span class="p">()</span>
     <span class="n">flip</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">y1</span><span class="o">&lt;</span><span class="n">y0</span> <span class="k">else</span> <span class="mi">1</span>
@@ -1302,6 +1378,138 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">register_cmap</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;roma&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">roma</span><span class="p">)</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;roma_r&#39;</span> <span class="ow">in</span> <span class="n">plt</span><span class="o">.</span><span class="n">colormaps</span><span class="p">():</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">register_cmap</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;roma_r&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">roma_r</span><span class="p">)</span>
+
+    
+<span class="c1">############################################################</span>
+<span class="c1">############################################################</span>
+<span class="c1">############################################################</span>
+<span class="c1">############################################################</span>
+
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">is_in_hull</span>
+<div class="viewcode-block" id="tracking_match_plot"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.tracking_match_plot">[docs]</a><span class="k">def</span> <span class="nf">tracking_match_plot</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">centroids</span><span class="p">,</span> 
+    <span class="n">paths</span><span class="p">,</span>
+    <span class="n">fieldcolor</span><span class="o">=</span><span class="n">MAUVE</span>
+    <span class="p">):</span>
+    <span class="n">ok</span> <span class="o">=</span> <span class="p">{</span><span class="o">*</span><span class="n">where</span><span class="p">(</span>
+        <span class="n">is_in_hull</span><span class="p">(</span><span class="n">centroids</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">hull</span><span class="p">)</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]}</span>
+    <span class="n">ok</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ok</span><span class="p">))</span>
+    <span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">centroids</span><span class="p">[:,</span><span class="n">ok</span><span class="p">],</span><span class="n">facecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,)</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="n">fieldcolor</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">centroids</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ok</span><span class="p">:</span> <span class="k">continue</span>
+        <span class="n">tx</span><span class="p">,</span><span class="n">ty</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="n">text</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span><span class="n">ty</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">fieldcolor</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">paths</span><span class="p">):</span>
+        <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">.6</span><span class="p">)</span>
+        <span class="n">center</span> <span class="o">=</span> <span class="n">c2p</span><span class="p">(</span><span class="n">nanmean</span><span class="p">(</span><span class="n">p2c</span><span class="p">(</span><span class="n">p</span><span class="p">)))</span>
+        <span class="c1">#scatter(*center,marker=&#39;x&#39;,lw=.5,color=&#39;r&#39;)</span>
+        <span class="n">tx</span><span class="p">,</span><span class="n">ty</span> <span class="o">=</span> <span class="n">center</span>
+        <span class="n">text</span><span class="p">(</span><span class="n">tx</span><span class="o">+</span><span class="n">px2x</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="n">ty</span><span class="o">+</span><span class="n">px2y</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+    <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">noxyaxes</span><span class="p">()</span>
+    <span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">force_aspect</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="shiftplot"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.shiftplot">[docs]</a><span class="k">def</span> <span class="nf">shiftplot</span><span class="p">(</span>
+    <span class="n">z1</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">z2</span><span class="p">,</span><span class="n">s2</span><span class="p">,</span>
+    <span class="n">centers</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">zscore</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">draw_ellipse</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">draw_lines</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">line_color</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span>
+    <span class="n">line_width</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+    <span class="n">s</span>  <span class="o">=</span> <span class="n">s1</span> <span class="o">+</span> <span class="n">s2</span>
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="s1">&#39;lw&#39;</span><span class="p">:</span><span class="mf">.6</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">}</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ellipses</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ii</span><span class="p">,(</span><span class="n">si</span><span class="p">,</span><span class="n">za</span><span class="p">,</span><span class="n">zb</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">si</span><span class="p">)):</span> <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">centers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">z0</span> <span class="o">=</span> <span class="p">(</span><span class="n">za</span><span class="o">+</span><span class="n">zb</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">z0</span> <span class="o">=</span> <span class="n">centers</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">zscore</span><span class="p">:</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">get_whitener</span><span class="p">(</span><span class="n">si</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="n">zb</span><span class="o">-</span><span class="n">za</span><span class="p">)</span><span class="o">*</span><span class="n">scale</span>
+            <span class="n">cxy</span> <span class="o">=</span> <span class="n">covariance_crosshairs</span><span class="p">(</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">draw_cross</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">*</span><span class="n">scale</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">zb</span><span class="o">-</span><span class="n">za</span>
+            <span class="n">cxy</span> <span class="o">=</span> <span class="n">covariance_crosshairs</span><span class="p">(</span><span class="n">si</span><span class="p">,</span><span class="n">draw_cross</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">cxy</span> <span class="o">+=</span> <span class="n">z0</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span>
+        
+        <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">float32</span><span class="p">([</span><span class="n">z0</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span><span class="n">z0</span><span class="o">+</span><span class="n">delta</span><span class="p">]))</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">NaN</span><span class="p">,</span><span class="n">NaN</span><span class="p">])</span>
+        <span class="n">ellipses</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">cxy</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">ellipses</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">NaN</span><span class="p">,</span><span class="n">NaN</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">draw_lines</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">float32</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">line_color</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="n">line_width</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">draw_ellipse</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">float32</span><span class="p">(</span><span class="n">ellipses</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">force_aspect</span><span class="p">()</span>
+    <span class="n">noxyaxes</span><span class="p">()</span></div>
+
+<span class="kn">import</span> <span class="nn">lgcpspatial</span>
+<div class="viewcode-block" id="colored_shift_density_images"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.colored_shift_density_images">[docs]</a><span class="k">def</span> <span class="nf">colored_shift_density_images</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span> 
+    <span class="n">NSEW_densities</span><span class="p">,</span> 
+    <span class="n">pct</span>  <span class="o">=</span> <span class="mf">99.9</span> <span class="c1"># Saturate pixels above this</span>
+    <span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Prepare colored (North - South) and (East - West)</span>
+<span class="sd">    peak density shift images.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data: lgcpspatial.loaddata.Dataset</span>
+<span class="sd">        Prepared dataset object.</span>
+<span class="sd">    NSEW_densities: list</span>
+<span class="sd">        Length 4 list of [N,S,E,W] results, each containing</span>
+<span class="sd">        a ``(L*resolution)×(L*resolution)`` smoothed </span>
+<span class="sd">        peak-density map.</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    pct: float ∈(0,100); default 99.9</span>
+<span class="sd">        Percentile of maximum saturation.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    RGBNS:</span>
+<span class="sd">        Rendered RGB values for NS plot</span>
+<span class="sd">    RGBEW:</span>
+<span class="sd">        Rendered RGB values for EW plot</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="c1"># Unpack reference result</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">L</span>
+    <span class="n">N</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">W</span> <span class="o">=</span> <span class="n">NSEW_densities</span>
+    
+    <span class="n">LL</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">resolution</span> <span class="o">=</span> <span class="n">LL</span><span class="o">//</span><span class="n">L</span>
+    
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">lgcpspatial</span><span class="o">.</span><span class="n">loaddata</span><span class="o">.</span><span class="n">Arena</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">py</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">resolution</span><span class="p">)</span><span class="o">.</span><span class="n">mask</span>
+
+    <span class="n">colors</span>  <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">array</span><span class="p">([</span><span class="n">cE</span><span class="p">,</span><span class="n">cW</span><span class="p">])</span>
+    <span class="n">RGBEW</span>   <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">clip</span><span class="p">(</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;dc,dxy-&gt;xyc&#39;</span><span class="p">,</span><span class="n">colors</span><span class="p">,</span>
+        <span class="n">array</span><span class="p">([</span>
+            <span class="p">(</span><span class="n">E</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">E</span><span class="p">,</span><span class="n">pct</span><span class="p">)),</span>
+            <span class="p">(</span><span class="n">W</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">W</span><span class="p">,</span><span class="n">pct</span><span class="p">))])),</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">RGBEW</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">colors</span>  <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">array</span><span class="p">([</span><span class="n">cN</span><span class="p">,</span><span class="n">cS</span><span class="p">])</span>
+    <span class="n">RGBNS</span>   <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">clip</span><span class="p">(</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;dc,dxy-&gt;xyc&#39;</span><span class="p">,</span><span class="n">colors</span><span class="p">,</span>
+        <span class="n">array</span><span class="p">([</span>
+            <span class="p">(</span><span class="n">N</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">pct</span><span class="p">)),</span>
+            <span class="p">(</span><span class="n">S</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">pct</span><span class="p">))])),</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">RGBNS</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">RGBNS</span><span class="p">,</span> <span class="n">RGBEW</span></div>
 </pre></div>
 
            </div>

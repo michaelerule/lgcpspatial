@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>lgcpspatial.savitskygolay module &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -28,15 +27,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -78,8 +81,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>lgcpspatial.savitskygolay module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">lgcpspatial.savitskygolay module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/lgcpspatial.savitskygolay.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -123,7 +126,7 @@
 For fixed M, Fc
 N = Fc*(3.2M-4.6)-1</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>m</strong> (<em>length</em><em> of </em><em>filter in samples</em>) – </p></li>
 <li><p><strong>fc</strong> (<em>low frequency cutoff</em>) – </p></li>
@@ -178,7 +181,7 @@ N = Fc*(3.2M-4.6)-1</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGaccelerate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGaccelerate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGaccelerate" title="Permalink to this definition"></a></dt>
 <dd><p>Smoothed second derivative using a Savitsky-Golay filter</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>signal to smooth + differentiate</em>) – </p></li>
 <li><p><strong>m</strong> (<em>length</em><em> of </em><em>filter in samples</em>) – </p></li>
@@ -199,7 +202,7 @@ N = Fc*(3.2M-4.6)-1</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGdifferentiate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGdifferentiate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGdifferentiate" title="Permalink to this definition"></a></dt>
 <dd><p>Differentiate and smooth using a Savitsky-Golay filter</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>signal to smooth + differentiate</em>) – </p></li>
 <li><p><strong>m</strong> (<em>length</em><em> of </em><em>filter in samples</em>) – </p></li>
@@ -215,7 +218,7 @@ N = Fc*(3.2M-4.6)-1</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.savitskygolay.</span></span><span class="sig-name descname"><span class="pre">SGsmooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/savitskygolay.html#SGsmooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.savitskygolay.SGsmooth" title="Permalink to this definition"></a></dt>
 <dd><p>Smooth using a Savitsky-Golay filter</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>signal to smooth</em>) – </p></li>
 <li><p><strong>m</strong> (<em>length</em><em> of </em><em>filter in samples</em>) – </p></li>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Example 0: Ground truth &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -32,15 +31,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -82,8 +85,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Example 0: Ground truth</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Example 0: Ground truth</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/example 0 hyperparameter groundtruth test.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -203,10 +206,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -377,17 +381,17 @@ div.rendered_html tbody tr:hover {
 <section id="Simulate-a-grid-map-with-known-parameters">
 <h2>Simulate a grid map with known parameters<a class="headerlink" href="#Simulate-a-grid-map-with-known-parameters" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.simulate</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.simulate</span> <span class="kn">import</span> <span class="n">simulate_data</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>     <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">L</span>   <span class="o">=</span> <span class="mi">128</span>       <span class="c1"># Grid size</span>
-<span class="n">P0</span>  <span class="o">=</span> <span class="n">L</span><span class="o">/</span><span class="mi">10</span>      <span class="c1"># Grid spacing</span>
+<span class="n">P0</span>  <span class="o">=</span> <span class="n">L</span><span class="o">/</span><span class="mi">8</span>       <span class="c1"># Grid spacing</span>
 <span class="n">α</span>   <span class="o">=</span> <span class="mf">0.5</span>       <span class="c1"># Grid &quot;sharpness&quot;</span>
 <span class="n">μ</span>   <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="mi">5</span><span class="o">/</span><span class="n">L</span><span class="o">**</span><span class="mi">2</span><span class="c1"># Mean firing rate (spikes per sample)</span>
 <span class="n">pad</span> <span class="o">=</span> <span class="mf">0.1</span>       <span class="c1"># Edge padding (Avoids circular convolution wrap-around)</span>
@@ -419,18 +423,6 @@ div.rendered_html tbody tr:hover {
 <span class="n">subplot</span><span class="p">(</span><span class="mi">133</span><span class="p">);</span> <span class="n">showim</span><span class="p">(</span><span class="n">K</span>   <span class="p">,</span><span class="s1">&#39;Binned Spikes&#39;</span><span class="p">)</span>
 
 <span class="n">datasetname</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;simulated_data_L</span><span class="si">%d</span><span class="s1">_P</span><span class="si">%d</span><span class="s1">_α</span><span class="si">%.2f</span><span class="s1">_μ</span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">P0</span><span class="p">,</span><span class="n">α</span><span class="p">,</span><span class="n">μ</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
-
-<span class="n">simulated</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;L&#39;</span><span class="p">:</span><span class="n">L</span><span class="p">,</span>
-    <span class="s1">&#39;period_bins&#39;</span><span class="p">:</span><span class="n">P0</span><span class="p">,</span>
-    <span class="s1">&#39;sharpness&#39;</span><span class="p">:</span><span class="n">α</span><span class="p">,</span>
-    <span class="s1">&#39;mean_rate&#39;</span><span class="p">:</span><span class="n">μ</span><span class="p">,</span>
-    <span class="s1">&#39;firing_rate&#39;</span><span class="p">:</span><span class="n">λ0</span><span class="p">,</span>
-    <span class="s1">&#39;firing_rate_with_background_variations&#39;</span><span class="p">:</span><span class="n">λ0_bg</span><span class="p">,</span>
-    <span class="s1">&#39;visits_per_bin&#39;</span><span class="p">:</span><span class="n">N</span><span class="p">,</span>
-    <span class="s1">&#39;spikes_per_bin&#39;</span><span class="p">:</span><span class="n">K</span><span class="p">,</span>
-    <span class="s1">&#39;arena_mask&#39;</span><span class="p">:</span><span class="n">mask</span><span class="p">,</span>
-<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -446,7 +438,7 @@ div.rendered_html tbody tr:hover {
 <h2>Heuristic parameters<a class="headerlink" href="#Heuristic-parameters" title="Permalink to this heading"></a></h2>
 <p><strong>Always inspect the heuristic initialization.</strong> If something goes wrong here, grid search will likely also fail.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.util</span>       <span class="kn">import</span> <span class="n">blur</span><span class="p">,</span> <span class="n">fft_acorr</span><span class="p">,</span> <span class="n">radial_average</span><span class="p">,</span> <span class="n">find_peaks</span><span class="p">,</span> <span class="n">slog</span>
@@ -558,7 +550,7 @@ div.rendered_html tbody tr:hover {
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Period (bins) average:              &#39;</span><span class="p">,</span><span class="n">P_hat</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;True      period:  </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">P0</span>)
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Heuristic period:  </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">P_hat</span>)
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;True log-variance: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">var</span>(slog(simulated[&#39;firing_rate&#39;])[mask]))
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;True log-variance: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">var</span>(slog(λ0)[mask]))
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scale (variance):  </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">σ1</span>)
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Scale (Bessel):    </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">σ0</span>)
 </pre></div>
@@ -569,14 +561,14 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Period (bins) estimated from trough: 11.478515703509256
-Period (bins) estimated from peak:   12.53845165636391
-Period (bins) average:               12.008483679936582
-True      period:  12.8
-Heuristic period:  12.008483679936582
-True log-variance: 0.38135907
-Scale (variance):  0.08602198
-Scale (Bessel):    0.5128995364790391
+Period (bins) estimated from trough: 14.758091618797616
+Period (bins) estimated from peak:   15.225262725584749
+Period (bins) average:               14.991677172191181
+True      period:  16.0
+Heuristic period:  14.991677172191181
+True log-variance: 0.3835029
+Scale (variance):  0.09588305
+Scale (Bessel):    0.5063957437730227
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -590,39 +582,28 @@ Scale (Bessel):    0.5128995364790391
 <section id="Infer-rate-map-using-heuristic-parameters">
 <h2>Infer rate map using heuristic parameters<a class="headerlink" href="#Infer-rate-map-using-heuristic-parameters" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">Arena</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>   <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span><span class="p">,</span> <span class="n">coordinate_descent</span>
 
 <span class="n">P</span>     <span class="o">=</span> <span class="n">P_hat</span>
-<span class="n">Fs</span>    <span class="o">=</span> <span class="mi">50</span> <span class="c1"># Hz, but this is fictional for simulated data</span>
-<span class="n">scale</span> <span class="o">=</span> <span class="mf">.5</span> <span class="c1"># 1/Meters, but again: fictional</span>
 <span class="n">data</span>  <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">create_posthoc</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">lograte_guess</span><span class="o">=</span><span class="n">μz</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">arena</span> <span class="o">=</span> <span class="n">Arena</span><span class="o">.</span><span class="n">from_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">position_sample_rate</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Hz, but this is fictional for simulated data</span>
+<span class="n">data</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="mf">.5</span> <span class="c1"># 1/Meters, but again: fictional</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">σ0</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">vfe</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
-<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">μh</span><span class="p">,</span><span class="n">μz</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">Fs</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">scale</span><span class="p">,</span><span class="n">datasetname</span><span class="p">)</span>
+<span class="n">fit</span>   <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span> <span class="c1"># (μh,v,vfe)</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">datasetname</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{1: &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f867e01a4c0&gt;,
- 2: &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f867dfcb550&gt;,
- 3: &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f867dfddcd0&gt;,
- 4: &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f867e251820&gt;}
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/example_0_hyperparameter_groundtruth_test_6_1.png" src="_images/example_0_hyperparameter_groundtruth_test_6_1.png" />
+<img alt="_images/example_0_hyperparameter_groundtruth_test_6_0.png" src="_images/example_0_hyperparameter_groundtruth_test_6_0.png" />
 </div>
 </div>
 </section>
@@ -630,7 +611,7 @@ Scale (Bessel):    0.5128995364790391
 <h2>Identify optimal parameters via grid search<a class="headerlink" href="#Identify-optimal-parameters-via-grid-search" title="Permalink to this heading"></a></h2>
 <p>See <code class="docutils literal notranslate"><span class="pre">example</span> <span class="pre">3</span> <span class="pre">optimize</span> <span class="pre">hyperparameters.ipynb</span></code> for more details.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.gridsearch</span> <span class="kn">import</span> <span class="n">grid_search</span>
@@ -677,7 +658,7 @@ Scale (Bessel):    0.5128995364790391
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;True parameters:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;P  = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">P0</span>)
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;σ² = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">var</span>(slog(simulated[&#39;firing_rate&#39;])[mask]))
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;σ² = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">var</span>(slog(λ0)[mask]))
 </pre></div>
 </div>
 </div>
@@ -686,66 +667,55 @@ Scale (Bessel):    0.5128995364790391
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[55,37](1.29e+01,1.82e+00) loss=-3.744972e+04(done)
+[50,12](1.50e+01,5.75e+00) loss=2.294728e+04(done)
 
 Heuristic parameters
-P  = 12.008484
-σ² = 0.512900
+P  = 14.991677
+σ² = 0.506396
 
 Optimized parameters:
-P  = 12.693184
-σ² = 0.281859
+P  = 14.785282
+σ² = 0.088001
 
 True parameters:
-P  = 12.800000
-σ² = 0.381359
+P  = 16.000000
+σ² = 0.383503
 </pre></div></div>
 </div>
 </section>
 <section id="Infer-rate-map-at-optimized-parameters">
 <h2>Infer rate map at optimized parameters<a class="headerlink" href="#Infer-rate-map-at-optimized-parameters" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">P_use</span>    <span class="o">=</span> <span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">σ0_use</span>   <span class="o">=</span> <span class="n">σ0</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">model</span>    <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">σ0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span><span class="o">**</span><span class="n">modelargs</span><span class="p">)</span>
-<span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">vfe</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
-<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">μh</span><span class="p">,</span><span class="n">μz</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">Fs</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">scale</span><span class="p">,</span><span class="n">datasetname</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">P_use</span>  <span class="o">=</span> <span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">σ0_use</span> <span class="o">=</span> <span class="n">σ0</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">model</span>  <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">σ0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span><span class="o">**</span><span class="n">modelargs</span><span class="p">)</span>
+<span class="n">fit</span>    <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">datasetname</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-{1: &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f867e163f10&gt;,
- 2: &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f867df47ee0&gt;,
- 3: &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f867df616a0&gt;,
- 4: &lt;matplotlib.axes._subplots.AxesSubplot at 0x7f867c32e400&gt;}
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/example_0_hyperparameter_groundtruth_test_10_1.png" src="_images/example_0_hyperparameter_groundtruth_test_10_1.png" />
+<img alt="_images/example_0_hyperparameter_groundtruth_test_10_0.png" src="_images/example_0_hyperparameter_groundtruth_test_10_0.png" />
 </div>
 </div>
 </section>
 <section id="Check-accuracy-of-inferred-rates-relative-to-ground-truth">
 <h2>Check accuracy of inferred rates relative to ground truth<a class="headerlink" href="#Check-accuracy-of-inferred-rates-relative-to-ground-truth" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pz</span> <span class="o">=</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@μh</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">+</span><span class="n">μz</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">fit</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">pz</span> <span class="o">=</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@μh</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">+</span><span class="n">μz</span>
 <span class="n">μλ</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">pz</span><span class="o">+</span><span class="n">v</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">mλ</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">pz</span><span class="p">)</span>
-<span class="n">λ</span>  <span class="o">=</span> <span class="n">simulated</span><span class="p">[</span><span class="s1">&#39;firing_rate_with_background_variations&#39;</span><span class="p">]</span>
+<span class="n">λ</span>  <span class="o">=</span> <span class="n">λ0_bg</span>
 
 <span class="k">def</span> <span class="nf">square_limits</span><span class="p">(</span><span class="n">limit</span><span class="p">):</span>
     <span class="n">xlim</span><span class="p">(</span><span class="o">*</span><span class="n">limit</span><span class="p">)</span>
@@ -759,7 +729,7 @@ P  = 12.800000
 <span class="n">figure</span><span class="p">(</span><span class="mi">0</span><span class="p">,(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mi">140</span><span class="p">)</span>
 
 <span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
-<span class="n">scatter</span><span class="p">(</span><span class="n">λ</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">mλ</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">scatter</span><span class="p">(</span><span class="n">λ</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">μλ</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">simpleaxis</span><span class="p">()</span>
 <span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;True rate&#39;</span><span class="p">)</span>
 <span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Inferred rate&#39;</span><span class="p">)</span>
@@ -773,6 +743,8 @@ P  = 12.800000
 <span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;True log-rate&#39;</span><span class="p">)</span>
 <span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Inferred log-rate&#39;</span><span class="p">)</span>
 <span class="n">square_limits</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+
+<span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>

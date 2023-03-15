@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>lgcpspatial.estimators module &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -30,15 +29,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -80,8 +83,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>lgcpspatial.estimators module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">lgcpspatial.estimators module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/lgcpspatial.estimators.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -122,7 +125,7 @@
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.estimators.</span></span><span class="sig-name descname"><span class="pre">estimate_period_via_autocorrelation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/estimators.html#estimate_period_via_autocorrelation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.estimators.estimate_period_via_autocorrelation" title="Permalink to this definition"></a></dt>
 <dd><p>Estimate grid period using autocorrelation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>N</strong> (<em>2D np.array</em>) – Number of visits to each location</p></li>
 <li><p><strong>K</strong> (<em>2D np.array</em>) – Number of spikes observed at each location</p></li>
@@ -131,7 +134,7 @@
 default is 5x</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>P</strong> (<em>positive float</em>) – Estimated grid period in pixels</p></li>
 <li><p><strong>Δs</strong> (<em>1D np.array</em>) – Bin separations for upsampled radial autocorrelation</p></li>
@@ -153,7 +156,7 @@ regularization parameter to prevent division by zero.</p>
 it; It’s provided as a straw-man to show how much better
 the other estimators are.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>N</strong> (<em>2D np.array</em>) – Number of visits to each location</p></li>
 <li><p><strong>K</strong> (<em>2D np.array</em>) – Number of spikes observed at each location</p></li>
@@ -162,10 +165,10 @@ to avoid ÷0</p></li>
 <li><p><strong>gamma</strong> (<em>float</em>) – Bias parameter; defaults to 0.5</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>2D array</strong></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Regularized (biased) estimate of firing rate in each bin</p>
 </dd>
 </dl>
@@ -178,7 +181,7 @@ to avoid ÷0</p></li>
 better than estimating the rate using a binned
 histogram, but worse than a Gaussian-Process estimator.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>N</strong> (<em>2D np.array</em>) – Number of visits to each location</p></li>
 <li><p><strong>K</strong> (<em>2D np.array</em>) – Number of spikes observed at each location</p></li>
@@ -186,10 +189,10 @@ histogram, but worse than a Gaussian-Process estimator.</p>
 in x and y ×⎷2)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>2D array</strong></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>KDE rate estimate of firing rate in each bin</p>
 </dd>
 </dl>
@@ -213,7 +216,7 @@ and only requires a function which can compute Hessian-
 vector products. This can be done quickly with circulant
 (convolutional) covariance priors using the FFT.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>N</strong> (<em>2D np.array</em>) – Number of visits to each location</p></li>
 <li><p><strong>K</strong> (<em>2D np.array</em>) – Number of spikes observed at each location</p></li>
@@ -221,7 +224,7 @@ vector products. This can be done quickly with circulant
 in x and y ×⎷2)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>rate</strong> (<em>2D np.array</em>) – GP rate estimate of firing rate in each bin</p></li>
 <li><p><strong>kern</strong> (<em>2D np.array</em>) – Prior covariance kernel used for inference</p></li>
@@ -236,7 +239,7 @@ in x and y ×⎷2)</p></li>
 <dt class="sig sig-object py" id="lgcpspatial.estimators.convolutionalLinearGP">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.estimators.</span></span><span class="sig-name descname"><span class="pre">convolutionalLinearGP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/estimators.html#convolutionalLinearGP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.estimators.convolutionalLinearGP" title="Permalink to this definition"></a></dt>
 <dd><p>Special case of a linear Gaussian process (see
-<cite>linearGP</cite>) which can be calculated extremely quickly.</p>
+<code class="docutils literal notranslate"><span class="pre">linearGP</span></code>) which can be calculated extremely quickly.</p>
 <p>This is not recommended for inferring firing rate maps,
 but rather to provide an instructive example of how GP
 inference relates to simpler KDE smoothers.</p>
@@ -245,14 +248,14 @@ uniform. This is assumption is wrong, but the
 computational simpicity and  connection to the KDE
 estimate are instructive.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>np.array</strong><strong>)</strong> (<em>K</em><em> (</em><em>2D</em>) – </p></li>
 <li><p><strong>np.array</strong><strong>)</strong> – </p></li>
 <li><p><strong>(</strong><strong>float</strong><strong>)</strong> (<em>sigma</em>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>λcnv (2D np.array)</strong> (<em>GP rate estimate of firing rate in each bin</em>)</p></li>
 <li><p><strong>gft (2D np.array)</strong> (<em>Fourier transform of computed convolution kernel</em>)</p></li>

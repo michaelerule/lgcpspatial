@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>lgcpspatial.hyperparameters module &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -30,15 +29,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -80,8 +83,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>lgcpspatial.hyperparameters module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">lgcpspatial.hyperparameters module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/lgcpspatial.hyperparameters.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -124,18 +127,18 @@ model class.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.hyperparameters.period_and_prior_variance">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.hyperparameters.</span></span><span class="sig-name descname"><span class="pre">period_and_prior_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/hyperparameters.html#period_and_prior_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.hyperparameters.period_and_prior_variance" title="Permalink to this definition"></a></dt>
-<dd><p>Wrapper for <cite>gridsearch_optimize()</cite> that returns
+<dd><p>Wrapper for <code class="docutils literal notranslate"><span class="pre">gridsearch_optimize()</span></code> that returns
 the optimized period and variance</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>lgcpspatal.loaddata.Dataset</em>) – Prepared dataset</p></li>
 <li><p><strong>**kwargs</strong> – Keyword arguments are forwaded to
-<cite>gridsearch_optimize</cite>, see the documentation for
-<cite>gridsearch_optimize</cite> for more details.</p></li>
+<code class="docutils literal notranslate"><span class="pre">gridsearch_optimize</span></code>, see the documentation for
+<code class="docutils literal notranslate"><span class="pre">gridsearch_optimize</span></code> for more details.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>period</strong> (<em>float</em>) – Estimated grid-cell period in pixels</p></li>
 <li><p><em>v0</em> – Estiamted kernel marginal variance</p></li>
@@ -149,7 +152,7 @@ the optimized period and variance</p>
 <dt class="sig sig-object py" id="lgcpspatial.hyperparameters.gridsearch_optimize">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.hyperparameters.</span></span><span class="sig-name descname"><span class="pre">gridsearch_optimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">np</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">201</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">201</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kclip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variance_attenuate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/hyperparameters.html#gridsearch_optimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.hyperparameters.gridsearch_optimize" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>load_data.Dataset</em>) – <dl class="simple">
 <dt>Prepared dataset with the following attributes:</dt><dd><dl class="simple">
@@ -167,17 +170,17 @@ the optimized period and variance</p>
 in the grid search.</p></li>
 <li><p><strong>nv</strong> (<em>positive odd int; default 201</em>) – Number of prior marginal variance values to explore
 in the grid search.</p></li>
-<li><p><strong>rp</strong> (<em>float &gt;1.0; default 4</em>) – Ratio above and below the provided <cite>dataset.P</cite>
+<li><p><strong>rp</strong> (<em>float &gt;1.0; default 4</em>) – Ratio above and below the provided <code class="docutils literal notranslate"><span class="pre">dataset.P</span></code>
 grid cell period to explore.
-This will explore <cite>np</cite> periods evenly spaced on
-a logarithmic scale between <cite>dataset.P/rp</cite> and
-<cite>dataset.P*rp</cite>.</p></li>
-<li><p><strong>150</strong> (<em>rv float &gt;1.0; default</em>) – Ratio above and below the provided <cite>dataset.P</cite>
+This will explore <code class="docutils literal notranslate"><span class="pre">np</span></code> periods evenly spaced on
+a logarithmic scale between <code class="docutils literal notranslate"><span class="pre">dataset.P/rp</span></code> and
+<code class="docutils literal notranslate"><span class="pre">dataset.P*rp</span></code>.</p></li>
+<li><p><strong>150</strong> (<em>rv float &gt;1.0; default</em>) – Ratio above and below the provided <code class="docutils literal notranslate"><span class="pre">dataset.P</span></code>
 grid cell period to explore.
-This will explore <cite>nv</cite> periods evenly spaced on
+This will explore <code class="docutils literal notranslate"><span class="pre">nv</span></code> periods evenly spaced on
 a logarithmic scale between
-<cite>dataset.prior_variance/rv</cite> and
-<cite>dataset.prior_variance*rv</cite>.</p></li>
+<code class="docutils literal notranslate"><span class="pre">dataset.prior_variance/rv</span></code> and
+<code class="docutils literal notranslate"><span class="pre">dataset.prior_variance*rv</span></code>.</p></li>
 <li><p><strong>kclip</strong> (<em>int</em><em>, </em><em>default 3</em>) – <dl class="simple">
 <dt>Bessel zero to clip the grid-cell kernel at.</dt><dd><ul>
 <li><dl class="simple">
@@ -223,14 +226,14 @@ issues with the variance iteration diverging.</p></li>
 <li><p><strong>verbose</strong> (<em>boolean</em><em>, </em><em>default True</em>) – Whether to print progress update</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><em>bestindex</em> – best index into parameter grid</p></li>
 <li><p><em>bestpars</em> – values of best parameters</p></li>
 <li><p><em>bestresult]</em> – (state, likelihood, info) at best parameters.
-<cite>info</cite> is determined by the third element in the
-3-tuple return-value of the <cite>evaluate</cite> function,
-passed by the user. <cite>state</cite> is also user-defined.</p></li>
+<code class="docutils literal notranslate"><span class="pre">info</span></code> is determined by the third element in the
+3-tuple return-value of the <code class="docutils literal notranslate"><span class="pre">evaluate</span></code> function,
+passed by the user. <code class="docutils literal notranslate"><span class="pre">state</span></code> is also user-defined.</p></li>
 <li><p><em>allresults</em> – All other results as an object array.
 Grid points that were not evaluated are None.</p></li>
 </ul>

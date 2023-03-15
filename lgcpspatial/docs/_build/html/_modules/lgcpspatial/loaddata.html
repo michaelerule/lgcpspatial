@@ -10,10 +10,9 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -27,15 +26,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -77,9 +80,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>lgcpspatial.loaddata</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">lgcpspatial.loaddata</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -100,9 +103,8 @@
 <span class="sd">Fs     = 50.0      # Sample rate of data (samples/second)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="n">datadir</span> <span class="o">=</span> <span class="s2">&quot;/home/mer49/Dropbox (Cambridge University)/OLeary_notebooks/gp/&quot;</span>
-
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">numpy</span>             <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>        <span class="k">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -121,7 +123,7 @@
 
 
 <div class="viewcode-block" id="patch_position_data"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.patch_position_data">[docs]</a><span class="k">def</span> <span class="nf">patch_position_data</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">delta_threshold</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Linearly interpolate across noise/glitches in the </span>
 <span class="sd">    position tracking.</span>
 <span class="sd">    </span>
@@ -138,7 +140,7 @@
 
 
 <div class="viewcode-block" id="bin_spikes"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.bin_spikes">[docs]</a><span class="k">def</span> <span class="nf">bin_spikes</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">w</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Bin spikes, using linear interpolation to distribute </span>
 <span class="sd">    point mass to four nearest pixels, weighted by distance. </span>
 <span class="sd">    </span>
@@ -186,38 +188,47 @@
 
 
 <div class="viewcode-block" id="Arena"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena">[docs]</a><span class="k">class</span> <span class="nc">Arena</span><span class="p">:</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Object describing the area visited by an animal within </span>
 <span class="sd">    an experiment.</span>
 <span class="sd">    </span>
 <span class="sd">    Attributes</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    mask: np.bool</span>
-<span class="sd">        L x L boolean matrices of grid locations within the </span>
+<span class="sd">        L × L boolean matrices of grid locations within the </span>
 <span class="sd">        experimetnal arena</span>
 <span class="sd">    nanmask: np.float32</span>
-<span class="sd">        L x L float32 array with 1 for in-bounds points and </span>
+<span class="sd">        L × L float32 array with 1 for in-bounds points and </span>
 <span class="sd">        NaN for out-of-bounds points. Multiple array data by</span>
 <span class="sd">        this mask before </span>
-<span class="sd">        sending to `imshow()` to render out-of-bounds points</span>
+<span class="sd">        sending to ``imshow()`` to render out-of-bounds points</span>
 <span class="sd">        as transparent.</span>
 <span class="sd">    perimeter: np.float32</span>
-<span class="sd">        NPOINTS x 2 list of points in the convex hull of the </span>
+<span class="sd">        NPOINTS × 2 list of points in the convex hull of the </span>
 <span class="sd">        experimental arena</span>
 <span class="sd">        in [0,1]² normalied coordinates        </span>
 <span class="sd">    hull: scipy.spatial._qhull.ConvexHull</span>
 <span class="sd">        Convex Hull object describing the arena perimeter</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">L</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;__from_mask&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">Arena</span><span class="o">.</span><span class="n">_init_from_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;__from_perimeter&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">Arena</span><span class="o">.</span><span class="n">_init_from_perimeter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Arena</span><span class="o">.</span><span class="n">_init_from_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_init_from_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">L</span><span class="p">,</span>
                  <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                  <span class="n">radius</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
                  <span class="n">thr</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Prepare a mask from the convex hull of visited</span>
 <span class="sd">        locations</span>
 
 <span class="sd">        Parameters</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        px: np.float32</span>
 <span class="sd">            NPOINTS ndarray</span>
 <span class="sd">            X coordinates of points in [0,1]</span>
@@ -229,7 +240,7 @@
 <span class="sd">            Number of spatial bins (e.g. 128)</span>
 
 <span class="sd">        Other Parameters</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        ----------------</span>
 <span class="sd">        resolution: positive integer</span>
 <span class="sd">            Upsampling factor</span>
 <span class="sd">            Defaults to 1</span>
@@ -242,12 +253,12 @@
 <span class="sd">            the boundary.</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        -------</span>
 <span class="sd">        arena: Arena</span>
 <span class="sd">            An Arena object containing a LxL boolean array </span>
-<span class="sd">            `mask`, a NPOINTSx2 array of perimeter points</span>
-<span class="sd">            `perimenter`, and a </span>
-<span class="sd">            `scipy.spatial._qhull.ConvexHull` object `hull`; </span>
+<span class="sd">            ``mask``, a NPOINTSx2 array of perimeter points</span>
+<span class="sd">            ``perimenter``, and a </span>
+<span class="sd">            ``scipy.spatial._qhull.ConvexHull`` object ``hull``; </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         
         <span class="c1"># Encircle points in a convex hull</span>
@@ -267,7 +278,7 @@
         <span class="c1"># Find points within this grid inside convex hull</span>
         <span class="n">mask</span>  <span class="o">=</span> <span class="n">is_in_hull</span><span class="p">(</span><span class="n">grdp</span><span class="p">,</span><span class="n">hull</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Lr</span><span class="p">,</span><span class="n">Lr</span><span class="p">)</span>
         
-        <span class="c1"># Extent the mask to add a margin</span>
+        <span class="c1"># Extend the mask to add a margin</span>
         <span class="n">mask</span>  <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span><span class="n">radius</span><span class="p">)</span><span class="o">&gt;</span><span class="n">thr</span>
         
         <span class="c1"># Recalculate hull to include extended mask</span>
@@ -280,30 +291,85 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">perimeter</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">verts</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hull</span> <span class="o">=</span> <span class="n">hull</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span>
+    
+    
+    <span class="k">def</span> <span class="nf">_init_from_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mask</span><span class="p">,</span><span class="n">resolution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">radius</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+        <span class="c1"># Recalculate hull to include extended mask</span>
+        <span class="n">py</span><span class="p">,</span><span class="n">px</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="p">))</span><span class="o">/</span><span class="n">L</span>
+        <span class="n">points</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">hull</span>  <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="n">verts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:</span><span class="mi">1</span><span class="p">]])</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perimeter</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">verts</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hull</span> <span class="o">=</span> <span class="n">hull</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span>
         
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">resolution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Generate discrete grid at desired resolution</span>
+            <span class="n">Lr</span>   <span class="o">=</span> <span class="n">L</span><span class="o">*</span><span class="n">resolution</span>
+            <span class="n">grdp</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">Lr</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">Lr</span><span class="p">)[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">grdp</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span>
+                <span class="n">grdp</span><span class="p">[</span><span class="kc">None</span><span class="p">,:]</span><span class="o">*</span><span class="n">ones</span><span class="p">((</span><span class="n">Lr</span><span class="p">,</span><span class="n">Lr</span><span class="p">)),</span>
+                <span class="n">grdp</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">ones</span><span class="p">((</span><span class="n">Lr</span><span class="p">,</span><span class="n">Lr</span><span class="p">))])</span>
+            <span class="n">grdp</span>  <span class="o">=</span> <span class="n">grdp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,(</span><span class="n">Lr</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+            <span class="c1"># Find points within this grid inside convex hull</span>
+            <span class="n">mask</span>  <span class="o">=</span> <span class="n">is_in_hull</span><span class="p">(</span><span class="n">grdp</span><span class="p">,</span><span class="n">hull</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">Lr</span><span class="p">,</span><span class="n">Lr</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">radius</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Extend the mask to add a margin</span>
+                <span class="n">mask</span>  <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span><span class="n">radius</span><span class="p">)</span><span class="o">&gt;</span><span class="n">thr</span>
+
+            <span class="c1"># Recalculate hull to include extended mask</span>
+            <span class="n">py</span><span class="p">,</span><span class="n">px</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">Lr</span><span class="p">)</span>
+            <span class="n">points</span><span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+            <span class="n">hull</span>  <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+            <span class="n">verts</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:</span><span class="mi">1</span><span class="p">]])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">perimeter</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">verts</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hull</span>      <span class="o">=</span> <span class="n">hull</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span>   <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nanmask</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span>
+    
+    
+<div class="viewcode-block" id="Arena.from_mask"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.from_mask">[docs]</a>    <span class="k">def</span> <span class="nf">from_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Arena</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span><span class="n">__from_mask</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    
         
-<div class="viewcode-block" id="Arena.close_to_boundary"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.close_to_boundary">[docs]</a>    <span class="k">def</span> <span class="nf">close_to_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Detect peaks within distance `radius` of the </span>
-<span class="sd">        Arena boundary. </span>
+<div class="viewcode-block" id="Arena.distance_to_boundary"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.distance_to_boundary">[docs]</a>    <span class="k">def</span> <span class="nf">distance_to_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peaks</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Measure the distance of a point within this</span>
+<span class="sd">        Arena&#39;s convex hull, and the boundary (the</span>
+<span class="sd">        convex hull). </span>
+<span class="sd">        </span>
+<span class="sd">        This is calculated in a fairly crude way: </span>
+<span class="sd">        brute force search for the closest out of</span>
+<span class="sd">        bounds point on the L × L grid. </span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------------------------------------------------</span>
 <span class="sd">        peaks: 2 × NPOINTS np.float32  </span>
-<span class="sd">            (x,y) positions of peaks to trim </span>
-<span class="sd">            in normalized [0,1]² coordinates.</span>
-<span class="sd">        radius: float</span>
-<span class="sd">            Distance from edge to trim</span>
-<span class="sd">            in pixels</span>
-
+<span class="sd">            (x,y) positions of points to test.</span>
+<span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        ----------------------------------------------------</span>
 <span class="sd">        is_close: Length NPOINTS 1D np.bool</span>
 <span class="sd">            Boolean array indicating </span>
+<span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">peaks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+        
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">peaks</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">peaks</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s1">&#39;Expected peaks to be 2×NPOINTS np.float32 &#39;</span>
@@ -314,16 +380,38 @@
         <span class="n">zpeaks</span>  <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@peaks</span>
         <span class="n">D</span>  <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">zpeaks</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">-</span><span class="n">outside</span><span class="p">[</span><span class="kc">None</span><span class="p">,:])</span>
         <span class="n">D</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">D</span><span class="o">&lt;</span><span class="n">radius</span><span class="o">/</span><span class="n">L</span></div>
+        <span class="k">return</span> <span class="n">D</span></div>
+    
+        
+<div class="viewcode-block" id="Arena.close_to_boundary"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.close_to_boundary">[docs]</a>    <span class="k">def</span> <span class="nf">close_to_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Detect peaks within distance ``radius`` of the </span>
+<span class="sd">        Arena boundary. </span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        peaks: 2 × NPOINTS np.float32  </span>
+<span class="sd">            (x,y) positions of peaks to trim </span>
+<span class="sd">            in normalized [0,1]² coordinates.</span>
+<span class="sd">        radius: float</span>
+<span class="sd">            Distance from edge *in pixels*.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        is_close: Length NPOINTS 1D np.bool</span>
+<span class="sd">            Boolean array indicating </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">L</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_to_boundary</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span><span class="o">&lt;</span><span class="n">radius</span><span class="o">/</span><span class="n">L</span></div>
     
     
 <div class="viewcode-block" id="Arena.remove_near_boundary"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.remove_near_boundary">[docs]</a>    <span class="k">def</span> <span class="nf">remove_near_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Delete peaks that are too close to the edgs of</span>
-<span class="sd">        an experimental arena</span>
+<span class="sd">        an experimental arena.</span>
 
 <span class="sd">        Parameters</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        peaks: 2 × NPOINTS np.float32  </span>
 <span class="sd">            (x,y) positions of peaks to trim </span>
 <span class="sd">            in normalized [0,1]² coordinates.</span>
@@ -332,16 +420,20 @@
 <span class="sd">            in pixels</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        -------</span>
 <span class="sd">        peaks: 2 × NPOINTS np.float32  </span>
-<span class="sd">            (x,y) positions of peaks further than `radius`</span>
+<span class="sd">            (x,y) positions of peaks further than ``radius``</span>
 <span class="sd">            pixels from the boundary.      </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">ok</span> <span class="o">=</span> <span class="o">~</span><span class="bp">self</span><span class="o">.</span><span class="n">close_to_boundary</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">radius</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">peaks</span><span class="p">[:,</span><span class="n">ok</span><span class="p">]</span></div></div>
+        <span class="k">return</span> <span class="n">peaks</span><span class="p">[:,</span><span class="n">ok</span><span class="p">]</span></div>
+    
+    
+<div class="viewcode-block" id="Arena.contains"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Arena.contains">[docs]</a>    <span class="k">def</span> <span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">P</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">lgcpspatial</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">is_in_hull</span><span class="p">(</span><span class="n">P</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">hull</span><span class="p">)</span></div></div>
         
 <div class="viewcode-block" id="Dataset"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset">[docs]</a><span class="k">class</span> <span class="nc">Dataset</span><span class="p">:</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Class to load and extract experimental data</span>
 <span class="sd">    from Krupic Lab data format.     </span>
 <span class="sd">    </span>
@@ -352,8 +444,8 @@
 <span class="sd">        point.</span>
 <span class="sd">    extent: tuple</span>
 <span class="sd">        (xstart,xstop,ystart,ystop) coordinates of 2D arena </span>
-<span class="sd">        in meters. Pass this as the `extent` argument to </span>
-<span class="sd">        `imshow()` to correctly position L x L grid in </span>
+<span class="sd">        in meters. Pass this as the ``extent`` argument to </span>
+<span class="sd">        ``imshow()`` to correctly position L × L grid in </span>
 <span class="sd">        physical coordinates.  </span>
 <span class="sd">    scale: float, units of 1/meters </span>
 <span class="sd">        Scaling factor between (px,py)∈[0,1]²</span>
@@ -370,7 +462,7 @@
 <span class="sd">        width is smaller than margin*L/2.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">spikes</span><span class="p">,</span><span class="n">margin</span><span class="o">=</span><span class="mf">.1</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------------------------------------------------</span>
 <span class="sd">        x: np.float32</span>
@@ -412,7 +504,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="o">=</span><span class="n">scale</span>
     
 <div class="viewcode-block" id="Dataset.from_file"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset.from_file">[docs]</a>    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="n">margin</span><span class="o">=</span><span class="mf">.1</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Load a dataset, rescaling the spatial locations.</span>
 <span class="sd">        </span>
 <span class="sd">        We correct the head direction angles to align</span>
@@ -433,8 +525,8 @@
 <span class="sd">            grid-cell data file. </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="c1"># Retrieve data from file</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">loadmat</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="n">squeeze_me</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">dataset</span>              <span class="o">=</span> <span class="n">dataset</span>
+        <span class="n">data</span>    <span class="o">=</span> <span class="n">loadmat</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="n">squeeze_me</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span>
         
         <span class="k">for</span> <span class="n">varname</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;xy dir pos_sample_rate &#39;</span>
                         <span class="s1">&#39;pixels_per_m spikes_times &#39;</span>
@@ -456,7 +548,7 @@
         <span class="n">head_direction_deg</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">head_direction_deg</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span><span class="o">%</span><span class="mi">360</span>
         
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">spike_times_samples</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The `spikes_times` variable &#39;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;The `spikes_times` variable &#39;</span>
                 <span class="s1">&#39;for file </span><span class="si">%s</span><span class="s1"> appears to be empty.&#39;</span><span class="o">%</span><span class="n">dataset</span><span class="p">)</span>
 
         <span class="c1"># Convert units</span>
@@ -495,22 +587,25 @@
         <span class="n">data</span><span class="o">.</span><span class="n">NSAMPLES</span>             <span class="o">=</span> <span class="n">NSAMPLES</span>
         <span class="k">return</span> <span class="n">data</span></div>
 
-<div class="viewcode-block" id="Dataset.prepare"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset.prepare">[docs]</a>    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">L</span><span class="p">,</span>
-                <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">spike_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">blur_radius</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                <span class="n">doplot</span><span class="o">=</span><span class="kc">False</span>
-               <span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="Dataset.prepare"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset.prepare">[docs]</a>    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">L</span><span class="p">,</span>
+        <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">spike_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">blur_radius</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">doplot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">arena_only</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Prepare dataset for further inference.</span>
 <span class="sd">        This function bins spikes and position data, and </span>
 <span class="sd">        heuristically estimates grid scale. It adds the </span>
 <span class="sd">        following attributes to the Dataset object:</span>
 
 <span class="sd">        Attributes</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        L: int</span>
-<span class="sd">            Size of L x L spatial grid for binned data.</span>
+<span class="sd">            Size of L × L spatial grid for binned data.</span>
 <span class="sd">            I&#39;ve found that 128² grids work well and are a</span>
 <span class="sd">            good compromise between speed, resolution, and </span>
 <span class="sd">            numerical stability.</span>
@@ -536,7 +631,7 @@
 <span class="sd">            you should optimize the kernel hyperparameters</span>
 <span class="sd">            using the ELBO if you want the posterior</span>
 <span class="sd">            variance to be interpretable. See</span>
-<span class="sd">            `grid_search.py`. </span>
+<span class="sd">            ``grid_search.py``. </span>
 <span class="sd">        bg_blur_radius: float</span>
 <span class="sd">            Low-frequency spatial scale below which rate</span>
 <span class="sd">            variations are considered background</span>
@@ -547,50 +642,58 @@
 <span class="sd">            Density Estimator (KDE) of firing rate as a</span>
 <span class="sd">            function of location.</span>
 <span class="sd">        prior_mean: np.float32</span>
-<span class="sd">            L x L array of estimated background log-rate. </span>
+<span class="sd">            L × L array of estimated background log-rate. </span>
 <span class="sd">            Use this as a prior during Gaussian Process </span>
 <span class="sd">            inference so that the calculated rate maps are</span>
 <span class="sd">            defined in terms of grid-like structure above</span>
 <span class="sd">            these background rate variations. This is</span>
-<span class="sd">            calculated by Gaussian blurring the visits `n`</span>
-<span class="sd">            and spike counts `y` with a kernel with</span>
-<span class="sd">            standard-deviation `bg_blur_radius`, and taking</span>
+<span class="sd">            calculated by Gaussian blurring the visits ``n``</span>
+<span class="sd">            and spike counts ``y`` with a kernel with</span>
+<span class="sd">            standard-deviation ``bg_blur_radius``, and taking</span>
 <span class="sd">            the logarithm of their ratio.</span>
 <span class="sd">        lograte_guess: np.float32</span>
-<span class="sd">            L x L array of KDE-estimated log-firing rate.</span>
-<span class="sd">            This is calculated by blurring visits `n` and</span>
-<span class="sd">            spike counts `y` with a Gaussian kernel with</span>
-<span class="sd">            standard deviation `kde_blur_radius`, taking </span>
+<span class="sd">            L × L array of KDE-estimated log-firing rate.</span>
+<span class="sd">            This is calculated by blurring visits ``n`` and</span>
+<span class="sd">            spike counts ``y`` with a Gaussian kernel with</span>
+<span class="sd">            standard deviation ``kde_blur_radius``, taking </span>
 <span class="sd">            the logarithm of their ratio, and subtracting</span>
 <span class="sd">            prior_mean.</span>
 
 <span class="sd">        Parameters</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        fn: str</span>
 <span class="sd">            File path to load</span>
 <span class="sd">        L: int</span>
-<span class="sd">            Number of bins in L x L spatial grid</span>
+<span class="sd">            Number of bins in L × L spatial grid</span>
 
 <span class="sd">        Other Parameters</span>
-<span class="sd">        ----------------------------------------------------</span>
-<span class="sd">        P: int</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        P: int; default None</span>
 <span class="sd">            Grid period; If not provided we will estimate</span>
 <span class="sd">            this from the autocorrelogram,</span>
-<span class="sd">        blur_radius: float</span>
+<span class="sd">        blur_radius: float; default 2</span>
 <span class="sd">            Initial KDE blur radius for heuristic period</span>
-<span class="sd">            estimate. Default is 2. </span>
-<span class="sd">        spike_weights: float32</span>
+<span class="sd">            estimate.</span>
+<span class="sd">        spike_weights: np.float32; default None</span>
 <span class="sd">            Array of sample weightings of the same length</span>
 <span class="sd">            as Dataset.spikes to use when binning.</span>
-<span class="sd">        doplot: boolean</span>
-<span class="sd">            Whether to show a summary plot; Default: True.</span>
+<span class="sd">        doplot: boolean; default True</span>
+<span class="sd">            Whether to show a summary plot</span>
+<span class="sd">        arena_only: boolean; default False</span>
+<span class="sd">            Prepare binned position and arena information</span>
+<span class="sd">            only. Useful if you want to use this code</span>
+<span class="sd">            for something that is not a grid cell. The</span>
+<span class="sd">            following attributes will remain absent:</span>
+<span class="sd">            ``P``, ``bg_blur_radius``, ``prior_mean``, </span>
+<span class="sd">            ``kde_blur_radius``, ``lograte_guess``, </span>
+<span class="sd">            ``prior_variance``.</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        -------</span>
 <span class="sd">        A Dataset object containing spatially-binned data,</span>
 <span class="sd">        Heurstic estimates of the grid scale, and initial </span>
 <span class="sd">        firing-rate maps estimated using a kernel density </span>
-<span class="sd">        estimator. See the `PreparedDataset` docstring for </span>
+<span class="sd">        estimator. See the ``PreparedDataset`` docstring for </span>
 <span class="sd">        more detail. </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="c1"># Bin spikes</span>
@@ -601,36 +704,71 @@
                          <span class="n">w</span><span class="o">=</span><span class="n">spike_weights</span><span class="p">)</span> 
         <span class="n">zeros</span>    <span class="o">=</span> <span class="n">N</span><span class="o">&lt;=</span><span class="mf">0.0</span>
         <span class="n">N</span><span class="p">[</span><span class="n">zeros</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">y</span>        <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">K</span><span class="o">/</span><span class="n">N</span><span class="p">)</span>
-        <span class="n">y</span><span class="p">[</span><span class="n">zeros</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">Y</span>        <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">K</span><span class="o">/</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">Y</span><span class="p">[</span><span class="n">zeros</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">n</span>        <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>                  <span class="c1"># s/bin</span>
+        <span class="n">y</span>        <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>                  <span class="c1"># spikes/s/bin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">L</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">=</span><span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">=</span><span class="n">y</span>
 
         <span class="c1"># Prepare mask using the convex hull</span>
         <span class="n">arena</span> <span class="o">=</span> <span class="n">Arena</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">py</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arena</span><span class="o">=</span><span class="n">arena</span>
+        
+        <span class="c1"># This is helpful</span>
+        <span class="n">perimeter_meters</span> <span class="o">=</span> <span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span> \
+            <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+        <span class="n">arena</span><span class="o">.</span><span class="n">perimeter_meters</span> <span class="o">=</span> <span class="n">perimeter_meters</span>
+        
+        <span class="c1"># Don&#39;t bother</span>
+        <span class="k">if</span> <span class="n">arena_only</span><span class="p">:</span> 
+            <span class="k">return</span> <span class="bp">self</span>
 
         <span class="c1"># Calibrate grid scale</span>
-        <span class="n">λhat</span>   <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">blur_radius</span><span class="p">)</span> <span class="c1"># spikes/second</span>
+        <span class="n">λhat</span>   <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span><span class="n">blur_radius</span><span class="p">)</span>      <span class="c1"># spikes/second</span>
         <span class="n">acorr2</span> <span class="o">=</span> <span class="n">fft_acorr</span><span class="p">(</span><span class="n">λhat</span><span class="p">,</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span> <span class="c1"># 2D autocorr.</span>
-        <span class="n">acorrR</span> <span class="o">=</span> <span class="n">radial_average</span><span class="p">(</span><span class="n">acorr2</span><span class="p">)</span> <span class="c1"># radial autocorr.</span>
-        <span class="n">res</span>    <span class="o">=</span> <span class="mi">50</span>                     <span class="c1"># Subsample res.</span>
+        <span class="n">acorrR</span> <span class="o">=</span> <span class="n">radial_average</span><span class="p">(</span><span class="n">acorr2</span><span class="p">)</span>   <span class="c1"># radial autocorr.</span>
+        <span class="n">res</span>    <span class="o">=</span> <span class="mi">50</span>                       <span class="c1"># Subsample res.</span>
         <span class="k">if</span> <span class="n">P</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># № bins to 1st peak</span>
             <span class="n">P</span><span class="p">,</span><span class="n">acup</span> <span class="o">=</span> <span class="n">acorr_peak</span><span class="p">(</span><span class="n">acorrR</span><span class="p">,</span><span class="n">res</span><span class="p">)</span> 
-            <span class="c1">#if isnan(P):</span>
-            <span class="c1">#    raise AssertionError(&#39;Could not detect grid &#39;</span>
-            <span class="c1">#        &#39;period. Is the period too large? Is &#39;</span>
-            <span class="c1">#        &#39;this a place cell?&#39;)</span>
-            <span class="c1"># Get peiod from peak assuming bessel Jo</span>
-            <span class="n">P</span>  <span class="o">*=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="n">jn_zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># Get period from peak assuming bessel Jo</span>
+            <span class="n">P</span>  <span class="o">*=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">jn_zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="s1">&#39;Could not detect grid period using &#39;</span>
+                    <span class="s1">&#39;autocorrelogram peaks. Is the period &#39;</span>
+                    <span class="s1">&#39;too large? Is this a place cell? &#39;</span>
+                    <span class="s1">&#39;I will try to use the trough instead.&#39;</span>
+                <span class="p">)</span>
+                <span class="n">P</span><span class="p">,</span><span class="n">acup</span> <span class="o">=</span> <span class="n">acorr_trough</span><span class="p">(</span><span class="n">acorrR</span><span class="p">,</span><span class="n">res</span><span class="p">)</span> 
+                <span class="c1"># Get period from peak assuming bessel Jo</span>
+                <span class="n">P</span> <span class="o">*=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">jn_zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">isnan</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="s1">&#39;Heuristic detection of grid-cell &#39;</span>
+                        <span class="s1">&#39;period using peaks/troughs in the &#39;</span>
+                        <span class="s1">&#39;autocorrelogram failed; Check &#39;</span>
+                        <span class="s1">&#39;that this is really a grid cell &#39;</span>
+                        <span class="s1">&#39;and that the data can resolve &#39;</span>
+                        <span class="s1">&#39;its periodicity. For high grid &#39;</span>
+                        <span class="s1">&#39;resolutions (large ``L``) relative&#39;</span>
+                        <span class="s1">&#39; to the grid scale, it may also &#39;</span>
+                        <span class="s1">&#39;be useful to increase the &#39;</span>
+                        <span class="s1">&#39;argument ``blur_radius`` to &#39;</span>
+                        <span class="s1">&#39;``Dataset.prepare()`` (the default&#39;</span>
+                        <span class="s1">&#39; is 2).&#39;</span>
+                    <span class="p">)</span>
         <span class="k">elif</span> <span class="n">doplot</span><span class="p">:</span>
             <span class="n">_</span><span class="p">,</span><span class="n">acup</span> <span class="o">=</span> <span class="n">acorr_peak</span><span class="p">(</span><span class="n">acorrR</span><span class="p">,</span><span class="n">res</span><span class="p">)</span>
             
         <span class="c1"># Precompute variables</span>
         <span class="n">kde_blur_radius</span> <span class="o">=</span> <span class="n">P</span><span class="o">/</span><span class="n">pi</span>              <span class="c1"># bins</span>
         <span class="n">bg_blur_radius</span>  <span class="o">=</span> <span class="n">kde_blur_radius</span><span class="o">*</span><span class="mi">5</span> <span class="c1"># bins</span>
-        <span class="n">n</span>    <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>                    <span class="c1"># s/bin</span>
-        <span class="n">y</span>    <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>                    <span class="c1"># spikes/s/bin</span>
-        <span class="n">λhat</span> <span class="o">=</span> <span class="n">kde</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">kde_blur_radius</span><span class="p">)</span>    <span class="c1"># KDE rate</span>
-        <span class="n">λbg</span>  <span class="o">=</span> <span class="n">kde</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">bg_blur_radius</span><span class="p">)</span>     <span class="c1"># Bkgnd rate</span>
+        <span class="n">λhat</span> <span class="o">=</span> <span class="n">kde</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">kde_blur_radius</span><span class="p">)</span>     <span class="c1"># KDE rate</span>
+        <span class="n">λbg</span>  <span class="o">=</span> <span class="n">kde</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">K</span><span class="p">,</span><span class="n">bg_blur_radius</span><span class="p">)</span>      <span class="c1"># Bkgnd rate</span>
         <span class="n">lλh</span>  <span class="o">=</span> <span class="n">slog</span><span class="p">(</span><span class="n">λhat</span><span class="p">)</span>                   <span class="c1"># Log rate</span>
         <span class="n">prior_mean</span>    <span class="o">=</span> <span class="n">slog</span><span class="p">(</span><span class="n">λbg</span><span class="p">)</span>           <span class="c1"># Log bkgnd</span>
         <span class="n">lograte_guess</span> <span class="o">=</span> <span class="n">lλh</span> <span class="o">-</span> <span class="n">prior_mean</span>    <span class="c1"># Fgnd lograte</span>
@@ -688,39 +826,43 @@
             <span class="n">sca</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">7</span><span class="p">]);</span> <span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;spike²/sample²&#39;</span><span class="p">)</span>
             <span class="n">figurebox</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
 
-        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
-        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">K</span><span class="p">))</span>
-        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">λhat</span><span class="p">))</span>
-        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">λbg</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">N</span><span class="p">)):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s1">&#39;Some visit counts (N) are not finite&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">K</span><span class="p">)):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s1">&#39;Some spike counts (K) are not finite&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">λhat</span><span class="p">)):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s1">&#39;Some rates (λhat=K/N) are not finite&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">λbg</span><span class="p">)):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s1">&#39;Some background rate (λbg) values &#39;</span>
+                <span class="s1">&#39;are not finite&#39;</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">=</span><span class="n">L</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">=</span><span class="n">n</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">=</span><span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="o">=</span><span class="n">P</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">arena</span><span class="o">=</span><span class="n">arena</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bg_blur_radius</span>  <span class="o">=</span> <span class="n">bg_blur_radius</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prior_mean</span>      <span class="o">=</span> <span class="n">prior_mean</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kde_blur_radius</span> <span class="o">=</span> <span class="n">kde_blur_radius</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lograte_guess</span>   <span class="o">=</span> <span class="n">lograte_guess</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prior_variance</span>  <span class="o">=</span> <span class="n">prior_variance</span>
         
-        <span class="c1"># This is helpful</span>
-        <span class="n">perimeter_meters</span> <span class="o">=</span> <span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">scale</span> \
-            <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
-        <span class="n">arena</span><span class="o">.</span><span class="n">perimeter_meters</span> <span class="o">=</span> <span class="n">perimeter_meters</span>
-        
         <span class="k">return</span> <span class="bp">self</span></div>
     
-<div class="viewcode-block" id="Dataset.create_posthoc"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset.create_posthoc">[docs]</a>    <span class="k">def</span> <span class="nf">create_posthoc</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">y</span><span class="p">,</span>
-                       <span class="n">prior_mean</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                       <span class="n">lograte_guess</span><span class="o">=</span><span class="kc">None</span>
-                      <span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="Dataset.create_posthoc"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset.create_posthoc">[docs]</a>    <span class="k">def</span> <span class="nf">create_posthoc</span><span class="p">(</span>
+        <span class="n">L</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">y</span><span class="p">,</span>
+        <span class="n">prior_mean</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">lograte_guess</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Bypass normal initialization and Dataset holding </span>
 <span class="sd">        only binned positions and rate. </span>
 <span class="sd">        This is only used by </span>
-<span class="sd">        `example 0 hyperparameter groundtruth test.ipynb`</span>
+<span class="sd">        ``example 0 hyperparameter groundtruth test.ipynb``</span>
+<span class="sd">        </span>
+<span class="sd">        The resulting object has the prepared values</span>
+<span class="sd">        ``(n,y,prior_mean,lograte_guess,L)`` only, </span>
+<span class="sd">        and lacks the ``(px,py,spikes)`` raw data fields. </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">float32</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
@@ -735,17 +877,17 @@
         <span class="k">return</span> <span class="n">data</span></div>
     
 <div class="viewcode-block" id="Dataset.reweighted"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset.reweighted">[docs]</a>    <span class="k">def</span> <span class="nf">reweighted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">weights</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Re-bin spike histogram using the provided weights</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        weights: 1D np.array</span>
 <span class="sd">            1D array of spike weights of the same length</span>
 <span class="sd">            as data.spikes.</span>
 <span class="sd">            </span>
 <span class="sd">        Returns</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        -------</span>
 <span class="sd">        Dataset:</span>
 <span class="sd">            New dataset with spike histogram binned using</span>
 <span class="sd">            the provided weights.</span>
@@ -754,7 +896,6 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="o">==</span><span class="bp">self</span><span class="o">.</span><span class="n">spikes</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;list of weights should be &#39;</span>
                 <span class="s1">&#39;the same length as Dataset.spikes.&#39;</span><span class="p">)</span>
-            
         <span class="n">N</span><span class="p">,</span><span class="n">K</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">ravel</span><span class="p">,</span><span class="n">bin_spikes</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">px</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">py</span><span class="p">,</span>
@@ -769,17 +910,17 @@
         <span class="k">return</span> <span class="n">data</span></div>
     
 <div class="viewcode-block" id="Dataset.normalized_to_physical_units"><a class="viewcode-back" href="../../lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset.normalized_to_physical_units">[docs]</a>    <span class="k">def</span> <span class="nf">normalized_to_physical_units</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">p</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Convert a list of points from [0,1]² units to</span>
 <span class="sd">        physical units (meters)</span>
 
 <span class="sd">        Parameters</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        ----------</span>
 <span class="sd">        p: np.array</span>
 <span class="sd">            array of 2D point data</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">        ----------------------------------------------------</span>
+<span class="sd">        -------</span>
 <span class="sd">        np.array: </span>
 <span class="sd">            2×NPOINTS array of points in physical units</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -795,7 +936,7 @@
                 <span class="s1">&#39;direction contains (x,y) points for &#39;</span><span class="o">+</span>
                 <span class="s1">&#39;shape </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">,))</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">p</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">p</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected points in [0,1]², but &#39;</span><span class="o">+</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Expected points in [0,1]²; &#39;</span><span class="o">+</span>
                 <span class="s1">&#39;point data contained values outside this.&#39;</span><span class="p">)</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">scale</span> <span class="o">+</span> <span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
         <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">T</span></div></div>

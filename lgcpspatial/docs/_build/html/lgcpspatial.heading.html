@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>lgcpspatial.heading module &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -30,15 +29,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -80,8 +83,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>lgcpspatial.heading module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">lgcpspatial.heading module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/lgcpspatial.heading.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -118,7 +121,9 @@
 <section id="module-lgcpspatial.heading">
 <span id="lgcpspatial-heading-module"></span><h1>lgcpspatial.heading module<a class="headerlink" href="#module-lgcpspatial.heading" title="Permalink to this heading"></a></h1>
 <p>heading.py: Subroutines used in
-<cite>example 5: heading dependence</cite>.</p>
+<code class="docutils literal notranslate"><span class="pre">example</span> <span class="pre">5:</span> <span class="pre">heading</span> <span class="pre">dependence</span></code>.</p>
+<p>Several of these routines overlap and will likely be
+merged in a clean-up of this code in future commits.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.smoothed_heading_angle">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">smoothed_heading_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">py</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#smoothed_heading_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.smoothed_heading_angle" title="Permalink to this definition"></a></dt>
@@ -131,13 +136,34 @@ are as follows:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>0   : rightwards (eastwards)</p></li>
-<li><p>½π  : upwards    (northwards)</p></li>
+<li><p>π/2 : upwards    (northwards)</p></li>
 <li><p>π   : leftwards  (westwards)</p></li>
 <li><p>3π/2: downwards  (southwards)</p></li>
 </ul>
 </div></blockquote>
+<p>Note: For the Krupic lab datasets, the convention is
+<em>not</em> the standard cartesian plane.
+<strong>*Smaller</strong> <code class="docutils literal notranslate"><span class="pre">y</span></code> values correspond to “more north”,
+i.e. the <code class="docutils literal notranslate"><span class="pre">(x,y)</span></code> coordinates should be interpreted
+as image-like, not Cartesian-like, with the <code class="docutils literal notranslate"><span class="pre">(0,0)</span></code>
+coordinate in the upper left, i.e. the northwest corner.</p>
+<p>This library has been prepared to use the Cartesian
+convention for compatibility. You should manually
+flip the y-axis convention if you want results to
+match Krupic-lab conventions in previously published
+manuscripts.</p>
+<p>For image-convention coordinates, angles should
+instead be interpreted as:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>0   : rightwards (eastwards)</p></li>
+<li><p>π/2 : downwards  (southwards)</p></li>
+<li><p>π   : leftwards  (westwards)</p></li>
+<li><p>3π/2: upwards    (northwards)</p></li>
+</ul>
+</div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>px</strong> (<em>float32</em>) – List of animal’s location, x-coordinate</p></li>
 <li><p><strong>py</strong> (<em>float32</em>) – List of animal’s location, y-coordinate</p></li>
@@ -145,27 +171,27 @@ are as follows:</p>
 <li><p><strong>Fl</strong> (<em>float</em>) – Low-pass cutoff frequency in Hz</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>heading_angle</strong> – Heading angle based on the low-pass derivative
 of position.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float32</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.float32</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.get_peaks_at_heading_angles">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">get_peaks_at_heading_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading_angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#get_peaks_at_heading_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.get_peaks_at_heading_angles" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">get_peaks_at_heading_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading_angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clearance_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_heights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_fits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cos'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#get_peaks_at_heading_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.get_peaks_at_heading_angles" title="Permalink to this definition"></a></dt>
 <dd><p>Check for location shifts based on heading. Re-weight
 data based on cosine similarity to target heading angle.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>object</em>) – <dl class="simple">
-<dt>Any object with the following attributes:</dt><dd><dl class="simple">
-<dt>L: float</dt><dd><p>Size of LxL spatial grid for binned data.</p>
+<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>lgcpspatial.loaddata.Dataset</em></a>) – <dl class="simple">
+<dt>An object with the following attributes:</dt><dd><dl class="simple">
+<dt>L: float</dt><dd><p>Size of L×L spatial grid for binned data.</p>
 </dd>
 <dt>n: np.float32</dt><dd><p>Length L² array of visits to each bin.</p>
 </dd>
@@ -177,7 +203,7 @@ variations unrelated to the grid structure</p>
 </dd>
 <dt>lograte_guess: float32 array</dt><dd><p>Shape L×L or L² array with an initial guess
 for log rate. This should be expressed as a
-deviation from <cite>prior_mean</cite>.</p>
+deviation from <code class="docutils literal notranslate"><span class="pre">prior_mean</span></code>.</p>
 </dd>
 <dt>arena.hull:</dt><dd><p>Convex Hull object describing the arena
 perimeter</p>
@@ -186,24 +212,59 @@ perimeter</p>
 </dd>
 </dl>
 </p></li>
-<li><p><strong>model</strong> (<em>lgcpspatial.DiagonalFourierLowrank</em>) – parent model instance (fitted model without heading
+<li><p><strong>model</strong> (<a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank" title="lgcpspatial.lgcp2d.DiagonalFourierLowrank"><em>lgcpspatial.lgcp2d.DiagonalFourierLowrank</em></a>) – parent model instance (fitted model without heading
 filtering)</p></li>
-<li><p><strong>heading_angles</strong> (<em>np.float32 array</em>) – List of heading angles to check.
-Westward is 0 degrees, then rotates counterclockwise
-through southward, eastward, northward.</p></li>
+<li><p><strong>heading_angles</strong> (<em>np.float32 array</em>) – List of heading angles to check. Westward is 0
+degrees, then rotates counterclockwise through
+southward, eastward, and northward.</p></li>
 <li><p><strong>threshold</strong> (<em>float</em>) – Percentile peaks must be above to be retained.
 Should be in [0,100).</p></li>
 <li><p><strong>Fs</strong> (<em>positive float; default 50.0</em>) – Sampling rate for position data</p></li>
 <li><p><strong>Fl</strong> (<em>positive float; default 2.0</em>) – Low-frequency cutoff for smooothing position data</p></li>
+<li><p><strong>heading_angle</strong> (<em>np.float32; default None</em>) – Provided heading angles.
+This must be a 1D np.float32 the same length
+as <code class="docutils literal notranslate"><span class="pre">px</span></code> and <code class="docutils literal notranslate"><span class="pre">py</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, angles are recalvulated as
+<code class="docutils literal notranslate"><span class="pre">smoothed_heading_angle(px,py,Fs,Fl)</span></code>.</p></li>
+<li><p><strong>show_progress</strong> (<em>boolean; default True</em>) – Show progress bar</p></li>
+<li><p><strong>clearance_radius</strong> (<em>positive float; default 0.45</em>) – Neighborhood in which a peak must be a neighborhood
+maximum.
+This is in units of
+<strong>fraction of the grid-cell period ``model.P``</strong>.</p></li>
+<li><p><strong>return_heights</strong> (<em>boolean; default False</em>) – Whether to return heights of peaks</p></li>
+<li><p><strong>return_models</strong> (<em>boolean; default False</em>) – Whether to return a list of models at each angle.</p></li>
+<li><p><strong>return_fits</strong> (<em>boolean; default False</em>) – Whether to return a list of model fits
+at each angle.</p></li>
+<li><p><strong>weight_function</strong> (<em>str</em><em> or </em><em>function; default 'cos'</em>) – Function used to compute non-negative heading
+weights as a function of the difference between
+the animals current heading, and the reference
+orientation. Can be <code class="docutils literal notranslate"><span class="pre">'cos'</span></code> for
+<code class="docutils literal notranslate"><span class="pre">max(0,cos(Δθ))</span></code>, <code class="docutils literal notranslate"><span class="pre">'cos2'</span></code> for
+<code class="docutils literal notranslate"><span class="pre">max(0,cos(Δθ))²</span></code>, or a custom function.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>peaks</strong> – List of 2×NPEAKS float32 arrays containing (x,y)
-locations of peaks at each of the angles specified
-by the list <cite>heading_angles</cite>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>peaks</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of peak locations for each
+heading angle. Each item is a <code class="docutils literal notranslate"><span class="pre">2×NPEAKS</span></code> array of
+<code class="docutils literal notranslate"><span class="pre">(x,y)</span></code> peak locations in normalized <code class="docutils literal notranslate"><span class="pre">[0,1]²</span></code>
+coordinates. These peaks are not matched up to any
+particular field-IDs.</p></li>
+<li><p><strong>heights</strong> (<em>list</em>) – <strong>Returned only if ``return_heights=True``;</strong>
+List of NPEAKS float32 arrays containing the
+heights of the log-rates in <code class="docutils literal notranslate"><span class="pre">peaks</span></code>.</p></li>
+<li><p><strong>models</strong> (<em>list</em>) – <strong>Returned only if ``return_models=True``;</strong>
+List of lgcp2d.DiagonalFourierLowrank model
+objects for each angle.</p></li>
+<li><p><strong>fits</strong> (<em>list</em>) – <strong>Returned only if ``return_fits=True``;</strong>
+List of tuples <code class="docutils literal notranslate"><span class="pre">(μh,v,loss,rate)</span></code>
+containing the low-rank posterior log-rate <code class="docutils literal notranslate"><span class="pre">μh</span></code>,
+the posterior marginal log-rate variances <code class="docutils literal notranslate"><span class="pre">v</span></code>,
+the model evidence lower bound <code class="docutils literal notranslate"><span class="pre">loss</span></code>
+(up to constants), and the posterior mean rate
+map <code class="docutils literal notranslate"><span class="pre">rate</span></code>.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -220,7 +281,7 @@ by the list <cite>heading_angles</cite>.</p>
 <li><dl class="simple">
 <dt>Greedy approach</dt><dd><ul>
 <li><p>If you’re my closest match, and I’m yours, pair up.</p></li>
-<li><p>Repeat until no more edges closer than <cite>maxd</cite></p></li>
+<li><p>Repeat until no more edges closer than <code class="docutils literal notranslate"><span class="pre">maxd</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -228,23 +289,38 @@ by the list <cite>heading_angles</cite>.</p>
 </ul>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>peaks</strong> (<em>list</em>) – Length NANGLES list of 2×NPEAKS float32 arrays with
-(x,y) locations of peaks at each heading angle</p></li>
+<li><p><strong>peaks</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of <code class="docutils literal notranslate"><span class="pre">2×NPEAKS</span></code> <code class="docutils literal notranslate"><span class="pre">np.float32</span></code>
+arrays with (x,y) locations of peaks at each
+heading angle.</p></li>
 <li><p><strong>maxd</strong> – The maximum distance between peaks allowed when
-connecting them</p></li>
+connecting them (in the same units as <code class="docutils literal notranslate"><span class="pre">peaks</span></code>).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>edges</strong> – Length NANGLES list of edge sets for each pair of
-headings. Each list entry is a 2×NEDGES int32 array.
-This contains pairs of indecies (a,b).
-For edge set i, index a is the index into peaks[i]
-(edge source) and index b is the index into
-peaks[(i+1)%Nφ] (edge target).</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>edges</strong> – A length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for
+each pair of headings.
+Each list entry is a 2×NEDGES int32 array.</p>
+<blockquote>
+<div><ul>
+<li><p>This contains pairs of indecies (a,b).
+- <code class="docutils literal notranslate"><span class="pre">a</span></code> is the index into peaks[i]</p>
+<blockquote>
+<div><p>(the node source of this edge)</p>
+</div></blockquote>
+</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> is the index into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code>
+(the node target of this edge).</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
 </dd>
 </dl>
@@ -254,18 +330,18 @@ peaks[(i+1)%Nφ] (edge target).</p>
 <dt class="sig sig-object py" id="lgcpspatial.heading.pair_points">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">pair_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#pair_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.pair_points" title="Permalink to this definition"></a></dt>
 <dd><p>Greedily associate nearest-neighbors between two
-point sets <cite>z1</cite> and <cite>z2</cite>, limiting matches to points closer
-than <cite>connection_radius</cite> apart. 2D points are encoded as
+point sets <code class="docutils literal notranslate"><span class="pre">z1</span></code> and <code class="docutils literal notranslate"><span class="pre">z2</span></code>, limiting matches to points closer
+than <code class="docutils literal notranslate"><span class="pre">connection_radius</span></code> apart. 2D points are encoded as
 complex numbers.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>z1</strong> (<em>iterable</em>) – iterable of 2D points encoded as complex numbers</p></li>
 <li><p><strong>z2</strong> (<em>iterable</em>) – iterable of 2D points encoded as complex numbers</p></li>
 <li><p><strong>connection_radius</strong> (<em>float</em>) – Maximum radius at which to allow connections.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>index1</strong> (<em>int32</em>) – index into z1 of paired points</p></li>
 <li><p><strong>index2</strong> (<em>int32</em>) – index into z2 of paired points</p></li>
@@ -280,40 +356,65 @@ complex numbers.</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">extract_as_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#extract_as_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.extract_as_paths" title="Permalink to this definition"></a></dt>
 <dd><p>Convert tracked (peaks,edges) to a list of 2D paths.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>peaks</strong> (<em>list</em>) – Length NANGLES list of 2xNPEAKS np.float32 arrays
+<li><p><strong>peaks</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of 2xNPEAKS np.float32 arrays
 containing (rx,ry) peak locations at a list of
 heading angles, as returned  by
-<cite>get_peaks_at_heading_angles()</cite>.</p></li>
-<li><p><strong>edges</strong> (<em>list</em>) – Length NANGLES list of edge sets for each pair of
-headings, as returned by <cite>match_peaks</cite> or
-<cite>link_peaks()</cite>. Each list entry is a 2×NEDGES int32
+<code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code>.</p></li>
+<li><p><strong>edges</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for each pair of
+headings, as returned by <code class="docutils literal notranslate"><span class="pre">match_peaks</span></code> or
+<code class="docutils literal notranslate"><span class="pre">link_peaks()</span></code>. Each list entry is a 2×NEDGES int32
 array. This contains pairs of indecies (a,b). For
 edge set i, index a is the index into peaks[i] (edge
 source) and index b is the index into
 peaks[(i+1)%Nφ] (edge target).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>paths</strong> (<em>list</em>) – List of npoints x 2 path data for each connected
+<li><p><strong>paths</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">N_COMPONENTS</span></code> list of
+<code class="docutils literal notranslate"><span class="pre">NPOINTS</span></code> x 2 path data for each connected
 component</p></li>
-<li><p><strong>chains</strong> (<em>list</em>) – Chained node-information in format of (iphi,ipeak)</p></li>
+<li><p><strong>chains</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">N_COMPONENTS</span></code> list of
+chained node-information in format of (iphi,ipeak)</p></li>
 </ul>
 </p>
 </dd>
 </dl>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="lgcpspatial.heading.PathInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">PathInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#PathInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.PathInfo" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.heading.PathInfo.path">
+<span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.heading.PathInfo.path" title="Permalink to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.heading.PathInfo.centroid">
+<span class="sig-name descname"><span class="pre">centroid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.heading.PathInfo.centroid" title="Permalink to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.heading.path_information">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">path_information</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">centroids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#path_information"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.path_information" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.link_peaks">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">link_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_end_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#link_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.link_peaks" title="Permalink to this definition"></a></dt>
-<dd><p>Cleans up the result from <cite>match_peaks()</cite>, removing any
-peaks that aren’t tracked unambiguously over a range of
-heading angles.</p>
+<dd><p>Cleans up the result from <code class="docutils literal notranslate"><span class="pre">match_peaks()</span></code>, removing
+any peaks that aren’t tracked unambiguously over a range
+of heading angles.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peaks</strong> (<em>list</em>) – List of 2×NPEAKS arrays containing (x,y) locations
 of identified peaks over a range of heading angles.</p></li>
@@ -323,16 +424,41 @@ at adjacent angles.</p></li>
 of a tracked peak.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>edges</strong> – A graph connecting peaks putatively associated with
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>edges</strong> – A graph connecting peaks putatively associated with
 the same grid field at different heading angles.
-This has the same length as the <cite>heading_angles</cite>
-argument. The format is the same as the result
-returned by <cite>match_peaks</cite>, but edges from peaks that
+The format is the same as the result
+returned by <code class="docutils literal notranslate"><span class="pre">match_peaks</span></code>, but edges from peaks that
 aren’t tracked unambiguously over a range of heading
 angles have been removed.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This is a length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for</p></li>
+</ul>
+</div></blockquote>
+<dl>
+<dt>each pair of headings.</dt><dd><ul>
+<li><p>Each list entry is a 2×NEDGES int32 array.
+- This contains pairs of indecies (a,b).</p>
+<blockquote>
+<div><blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> is the index into peaks[i]
+(the node source of this edge)</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> is the index into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code>
+(the node target of this edge).</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
 </dd>
-<dt class="field-odd">Return type</dt>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
 </dd>
 </dl>
@@ -340,33 +466,76 @@ angles have been removed.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.plot_tracked_peaks">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">plot_tracked_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perim=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compass=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=&lt;matplotlib.colors.LinearSegmentedColormap</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#plot_tracked_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.plot_tracked_peaks" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">plot_tracked_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perim=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compass=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=&lt;matplotlib.colors.LinearSegmentedColormap</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin='lower'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hideaxis=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#plot_tracked_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.plot_tracked_peaks" title="Permalink to this definition"></a></dt>
 <dd><p>Plot connected grid fields. Use this with
-<cite>get_peaks_at_heading_angles()</cite> and <cite>link_peaks()</cite>.</p>
-<p>Assumptions: Orient Cartesian (x,y) plane in the
-standard way, with +y upwards and +x rightwards.
-Then heading angles are:</p>
+<code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code> and <code class="docutils literal notranslate"><span class="pre">link_peaks()</span></code>.</p>
+<p>#### Angle conventions:</p>
+<p>The indecies <code class="docutils literal notranslate"><span class="pre">iφ</span> <span class="pre">∈</span> <span class="pre">{0,..,NANGLES-1}``into</span> <span class="pre">the</span> <span class="pre">length-</span>
+<span class="pre">``NANGLES</span></code> arguments <code class="docutils literal notranslate"><span class="pre">peaks</span></code> and <code class="docutils literal notranslate"><span class="pre">edges</span></code> are assumed
+to correpond to equally-spaced angles, starting at
+<code class="docutils literal notranslate"><span class="pre">φ=0</span></code>; that is, <code class="docutils literal notranslate"><span class="pre">phi</span> <span class="pre">=</span> <span class="pre">linspace(0,2*pi,NANGLES+1)[:-1]</span></code>.</p>
+<p>#### Colors:</p>
+<p>This is designed to be used with the <code class="docutils literal notranslate"><span class="pre">riley</span></code>
+colormap from <code class="docutils literal notranslate"><span class="pre">lgcpspatial.plot</span></code>. This map starts at
+mauve, continues through rust, olive, blue, before
+circling back to mauve. We use these color–direction
+conventions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>North: blue/azure/cyan</p></li>
+<li><p>South: red/rust</p></li>
+<li><p>East:  green/olive</p></li>
+<li><p>West:  purple/mauve/magenta</p></li>
+</ul>
+</div></blockquote>
+<p>For comatibility, then, the direction ordering
+for the colormap parameter <code class="docutils literal notranslate"><span class="pre">color</span></code> should be</p>
+<blockquote>
+<div><p>{West, South, East, North}</p>
+</div></blockquote>
+<p>#### Axis orientation:</p>
+<p>If the keyword argument <code class="docutils literal notranslate"><span class="pre">origin</span></code> is <code class="docutils literal notranslate"><span class="pre">'lower'</span></code> (the
+default value), heading angles are interpreted as
+the usual definition of polar coordinates on the
+Cartesian plane. That is, we assume an axis where
+<code class="docutils literal notranslate"><span class="pre">(x,y)=(0,0)</span></code> corresponds to the <em>lower left</em>
+(southwest) corner, and measure angles as staring
+at <code class="docutils literal notranslate"><span class="pre">0</span></code> for “East”, then increasing as we rotate
+counter-clockwise:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>0   : rightwards (eastwards)</p></li>
-<li><p>½π  : upwards    (northwards)</p></li>
+<li><p>π/2 : upwards    (northwards)</p></li>
 <li><p>π   : leftwards  (westwards)</p></li>
 <li><p>3π/2: downwards  (southwards)</p></li>
 </ul>
 </div></blockquote>
-<p>This assumes that peaks and edges are both
-taken from angles samples on [0,2π), where the
-angles are linspace(0,2*pi,len(peaks)+1)[:-1].</p>
+<p>If the keyword argument <code class="docutils literal notranslate"><span class="pre">origin</span></code> is <code class="docutils literal notranslate"><span class="pre">'upper'</span></code>, use
+image-coordinate conventions. This is the convention
+used in Krupic lab datasets and publications.
+For image coordinates, <code class="docutils literal notranslate"><span class="pre">(x,y)=(0,0)</span></code> corresponds to the
+top-left (northwest) corner.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>0   : rightwards (eastwards)</p></li>
+<li><p>π/2 : downwards  (southwards)</p></li>
+<li><p>π   : leftwards  (westwards)</p></li>
+<li><p>3π/2: upwards    (northwards)</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Note:</strong> Unlike <code class="docutils literal notranslate"><span class="pre">matplotlib.imshow()</span></code>, using
+<code class="docutils literal notranslate"><span class="pre">oring='upper'</span></code> will cause the y-axis to be flipped
+so that smaller <code class="docutils literal notranslate"><span class="pre">y</span></code> values are at the top.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>peaks</strong> (<em>list</em>) – Length NANGLES list of 2xNPEAKS np.float32 arrays
+<li><p><strong>peaks</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of 2xNPEAKS np.float32 arrays
 containing (rx,ry) peak locations at a list of
 heading angles, as returned  by
-<cite>get_peaks_at_heading_angles()</cite>.</p></li>
-<li><p><strong>edges</strong> (<em>list</em>) – Length NANGLES list of edge sets for each pair of
-headings, as returned by <cite>match_peaks</cite> or
-<cite>link_peaks()</cite>. Each list entry is a 2×NEDGES int32
+<code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code>.</p></li>
+<li><p><strong>edges</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for each pair of
+headings, as returned by <code class="docutils literal notranslate"><span class="pre">match_peaks</span></code> or
+<code class="docutils literal notranslate"><span class="pre">link_peaks()</span></code>. Each list entry is a 2×NEDGES int32
 array. This contains pairs of indecies (a,b). For
 edge set i, index a is the index into peaks[i] (edge
 source) and index b is the index into
@@ -374,9 +543,14 @@ peaks[(i+1)%Nφ] (edge target).</p></li>
 <li><p><strong>perim</strong> (<em>np.float32</em>) – NPOINTS x 2 Array of (x,y) points of the arena
 perimeter to add to plot. Optional, default is None.</p></li>
 <li><p><strong>compass</strong> (<em>bool</em>) – Draw colored compass rose if true</p></li>
-<li><p><strong>color</strong> (<em>matplotlib color</em>) – Color or colormap to use for heading angles
-defaults to the custom <cite>riley</cite> circular color map.</p></li>
-<li><p><strong>**kwargs</strong> – Forwarded to <cite>plot()</cite></p></li>
+<li><p><strong>cmap_fn</strong> (<em>matplotlib.colors.Colormap</em>) – colormap to use for heading angles
+defaults to the custom <code class="docutils literal notranslate"><span class="pre">riley</span></code> circular color map.
+Should be a callable :<code class="docutils literal notranslate"><span class="pre">[0,1]→(r,g,b,a)</span></code>
+where color components <code class="docutils literal notranslate"><span class="pre">rgba</span></code> are floats in <code class="docutils literal notranslate"><span class="pre">[0,1]</span></code>.</p></li>
+<li><p><strong>origin</strong> (<em>str; default 'lower'</em>) – String in <code class="docutils literal notranslate"><span class="pre">{'lower','upper'}</span></code> (compare to
+<code class="docutils literal notranslate"><span class="pre">matplotlib.imshow()</span></code>).</p></li>
+<li><p><strong>hideaxis</strong> (<em>boolean; default True</em>) – Hide the axis</p></li>
+<li><p><strong>**kwargs</strong> – Forwarded to <code class="docutils literal notranslate"><span class="pre">plot()</span></code></p></li>
 </ul>
 </dd>
 </dl>
@@ -397,26 +571,28 @@ heading direction</p></li>
 </ul>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>peaks</strong> (<em>list</em>) – List of 2×NPEAKS float32 arrays containing (x,y)
-locations of peaks at each of the angles specified
-by the list of heading angles <cite>heading_angles</cite>.</p></li>
+<li><p><strong>peaks</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of <code class="docutils literal notranslate"><span class="pre">2×NPEAKS</span></code> <code class="docutils literal notranslate"><span class="pre">np.float32</span></code>
+arrays with (x,y) locations of peaks at each
+heading angle.</p></li>
 <li><p><strong>maxd</strong> – The maximum distance between peaks allowed when
 connecting them</p></li>
-<li><p><strong>starti</strong> – The angle (index) to start at as a “seed”.</p></li>
-<li><p><strong>edges</strong> (<em>returned by match_peaks</em><em>(</em><em>Nφ</em><em>,</em><em>q</em><em>,</em><em>maxd</em><em>)</em>) – lenghth Nφ list of 2×NCONNECTED edge sets containing
-indecies into the point sets (source) and targets in
-the next adjacent direction</p></li>
+<li><p><strong>starti</strong> (<em>int ∈ {0</em><em>,</em><em>..</em><em>,</em><em>``NANGLES``-1}</em>) – The angle (index) to start at as a “seed”.</p></li>
+<li><p><strong>edges</strong> (<em>returned by match_peaks</em><em>(</em><em>Nφ</em><em>,</em><em>q</em><em>,</em><em>maxd</em><em>)</em>) – lenghth <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of <code class="docutils literal notranslate"><span class="pre">2×NCONNECTED</span></code> edge sets
+containing indecies into the point sets (source) and
+targets in  the next adjacent direction.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>iop</strong> (<em>int</em>) – Index between 0 and Nφ-1 into the q list of the
-opposite-heading fields</p></li>
-<li><p><strong>op</strong> (<em>int32</em>) – Indecies of matching field in direction
-<cite>q[iop]</cite> for each field <cite>q[istart]</cite>.
-If no match exists, -1</p></li>
+<li><p><strong>iop</strong> (<em>int (scalar)</em>) – Index <code class="docutils literal notranslate"><span class="pre">iop</span> <span class="pre">∈</span> <span class="pre">{0,..,NANGLES-1}</span></code> opposite of the
+direction associated with the seed index given by
+<code class="docutils literal notranslate"><span class="pre">starti</span> <span class="pre">∈</span> <span class="pre">{0,..,NANGLES-1}</span></code>.
+This should be <code class="docutils literal notranslate"><span class="pre">(</span> <span class="pre">starti</span> <span class="pre">+</span> <span class="pre">NANGLES//2</span> <span class="pre">)</span> <span class="pre">%</span> <span class="pre">NANGLES</span></code>.</p></li>
+<li><p><strong>op</strong> (<em>np.int32</em>) – Indecies of matching field in direction
+<code class="docutils literal notranslate"><span class="pre">peaks[iop]</span></code> for each field <code class="docutils literal notranslate"><span class="pre">peaks[istart]</span></code>
+(or -1 is no match exists).</p></li>
 <li><p><strong>dd</strong> (<em>float32</em>) – Distance to matched peak, or NaN it not matched.</p></li>
 </ul>
 </p>
@@ -429,11 +605,12 @@ If no match exists, -1</p></li>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">plot_connection_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#plot_connection_arrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.plot_connection_arrow" title="Permalink to this definition"></a></dt>
 <dd><p>Draw arrows connecting related fields from two maps.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>op</strong> (<em>for every index in q1</em><em>, </em><em>corresponding index in q2</em>) – or -1 if no connection</p></li>
-<li><p><strong>q1</strong> (<em>field centers in map 1</em><em> (</em><em>as x+iy complex numbers</em><em>)</em>) – </p></li>
-<li><p><strong>q2</strong> (<em>field centers in map 2</em><em> (</em><em>as x+iy complex numbers</em><em>)</em>) – </p></li>
+<li><p><strong>q1</strong> (<em>np.complex64</em>) – field centers in map 1 (as x+iy complex numbers)</p></li>
+<li><p><strong>q2</strong> (<em>np.complex64</em>) – field centers in map 2 (as x+iy complex numbers)</p></li>
+<li><p><strong>op</strong> (<em>np.int32</em>) – for every index in q1, corresponding index in q2
+(or -1 if no connection).</p></li>
 </ul>
 </dd>
 </dl>
@@ -441,29 +618,34 @@ If no match exists, -1</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.fit_heading_variance">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">fit_heading_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">θ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NSEW</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#fit_heading_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.fit_heading_variance" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">fit_heading_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">θ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NSEW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cos'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#fit_heading_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.fit_heading_variance" title="Permalink to this definition"></a></dt>
 <dd><p>Re-optimize the prior marginal variance for the
 given set of heading-weighted models.</p>
 <p>This is necessary for achieving interpretable posterior
 confidence intervals, since variable amounts (generally,
 less) of data are present for the different directions.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>Dataset</em></a>) – </p></li>
 <li><p><strong>model</strong> (<em>Model</em>) – </p></li>
 <li><p><strong>θ</strong> (<em>np.float32</em>) – Heading angles for every time sample in Dataset</p></li>
 <li><p><strong>NSEW</strong> (<em>np.float32</em>) – List of reference heading angles to recompute</p></li>
+<li><p><strong>weight_function</strong> (<em>str</em><em> or </em><em>function; default 'cos'</em>) – Function used to compute non-negative heading
+weights as a function of the difference between
+the animals current heading, and the reference
+orientation. Can be <code class="docutils literal notranslate"><span class="pre">'cos'</span></code> for
+<code class="docutils literal notranslate"><span class="pre">max(0,cos(Δθ))</span></code>, <code class="docutils literal notranslate"><span class="pre">'cos2'</span></code> for
+<code class="docutils literal notranslate"><span class="pre">max(0,cos(Δθ))²</span></code>, or a custom function.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>models</strong> (<em>list</em>) – A list, the same length as NSEW, containing
-the models with optimized hyperparameters for each
-heading angle in NSEW</p></li>
-<li><p><strong>fits</strong> (<em>list</em>) – A list, the same length as NSEW, containing
-the (posterior_mean, posterior_variance, loss)
-tuple returned by <cite>coordinate_descent</cite> for
+<li><p><strong>models</strong> (<em>list</em>) – Length 4 list of [N,S,E,W] results, each containing
+the models with optimized hyperparameters.</p></li>
+<li><p><strong>fits</strong> (<em>list</em>) – Length 4 list of [N,S,E,W] results, each containing
+the <code class="docutils literal notranslate"><span class="pre">(posterior_mean,</span> <span class="pre">posterior_variance,</span> <span class="pre">loss)</span></code>
+tuple returned by <code class="docutils literal notranslate"><span class="pre">coordinate_descent</span></code> for
 optimizing the model for each heading angle in NSEW.</p></li>
 </ul>
 </p>
@@ -478,26 +660,23 @@ optimizing the model for each heading angle in NSEW.</p></li>
 various heading angles,
 return the z+iy location of all NSEW-facing points</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>peaks</strong> (<em>length N_HEADING_ANGLES list</em>) – List of peak locations from
-<cite>get_peaks_at_heading_angles</cite></p></li>
-<li><p><strong>edges</strong> (<em>length N_HEADING_ANGLES list</em>) – List of edges between peaks returned by
-<cite>match_peaks</cite> or <cite>link_peaks</cite></p></li>
+<li><p><strong>peaks</strong> (length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list) – List of peak locations from
+<code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles</span></code></p></li>
+<li><p><strong>edges</strong> (length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list) – List of edges between peaks returned by
+<code class="docutils literal notranslate"><span class="pre">match_peaks</span></code> or <code class="docutils literal notranslate"><span class="pre">link_peaks</span></code></p></li>
 <li><p><strong>indexNSEW</strong> (<em>list</em>) – list of indecies into peaks and edges for the
 directions of interest (presumed to be N,S,E,W).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>points</strong> – A N_COMPONENTS x len(indexNSEW) array which
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>points</strong> – A <code class="docutils literal notranslate"><span class="pre">N_COMPONENTS</span> <span class="pre">×</span> <span class="pre">len(indexNSEW)</span></code> array which
 identifies which of the peaks at these heading
-indecies are part of the same grid field.
-Reach row is a list of integer indecies into
-the corresponding list in the <cite>peaks</cite> variable
-for the heading-angle-indecies specified by
-<cite>indexNSEW</cite>.</p>
+indecies are part of the same grid field. Missing
+directions are filled in with <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
@@ -505,31 +684,32 @@ for the heading-angle-indecies specified by
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.sample_heading_angles">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">sample_heading_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclusion_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prpeak_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#sample_heading_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.sample_heading_angles" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">sample_heading_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclusion_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prpeak_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'quadratic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#sample_heading_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.sample_heading_angles" title="Permalink to this definition"></a></dt>
 <dd><p>Sample confidence intervals, and plot, for a collection
 of models fit to (North, South, East, West) heading
 angles.</p>
-<p>Apply this to the lists`models` and <cite>fits</cite> returned by
-<cite>fit_heading_variance(data,model,heading,angles)</cite>.</p>
+<p>Apply this to the lists``models`` and <code class="docutils literal notranslate"><span class="pre">fits</span></code> returned
+by <code class="docutils literal notranslate"><span class="pre">fit_heading_variance(data,model,heading,angles)</span></code>.</p>
 <p>This routine re-optimizes the kernel parameters
 via grid-search for each heading angle, and calculates
 posterior confidence intervals via sampling.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>Dataset</em></a>) – </p></li>
 <li><p><strong>models</strong> (<em>list</em>) – List of N Models</p></li>
-<li><p><strong>fits</strong> (<em>list</em>) – List of N fits returned by <cite>coordinate_descent</cite></p></li>
+<li><p><strong>fits</strong> (<em>list</em>) – List of N fits returned by <code class="docutils literal notranslate"><span class="pre">coordinate_descent</span></code></p></li>
 <li><p><strong>angles</strong> (<em>list</em><em> of </em><em>floats</em>) – List of heading directions for each model</p></li>
-<li><p><strong>exclusion_radius</strong> (<em>positive float</em>) – Region a peak must clear to be a local maximum,
-In units of pixels in the L×L grid.
-If <cite>None</cite>, defaults to <cite>models[0].P/2.5</cite>.</p></li>
-<li><p><strong>edge_radius</strong> (<em>positive float</em>) – Remove peaks closer than <cite>edge_radius</cite> bins
+<li><p><strong>radius</strong> (<em>positive float; default 0.45</em>) – Region in which peak must be a local maximum to
+be considered a grid field.
+This is in units of
+<strong>fraction of the grid-cell period ``model.P``</strong>.</p></li>
+<li><p><strong>edge_radius</strong> (<em>positive float; Default 0.0</em>) – Remove peaks closer than <code class="docutils literal notranslate"><span class="pre">edge_radius</span></code> bins
 to the arena’s edge. The default value of 0
 does not remove points within a margin of
 the boundary.
-In units of pixels in the L×L grid.
-If <cite>None</cite>, defaults to <cite>models[0].P/2.0</cite>.</p></li>
+This is in units of
+<strong>fraction of the grid-cell period ``model.P``</strong>.</p></li>
 <li><p><strong>nsamples</strong> (<em>positive int</em>) – Number of posterior samples to use</p></li>
 <li><p><strong>resolution</strong> (<em>positive int; default 2</em>) – Upsampling factor for posterior sampling</p></li>
 <li><p><strong>height_threshold</strong> (<em>positive float ∈</em><em>[</em><em>0</em><em>,</em><em>1</em><em>]</em>) – Fraction of locations a peak must be taller than
@@ -539,7 +719,197 @@ to be included</p></li>
 <li><p><strong>doplot</strong> (<em>boolean; default True</em>) – Whether to draw plots</p></li>
 <li><p><strong>names</strong> (<em>list</em><em> of </em><em>str</em>) – Titles of each plot</p></li>
 <li><p><strong>colors</strong> (<em>lost</em><em> of </em><em>Matplotlib colors</em>) – List of plotting colors for each heading angle</p></li>
+<li><p><strong>confidence_mode</strong> (<em>str; default 'quadratic'</em>) – Can be <code class="docutils literal notranslate"><span class="pre">'quadratic'</span></code> or <code class="docutils literal notranslate"><span class="pre">'voronoi'</span></code></p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>samples</strong> – Length <code class="docutils literal notranslate"><span class="pre">len(angles)</span></code> list of sampled peak-density
+maps. Each element is a
+<code class="docutils literal notranslate"><span class="pre">lgcpspatial.posterior.SampledConfidence</span></code>
+object with attributes:</p>
+<blockquote>
+<div><dl>
+<dt>ellipses: np.float32</dt><dd><p>NaN-delimeted (x,y) coordinates for plotting
+confidence ellipses;</p>
+</dd>
+<dt>gaussians: list</dt><dd><p>List of mean, covariance for each peak;
+each entry is a tuple of</p>
+<blockquote>
+<div><dl class="simple">
+<dt>μ: shape (2,) np.float32</dt><dd><p>The peak mean</p>
+</dd>
+<dt>Σ: shape (2,2) np.float32</dt><dd><p>Covariance of gaussian convidence
+interval.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>samples: PosteriorSample</dt><dd><p>A PosteriorSample object with attributes:
+density:</p>
+<blockquote>
+<div><p>Counts of total number of times a field
+peak appeared at each location for all
+samples.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>pfield:</dt><dd><p>Normalized (sum to 1) density of peak
+locations for each grid field. Grid
+fields are defined as a local region
+around each local maximum in the peak
+<code class="docutils literal notranslate"><span class="pre">density</span></code> map.</p>
+</dd>
+<dt>peaks: np.float32</dt><dd><p>2xNPEAKS array of grid-field-peak (x,y)
+coordinates.</p>
+</dd>
+<dt>totals:</dt><dd><p>Number of samples within each peak basin
+that actually contained a peak.</p>
+</dd>
+<dt>means: np.float32</dt><dd><p>Center of mass of each peak</p>
+</dd>
+<dt>sigmas: np.float32</dt><dd><p>2D sampled covariance of each peak</p>
+</dd>
+<dt>nearest: np.float32</dt><dd><p>(L*resolution)x(L*resolution) map of
+Voronoi regions for each peak</p>
+</dd>
+<dt>kde: np.float32</dt><dd><p><code class="docutils literal notranslate"><span class="pre">(L*resolution)×(L*resolution)</span></code> smoothed
+peak density map.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.heading.match_with_tracked_peaks">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">match_with_tracked_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_peaks_opposite</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opposites_maxd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#match_with_tracked_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.match_with_tracked_peaks" title="Permalink to this definition"></a></dt>
+<dd><p>Match “fast-tracked” peak shifts with
+posterior-peak-density maps.</p>
+<p>### Details:</p>
+<p>In this workflow, we track shifts in single
+peaks over a broad range by re-fitting a single model
+over a high-resolution sweep of heading angles
+(“fast track”). Shifted peaks that are connected by a
+continuous range of heading angles are assumed to
+reflect shifted copies of the same grid field.</p>
+<p>To get confidence intervals, however, we need an
+interpretable posterior, which requires re-calibrating
+the prior variance. This is slow, so we do this for
+only a few directions (e.g. N,S,E,W).</p>
+<p>The resulting posterior-peak-densities won’t exactly
+match the “fast-tracked” peaks, since they were
+computed using different procedures. They should,
+however, be <em>very</em> close.</p>
+<p>This function matches them.</p>
+<p>### Procedure:</p>
+<p>Fast-tracked peaks are stored as lists of peak locations
+<code class="docutils literal notranslate"><span class="pre">peaks</span></code> and edge-indecies <code class="docutils literal notranslate"><span class="pre">edges</span></code>, for all heading
+angles. These are computed using the
+<code class="docutils literal notranslate"><span class="pre">lgcpspatial.heading</span></code> module as follows:</p>
+<blockquote>
+<div><p>``
+peaks = get_peaks_at_heading_angles(</p>
+<blockquote>
+<div><p>data,model,angles,heading_angle)</p>
+</div></blockquote>
+<p>edges = link_peaks(peaks,maximum_point_distance)
+``</p>
+</div></blockquote>
+<p>To figure out which shifted peaks are copies of the
+same field, we:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Walk the <code class="docutils literal notranslate"><span class="pre">edge</span></code> graph half-way around to find
+connected peaks in opposite directions.</p></li>
+<li><p>Find nearest neighbors with <code class="docutils literal notranslate"><span class="pre">target_peaks</span></code> and
+<code class="docutils literal notranslate"><span class="pre">target_peaks_opposite</span></code></p></li>
+<li><p>Connect indecies in <code class="docutils literal notranslate"><span class="pre">target_peaks</span></code> to the index
+in <code class="docutils literal notranslate"><span class="pre">target_peaks_opposite</span></code> connected to the same
+fast-tracked component (if any).</p></li>
+</ol>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of 2 × NPEAKS np.float32
+arrays containing (rx,ry) peak locations at a list
+of heading angles, as returned by
+<code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code>.</p></li>
+<li><p><strong>edges</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for each pair of
+headings, as returned by <code class="docutils literal notranslate"><span class="pre">match_peaks</span></code> or
+<code class="docutils literal notranslate"><span class="pre">link_peaks()</span></code>. Each list entry is a 2 × NEDGES
+int32 array. This contains pairs of indecies
+<code class="docutils literal notranslate"><span class="pre">(a,b)</span></code>. For edge set <code class="docutils literal notranslate"><span class="pre">i</span></code>, index <code class="docutils literal notranslate"><span class="pre">a</span></code> is the index
+into <code class="docutils literal notranslate"><span class="pre">peaks[i]</span></code> (edge source) and index <code class="docutils literal notranslate"><span class="pre">b</span></code> is the
+index  into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code> (edge target).</p></li>
+<li><p><strong>angle_index</strong> (<em>int ∈ {0</em><em>,</em><em>..</em><em>,</em><em>NANGLES-1}</em>) – Which angle to match, represented as an index
+into the peaks/edges array.</p></li>
+<li><p><strong>target_peaks</strong> (<em>2 × NPEAKS_A np.float32</em>) – Reference peak-density centroids for heading
+direction <code class="docutils literal notranslate"><span class="pre">angle_index</span></code> to match.</p></li>
+<li><p><strong>target_peaks_opposite</strong> (<em>2 × NPEAKS_A np.float32</em>) – Reference peak-density centroids for heading
+direction <strong>opposite</strong> to <code class="docutils literal notranslate"><span class="pre">angle_index</span></code> to match.</p></li>
+<li><p><strong>opposites_maxd</strong> (<em>positive float</em>) – Tolerance for matching opposite-direction peaks
+from the continuous tracking, in the same
+units as the points <code class="docutils literal notranslate"><span class="pre">peaks</span></code>. (This is most likely
+<strong>normalized [0,1]² coordinates</strong> if you’re
+following the provided example workflows).
+This should be similar to the grid scale, to avoid
+associating peaks from different fields in the
+region where the posterior is very noisy.
+I suggest
+<code class="docutils literal notranslate"><span class="pre">opposites_maxd</span> <span class="pre">=</span> <span class="pre">P/L*0.75</span></code>, where <code class="docutils literal notranslate"><span class="pre">P</span></code> is the
+grid-cell period in pixels and <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
+resolution of the discrete bin (again, in pixels).</p></li>
+<li><p><strong>connection_radius</strong> (<em>positive float</em>) – Tolerance for matching fast-tracked peaks with
+posterior-peak-density centroids, in the
+same units as <code class="docutils literal notranslate"><span class="pre">peaks.</span> <span class="pre">This</span> <span class="pre">is</span> <span class="pre">most</span> <span class="pre">likely</span>
+<span class="pre">**normalized</span> <span class="pre">[0,1]²</span> <span class="pre">coordinates**</span> <span class="pre">if</span> <span class="pre">you're</span>
+<span class="pre">following</span> <span class="pre">the</span> <span class="pre">provided</span> <span class="pre">example</span> <span class="pre">workflows).</span>
+<span class="pre">This</span> <span class="pre">should</span> <span class="pre">be</span> <span class="pre">small,</span> <span class="pre">since</span> <span class="pre">we're</span> <span class="pre">just</span> <span class="pre">trying</span> <span class="pre">to</span>
+<span class="pre">account</span> <span class="pre">for</span> <span class="pre">small</span> <span class="pre">changes.</span> <span class="pre">I</span> <span class="pre">suggest</span>
+<span class="pre">``connection_radius</span> <span class="pre">=</span> <span class="pre">P/L/5</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>paired_indecies</strong> – For each of the <code class="docutils literal notranslate"><span class="pre">NMATCHED</span></code> peak pairs,
+the first row is the index into
+<code class="docutils literal notranslate"><span class="pre">target_peaks</span></code> and the second an index into
+<code class="docutils literal notranslate"><span class="pre">target_peaks_opposite</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2 × NMATCHED np.int32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.heading.maybe_aliased">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">maybe_aliased</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#maybe_aliased"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.maybe_aliased" title="Permalink to this definition"></a></dt>
+<dd><p>Deal with aliasing:
+if matches look ambiguous, remove them.</p>
+<p>Fields are marked as postentially aliased if there
+is another opposite-direction match closeby, or
+if they are equally close to a different grid field
+centroid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>1D np.complex64</em>) – Peak locations in direction 1 as complex numbers</p></li>
+<li><p><strong>b</strong> (<em>1D np.complex64</em>) – Peak locations in direction 2 as complex numbers</p></li>
+<li><p><strong>c</strong> (<em>1D np.complex64</em>) – Field centroids as complex numbers</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>bad</strong> – Indicator list of which fields might be aliased.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.bool</p>
 </dd>
 </dl>
 </dd></dl>

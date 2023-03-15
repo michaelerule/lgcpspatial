@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Example 5: Heading dependence &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -32,15 +31,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -82,8 +85,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Example 5: Heading dependence</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Example 5: Heading dependence</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/example 5 heading dependence.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -203,10 +206,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -376,35 +380,43 @@ div.rendered_html tbody tr:hover {
 <p>Inspect how grid maps change depending on the animal’s heading. See <code class="docutils literal notranslate"><span class="pre">heading.py</span></code> for subroutines used in this notebook.</p>
 <section id="Setup-workspace,-load,-and-prepare-dataset">
 <h2>Setup workspace, load, and prepare dataset<a class="headerlink" href="#Setup-workspace,-load,-and-prepare-dataset" title="Permalink to this heading"></a></h2>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
-
 <span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">loadmat</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span> <span class="kn">import</span> <span class="n">Dataset</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>   <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>   <span class="kn">import</span> <span class="n">coordinate_descent</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>     <span class="kn">import</span> <span class="n">inference_summary_plot</span>
 
 <span class="c1"># Load dataset R11_20190607_EC_02</span>
 <span class="n">L</span>        <span class="o">=</span> <span class="mi">128</span> <span class="c1"># Grid size for position bins</span>
-<span class="n">dataset</span>  <span class="o">=</span> <span class="s1">&#39;R11_20190607_EC_02.mat&#39;</span>
+<span class="n">dataset</span>  <span class="o">=</span> <span class="s1">&#39;r2405_051216b_cell1816.mat&#39;</span>
 <span class="n">datadir</span>  <span class="o">=</span> <span class="s1">&#39;../example data/&#39;</span>
 <span class="n">fn</span>       <span class="o">=</span> <span class="n">datadir</span> <span class="o">+</span> <span class="n">dataset</span>
 <span class="n">Fs</span>       <span class="o">=</span> <span class="n">loadmat</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span><span class="n">squeeze_me</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s1">&#39;pos_sample_rate&#39;</span><span class="p">]</span>
 <span class="n">data</span>     <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
 
-<span class="c1"># Infer using parameters optimized by optimize_hyperparameters.ipynb</span>
-<span class="n">P</span>        <span class="o">=</span> <span class="mf">11.44</span> <span class="c1"># Grid period</span>
-<span class="n">v0</span>       <span class="o">=</span> <span class="mf">0.103</span> <span class="c1"># kernel variance (zero lag variance)</span>
+<span class="c1"># Use parameters found by optimize_hyperparameters.ipynb</span>
+<span class="n">P</span>        <span class="o">=</span> <span class="mf">23.58975</span>  <span class="c1"># Grid period</span>
+<span class="n">v0</span>       <span class="o">=</span> <span class="mf">0.4109905</span> <span class="c1"># Log-rate prior covariance kernel peak variance (zero lag variance)</span>
 <span class="n">model</span>    <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v0</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
 <span class="n">fit</span>      <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
 <span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">vfe</span> <span class="o">=</span> <span class="n">fit</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">dataset</span><span class="p">);</span>
 </pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/example_5_heading_dependence_3_0.png" src="_images/example_5_heading_dependence_3_0.png" />
 </div>
 </div>
 </section>
@@ -428,8 +440,14 @@ div.rendered_html tbody tr:hover {
 
 <span class="c1"># Grab peaks at a range of heading angles, then</span>
 <span class="c1"># locate peaks tracked over a range of heading angles</span>
-<span class="n">peaks</span> <span class="o">=</span> <span class="n">get_peaks_at_heading_angles</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">phis</span><span class="p">)</span>
-<span class="n">edges</span> <span class="o">=</span> <span class="n">link_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">P</span><span class="o">/</span><span class="n">L</span><span class="o">/</span><span class="n">Nphi</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">peaks</span><span class="p">,</span><span class="n">models</span><span class="p">,</span><span class="n">fits</span> <span class="o">=</span> <span class="n">get_peaks_at_heading_angles</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">phis</span><span class="p">,</span>
+    <span class="n">threshold</span>     <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">return_models</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">return_fits</span>   <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -456,7 +474,7 @@ div.rendered_html tbody tr:hover {
 <span class="c1"># allowed for assuming two peaks come from the same field.</span>
 <span class="n">maximum_point_distance</span> <span class="o">=</span> <span class="p">(</span><span class="n">P</span><span class="o">/</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="mi">15</span><span class="o">/</span><span class="n">Nphi</span>
 
-<span class="n">figure</span><span class="p">(</span><span class="mi">0</span><span class="p">,(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mi">120</span><span class="p">)</span>
+<span class="n">figure</span><span class="p">(</span><span class="mi">0</span><span class="p">,(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mi">300</span><span class="p">)</span>
 <span class="n">subplots_adjust</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">subplot</span><span class="p">(</span><span class="mi">131</span><span class="p">)</span>
@@ -492,39 +510,20 @@ div.rendered_html tbody tr:hover {
 <img alt="_images/example_5_heading_dependence_7_0.png" src="_images/example_5_heading_dependence_7_0.png" />
 </div>
 </div>
-<section id="Save-figure-5b">
-<h3>Save figure 5b<a class="headerlink" href="#Save-figure-5b" title="Permalink to this heading"></a></h3>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">figure</span><span class="p">(</span><span class="mi">0</span><span class="p">,(</span><span class="mf">2.5</span><span class="p">,</span><span class="mf">2.5</span><span class="p">),</span><span class="mi">120</span><span class="p">)</span>
-<span class="n">plot_tracked_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">edges</span><span class="p">,</span><span class="n">perim</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="p">)</span>
-<span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;fig5b.svg&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_5_heading_dependence_9_0.png" src="_images/example_5_heading_dependence_9_0.png" />
-</div>
-</div>
-</section>
 </section>
 <section id="Get-confidence-intervals-for-maps-in-cardinal-directions">
 <h2>Get confidence intervals for maps in cardinal directions<a class="headerlink" href="#Get-confidence-intervals-for-maps-in-cardinal-directions" title="Permalink to this heading"></a></h2>
 <p>Re-optimizing the kernel variance will adjust the posterior confidence intervals to account for the fact that, due to heading-dependent weighting, each heading direction now has a different effective number of sampled.</p>
 <p>We are focus on opposite heading directions because these are fit on entirely non-overlapping sets of data, due to the heading weights tapering to zero for opposing directions.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">smoothed_heading_angle</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">fit_heading_variance</span>
 
 <span class="n">angleNSEW</span> <span class="o">=</span> <span class="n">float32</span><span class="p">([</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">pi</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
 <span class="n">models</span><span class="p">,</span> <span class="n">fits</span> <span class="o">=</span> <span class="n">fit_heading_variance</span><span class="p">(</span>
     <span class="n">data</span><span class="p">,</span>
     <span class="n">model</span><span class="p">,</span>
@@ -538,29 +537,29 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[13](6.60e-01) loss=-1.515314e+03(done)
-σ0   = 0.103000
-β    = 0.757858
-σ0/β = 0.135909
-[5](2.00e+00) loss=-1.519080e+033(done)
-σ0   = 0.135909
-β    = 1.741101
-σ0/β = 0.078059
-[14](5.74e-01) loss=-1.509483e+03(done)
-σ0   = 0.078059
-β    = 0.659754
-σ0/β = 0.118316
-[8](1.32e+00) loss=-1.491525e+033(done)
-σ0   = 0.118316
+[7](1.52e+00) loss=-3.165055e+033(done)
+σ0   = 0.410990
+β    = 1.319508
+σ0/β = 0.311473
+[12](7.58e-01) loss=-2.932043e+03(done)
+σ0   = 0.311473
+β    = 0.870551
+σ0/β = 0.357788
+[8](1.32e+00) loss=-2.874971e+033(done)
+σ0   = 0.357788
 β    = 1.148698
-σ0/β = 0.103000
+σ0/β = 0.311473
+[9](1.15e+00) loss=-3.067678e+033(done)
+σ0   = 0.311473
+β    = 1.000000
+σ0/β = 0.311473
 </pre></div></div>
 </div>
 <section id="Get-sampled-confidence-intervals-for-each-direction">
 <h3>Get sampled confidence intervals for each direction<a class="headerlink" href="#Get-sampled-confidence-intervals-for-each-direction" title="Permalink to this heading"></a></h3>
 <p>The reason we fit separate models, as opposed to introducing heading as a new dimension in our Gaussian process, is that we want the resulting posteriors to be statistically independent for opposing directions. For a Gaussian process, even if the prior kernel for heading angle were to taper to zero for opposing directions, this would nor guarantee that the GP posteriors for oppsing directions are statistically independent.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">sample_heading_angles</span>
@@ -586,74 +585,26 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/example_5_heading_dependence_13_0.png" src="_images/example_5_heading_dependence_13_0.png" />
-</div>
-</div>
-</section>
-<section id="Save-Figure-5c">
-<h3>Save Figure 5c<a class="headerlink" href="#Save-Figure-5c" title="Permalink to this heading"></a></h3>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span> <span class="kn">import</span> <span class="n">Arena</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>     <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">nanpercentile</span> <span class="k">as</span> <span class="n">pctl</span>
-
-<span class="n">cN</span><span class="p">,</span><span class="n">cS</span><span class="p">,</span><span class="n">cE</span><span class="p">,</span><span class="n">cW</span> <span class="o">=</span> <span class="n">colorNSEW</span>
-<span class="n">N</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">E</span><span class="p">,</span><span class="n">W</span>     <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">kde</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">]</span>
-
-<span class="n">pct</span>  <span class="o">=</span> <span class="mf">99.9</span> <span class="c1"># Saturate pixels above this</span>
-<span class="n">mask</span> <span class="o">=</span> <span class="n">Arena</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">py</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">resolution</span><span class="p">)</span><span class="o">.</span><span class="n">mask</span>
-
-<span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
-<span class="n">subplots_adjust</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-
-<span class="n">extent</span> <span class="o">=</span> <span class="n">float32</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="mi">1</span><span class="o">/</span><span class="n">L</span>
-
-<span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
-<span class="n">RGBEW</span>  <span class="o">=</span> <span class="n">clip</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">einsum</span><span class="p">(</span>
-    <span class="s1">&#39;dc,dxy-&gt;xyc&#39;</span><span class="p">,</span>
-    <span class="mi">1</span><span class="o">-</span><span class="n">colorNSEW</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
-    <span class="n">array</span><span class="p">([</span>
-        <span class="p">(</span><span class="n">E</span><span class="o">/</span><span class="n">pctl</span><span class="p">(</span><span class="n">E</span><span class="p">,</span><span class="n">pct</span><span class="p">)),</span>
-        <span class="p">(</span><span class="n">W</span><span class="o">/</span><span class="n">pctl</span><span class="p">(</span><span class="n">W</span><span class="p">,</span><span class="n">pct</span><span class="p">))</span>
-    <span class="p">])),</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">RGBEW</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">imshow</span><span class="p">(</span><span class="n">RGBEW</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
-<span class="n">noxyaxes</span><span class="p">()</span>
-<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Eastward (green) vs. westward (pink)&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">.8</span><span class="p">)</span>
-
-<span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
-<span class="n">RGBNS</span>  <span class="o">=</span> <span class="n">clip</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">einsum</span><span class="p">(</span>
-    <span class="s1">&#39;dc,dxy-&gt;xyc&#39;</span><span class="p">,</span>
-    <span class="mi">1</span><span class="o">-</span><span class="n">colorNSEW</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span>
-    <span class="n">array</span><span class="p">([</span>
-        <span class="p">(</span><span class="n">N</span><span class="o">/</span><span class="n">pctl</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">pct</span><span class="p">)),</span>
-        <span class="p">(</span><span class="n">S</span><span class="o">/</span><span class="n">pctl</span><span class="p">(</span><span class="n">S</span><span class="p">,</span><span class="n">pct</span><span class="p">))</span>
-    <span class="p">])),</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">RGBNS</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">imshow</span><span class="p">(</span><span class="n">RGBNS</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
-<span class="n">noxyaxes</span><span class="p">()</span>
-<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Northward (blue) vs. southward (ochre)&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">perimeter</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">.8</span><span class="p">)</span>
-
-<span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;fig5c.svg&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight"><pre>
+[110.353455  80.54498   91.29039   93.286705 114.655     98.06123
+ 121.77084  103.56533 ]
+[ 95.42271  110.93017   93.57962   94.56246   94.637375 102.86066
+  95.67329  109.864815 103.47378 ]
+[ 95.37448   98.05607   85.68578   93.6258    98.99576  110.822365
+  86.856834 126.47598 ]
+[ 94.55873   99.81282   96.40652   94.295044 102.955086  98.18214
+  98.77953  108.811386  99.629     93.932816]
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/example_5_heading_dependence_15_0.png" src="_images/example_5_heading_dependence_15_0.png" />
+<img alt="_images/example_5_heading_dependence_11_1.png" src="_images/example_5_heading_dependence_11_1.png" />
 </div>
 </div>
 </section>

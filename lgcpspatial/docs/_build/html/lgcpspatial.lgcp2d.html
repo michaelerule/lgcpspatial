@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>lgcpspatial.lgcp2d module &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -30,15 +29,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -80,8 +83,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>lgcpspatial.lgcp2d module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">lgcpspatial.lgcp2d module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/lgcpspatial.lgcp2d.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -117,22 +120,46 @@
 </style>
 <section id="module-lgcpspatial.lgcp2d">
 <span id="lgcpspatial-lgcp2d-module"></span><h1>lgcpspatial.lgcp2d module<a class="headerlink" href="#module-lgcpspatial.lgcp2d" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">CoordinateDescentResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">μh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#CoordinateDescentResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.h">
+<span class="sig-name descname"><span class="pre">μh</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.h" title="Permalink to this definition"></a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.v">
+<span class="sig-name descname"><span class="pre">v</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.v" title="Permalink to this definition"></a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.loss" title="Permalink to this definition"></a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.coordinate_descent">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">coordinate_descent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialmean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialcov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxmeaniter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxvariter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showprogress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#coordinate_descent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.coordinate_descent" title="Permalink to this definition"></a></dt>
 <dd><p>Abstract mean/variance coordinate descent subroutine</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>gp</strong> (<em>Model</em>) – Gaussian-Process model instance.</p></li>
 <li><p><strong>initialmean</strong> (<em>np.float32</em>) – Initial guess for mean, in whatever format
 gp expects for calculating derivatives.
-if None, <cite>coordiante_descent</cite> will initialize this
-by calling <cite>gp.initialmean()</cite></p></li>
+if None, <code class="docutils literal notranslate"><span class="pre">coordiante_descent</span></code> will initialize this
+by calling <code class="docutils literal notranslate"><span class="pre">gp.initialmean()</span></code></p></li>
 <li><p><strong>initialcov</strong> (<em>np.float32</em>) – Intial guess for covariance, in whatever format
 gp expects for calculating derivatives.
-if None, <cite>coordiante_descent</cite> will initialize this
-by calling <cite>gp.initialcov()</cite></p></li>
+if None, <code class="docutils literal notranslate"><span class="pre">coordiante_descent</span></code> will initialize this
+by calling <code class="docutils literal notranslate"><span class="pre">gp.initialcov()</span></code></p></li>
 <li><p><strong>maxiter</strong> (<em>int</em>) – Maximum number of iterations for the mean and
 covariance combined. Decault if 40.</p></li>
 <li><p><strong>maxmeaniter</strong> (<em>int</em>) – Maximum number of mean Newton-Raphson updates
@@ -146,11 +173,11 @@ and variance is less than this.</p></li>
 progress.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>μ</strong> (<em>np.float32</em>) – Posterior mean, in whatever format is used by <cite>gp</cite>.</p></li>
-<li><p><strong>Σ</strong> (<em>np.float32</em>) – Posterior covariance, in format used by <cite>gp</cite></p></li>
-<li><p><strong>loss</strong> (<em>float</em>) – Loss evaluated at posterior mean, <cite>gp.loss(μ,Σ)</cite>,
+<li><p><strong>μ</strong> (<em>np.float32</em>) – Posterior mean, in whatever format is used by <code class="docutils literal notranslate"><span class="pre">gp</span></code>.</p></li>
+<li><p><strong>Σ</strong> (<em>np.float32</em>) – Posterior covariance, in format used by <code class="docutils literal notranslate"><span class="pre">gp</span></code></p></li>
+<li><p><strong>loss</strong> (<em>float</em>) – Loss evaluated at posterior mean, <code class="docutils literal notranslate"><span class="pre">gp.loss(μ,Σ)</span></code>,
 or infinity if optimization failed.</p></li>
 </ul>
 </p>
@@ -160,13 +187,13 @@ or infinity if optimization failed.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.make_kernel_ft">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">make_kernel_ft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#make_kernel_ft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.make_kernel_ft" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">make_kernel_ft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#make_kernel_ft"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.make_kernel_ft" title="Permalink to this definition"></a></dt>
 <dd><p>Generate grid kernel and return its Fourier transform.</p>
 <p>Scaling the height of this kernel and selecting which
 frequency components to retain is handled in
-<cite>diagonal_fourier_lowrank</cite>.</p>
+<code class="docutils literal notranslate"><span class="pre">diagonal_fourier_lowrank</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>L</strong> (<em>int&gt;1</em>) – This should be an integer describing the number of
 spatial bins used to prepare n, y, lograte_guess,
@@ -175,10 +202,6 @@ compromise between speed, resolution, and numerical
 stability.</p></li>
 <li><p><strong>P</strong> (<em>float&gt;0</em>) – A kernel hyperparameter: The grid cell’s period in
 units of bins on the L×L grid.</p></li>
-<li><p><strong>dc</strong> (<em>float&gt;0</em>) – Amount of DC variance to add. This corresponds to
-uncertainty about the average firing rate. If your
-prior is good, this variance can be small. Setting
-it too large slows down inference.</p></li>
 <li><p><strong>k</strong> (<em>int&gt;0</em>) – Which Bessel function zero to truncate the kernel at.
 1: central lobe only, no periodicity
 2: central lobe and inhibitory surround
@@ -206,8 +229,13 @@ negligeble variance is another option.</p></li>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class representing variational GP inference with
 posterior covariance Σ = [ Λ + diag[p] ]¯¹. A low-rank
-Fourier-space representation is used to approximately
-compute this inverse.</p>
+Fourier-space representation is used to approximate
+this inverse.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.DiagonalFourierLowrank.update_cached">
+<span class="sig-name descname"><span class="pre">update_cached</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.update_cached"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.update_cached" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.DiagonalFourierLowrank.Fu">
 <span class="sig-name descname"><span class="pre">Fu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.Fu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.Fu" title="Permalink to this definition"></a></dt>
@@ -250,10 +278,10 @@ of Fu(u).</p>
 <span class="sig-name descname"><span class="pre">rates_from_lowrank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lowrank_posterior_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_marginal_variances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.rates_from_lowrank"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.rates_from_lowrank" title="Permalink to this definition"></a></dt>
 <dd><p>Compute the posterior mean in spatial coordinates
 as well as the expected firing rate. Note: the prior
-<cite>initialmean</cite> is added for calculating the firing-
+<code class="docutils literal notranslate"><span class="pre">initialmean</span></code> is added for calculating the firing-
 rate λ, as well as a variance correction ½v.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lowrank_posterior_mean</strong> (<em>np.array</em>) – Posterior mean in low-rank spatial-frequency
 space. Size model.R float32 or float64</p></li>
@@ -261,7 +289,7 @@ space. Size model.R float32 or float64</p></li>
 domain. Size L² float32 or float64</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>μ</strong> (<em>np.array, shape L²</em>) – The posterior mean in spatial coordinates (not
 in the low-rank subspace). This is only the
@@ -276,9 +304,35 @@ model. λ = exp(μ+ μ₀ + ½σ2)</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.DiagonalFourierLowrank.low_rank_likelihood_precision">
+<span class="sig-name descname"><span class="pre">low_rank_likelihood_precision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lowrank_posterior_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_marginal_variances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.low_rank_likelihood_precision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.low_rank_likelihood_precision" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the precision matrix update for the
+likelihood in low-rank space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lowrank_posterior_mean</strong> (<em>np.array</em>) – Posterior mean in low-rank spatial-frequency
+space. Size model.R float32 or float64</p></li>
+<li><p><strong>posterior_marginal_variances</strong> (<em>np.array</em>) – Posterior marginal variance in the spatial
+domain. Size L² float32 or float64</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>x&#64;x.T</strong> – Precision (inverse covariance) contribution of
+the likelihood in low-rank space.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.DiagonalFourierLowrank.low_rank_cholesky">
 <span class="sig-name descname"><span class="pre">low_rank_cholesky</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lowrank_posterior_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_marginal_variances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.low_rank_cholesky"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.low_rank_cholesky" title="Permalink to this definition"></a></dt>
-<dd><blockquote>
+<dd><p>Compute the Choleskey factor <code class="docutils literal notranslate"><span class="pre">C</span></code> of the low-rank
+posterior covariance such that <code class="docutils literal notranslate"><span class="pre">Σh</span> <span class="pre">=</span> <span class="pre">C'C</span></code>.</p>
+<blockquote>
 <div><ol class="arabic simple">
 <li><p>project ⎷q into the low-d frequency space</p></li>
 <li><p>add this projection to the prior precision</p></li>
@@ -291,7 +345,7 @@ diagonal in frequency space.</p></li>
 </ul>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lowrank_posterior_mean</strong> (<em>np.array</em>) – Posterior mean in low-rank spatial-frequency
 space. Size model.R float32 or float64</p></li>
@@ -299,11 +353,11 @@ space. Size model.R float32 or float64</p></li>
 domain. Size L² float32 or float64</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>C</strong> – Cholesky factor such that the low-rank
 covariance Σh can be reconstructed as Σh=C’C.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
@@ -312,7 +366,9 @@ covariance Σh can be reconstructed as Σh=C’C.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.DiagonalFourierLowrank.low_rank_covariance">
 <span class="sig-name descname"><span class="pre">low_rank_covariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lowrank_posterior_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_marginal_variances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.low_rank_covariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.low_rank_covariance" title="Permalink to this definition"></a></dt>
-<dd><blockquote>
+<dd><p>Calculate the full covariance <code class="docutils literal notranslate"><span class="pre">Σh</span></code> in the truncated
+low-rank spatial frequency domain.</p>
+<blockquote>
 <div><ol class="arabic simple">
 <li><p>project ⎷q into the low-d frequency space</p></li>
 <li><p>add this projection to the prior precision</p></li>
@@ -325,7 +381,7 @@ diagonal in frequency space.</p></li>
 </ul>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lowrank_posterior_mean</strong> (<em>np.array</em>) – Posterior mean in low-rank spatial-frequency
 space. Size model.R float32 or float64</p></li>
@@ -333,10 +389,10 @@ space. Size model.R float32 or float64</p></li>
 domain. Size L² float32 or float64</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>Σh</strong> – Full covariance in truncated frequency domain</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
@@ -345,7 +401,7 @@ domain. Size L² float32 or float64</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.DiagonalFourierLowrank.covariance_diagonal">
 <span class="sig-name descname"><span class="pre">covariance_diagonal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lowrank_posterior_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_marginal_variances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.covariance_diagonal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.covariance_diagonal" title="Permalink to this definition"></a></dt>
-<dd><p>Similar to <cite>low_rank_covariance</cite>, but converts
+<dd><p>Similar to <code class="docutils literal notranslate"><span class="pre">low_rank_covariance</span></code>, but converts
 low-rank posterior Σ back to the spatial domain,
 returning only the marginal variances at each
 location to avoid having to construct the full
@@ -358,7 +414,7 @@ diagonal in frequency space.</p></li>
 </ul>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lowrank_posterior_mean</strong> (<em>np.array</em>) – Posterior mean in low-rank spatial-frequency
 space. Size model.R float32 or float64</p></li>
@@ -366,10 +422,10 @@ space. Size model.R float32 or float64</p></li>
 domain. Size L² float32 or float64</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>v</strong></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>posterior marginal variances at each location</p>
 </dd>
 </dl>
@@ -378,12 +434,12 @@ domain. Size L² float32 or float64</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.DiagonalFourierLowrank.loss">
 <span class="sig-name descname"><span class="pre">loss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lowrank_posterior_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_marginal_variances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.loss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.loss" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the (negative) evidence lower bound</p>
-<p>Notes on scaling/comparison of this quantity:</p>
+<dd><p>Calculate the negative evidence lower bound</p>
+<p>Notes on the scaling/comparison of this quantity:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>This is computed in the low-rank subspace.</p></li>
-<li><p>Assumes posterior = prior outside this subspace.
+<li><p>We Assume posterior = prior outside this subspace.
 - In the discarded subspace, we have ΛΣ=I
 - Let D=L²-R be dimension of discarded subspace.
 - This should contribute D from the trace.
@@ -392,7 +448,7 @@ domain. Size L² float32 or float64</p></li>
 </ul>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lowrank_posterior_mean</strong> (<em>np.array</em>) – Posterior mean in low-rank spatial-frequency
 space. Size model.R float32 or float64</p></li>
@@ -406,9 +462,9 @@ domain. Size L² float32 or float64</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.DiagonalFourierLowrank.JHvM">
 <span class="sig-name descname"><span class="pre">JHvM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lowrank_posterior_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_marginal_variances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.JHvM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.JHvM" title="Permalink to this definition"></a></dt>
-<dd><p>Prepare gradient (Jacobian) <cite>J</cite>;
-Hessian <cite>H</cite>;
-and preconditioner <cite>M</cite>.</p>
+<dd><p>Prepare gradient (Jacobian) <code class="docutils literal notranslate"><span class="pre">J</span></code>;
+Hessian <code class="docutils literal notranslate"><span class="pre">H</span></code>;
+and preconditioner <code class="docutils literal notranslate"><span class="pre">M</span></code>.</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>This is used to run minres for Newton-Raphson
@@ -421,7 +477,7 @@ and preconditioner <cite>M</cite>.</p>
 </ul>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lowrank_posterior_mean</strong> (<em>np.array</em>) – Posterior mean in low-rank spatial-frequency
 space. Size model.R float32 or float64</p></li>
@@ -429,7 +485,7 @@ space. Size model.R float32 or float64</p></li>
 domain. Size L² float32 or float64</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>J</strong> (<em>np.array</em>) – Jacobian</p></li>
 <li><p><strong>Hv</strong> (<em>function</em>) – Function that computes Hessian-vector product</p></li>
@@ -445,7 +501,7 @@ domain. Size L² float32 or float64</p></li>
 <span class="sig-name descname"><span class="pre">mean_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lowrank_posterior_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_marginal_variances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.mean_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.mean_update" title="Permalink to this definition"></a></dt>
 <dd><p>Update posterior mean using Newton-Raphson</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lowrank_posterior_mean</strong> (<em>np.array</em>) – Posterior mean in low-rank spatial-frequency
 space. Size model.R float32 or float64</p></li>
@@ -453,10 +509,10 @@ space. Size model.R float32 or float64</p></li>
 domain. Size L² float32 or float64</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>Δμ</strong> – Newton-Raphson update to the posterior mean</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
@@ -468,7 +524,7 @@ domain. Size L² float32 or float64</p></li>
 <dd><p>Update posterior marginal variances via fixed-
 point iteration</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>lowrank_posterior_mean</strong> (<em>np.array</em>) – Posterior mean in low-rank spatial-frequency
 space. Size model.R float32 or float64</p></li>
@@ -476,15 +532,20 @@ space. Size model.R float32 or float64</p></li>
 domain. Size L² float32 or float64</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>Δv</strong> – Fixed-point iteration update to the marginal
 variances</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.DiagonalFourierLowrank.load_new_data">
+<span class="sig-name descname"><span class="pre">load_new_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.load_new_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.load_new_data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -495,13 +556,13 @@ variances</p>
 factorization of a positive definite matrix, “C”. The
 inverse of the original matrix is then inv(X) = C’C.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>X</strong> (<em>np.array</em>) – Square, positive-definite matrix</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>inv(X)</strong></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
@@ -513,16 +574,16 @@ inverse of the original matrix is then inv(X) = C’C.</p>
 <dd><p>Solve PSD linear system x = H^{-1}v
 via Cholesky factorization</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>H</strong> (<em>PSD matrix as np.array</em>) – </p></li>
 <li><p><strong>v</strong> (<em>1D np.array with the same dimension as H</em>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>np.array</strong></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>H^{-1}v</p>
 </dd>
 </dl>
@@ -534,13 +595,13 @@ via Cholesky factorization</p>
 <dd><p>Calculate log-determinant of positive-definite matrix
 via Choleskey factorization.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>A</strong> (<em>np.array</em>) – Square, positive-definite matrix</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ln(|A|)</strong></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
@@ -552,10 +613,10 @@ via Choleskey factorization.</p>
 <dd><p>Sum the real and imaginary components of a
 complex-valued array</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>np.complex64</em>) – </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>np.float32</p>
 </dd>
 </dl>
@@ -566,7 +627,7 @@ complex-valued array</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">npdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#npdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.npdf" title="Permalink to this definition"></a></dt>
 <dd><p>Univariate Gaussian probability density</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mu</strong> (<em>float</em><em>, </em><em>scalar</em><em> or </em><em>array-like</em>) – Mean(s) of distribution(s)</p></li>
 <li><p><strong>sigma</strong> (<em>float</em><em>, </em><em>scalar</em><em> or </em><em>array-like</em>) – Standard deviation(s) of distribution(s)</p></li>

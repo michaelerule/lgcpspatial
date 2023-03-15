@@ -10,10 +10,9 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="../../_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -27,15 +26,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="../../_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -77,9 +80,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>lgcpspatial.heading</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">lgcpspatial.heading</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -93,9 +96,13 @@
 <span class="c1"># -*- coding: UTF-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">heading.py: Subroutines used in </span>
-<span class="sd">`example 5: heading dependence`.</span>
+<span class="sd">``example 5: heading dependence``.</span>
+
+<span class="sd">Several of these routines overlap and will likely be </span>
+<span class="sd">merged in a clean-up of this code in future commits.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">numpy</span>             <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>        <span class="k">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -112,11 +119,12 @@
 <span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>        <span class="kn">import</span> <span class="n">coordinate_descent</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.posterior</span>     <span class="kn">import</span> <span class="n">interpolate_peaks</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.posterior</span>     <span class="kn">import</span> <span class="n">SampledConfidence</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.posterior</span>     <span class="kn">import</span> <span class="n">QuadraticConfidence</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.gridsearch</span>    <span class="kn">import</span> <span class="n">grid_search</span>
 
 
 <div class="viewcode-block" id="smoothed_heading_angle"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.smoothed_heading_angle">[docs]</a><span class="k">def</span> <span class="nf">smoothed_heading_angle</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">Fs</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span><span class="n">Fl</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculate smoothed estimate of heading from </span>
 <span class="sd">    position data. </span>
 <span class="sd">    </span>
@@ -126,9 +134,31 @@
 <span class="sd">    are as follows: </span>
 
 <span class="sd">      - 0   : rightwards (eastwards)</span>
-<span class="sd">      - ½π  : upwards    (northwards)</span>
+<span class="sd">      - π/2 : upwards    (northwards)</span>
 <span class="sd">      - π   : leftwards  (westwards)</span>
 <span class="sd">      - 3π/2: downwards  (southwards)</span>
+<span class="sd">      </span>
+<span class="sd">    Note: For the Krupic lab datasets, the convention is</span>
+<span class="sd">    *not* the standard cartesian plane.</span>
+<span class="sd">    ***Smaller** ``y`` values correspond to &quot;more north&quot;, </span>
+<span class="sd">    i.e. the ``(x,y)`` coordinates should be interpreted</span>
+<span class="sd">    as image-like, not Cartesian-like, with the ``(0,0)``</span>
+<span class="sd">    coordinate in the upper left, i.e. the northwest corner.</span>
+<span class="sd">    </span>
+<span class="sd">    This library has been prepared to use the Cartesian</span>
+<span class="sd">    convention for compatibility. You should manually</span>
+<span class="sd">    flip the y-axis convention if you want results to </span>
+<span class="sd">    match Krupic-lab conventions in previously published</span>
+<span class="sd">    manuscripts. </span>
+<span class="sd">    </span>
+<span class="sd">    For image-convention coordinates, angles should</span>
+<span class="sd">    instead be interpreted as:</span>
+<span class="sd">    </span>
+<span class="sd">      - 0   : rightwards (eastwards)</span>
+<span class="sd">      - π/2 : downwards  (southwards)</span>
+<span class="sd">      - π   : leftwards  (westwards)</span>
+<span class="sd">      - 3π/2: upwards    (northwards)</span>
+<span class="sd">      </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -146,7 +176,7 @@
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    heading_angle: float32</span>
+<span class="sd">    heading_angle: np.float32</span>
 <span class="sd">        Heading angle based on the low-pass derivative </span>
 <span class="sd">        of position.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -160,20 +190,27 @@
     <span class="n">data</span><span class="p">,</span>
     <span class="n">model</span><span class="p">,</span>
     <span class="n">heading_angles</span><span class="p">,</span>
-    <span class="n">threshold</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
-    <span class="n">Fs</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
-    <span class="n">Fl</span><span class="o">=</span><span class="mf">2.0</span>
+    <span class="n">threshold</span>        <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
+    <span class="n">Fs</span>               <span class="o">=</span> <span class="mf">50.0</span><span class="p">,</span>
+    <span class="n">Fl</span>               <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">heading_angle</span>    <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">show_progress</span>    <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">clearance_radius</span> <span class="o">=</span> <span class="mf">0.45</span><span class="p">,</span>
+    <span class="n">return_heights</span>   <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">return_models</span>    <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">return_fits</span>      <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">weight_function</span>  <span class="o">=</span> <span class="s1">&#39;cos&#39;</span>
     <span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Check for location shifts based on heading. Re-weight </span>
 <span class="sd">    data based on cosine similarity to target heading angle.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data: object</span>
-<span class="sd">        Any object with the following attributes:</span>
+<span class="sd">    data: lgcpspatial.loaddata.Dataset</span>
+<span class="sd">        An object with the following attributes:</span>
 <span class="sd">            L: float</span>
-<span class="sd">                Size of LxL spatial grid for binned data.</span>
+<span class="sd">                Size of L×L spatial grid for binned data.</span>
 <span class="sd">            n: np.float32</span>
 <span class="sd">                Length L² array of visits to each bin.</span>
 <span class="sd">            y: np.float32</span>
@@ -185,17 +222,17 @@
 <span class="sd">            lograte_guess: float32 array</span>
 <span class="sd">                Shape L×L or L² array with an initial guess</span>
 <span class="sd">                for log rate. This should be expressed as a </span>
-<span class="sd">                deviation from `prior_mean`.</span>
+<span class="sd">                deviation from ``prior_mean``.</span>
 <span class="sd">            arena.hull:</span>
 <span class="sd">                Convex Hull object describing the arena </span>
 <span class="sd">                perimeter</span>
-<span class="sd">    model: lgcpspatial.DiagonalFourierLowrank </span>
+<span class="sd">    model: lgcpspatial.lgcp2d.DiagonalFourierLowrank </span>
 <span class="sd">        parent model instance (fitted model without heading</span>
 <span class="sd">        filtering)</span>
 <span class="sd">    heading_angles: np.float32 array</span>
-<span class="sd">        List of heading angles to check.</span>
-<span class="sd">        Westward is 0 degrees, then rotates counterclockwise </span>
-<span class="sd">        through southward, eastward, northward. </span>
+<span class="sd">        List of heading angles to check. Westward is 0 </span>
+<span class="sd">        degrees, then rotates counterclockwise through </span>
+<span class="sd">        southward, eastward, and northward. </span>
 <span class="sd">    </span>
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
@@ -206,45 +243,127 @@
 <span class="sd">        Sampling rate for position data</span>
 <span class="sd">    Fl: positive float; default 2.0</span>
 <span class="sd">        Low-frequency cutoff for smooothing position data</span>
+<span class="sd">    heading_angle: np.float32; default None</span>
+<span class="sd">        Provided heading angles.</span>
+<span class="sd">        This must be a 1D np.float32 the same length</span>
+<span class="sd">        as ``px`` and ``py``.</span>
+<span class="sd">        If ``None``, angles are recalvulated as </span>
+<span class="sd">        ``smoothed_heading_angle(px,py,Fs,Fl)``.</span>
+<span class="sd">    show_progress: boolean; default True</span>
+<span class="sd">        Show progress bar</span>
+<span class="sd">    clearance_radius: positive float; default 0.45</span>
+<span class="sd">        Neighborhood in which a peak must be a neighborhood</span>
+<span class="sd">        maximum.</span>
+<span class="sd">        This is in units of </span>
+<span class="sd">        **fraction of the grid-cell period ``model.P``**.</span>
+<span class="sd">    return_heights: boolean; default False</span>
+<span class="sd">        Whether to return heights of peaks</span>
+<span class="sd">    return_models: boolean; default False</span>
+<span class="sd">        Whether to return a list of models at each angle.</span>
+<span class="sd">    return_fits: boolean; default False</span>
+<span class="sd">        Whether to return a list of model fits </span>
+<span class="sd">        at each angle.</span>
+<span class="sd">    weight_function: str or function; default &#39;cos&#39;</span>
+<span class="sd">        Function used to compute non-negative heading</span>
+<span class="sd">        weights as a function of the difference between</span>
+<span class="sd">        the animals current heading, and the reference</span>
+<span class="sd">        orientation. Can be ``&#39;cos&#39;`` for </span>
+<span class="sd">        ``max(0,cos(Δθ))``, ``&#39;cos2&#39;`` for</span>
+<span class="sd">        ``max(0,cos(Δθ))²``, or a custom function. </span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    peaks: list</span>
-<span class="sd">        List of 2×NPEAKS float32 arrays containing (x,y)</span>
-<span class="sd">        locations of peaks at each of the angles specified</span>
-<span class="sd">        by the list `heading_angles`.</span>
+<span class="sd">        Length ``NANGLES`` list of peak locations for each </span>
+<span class="sd">        heading angle. Each item is a ``2×NPEAKS`` array of </span>
+<span class="sd">        ``(x,y)`` peak locations in normalized ``[0,1]²`` </span>
+<span class="sd">        coordinates. These peaks are not matched up to any </span>
+<span class="sd">        particular field-IDs.</span>
+<span class="sd">    heights: list</span>
+<span class="sd">        **Returned only if ``return_heights=True``;**</span>
+<span class="sd">        List of NPEAKS float32 arrays containing the</span>
+<span class="sd">        heights of the log-rates in ``peaks``.</span>
+<span class="sd">    models: list</span>
+<span class="sd">        **Returned only if ``return_models=True``;**</span>
+<span class="sd">        List of lgcp2d.DiagonalFourierLowrank model</span>
+<span class="sd">        objects for each angle. </span>
+<span class="sd">    fits: list</span>
+<span class="sd">        **Returned only if ``return_fits=True``;**</span>
+<span class="sd">        List of tuples ``(μh,v,loss,rate)``</span>
+<span class="sd">        containing the low-rank posterior log-rate ``μh``,</span>
+<span class="sd">        the posterior marginal log-rate variances ``v``, </span>
+<span class="sd">        the model evidence lower bound ``loss``</span>
+<span class="sd">        (up to constants), and the posterior mean rate</span>
+<span class="sd">        map ``rate``.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">L</span><span class="p">,</span><span class="n">kv</span><span class="p">,</span><span class="n">P</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">kv</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
     
+    <span class="n">clearance_radius</span> <span class="o">*=</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
+    
     <span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">spikes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">py</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">spikes</span>
     <span class="n">arena</span> <span class="o">=</span> <span class="n">Arena</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">heading_angle</span> <span class="o">=</span> <span class="n">smoothed_heading_angle</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">Fs</span><span class="p">,</span><span class="n">Fl</span><span class="p">)</span>
     
-    <span class="n">peaks</span> <span class="o">=</span> <span class="p">[]</span>        
+    <span class="k">if</span> <span class="n">heading_angle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">heading_angle</span> <span class="o">=</span> <span class="n">smoothed_heading_angle</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="n">py</span><span class="p">,</span><span class="n">Fs</span><span class="p">,</span><span class="n">Fl</span><span class="p">)</span>
+
+    <span class="n">peaks</span>   <span class="o">=</span> <span class="p">[]</span>        
+    <span class="n">heights</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">models</span>  <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fits</span>    <span class="o">=</span> <span class="p">[]</span>
     <span class="n">μh</span><span class="p">,</span><span class="n">v</span>  <span class="o">=</span> <span class="kc">None</span><span class="p">,</span><span class="kc">None</span> <span class="c1"># propagate initial conditions </span>
-    <span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span> <span class="n">progress_bar</span><span class="p">(</span><span class="n">heading_angles</span><span class="p">):</span> 
+    
+    <span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span> <span class="p">(</span><span class="n">progress_bar</span><span class="p">(</span><span class="n">heading_angles</span><span class="p">)</span> \
+                <span class="k">if</span> <span class="n">show_progress</span> \
+                <span class="k">else</span> <span class="n">heading_angles</span><span class="p">):</span> 
         
         <span class="c1"># Heading-weighted data binning</span>
-        <span class="n">sw</span>  <span class="o">=</span> <span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cos</span><span class="p">(</span><span class="n">heading_angle</span><span class="o">-</span><span class="n">phi</span><span class="p">))</span>
-        <span class="n">data2</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reweighted</span><span class="p">(</span><span class="n">sw</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">weight_function</span><span class="o">==</span><span class="s1">&#39;cos&#39;</span><span class="p">:</span>
+            <span class="n">sw</span>  <span class="o">=</span> <span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cos</span><span class="p">(</span><span class="n">heading_angle</span><span class="o">-</span><span class="n">phi</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">weight_function</span><span class="o">==</span><span class="s1">&#39;cos2&#39;</span><span class="p">:</span>
+            <span class="n">sw</span>  <span class="o">=</span> <span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cos</span><span class="p">(</span><span class="n">heading_angle</span><span class="o">-</span><span class="n">phi</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sw</span>  <span class="o">=</span> <span class="n">weight_function</span><span class="p">(</span><span class="n">heading_angle</span><span class="o">-</span><span class="n">phi</span><span class="p">)</span>
         
-        <span class="c1"># Infer and save</span>
+        <span class="c1"># Prepare new model with reweighted data</span>
+        <span class="n">data2</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reweighted</span><span class="p">(</span><span class="n">sw</span><span class="p">)</span>
         <span class="n">hmodel</span> <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">kv</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data2</span><span class="p">,</span>
-            <span class="n">prior_mean</span><span class="o">=</span><span class="n">data2</span><span class="o">.</span><span class="n">prior_mean</span><span class="p">,</span>
+            <span class="n">prior_mean</span>   <span class="o">=</span><span class="n">data2</span><span class="o">.</span><span class="n">prior_mean</span><span class="p">,</span>
             <span class="n">lograte_guess</span><span class="o">=</span><span class="n">data2</span><span class="o">.</span><span class="n">lograte_guess</span><span class="p">)</span>
+        
+        <span class="c1"># Infer posterior mean rate</span>
         <span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">l</span> <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">hmodel</span><span class="p">,</span>
             <span class="n">initialmean</span><span class="o">=</span><span class="n">μh</span><span class="p">,</span><span class="n">initialcov</span><span class="o">=</span><span class="n">v</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
         <span class="n">rate</span>   <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">hmodel</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@μh</span><span class="o">+</span><span class="n">v</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
+
+        <span class="c1"># Find peaks</span>
         <span class="n">thresh</span> <span class="o">=</span> <span class="n">nanpercentile</span><span class="p">(</span><span class="n">rate</span><span class="p">[</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span><span class="p">],</span><span class="n">threshold</span><span class="p">)</span>
-        <span class="n">hpeaks</span> <span class="o">=</span> <span class="n">interpolate_peaks</span><span class="p">(</span><span class="n">rate</span><span class="p">,</span><span class="n">height_threshold</span><span class="o">=</span><span class="n">thresh</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">ok</span>     <span class="o">=</span> <span class="n">is_in_hull</span><span class="p">(</span><span class="n">hpeaks</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">hull</span><span class="p">)</span>
-        <span class="n">peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hpeaks</span><span class="p">[:,</span><span class="n">ok</span><span class="p">])</span>
+        <span class="n">hpeaks</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">interpolate_peaks</span><span class="p">(</span>
+            <span class="n">rate</span><span class="p">,</span>
+            <span class="n">clearance_radius</span> <span class="o">=</span> <span class="n">clearance_radius</span><span class="p">,</span>
+            <span class="n">height_threshold</span> <span class="o">=</span> <span class="o">-</span><span class="n">inf</span><span class="p">,</span><span class="c1">#thresh,</span>
+            <span class="n">return_heights</span>   <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">hpeaks</span> <span class="o">=</span> <span class="n">hpeaks</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        
+        <span class="c1"># Restrict to hull</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="n">is_in_hull</span><span class="p">(</span><span class="n">hpeaks</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">arena</span><span class="o">.</span><span class="n">hull</span><span class="p">)</span>
+        <span class="n">hpeaks</span> <span class="o">=</span> <span class="n">hpeaks</span><span class="p">[:,</span><span class="n">ok</span><span class="p">]</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="p">[</span><span class="n">ok</span><span class="p">]</span>
+        
+        <span class="c1"># Save</span>
+        <span class="n">peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hpeaks</span><span class="p">)</span>
+        <span class="n">heights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+        <span class="n">models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">fits</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">rate</span><span class="p">))</span>
     
-    <span class="k">return</span> <span class="n">peaks</span></div>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">peaks</span><span class="p">,)</span>
+    <span class="k">if</span> <span class="n">return_heights</span><span class="p">:</span> <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span><span class="n">heights</span><span class="p">,)</span>
+    <span class="k">if</span> <span class="n">return_models</span><span class="p">:</span>  <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span><span class="n">models</span><span class="p">,)</span>
+    <span class="k">if</span> <span class="n">return_fits</span><span class="p">:</span>    <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span><span class="n">fits</span><span class="p">,)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
 
 
 <div class="viewcode-block" id="match_peaks"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.match_peaks">[docs]</a><span class="k">def</span> <span class="nf">match_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">maxd</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Matching algorithm:</span>
 <span class="sd">    </span>
 <span class="sd">     - Assume q come from an array of angles on [0,2pi)</span>
@@ -252,26 +371,29 @@
 <span class="sd">     - Build directed graph joining fields of adjacent angles</span>
 <span class="sd">     - Greedy approach</span>
 <span class="sd">        - If you&#39;re my closest match, and I&#39;m yours, pair up.</span>
-<span class="sd">        - Repeat until no more edges closer than `maxd`</span>
+<span class="sd">        - Repeat until no more edges closer than ``maxd``</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    peaks: list</span>
-<span class="sd">        Length NANGLES list of 2×NPEAKS float32 arrays with </span>
-<span class="sd">        (x,y) locations of peaks at each heading angle</span>
+<span class="sd">        Length ``NANGLES`` list of ``2×NPEAKS`` ``np.float32`` </span>
+<span class="sd">        arrays with (x,y) locations of peaks at each </span>
+<span class="sd">        heading angle.</span>
 <span class="sd">    maxd: </span>
 <span class="sd">        The maximum distance between peaks allowed when </span>
-<span class="sd">        connecting them</span>
+<span class="sd">        connecting them (in the same units as ``peaks``).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    edges: list</span>
-<span class="sd">        Length NANGLES list of edge sets for each pair of </span>
-<span class="sd">        headings. Each list entry is a 2×NEDGES int32 array.</span>
-<span class="sd">        This contains pairs of indecies (a,b).</span>
-<span class="sd">        For edge set i, index a is the index into peaks[i]</span>
-<span class="sd">        (edge source) and index b is the index into </span>
-<span class="sd">        peaks[(i+1)%Nφ] (edge target).</span>
+<span class="sd">        A length ``NANGLES`` list of edge sets for </span>
+<span class="sd">        each pair of headings.</span>
+<span class="sd">        Each list entry is a 2×NEDGES int32 array.</span>
+<span class="sd">         - This contains pairs of indecies (a,b).</span>
+<span class="sd">           - ``a`` is the index into peaks[i]</span>
+<span class="sd">             (the node source of this edge)</span>
+<span class="sd">          - ``b`` is the index into ``peaks[(i+1)%Nφ]`` </span>
+<span class="sd">            (the node target of this edge).</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">q</span>  <span class="o">=</span> <span class="p">[</span><span class="n">p2c</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
     <span class="n">Nφ</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
@@ -316,11 +438,12 @@
     <span class="n">edges</span> <span class="o">=</span> <span class="p">[</span><span class="n">int32</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">ee</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span> <span class="k">for</span> <span class="n">ee</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">edges</span></div>
 
+
 <div class="viewcode-block" id="pair_points"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.pair_points">[docs]</a><span class="k">def</span> <span class="nf">pair_points</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span><span class="n">z2</span><span class="p">,</span><span class="n">connection_radius</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Greedily associate nearest-neighbors between two</span>
-<span class="sd">    point sets `z1` and `z2`, limiting matches to points closer</span>
-<span class="sd">    than `connection_radius` apart. 2D points are encoded as</span>
+<span class="sd">    point sets ``z1`` and ``z2``, limiting matches to points closer</span>
+<span class="sd">    than ``connection_radius`` apart. 2D points are encoded as</span>
 <span class="sd">    complex numbers.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -345,20 +468,20 @@
 
 
 <div class="viewcode-block" id="extract_as_paths"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.extract_as_paths">[docs]</a><span class="k">def</span> <span class="nf">extract_as_paths</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">edges</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Convert tracked (peaks,edges) to a list of 2D paths.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    peaks: list </span>
-<span class="sd">        Length NANGLES list of 2xNPEAKS np.float32 arrays </span>
+<span class="sd">        Length ``NANGLES`` list of 2xNPEAKS np.float32 arrays </span>
 <span class="sd">        containing (rx,ry) peak locations at a list of </span>
 <span class="sd">        heading angles, as returned  by </span>
-<span class="sd">        `get_peaks_at_heading_angles()`.</span>
+<span class="sd">        ``get_peaks_at_heading_angles()``.</span>
 <span class="sd">    edges: list</span>
-<span class="sd">        Length NANGLES list of edge sets for each pair of </span>
-<span class="sd">        headings, as returned by `match_peaks` or </span>
-<span class="sd">        `link_peaks()`. Each list entry is a 2×NEDGES int32 </span>
+<span class="sd">        Length ``NANGLES`` list of edge sets for each pair of </span>
+<span class="sd">        headings, as returned by ``match_peaks`` or </span>
+<span class="sd">        ``link_peaks()``. Each list entry is a 2×NEDGES int32 </span>
 <span class="sd">        array. This contains pairs of indecies (a,b). For </span>
 <span class="sd">        edge set i, index a is the index into peaks[i] (edge </span>
 <span class="sd">        source) and index b is the index into </span>
@@ -367,20 +490,23 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    paths: list</span>
-<span class="sd">        List of npoints x 2 path data for each connected</span>
+<span class="sd">        Length ``N_COMPONENTS`` list of</span>
+<span class="sd">        ``NPOINTS`` x 2 path data for each connected</span>
 <span class="sd">        component</span>
 <span class="sd">    chains: list</span>
-<span class="sd">        Chained node-information in format of (iphi,ipeak)</span>
+<span class="sd">        Length ``N_COMPONENTS`` list of</span>
+<span class="sd">        chained node-information in format of (iphi,ipeak)</span>
 <span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># Get components sharing edges</span>
     <span class="c1"># Start by finding connected fields at nearby angles</span>
-    <span class="c1"># `cc` stores a list of sets of connected nodes.</span>
+    <span class="c1"># ``cc`` stores a list of sets of connected nodes.</span>
     <span class="c1"># The node ID format is (angle #, point ID @ angle #)</span>
     <span class="c1"># The point IDs are the same as the outgoing edge info #</span>
     <span class="c1"># in the edges datastructure.</span>
+    
     <span class="n">Nphi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
-    <span class="n">cc</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cc</span>   <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i0</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Nphi</span><span class="p">):</span>
         <span class="n">i1</span> <span class="o">=</span> <span class="p">(</span><span class="n">i0</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">Nphi</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">i0</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">i1</span><span class="p">])</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
@@ -402,8 +528,8 @@
         <span class="n">cc</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cc</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)]</span>
 
     <span class="n">chains</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cc</span><span class="p">:</span>
+    <span class="n">paths</span>  <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ic</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cc</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">&lt;</span><span class="n">Nphi</span><span class="o">//</span><span class="mi">2</span><span class="p">:</span> <span class="k">continue</span>
 
         <span class="c1"># Pick up the chain </span>
@@ -426,11 +552,75 @@
                     <span class="n">remove</span> <span class="o">=</span> <span class="n">link</span>
                     <span class="k">break</span>
             <span class="n">links</span> <span class="o">-=</span> <span class="p">{</span><span class="n">remove</span><span class="p">}</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">float32</span><span class="p">([</span><span class="n">peaks</span><span class="p">[</span><span class="n">iphi</span><span class="p">][:,</span><span class="n">ipeak</span><span class="p">]</span> \
-                        <span class="k">for</span> <span class="n">iphi</span><span class="p">,</span><span class="n">ipeak</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">])</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        ``chain`` is a list of tuples ``(iphi,ipeak)``</span>
+<span class="sd">        where a is ``iphi`` the angle index of the node</span>
+<span class="sd">        and ``ipeak`` is the peak index for the node</span>
+<span class="sd">        in the list if oeajs at ``iphi``</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">il</span><span class="p">,(</span><span class="n">iphi</span><span class="p">,</span><span class="n">ipeak</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chain</span><span class="p">):</span>
+            <span class="n">pp</span> <span class="o">=</span> <span class="n">peaks</span><span class="p">[</span><span class="n">iphi</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">ipeak</span><span class="o">&gt;=</span><span class="n">pp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s1">&#39;extract_as_paths(peaks,edges): error&#39;</span><span class="p">,</span>
+                    <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s1">&#39;chain </span><span class="si">%d</span><span class="s1"> link </span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">ic</span><span class="p">,</span><span class="n">il</span><span class="p">),</span>
+                    <span class="s1">&#39;(iphi,ipeak) = (</span><span class="si">%d</span><span class="s1">,</span><span class="si">%d</span><span class="s1">)&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">iphi</span><span class="p">,</span><span class="n">ipeak</span><span class="p">),</span>
+                    <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s1">&#39;len(peaks[iphi]): </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span>
+                    <span class="n">shape</span><span class="p">(</span><span class="n">peaks</span><span class="p">[</span><span class="n">iphi</span><span class="p">])[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">((</span>
+                    <span class="s1">&#39;Edge index </span><span class="si">%d</span><span class="s1"> is out of bounds for &#39;</span>
+                    <span class="s1">&#39;peak list at angle </span><span class="si">%d</span><span class="s1">, &#39;</span>
+                    <span class="s1">&#39;which has length </span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="p">(</span>
+                    <span class="n">ipeak</span><span class="p">,</span>
+                    <span class="n">iphi</span><span class="p">,</span>
+                    <span class="n">shape</span><span class="p">(</span><span class="n">pp</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="p">)</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pp</span><span class="p">[:,</span><span class="n">ipeak</span><span class="p">])</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+                          
         <span class="n">paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
         <span class="n">chains</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chain</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">paths</span><span class="p">,</span><span class="n">chains</span></div>
+
+
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NamedTuple</span>
+<div class="viewcode-block" id="PathInfo"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.PathInfo">[docs]</a><span class="k">class</span> <span class="nc">PathInfo</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">path</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">centroid</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span></div>
+
+<div class="viewcode-block" id="path_information"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.path_information">[docs]</a><span class="k">def</span> <span class="nf">path_information</span><span class="p">(</span><span class="n">centroids</span><span class="p">,</span> <span class="n">peaks</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">maxd</span><span class="o">=</span><span class="n">inf</span><span class="p">):</span>
+    <span class="n">Nphi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+    <span class="n">paths</span><span class="p">,</span> <span class="n">chains</span>  <span class="o">=</span> <span class="n">extract_as_paths</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">edges</span><span class="p">)</span>
+    <span class="n">path_centroids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">])</span>
+    <span class="n">path_regions</span>   <span class="o">=</span> <span class="n">assign_to_regions</span><span class="p">(</span><span class="n">centroids</span><span class="p">,</span> <span class="n">path_centroids</span><span class="p">,</span> <span class="n">maxd</span><span class="o">=</span><span class="n">maxd</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">path_regions</span><span class="p">[</span><span class="n">path_regions</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">({</span><span class="o">*</span><span class="n">q</span><span class="p">}):</span>
+        <span class="n">uu</span><span class="p">,</span><span class="n">ct</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">bad</span> <span class="o">=</span> <span class="n">uu</span><span class="p">[</span><span class="n">ct</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">whichbad</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">qi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="k">if</span> <span class="n">qi</span> <span class="ow">in</span> <span class="n">bad</span><span class="p">]</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">((</span>
+            <span class="s1">&#39;Multiple paths </span><span class="si">%s</span><span class="s1"> all map to region(s) </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="p">(</span>
+            <span class="n">whichbad</span><span class="p">,</span> <span class="n">bad</span><span class="p">))</span>
+            
+    <span class="n">pathinfo</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">ipath</span><span class="p">,</span> <span class="n">iregion</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">path_regions</span><span class="p">):</span>
+        <span class="n">iphis</span><span class="p">,</span><span class="n">ipeaks</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">chains</span><span class="p">[</span><span class="n">ipath</span><span class="p">]))</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">Nphi</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">,</span><span class="s1">&#39;f&#39;</span><span class="p">)</span>
+        <span class="n">path</span><span class="p">[</span><span class="n">iphis</span><span class="p">]</span> <span class="o">=</span> <span class="n">paths</span><span class="p">[</span><span class="n">ipath</span><span class="p">]</span>
+        <span class="n">pathinfo</span><span class="p">[</span><span class="n">iregion</span><span class="p">]</span> <span class="o">=</span> <span class="n">PathInfo</span><span class="p">(</span>
+            <span class="n">path</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">in</span> <span class="n">pathinfo</span><span class="p">:</span> <span class="k">del</span> <span class="n">pathinfo</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">pathinfo</span></div>
 
 
 <div class="viewcode-block" id="link_peaks"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.link_peaks">[docs]</a><span class="k">def</span> <span class="nf">link_peaks</span><span class="p">(</span>
@@ -438,10 +628,10 @@
         <span class="n">maxd</span><span class="p">,</span>
         <span class="n">max_end_distance</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Cleans up the result from `match_peaks()`, removing any</span>
-<span class="sd">    peaks that aren&#39;t tracked unambiguously over a range of</span>
-<span class="sd">    heading angles. </span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Cleans up the result from ``match_peaks()``, removing </span>
+<span class="sd">    any peaks that aren&#39;t tracked unambiguously over a range </span>
+<span class="sd">    of heading angles. </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -463,11 +653,19 @@
 <span class="sd">    edges: list</span>
 <span class="sd">        A graph connecting peaks putatively associated with</span>
 <span class="sd">        the same grid field at different heading angles. </span>
-<span class="sd">        This has the same length as the `heading_angles` </span>
-<span class="sd">        argument. The format is the same as the result </span>
-<span class="sd">        returned by `match_peaks`, but edges from peaks that</span>
+<span class="sd">        The format is the same as the result </span>
+<span class="sd">        returned by ``match_peaks``, but edges from peaks that</span>
 <span class="sd">        aren&#39;t tracked unambiguously over a range of heading </span>
 <span class="sd">        angles have been removed.</span>
+<span class="sd">         - This is a length ``NANGLES`` list of edge sets for </span>
+<span class="sd">        each pair of headings.</span>
+<span class="sd">         - Each list entry is a 2×NEDGES int32 array.</span>
+<span class="sd">           - This contains pairs of indecies (a,b).</span>
+<span class="sd">             - ``a`` is the index into peaks[i]</span>
+<span class="sd">               (the node source of this edge)</span>
+<span class="sd">            - ``b`` is the index into ``peaks[(i+1)%Nφ]`` </span>
+<span class="sd">              (the node target of this edge).</span>
+<span class="sd">        </span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">edges</span> <span class="o">=</span> <span class="n">match_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">maxd</span><span class="p">)</span>    
@@ -520,40 +718,88 @@
 
 
 <div class="viewcode-block" id="plot_tracked_peaks"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.plot_tracked_peaks">[docs]</a><span class="k">def</span> <span class="nf">plot_tracked_peaks</span><span class="p">(</span>
-        <span class="n">peaks</span><span class="p">,</span>
-        <span class="n">edges</span><span class="p">,</span>
-        <span class="n">perim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">compass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">color</span><span class="o">=</span><span class="n">riley</span><span class="o">.</span><span class="n">reversed</span><span class="p">(),</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="n">peaks</span><span class="p">,</span>
+    <span class="n">edges</span><span class="p">,</span>
+    <span class="n">perim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">compass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">riley</span><span class="p">,</span>
+    <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
+    <span class="n">hideaxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Plot connected grid fields. Use this with </span>
-<span class="sd">    `get_peaks_at_heading_angles()` and `link_peaks()`.</span>
+<span class="sd">    ``get_peaks_at_heading_angles()`` and ``link_peaks()``.</span>
 <span class="sd">    </span>
-<span class="sd">    Assumptions: Orient Cartesian (x,y) plane in the </span>
-<span class="sd">    standard way, with +y upwards and +x rightwards.</span>
-<span class="sd">    Then heading angles are: </span>
+<span class="sd">    </span>
+<span class="sd">    #### Angle conventions:</span>
+<span class="sd">    </span>
+<span class="sd">    The indecies ``iφ ∈ {0,..,NANGLES-1}``into the length-</span>
+<span class="sd">    ``NANGLES`` arguments ``peaks`` and ``edges`` are assumed </span>
+<span class="sd">    to correpond to equally-spaced angles, starting at </span>
+<span class="sd">    ``φ=0``; that is, ``phi = linspace(0,2*pi,NANGLES+1)[:-1]``.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    #### Colors:</span>
+<span class="sd">    </span>
+<span class="sd">    This is designed to be used with the ``riley`` </span>
+<span class="sd">    colormap from ``lgcpspatial.plot``. This map starts at </span>
+<span class="sd">    mauve, continues through rust, olive, blue, before </span>
+<span class="sd">    circling back to mauve. We use these color–direction</span>
+<span class="sd">    conventions: </span>
+<span class="sd">    </span>
+<span class="sd">     - North: blue/azure/cyan</span>
+<span class="sd">     - South: red/rust</span>
+<span class="sd">     - East:  green/olive</span>
+<span class="sd">     - West:  purple/mauve/magenta</span>
+<span class="sd">    </span>
+<span class="sd">    For comatibility, then, the direction ordering</span>
+<span class="sd">    for the colormap parameter ``color`` should be</span>
+<span class="sd">    </span>
+<span class="sd">        {West, South, East, North}</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    #### Axis orientation:</span>
+<span class="sd">    </span>
+<span class="sd">    If the keyword argument ``origin`` is ``&#39;lower&#39;`` (the</span>
+<span class="sd">    default value), heading angles are interpreted as</span>
+<span class="sd">    the usual definition of polar coordinates on the</span>
+<span class="sd">    Cartesian plane. That is, we assume an axis where</span>
+<span class="sd">    ``(x,y)=(0,0)`` corresponds to the *lower left* </span>
+<span class="sd">    (southwest) corner, and measure angles as staring</span>
+<span class="sd">    at ``0`` for &quot;East&quot;, then increasing as we rotate</span>
+<span class="sd">    counter-clockwise:</span>
 <span class="sd">    </span>
 <span class="sd">      - 0   : rightwards (eastwards)</span>
-<span class="sd">      - ½π  : upwards    (northwards)</span>
+<span class="sd">      - π/2 : upwards    (northwards)</span>
 <span class="sd">      - π   : leftwards  (westwards)</span>
 <span class="sd">      - 3π/2: downwards  (southwards)</span>
-<span class="sd">        </span>
-<span class="sd">    This assumes that peaks and edges are both</span>
-<span class="sd">    taken from angles samples on [0,2π), where the</span>
-<span class="sd">    angles are linspace(0,2*pi,len(peaks)+1)[:-1].</span>
+<span class="sd">    </span>
+<span class="sd">    If the keyword argument ``origin`` is ``&#39;upper&#39;``, use</span>
+<span class="sd">    image-coordinate conventions. This is the convention </span>
+<span class="sd">    used in Krupic lab datasets and publications.</span>
+<span class="sd">    For image coordinates, ``(x,y)=(0,0)`` corresponds to the</span>
+<span class="sd">    top-left (northwest) corner. </span>
+<span class="sd">    </span>
+<span class="sd">      - 0   : rightwards (eastwards)</span>
+<span class="sd">      - π/2 : downwards  (southwards)</span>
+<span class="sd">      - π   : leftwards  (westwards)</span>
+<span class="sd">      - 3π/2: upwards    (northwards)</span>
+<span class="sd">    </span>
+<span class="sd">    **Note:** Unlike ``matplotlib.imshow()``, using</span>
+<span class="sd">    ``oring=&#39;upper&#39;`` will cause the y-axis to be flipped</span>
+<span class="sd">    so that smaller ``y`` values are at the top. </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    peaks: list </span>
-<span class="sd">        Length NANGLES list of 2xNPEAKS np.float32 arrays </span>
+<span class="sd">        Length ``NANGLES`` list of 2xNPEAKS np.float32 arrays </span>
 <span class="sd">        containing (rx,ry) peak locations at a list of </span>
 <span class="sd">        heading angles, as returned  by </span>
-<span class="sd">        `get_peaks_at_heading_angles()`.</span>
+<span class="sd">        ``get_peaks_at_heading_angles()``.</span>
 <span class="sd">    edges: list</span>
-<span class="sd">        Length NANGLES list of edge sets for each pair of </span>
-<span class="sd">        headings, as returned by `match_peaks` or </span>
-<span class="sd">        `link_peaks()`. Each list entry is a 2×NEDGES int32 </span>
+<span class="sd">        Length ``NANGLES`` list of edge sets for each pair of </span>
+<span class="sd">        headings, as returned by ``match_peaks`` or </span>
+<span class="sd">        ``link_peaks()``. Each list entry is a 2×NEDGES int32 </span>
 <span class="sd">        array. This contains pairs of indecies (a,b). For </span>
 <span class="sd">        edge set i, index a is the index into peaks[i] (edge </span>
 <span class="sd">        source) and index b is the index into </span>
@@ -566,39 +812,105 @@
 <span class="sd">        perimeter to add to plot. Optional, default is None.</span>
 <span class="sd">    compass: bool</span>
 <span class="sd">        Draw colored compass rose if true</span>
-<span class="sd">    color: matplotlib color</span>
-<span class="sd">        Color or colormap to use for heading angles</span>
-<span class="sd">        defaults to the custom `riley` circular color map.</span>
+<span class="sd">    cmap_fn: matplotlib.colors.Colormap</span>
+<span class="sd">        colormap to use for heading angles</span>
+<span class="sd">        defaults to the custom ``riley`` circular color map.</span>
+<span class="sd">        Should be a callable :``[0,1]→(r,g,b,a)``</span>
+<span class="sd">        where color components ``rgba`` are floats in ``[0,1]``.</span>
+<span class="sd">    origin: str; default &#39;lower&#39;</span>
+<span class="sd">        String in ``{&#39;lower&#39;,&#39;upper&#39;}`` (compare to </span>
+<span class="sd">        ``matplotlib.imshow()``). </span>
+<span class="sd">    hideaxis: boolean; default True</span>
+<span class="sd">        Hide the axis</span>
 <span class="sd">    **kwargs:</span>
-<span class="sd">        Forwarded to `plot()`</span>
+<span class="sd">        Forwarded to ``plot()``</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">Nphi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
-    <span class="n">q</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@pk</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
     
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">perim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">perim</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
-        <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">perim</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
-        
+    <span class="c1"># Argument validation</span>
+    <span class="n">ori</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ori</span> <span class="ow">in</span> <span class="s1">&#39;lu&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span>
+            <span class="s2">&quot;The ``origin`` parameter should be &#39;lower&#39; or &quot;</span>
+            <span class="s2">&quot;&#39;upper&#39;; hot &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">)</span><span class="o">%</span><span class="n">origin</span><span class="p">)</span>
+    <span class="n">origin</span> <span class="o">=</span> <span class="n">ori</span>
+    
+    <span class="c1"># look up color map string</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">color</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colormaps</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">pass</span> <span class="c1"># Assume it&#39;s something like &#39;r&#39; &#39;g&#39; &#39;b&#39;</span>
+            <span class="k">pass</span>
     
+    <span class="n">Nphi</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@pk</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
+    
+    <span class="c1"># Plot the boundary if given</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">perim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">perim</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">perim</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Plot segments between each angle pair as a single</span>
+    <span class="c1"># NaN-delimited path (faster)</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">ee</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">edges</span><span class="p">):</span>
+        <span class="c1"># Skip angles with no edges</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ee</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="k">continue</span>
+        <span class="c1"># Get (source, target) indecies of edges</span>
         <span class="n">ia</span><span class="p">,</span><span class="n">ib</span> <span class="o">=</span> <span class="n">ee</span>
+        <span class="c1"># Look up point positions</span>
         <span class="n">za</span><span class="p">,</span><span class="n">zb</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">ia</span><span class="p">],</span><span class="n">q</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="n">Nphi</span><span class="p">][</span><span class="n">ib</span><span class="p">]</span>
+        <span class="c1"># Generate NaN-delimited line-segment data</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="n">ravel</span><span class="p">(</span><span class="n">array</span><span class="p">([</span><span class="n">za</span><span class="p">,</span><span class="n">zb</span><span class="p">,</span><span class="n">NaN</span><span class="o">*</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">za</span><span class="p">))])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="n">color</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="n">Nphi</span><span class="p">)</span>\
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Colormap</span><span class="p">)</span>\
-            <span class="k">else</span> <span class="n">color</span>
+        <span class="c1"># Pick color</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Colormap</span><span class="p">):</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">i</span><span class="o">/</span><span class="n">Nphi</span>
+<span class="w">            </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">            ### For ``origin=&#39;lower&#39;``: </span>
+<span class="sd">            </span>
+<span class="sd">            Color map order + conventions: </span>
+<span class="sd">             - 0.00 West:  purple/mauve/magenta</span>
+<span class="sd">             - 0.25 South: red/rust</span>
+<span class="sd">             - 0.50 East:  green/olive</span>
+<span class="sd">             - 0.75 North: blue/azure/cyan</span>
+<span class="sd">            Angle order (r * 2π):</span>
+<span class="sd">             - 0   : rightwards (eastwards)</span>
+<span class="sd">             - π/2 : upwards    (northwards)</span>
+<span class="sd">             - π   : leftwards  (westwards)</span>
+<span class="sd">             - 3π/2: downwards  (southwards)</span>
+<span class="sd">            We need to re-map as this: </span>
+<span class="sd">                0.00 → 0.50</span>
+<span class="sd">                0.25 → 0.75</span>
+<span class="sd">                0.50 → 0.00</span>
+<span class="sd">                0.75 → 0.25</span>
+<span class="sd">            This can be achieved by adding 0.5 and</span>
+<span class="sd">            taking modulo 1. </span>
+
+<span class="sd">            ### For ``origin=&#39;upper&#39;``:</span>
+<span class="sd">            </span>
+<span class="sd">            Angle order (r * 2π):</span>
+<span class="sd">             - 0   : rightwards (eastwards)</span>
+<span class="sd">             - π/2 : downwards  (southwards)</span>
+<span class="sd">             - π   : leftwards  (westwards)</span>
+<span class="sd">             - 3π/2: upwards    (northwards)</span>
+
+<span class="sd">            We need to re-map as this: </span>
+
+<span class="sd">                0.00 → 0.50</span>
+<span class="sd">                0.25 → 0.25</span>
+<span class="sd">                0.50 → 0.00</span>
+<span class="sd">                0.75 → 0.75</span>
+
+<span class="sd">            This can be achieved by flipping q to 1-q,</span>
+<span class="sd">            then adding .5 and taking modulo 0</span>
+<span class="sd">            &#39;&#39;&#39;</span>
+            <span class="k">if</span> <span class="n">origin</span><span class="o">==</span><span class="s1">&#39;u&#39;</span><span class="p">:</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">r</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">color</span><span class="p">((</span><span class="n">r</span><span class="o">+</span><span class="mf">.5</span><span class="p">)</span><span class="o">%</span><span class="mf">1.0</span><span class="p">)</span>
         <span class="n">plot</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span><span class="n">imag</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span>
              <span class="o">**</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="n">c</span><span class="p">,</span><span class="s1">&#39;lw&#39;</span><span class="p">:</span><span class="mf">.6</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">})</span>
     
-    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;square&#39;</span><span class="p">);</span>
+    <span class="n">force_aspect</span><span class="p">()</span>
     <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Tracked peaks&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">hideaxis</span><span class="p">:</span> 
+        <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
     
     <span class="k">if</span> <span class="ow">not</span> <span class="n">perim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">xyd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">perim</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">perim</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
@@ -609,14 +921,21 @@
         <span class="n">xyd</span> <span class="o">=</span> <span class="n">xy1</span> <span class="o">-</span> <span class="n">xy0</span>
         <span class="n">xy0</span> <span class="o">=</span> <span class="n">xy1</span>
     
+    <span class="c1"># Flip axis first, draw_compass will notice this.</span>
+    <span class="k">if</span> <span class="n">origin</span><span class="o">==</span><span class="s1">&#39;u&#39;</span><span class="p">:</span>
+        <span class="n">y0</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">ylim</span><span class="p">())</span>
+        <span class="n">ylim</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span><span class="n">y0</span><span class="p">)</span>
+    
     <span class="k">if</span> <span class="n">compass</span><span class="p">:</span>
         <span class="n">draw_compass</span><span class="p">(</span>
-            <span class="n">xy0</span><span class="o">=</span><span class="n">p2c</span><span class="p">(</span><span class="n">xy0</span><span class="p">)</span><span class="o">+</span><span class="mf">0.2</span><span class="o">*</span><span class="n">xyd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">.3</span><span class="n">j</span><span class="o">*</span><span class="n">xyd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="n">r</span><span class="o">=</span><span class="n">mean</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">xyd</span><span class="p">))</span><span class="o">*</span><span class="mf">0.05</span><span class="p">)</span></div>
+            <span class="n">xy0</span>   <span class="o">=</span> <span class="n">p2c</span><span class="p">(</span><span class="n">xy0</span><span class="p">)</span><span class="o">+</span><span class="mf">0.2</span><span class="o">*</span><span class="n">xyd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">.3</span><span class="n">j</span><span class="o">*</span><span class="n">xyd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">r</span>     <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">xyd</span><span class="p">))</span><span class="o">*</span><span class="mf">0.04</span><span class="p">,</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+            <span class="n">cmap_fn</span> <span class="o">=</span> <span class="n">color</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="locate_opposites"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.locate_opposites">[docs]</a><span class="k">def</span> <span class="nf">locate_opposites</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">maxd</span><span class="p">,</span><span class="n">starti</span><span class="p">,</span><span class="n">edges</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    To be used on the result of calling match_peaks()</span>
 
 <span class="sd">    ### Algorithm: </span>
@@ -630,28 +949,30 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    peaks: list</span>
-<span class="sd">        List of 2×NPEAKS float32 arrays containing (x,y)</span>
-<span class="sd">        locations of peaks at each of the angles specified</span>
-<span class="sd">        by the list of heading angles `heading_angles`.</span>
+<span class="sd">        Length ``NANGLES`` list of ``2×NPEAKS`` ``np.float32`` </span>
+<span class="sd">        arrays with (x,y) locations of peaks at each </span>
+<span class="sd">        heading angle.</span>
 <span class="sd">    maxd: </span>
 <span class="sd">        The maximum distance between peaks allowed when </span>
 <span class="sd">        connecting them</span>
-<span class="sd">    starti: </span>
+<span class="sd">    starti: int ∈ {0,..,``NANGLES``-1}</span>
 <span class="sd">        The angle (index) to start at as a &quot;seed&quot;.</span>
 <span class="sd">    edges: returned by match_peaks(Nφ,q,maxd)</span>
-<span class="sd">        lenghth Nφ list of 2×NCONNECTED edge sets containing</span>
-<span class="sd">        indecies into the point sets (source) and targets in </span>
-<span class="sd">        the next adjacent direction</span>
+<span class="sd">        lenghth ``NANGLES`` list of ``2×NCONNECTED`` edge sets </span>
+<span class="sd">        containing indecies into the point sets (source) and</span>
+<span class="sd">        targets in  the next adjacent direction.</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    iop: int</span>
-<span class="sd">        Index between 0 and Nφ-1 into the q list of the </span>
-<span class="sd">        opposite-heading fields</span>
-<span class="sd">    op: int32</span>
+<span class="sd">    iop: int (scalar)</span>
+<span class="sd">        Index ``iop ∈ {0,..,NANGLES-1}`` opposite of the </span>
+<span class="sd">        direction associated with the seed index given by</span>
+<span class="sd">        ``starti ∈ {0,..,NANGLES-1}``. </span>
+<span class="sd">        This should be ``( starti + NANGLES//2 ) % NANGLES``.</span>
+<span class="sd">    op: np.int32</span>
 <span class="sd">        Indecies of matching field in direction </span>
-<span class="sd">        `q[iop]` for each field `q[istart]`.</span>
-<span class="sd">        If no match exists, -1</span>
+<span class="sd">        ``peaks[iop]`` for each field ``peaks[istart]``</span>
+<span class="sd">        (or -1 is no match exists).</span>
 <span class="sd">    dd: float32</span>
 <span class="sd">        Distance to matched peak, or NaN it not matched.</span>
 <span class="sd">        </span>
@@ -704,19 +1025,22 @@
             <span class="c1">#print(&#39;Remapped&#39;,other,&#39;to&#39;,pick)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">op</span><span class="p">[</span><span class="n">other</span><span class="p">]</span> <span class="o">=</span> <span class="n">dd</span><span class="p">[</span><span class="n">other</span><span class="p">]</span> <span class="o">=</span> <span class="n">NaN</span>
-    <span class="k">return</span> <span class="n">iop</span><span class="p">,</span><span class="n">int32</span><span class="p">(</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">nan</span><span class="o">=-</span><span class="mi">1</span><span class="p">)),</span><span class="n">dd</span></div>
+    <span class="k">return</span> <span class="n">iop</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">op</span><span class="p">,</span><span class="n">nan</span><span class="o">=-</span><span class="mi">1</span><span class="p">)),</span><span class="n">dd</span></div>
 
 
 <div class="viewcode-block" id="plot_connection_arrow"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.plot_connection_arrow">[docs]</a><span class="k">def</span> <span class="nf">plot_connection_arrow</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="p">,</span><span class="n">op</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Draw arrows connecting related fields from two maps. </span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    op: for every index in q1, corresponding index in q2</span>
-<span class="sd">        or -1 if no connection</span>
-<span class="sd">    q1: field centers in map 1 (as x+iy complex numbers)</span>
-<span class="sd">    q2: field centers in map 2 (as x+iy complex numbers)</span>
+<span class="sd">    q1: np.complex64</span>
+<span class="sd">        field centers in map 1 (as x+iy complex numbers)</span>
+<span class="sd">    q2: np.complex64</span>
+<span class="sd">        field centers in map 2 (as x+iy complex numbers)</span>
+<span class="sd">    op: np.int32</span>
+<span class="sd">        for every index in q1, corresponding index in q2</span>
+<span class="sd">        (or -1 if no connection). </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">op</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">op</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q1</span><span class="p">))</span>
@@ -732,8 +1056,14 @@
     <span class="n">plot</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span><span class="n">imag</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span><span class="o">**</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span><span class="n">RUST</span><span class="p">,</span><span class="s1">&#39;lw&#39;</span><span class="p">:</span><span class="mf">.4</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">})</span></div>
 
 
-<div class="viewcode-block" id="fit_heading_variance"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.fit_heading_variance">[docs]</a><span class="k">def</span> <span class="nf">fit_heading_variance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">θ</span><span class="p">,</span><span class="n">NSEW</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="fit_heading_variance"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.fit_heading_variance">[docs]</a><span class="k">def</span> <span class="nf">fit_heading_variance</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">,</span>
+    <span class="n">θ</span><span class="p">,</span>
+    <span class="n">NSEW</span><span class="p">,</span>
+    <span class="n">weight_function</span><span class="o">=</span><span class="s1">&#39;cos&#39;</span>
+    <span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Re-optimize the prior marginal variance for the </span>
 <span class="sd">    given set of heading-weighted models.</span>
 <span class="sd">    </span>
@@ -750,16 +1080,25 @@
 <span class="sd">    NSEW: np.float32</span>
 <span class="sd">        List of reference heading angles to recompute</span>
 <span class="sd">        </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    weight_function: str or function; default &#39;cos&#39;</span>
+<span class="sd">        Function used to compute non-negative heading</span>
+<span class="sd">        weights as a function of the difference between</span>
+<span class="sd">        the animals current heading, and the reference</span>
+<span class="sd">        orientation. Can be ``&#39;cos&#39;`` for </span>
+<span class="sd">        ``max(0,cos(Δθ))``, ``&#39;cos2&#39;`` for</span>
+<span class="sd">        ``max(0,cos(Δθ))²``, or a custom function. </span>
+<span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    models: list</span>
-<span class="sd">        A list, the same length as NSEW, containing</span>
-<span class="sd">        the models with optimized hyperparameters for each</span>
-<span class="sd">        heading angle in NSEW</span>
+<span class="sd">        Length 4 list of [N,S,E,W] results, each containing</span>
+<span class="sd">        the models with optimized hyperparameters.</span>
 <span class="sd">    fits: list</span>
-<span class="sd">        A list, the same length as NSEW, containing</span>
-<span class="sd">        the (posterior_mean, posterior_variance, loss)</span>
-<span class="sd">        tuple returned by `coordinate_descent` for </span>
+<span class="sd">        Length 4 list of [N,S,E,W] results, each containing</span>
+<span class="sd">        the ``(posterior_mean, posterior_variance, loss)``</span>
+<span class="sd">        tuple returned by ``coordinate_descent`` for </span>
 <span class="sd">        optimizing the model for each heading angle in NSEW.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># Prepare hyperparameter grid</span>
@@ -770,13 +1109,20 @@
 
     <span class="n">models</span><span class="p">,</span> <span class="n">fits</span> <span class="o">=</span> <span class="p">[],[]</span>
     <span class="k">for</span> <span class="n">iphi</span><span class="p">,</span><span class="n">phi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">NSEW</span><span class="p">):</span> 
+        
         <span class="c1"># Heading-weighted data binning</span>
-        <span class="n">sw</span>    <span class="o">=</span> <span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cos</span><span class="p">(</span><span class="n">θ</span><span class="o">-</span><span class="n">phi</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">weight_function</span><span class="o">==</span><span class="s1">&#39;cos&#39;</span><span class="p">:</span>
+            <span class="n">sw</span>  <span class="o">=</span> <span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cos</span><span class="p">(</span><span class="n">θ</span><span class="o">-</span><span class="n">phi</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">weight_function</span><span class="o">==</span><span class="s1">&#39;cos2&#39;</span><span class="p">:</span>
+            <span class="n">sw</span>  <span class="o">=</span> <span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">cos</span><span class="p">(</span><span class="n">θ</span><span class="o">-</span><span class="n">phi</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sw</span>  <span class="o">=</span> <span class="n">weight_function</span><span class="p">(</span><span class="n">θ</span><span class="o">-</span><span class="n">phi</span><span class="p">)</span>
+        
         <span class="n">data2</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reweighted</span><span class="p">(</span><span class="n">sw</span><span class="p">)</span>
         
         <span class="c1"># Loss function</span>
-        <span class="n">kv0</span>   <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">kv</span>
-        <span class="n">P</span>     <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
+        <span class="n">kv0</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">kv</span>
+        <span class="n">P</span>   <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
         <span class="k">def</span> <span class="nf">evaluate_ELBO</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span><span class="n">state</span><span class="p">):</span>
             <span class="n">β</span>       <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">μ</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">μh</span>  <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span><span class="o">*</span><span class="mi">3</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">state</span>
@@ -801,19 +1147,19 @@
 
 
 <div class="viewcode-block" id="matched_cardinal_points"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.matched_cardinal_points">[docs]</a><span class="k">def</span> <span class="nf">matched_cardinal_points</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">edges</span><span class="p">,</span><span class="n">indexNSEW</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    For each connected component from tracking peaks over</span>
 <span class="sd">    various heading angles, </span>
 <span class="sd">    return the z+iy location of all NSEW-facing points</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    peaks: length N_HEADING_ANGLES list</span>
+<span class="sd">    peaks: length ``NANGLES`` list</span>
 <span class="sd">        List of peak locations from </span>
-<span class="sd">        `get_peaks_at_heading_angles`</span>
-<span class="sd">    edges: length N_HEADING_ANGLES list</span>
+<span class="sd">        ``get_peaks_at_heading_angles``</span>
+<span class="sd">    edges: length ``NANGLES`` list</span>
 <span class="sd">        List of edges between peaks returned by</span>
-<span class="sd">        `match_peaks` or `link_peaks`</span>
+<span class="sd">        ``match_peaks`` or ``link_peaks``</span>
 <span class="sd">    indexNSEW: list</span>
 <span class="sd">        list of indecies into peaks and edges for the</span>
 <span class="sd">        directions of interest (presumed to be N,S,E,W).</span>
@@ -821,13 +1167,10 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    points: np.array</span>
-<span class="sd">        A N_COMPONENTS x len(indexNSEW) array which </span>
+<span class="sd">        A ``N_COMPONENTS × len(indexNSEW)`` array which </span>
 <span class="sd">        identifies which of the peaks at these heading</span>
-<span class="sd">        indecies are part of the same grid field. </span>
-<span class="sd">        Reach row is a list of integer indecies into </span>
-<span class="sd">        the corresponding list in the `peaks` variable</span>
-<span class="sd">        for the heading-angle-indecies specified by</span>
-<span class="sd">        `indexNSEW`.</span>
+<span class="sd">        indecies are part of the same grid field. Missing</span>
+<span class="sd">        directions are filled in with ``NaN``. </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># Find NSEW pairings from the peak tracking</span>
     <span class="c1"># List of point locations</span>
@@ -849,22 +1192,23 @@
     <span class="n">models</span><span class="p">,</span>
     <span class="n">fits</span><span class="p">,</span>
     <span class="n">angles</span><span class="p">,</span>
-    <span class="n">exclusion_radius</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">edge_radius</span>      <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">exclusion_radius</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">edge_radius</span>      <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
     <span class="n">nsamples</span>         <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span>
     <span class="n">resolution</span>       <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-    <span class="n">height_threshold</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
-    <span class="n">prpeak_threshold</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">height_threshold</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+    <span class="n">prpeak_threshold</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
     <span class="n">doplot</span>           <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">names</span>            <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">colors</span>           <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;</span>
+    <span class="n">colors</span>           <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">confidence_mode</span>  <span class="o">=</span> <span class="s1">&#39;quadratic&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Sample confidence intervals, and plot, for a collection</span>
 <span class="sd">    of models fit to (North, South, East, West) heading </span>
 <span class="sd">    angles. </span>
 <span class="sd">    </span>
-<span class="sd">    Apply this to the lists`models` and `fits` returned by</span>
-<span class="sd">    `fit_heading_variance(data,model,heading,angles)`.</span>
+<span class="sd">    Apply this to the lists``models`` and ``fits`` returned </span>
+<span class="sd">    by ``fit_heading_variance(data,model,heading,angles)``.</span>
 <span class="sd">    </span>
 <span class="sd">    This routine re-optimizes the kernel parameters </span>
 <span class="sd">    via grid-search for each heading angle, and calculates</span>
@@ -876,23 +1220,24 @@
 <span class="sd">    models: list</span>
 <span class="sd">        List of N Models</span>
 <span class="sd">    fits: list</span>
-<span class="sd">        List of N fits returned by `coordinate_descent`</span>
+<span class="sd">        List of N fits returned by ``coordinate_descent``</span>
 <span class="sd">    angles: list of floats</span>
 <span class="sd">        List of heading directions for each model</span>
 <span class="sd">        </span>
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
-<span class="sd">    exclusion_radius: positive float</span>
-<span class="sd">        Region a peak must clear to be a local maximum,</span>
-<span class="sd">        In units of pixels in the L×L grid.</span>
-<span class="sd">        If `None`, defaults to `models[0].P/2.5`.</span>
-<span class="sd">    edge_radius: positive float</span>
-<span class="sd">        Remove peaks closer than `edge_radius` bins</span>
+<span class="sd">    radius: positive float; default 0.45</span>
+<span class="sd">        Region in which peak must be a local maximum to </span>
+<span class="sd">        be considered a grid field. </span>
+<span class="sd">        This is in units of </span>
+<span class="sd">        **fraction of the grid-cell period ``model.P``**.</span>
+<span class="sd">    edge_radius: positive float; Default 0.0</span>
+<span class="sd">        Remove peaks closer than ``edge_radius`` bins</span>
 <span class="sd">        to the arena&#39;s edge. The default value of 0</span>
 <span class="sd">        does not remove points within a margin of</span>
 <span class="sd">        the boundary.</span>
-<span class="sd">        In units of pixels in the L×L grid.</span>
-<span class="sd">        If `None`, defaults to `models[0].P/2.0`.</span>
+<span class="sd">        This is in units of </span>
+<span class="sd">        **fraction of the grid-cell period ``model.P``**.</span>
 <span class="sd">    nsamples: positive int</span>
 <span class="sd">        Number of posterior samples to use</span>
 <span class="sd">    resolution: positive int; default 2</span>
@@ -909,12 +1254,55 @@
 <span class="sd">        Titles of each plot</span>
 <span class="sd">    colors: lost of Matplotlib colors</span>
 <span class="sd">        List of plotting colors for each heading angle</span>
-<span class="sd">    </span>
+<span class="sd">    confidence_mode: str; default &#39;quadratic&#39;</span>
+<span class="sd">        Can be ``&#39;quadratic&#39;`` or ``&#39;voronoi&#39;``</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    samples: list</span>
+<span class="sd">        Length ``len(angles)`` list of sampled peak-density</span>
+<span class="sd">        maps. Each element is a </span>
+<span class="sd">        ``lgcpspatial.posterior.SampledConfidence`` </span>
+<span class="sd">        object with attributes:</span>
+<span class="sd">            ellipses: np.float32</span>
+<span class="sd">                NaN-delimeted (x,y) coordinates for plotting </span>
+<span class="sd">                confidence ellipses; </span>
+<span class="sd">            gaussians: list</span>
+<span class="sd">                List of mean, covariance for each peak;</span>
+<span class="sd">                each entry is a tuple of</span>
+<span class="sd">                    μ: shape (2,) np.float32</span>
+<span class="sd">                        The peak mean</span>
+<span class="sd">                    Σ: shape (2,2) np.float32</span>
+<span class="sd">                        Covariance of gaussian convidence</span>
+<span class="sd">                        interval.</span>
+<span class="sd">            samples: PosteriorSample</span>
+<span class="sd">                A PosteriorSample object with attributes:</span>
+<span class="sd">                density:</span>
+<span class="sd">                    Counts of total number of times a field </span>
+<span class="sd">                    peak appeared at each location for all </span>
+<span class="sd">                    samples.</span>
+<span class="sd">                pfield:</span>
+<span class="sd">                    Normalized (sum to 1) density of peak </span>
+<span class="sd">                    locations for each grid field. Grid </span>
+<span class="sd">                    fields are defined as a local region </span>
+<span class="sd">                    around each local maximum in the peak </span>
+<span class="sd">                    ``density`` map.</span>
+<span class="sd">                peaks: np.float32</span>
+<span class="sd">                    2xNPEAKS array of grid-field-peak (x,y) </span>
+<span class="sd">                    coordinates.</span>
+<span class="sd">                totals:</span>
+<span class="sd">                    Number of samples within each peak basin</span>
+<span class="sd">                    that actually contained a peak.</span>
+<span class="sd">                means: np.float32</span>
+<span class="sd">                    Center of mass of each peak</span>
+<span class="sd">                sigmas: np.float32</span>
+<span class="sd">                    2D sampled covariance of each peak</span>
+<span class="sd">                nearest: np.float32</span>
+<span class="sd">                    (L*resolution)x(L*resolution) map of </span>
+<span class="sd">                    Voronoi regions for each peak</span>
+<span class="sd">                kde: np.float32</span>
+<span class="sd">                    ``(L*resolution)×(L*resolution)`` smoothed </span>
+<span class="sd">                    peak density map.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">if</span> <span class="n">exclusion_radius</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">exclusion_radius</span> <span class="o">=</span> <span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">P</span><span class="o">/</span><span class="mf">2.5</span>
-    <span class="k">if</span> <span class="n">edge_radius</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">edge_radius</span> <span class="o">=</span> <span class="n">models</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">P</span><span class="o">/</span><span class="mi">2</span>
     
     <span class="n">kplot</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">doplot</span><span class="p">:</span>
@@ -928,25 +1316,290 @@
         <span class="n">fit</span>   <span class="o">=</span> <span class="n">fits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">doplot</span><span class="p">:</span>
             <span class="n">subplot</span><span class="p">(</span><span class="n">kplot</span><span class="p">,</span><span class="n">kplot</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SampledConfidence</span><span class="p">(</span>
-            <span class="n">data</span><span class="p">,</span>
-            <span class="n">model</span><span class="p">,</span>
-            <span class="n">fit</span><span class="p">,</span>
-            <span class="n">radius</span>           <span class="o">=</span> <span class="n">exclusion_radius</span><span class="p">,</span>
-            <span class="n">edge_radius</span>      <span class="o">=</span> <span class="n">edge_radius</span><span class="p">,</span>
-            <span class="n">resolution</span>       <span class="o">=</span> <span class="n">resolution</span><span class="p">,</span>
-            <span class="n">nsamples</span>         <span class="o">=</span> <span class="n">nsamples</span><span class="p">,</span>
-            <span class="n">height_threshold</span> <span class="o">=</span> <span class="n">height_threshold</span><span class="p">,</span>
-            <span class="n">prpeak_threshold</span> <span class="o">=</span> <span class="n">prpeak_threshold</span><span class="p">,</span>
-            <span class="n">pct</span>              <span class="o">=</span> <span class="mi">95</span><span class="p">,</span>
-            <span class="n">doplot</span>           <span class="o">=</span> <span class="n">doplot</span><span class="p">,</span>
-            <span class="n">color</span>            <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-            <span class="n">scalebar</span>         <span class="o">=</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span>
-        <span class="p">))</span>
-        <span class="k">if</span> <span class="n">doplot</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">confidence_mode</span><span class="o">==</span><span class="s1">&#39;quadratic&#39;</span><span class="p">:</span>
+            <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SampledConfidence</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">,</span>
+                <span class="n">model</span><span class="p">,</span>
+                <span class="n">fit</span><span class="p">,</span>
+                <span class="n">radius</span>           <span class="o">=</span> <span class="n">exclusion_radius</span><span class="p">,</span>
+                <span class="n">edge_radius</span>      <span class="o">=</span> <span class="n">edge_radius</span><span class="p">,</span>
+                <span class="n">resolution</span>       <span class="o">=</span> <span class="n">resolution</span><span class="p">,</span>
+                <span class="n">nsamples</span>         <span class="o">=</span> <span class="n">nsamples</span><span class="p">,</span>
+                <span class="n">height_threshold</span> <span class="o">=</span> <span class="n">height_threshold</span><span class="p">,</span>
+                <span class="n">prpeak_threshold</span> <span class="o">=</span> <span class="n">prpeak_threshold</span><span class="p">,</span>
+                <span class="n">pct</span>              <span class="o">=</span> <span class="mi">95</span><span class="p">,</span>
+                <span class="n">doplot</span>           <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="n">color</span>            <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,)</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
+                <span class="n">scalebar</span>         <span class="o">=</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span>
+            <span class="p">))</span>
+            <span class="n">QuadraticConfidence</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">,</span>
+                <span class="n">model</span><span class="p">,</span>
+                <span class="n">fit</span><span class="p">,</span>
+                <span class="n">radius</span>           <span class="o">=</span> <span class="n">exclusion_radius</span><span class="p">,</span>
+                <span class="n">edge_radius</span>      <span class="o">=</span> <span class="n">edge_radius</span><span class="p">,</span>
+                <span class="n">height_threshold</span> <span class="o">=</span> <span class="n">height_threshold</span><span class="p">,</span>
+                <span class="n">pct</span>              <span class="o">=</span> <span class="mi">95</span><span class="p">,</span>
+                <span class="n">doplot</span>           <span class="o">=</span> <span class="n">doplot</span><span class="p">,</span>
+                <span class="n">color</span>            <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">confidence_mode</span><span class="o">==</span><span class="s1">&#39;voronoi&#39;</span><span class="p">:</span>
+            <span class="n">samples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SampledConfidence</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">,</span>
+                <span class="n">model</span><span class="p">,</span>
+                <span class="n">fit</span><span class="p">,</span>
+                <span class="n">radius</span>           <span class="o">=</span> <span class="n">exclusion_radius</span><span class="p">,</span>
+                <span class="n">edge_radius</span>      <span class="o">=</span> <span class="n">edge_radius</span><span class="p">,</span>
+                <span class="n">resolution</span>       <span class="o">=</span> <span class="n">resolution</span><span class="p">,</span>
+                <span class="n">nsamples</span>         <span class="o">=</span> <span class="n">nsamples</span><span class="p">,</span>
+                <span class="n">height_threshold</span> <span class="o">=</span> <span class="n">height_threshold</span><span class="p">,</span>
+                <span class="n">prpeak_threshold</span> <span class="o">=</span> <span class="n">prpeak_threshold</span><span class="p">,</span>
+                <span class="n">pct</span>              <span class="o">=</span> <span class="mi">95</span><span class="p">,</span>
+                <span class="n">doplot</span>           <span class="o">=</span> <span class="n">doplot</span><span class="p">,</span>
+                <span class="n">color</span>            <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">scalebar</span>         <span class="o">=</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span>
+            <span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span>
+            <span class="s1">&#39;confidence_mode can be quadratic or voronoi, &#39;</span>
+            <span class="s1">&#39;got </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">%</span><span class="n">confidence_mode</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">doplot</span> <span class="ow">and</span> <span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">title</span><span class="p">(</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             
     <span class="k">return</span> <span class="n">samples</span></div>
+
+
+<div class="viewcode-block" id="match_with_tracked_peaks"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.match_with_tracked_peaks">[docs]</a><span class="k">def</span> <span class="nf">match_with_tracked_peaks</span><span class="p">(</span>
+    <span class="n">peaks</span><span class="p">,</span> 
+    <span class="n">edges</span><span class="p">,</span>
+    <span class="n">angle_index</span><span class="p">,</span>
+    <span class="n">target_peaks</span><span class="p">,</span>
+    <span class="n">target_peaks_opposite</span><span class="p">,</span>
+    <span class="n">opposites_maxd</span><span class="p">,</span>
+    <span class="n">connection_radius</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Match &quot;fast-tracked&quot; peak shifts with </span>
+<span class="sd">    posterior-peak-density maps.    </span>
+<span class="sd">    </span>
+<span class="sd">    ### Details: </span>
+<span class="sd">    </span>
+<span class="sd">    In this workflow, we track shifts in single</span>
+<span class="sd">    peaks over a broad range by re-fitting a single model</span>
+<span class="sd">    over a high-resolution sweep of heading angles</span>
+<span class="sd">    (&quot;fast track&quot;). Shifted peaks that are connected by a </span>
+<span class="sd">    continuous range of heading angles are assumed to </span>
+<span class="sd">    reflect shifted copies of the same grid field.</span>
+<span class="sd">    </span>
+<span class="sd">    To get confidence intervals, however, we need an</span>
+<span class="sd">    interpretable posterior, which requires re-calibrating</span>
+<span class="sd">    the prior variance. This is slow, so we do this for </span>
+<span class="sd">    only a few directions (e.g. N,S,E,W). </span>
+<span class="sd">    </span>
+<span class="sd">    The resulting posterior-peak-densities won&#39;t exactly</span>
+<span class="sd">    match the &quot;fast-tracked&quot; peaks, since they were </span>
+<span class="sd">    computed using different procedures. They should, </span>
+<span class="sd">    however, be *very* close. </span>
+<span class="sd">    </span>
+<span class="sd">    This function matches them. </span>
+<span class="sd">    </span>
+<span class="sd">    ### Procedure:</span>
+<span class="sd">    </span>
+<span class="sd">    Fast-tracked peaks are stored as lists of peak locations</span>
+<span class="sd">    ``peaks`` and edge-indecies ``edges``, for all heading </span>
+<span class="sd">    angles. These are computed using the </span>
+<span class="sd">    ``lgcpspatial.heading`` module as follows:</span>
+<span class="sd">    </span>
+<span class="sd">        ``</span>
+<span class="sd">        peaks = get_peaks_at_heading_angles(</span>
+<span class="sd">            data,model,angles,heading_angle)</span>
+<span class="sd">        edges = link_peaks(peaks,maximum_point_distance)  </span>
+<span class="sd">        ``</span>
+<span class="sd">    </span>
+<span class="sd">    To figure out which shifted peaks are copies of the</span>
+<span class="sd">    same field, we: </span>
+<span class="sd">    </span>
+<span class="sd">     1. Walk the ``edge`` graph half-way around to find </span>
+<span class="sd">        connected peaks in opposite directions. </span>
+<span class="sd">     2. Find nearest neighbors with ``target_peaks`` and</span>
+<span class="sd">        ``target_peaks_opposite``</span>
+<span class="sd">     3. Connect indecies in ``target_peaks`` to the index</span>
+<span class="sd">        in ``target_peaks_opposite`` connected to the same</span>
+<span class="sd">        fast-tracked component (if any).</span>
+<span class="sd">    </span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    peaks: list </span>
+<span class="sd">        Length ``NANGLES`` list of 2 × NPEAKS np.float32  </span>
+<span class="sd">        arrays containing (rx,ry) peak locations at a list </span>
+<span class="sd">        of heading angles, as returned by </span>
+<span class="sd">        ``get_peaks_at_heading_angles()``.</span>
+<span class="sd">    edges: list</span>
+<span class="sd">        Length ``NANGLES`` list of edge sets for each pair of </span>
+<span class="sd">        headings, as returned by ``match_peaks`` or </span>
+<span class="sd">        ``link_peaks()``. Each list entry is a 2 × NEDGES  </span>
+<span class="sd">        int32 array. This contains pairs of indecies </span>
+<span class="sd">        ``(a,b)``. For edge set ``i``, index ``a`` is the index </span>
+<span class="sd">        into ``peaks[i]`` (edge source) and index ``b`` is the </span>
+<span class="sd">        index  into ``peaks[(i+1)%Nφ]`` (edge target).</span>
+<span class="sd">    angle_index: int ∈ {0,..,NANGLES-1}</span>
+<span class="sd">        Which angle to match, represented as an index</span>
+<span class="sd">        into the peaks/edges array.</span>
+<span class="sd">    target_peaks: 2 × NPEAKS_A np.float32</span>
+<span class="sd">        Reference peak-density centroids for heading</span>
+<span class="sd">        direction ``angle_index`` to match.</span>
+<span class="sd">    target_peaks_opposite: 2 × NPEAKS_A np.float32</span>
+<span class="sd">        Reference peak-density centroids for heading</span>
+<span class="sd">        direction **opposite** to ``angle_index`` to match.         </span>
+<span class="sd">    opposites_maxd: positive float</span>
+<span class="sd">        Tolerance for matching opposite-direction peaks </span>
+<span class="sd">        from the continuous tracking, in the same</span>
+<span class="sd">        units as the points ``peaks``. (This is most likely</span>
+<span class="sd">        **normalized [0,1]² coordinates** if you&#39;re </span>
+<span class="sd">        following the provided example workflows). </span>
+<span class="sd">        This should be similar to the grid scale, to avoid </span>
+<span class="sd">        associating peaks from different fields in the </span>
+<span class="sd">        region where the posterior is very noisy. </span>
+<span class="sd">        I suggest</span>
+<span class="sd">        ``opposites_maxd = P/L*0.75``, where ``P`` is the</span>
+<span class="sd">        grid-cell period in pixels and ``L`` is the </span>
+<span class="sd">        resolution of the discrete bin (again, in pixels).</span>
+<span class="sd">    connection_radius: positive float</span>
+<span class="sd">        Tolerance for matching fast-tracked peaks with</span>
+<span class="sd">        posterior-peak-density centroids, in the </span>
+<span class="sd">        same units as ``peaks. This is most likely</span>
+<span class="sd">        **normalized [0,1]² coordinates** if you&#39;re </span>
+<span class="sd">        following the provided example workflows). </span>
+<span class="sd">        This should be small, since we&#39;re just trying to </span>
+<span class="sd">        account for small changes. I suggest</span>
+<span class="sd">        ``connection_radius = P/L/5``.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    paired_indecies: 2 × NMATCHED np.int32</span>
+<span class="sd">        For each of the ``NMATCHED`` peak pairs, </span>
+<span class="sd">        the first row is the index into </span>
+<span class="sd">        ``target_peaks`` and the second an index into</span>
+<span class="sd">        ``target_peaks_opposite``.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="c1"># Validate arguments </span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">p</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">target_peaks</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">target_peaks_opposite</span><span class="p">))</span>
+    
+    <span class="c1"># Find opposite direction and connections with it</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Match peaks based on the &quot;continues&quot; tracking over</span>
+<span class="sd">    many angles. These were tracked without re-calibrating</span>
+<span class="sd">    the prior variance, so their locations are generally</span>
+<span class="sd">    correct but the posterior variances aren&#39;t </span>
+<span class="sd">    interpretable. We use them to decide which peaks are</span>
+<span class="sd">    shifted version of the same field. </span>
+
+<span class="sd">    peaks: list</span>
+<span class="sd">        Length ``NANGLES`` list of ``2×NPEAKS`` ``np.float32`` </span>
+<span class="sd">        arrays with (x,y) locations of peaks at each </span>
+<span class="sd">        heading angle.</span>
+
+<span class="sd">    iop: int</span>
+<span class="sd">        Index ``iop ∈ {0,..,NANGLES-1}`` opposite of the </span>
+<span class="sd">        direction associated with the seed index given by</span>
+<span class="sd">        ``starti ∈ {0,..,NANGLES-1}``. </span>
+<span class="sd">        This should be ``( starti + NANGLES//2 ) % NANGLES``.</span>
+
+<span class="sd">    op: int32</span>
+<span class="sd">        Indecies of matching field in direction </span>
+<span class="sd">        ``peaks[iop]`` for each field ``peaks[istart]``</span>
+<span class="sd">        (or -1 is no match exists).</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">iop</span><span class="p">,</span><span class="n">op</span> <span class="o">=</span> <span class="n">locate_opposites</span><span class="p">(</span>
+        <span class="n">peaks</span><span class="p">,</span>
+        <span class="n">opposites_maxd</span><span class="p">,</span>
+        <span class="n">angle_index</span><span class="p">,</span>
+        <span class="n">edges</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span> 
+    <span class="nb">print</span><span class="p">(</span><span class="n">iop</span><span class="p">)</span>
+
+    <span class="c1"># encode peak means as a complex number</span>
+    <span class="n">q</span>  <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@pk</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
+    <span class="n">z1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@target_peaks</span>
+    <span class="n">z2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@target_peaks_opposite</span>
+
+    <span class="c1"># Get list of peak locations in the reference direction</span>
+    <span class="c1"># (q[i]) and the opposite direction (q[iop])</span>
+    <span class="n">q1</span><span class="p">,</span><span class="n">q2</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="n">angle_index</span><span class="p">],</span><span class="n">q</span><span class="p">[</span><span class="n">iop</span><span class="p">]</span>
+<span class="w">    </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Register connected-peak data from ``locate_opposites``</span>
+<span class="sd">    (fast approximate peak tracking) with </span>
+<span class="sd">    the posterior-confidence information computed by the</span>
+<span class="sd">    (accurate by slow) posterior sampling with </span>
+<span class="sd">    recalibrated prior variance. </span>
+<span class="sd">    These should be close, but aren&#39;t exactly equal</span>
+<span class="sd">    Match them based on proximity.</span>
+
+<span class="sd">     - Get pairwise distances in each direction d1, d2</span>
+<span class="sd">     - Get the closest matches in each direction i1, i2</span>
+<span class="sd">     - Remove pairs too far apart</span>
+<span class="sd">     - Check the paired-opposite-heading-peaks computed </span>
+<span class="sd">       earlier</span>
+<span class="sd">     - For each (heading, opposite-heading) pair</span>
+<span class="sd">       - Skip pairs with no match</span>
+<span class="sd">       - Retrieve the posterior-sample peak index for each</span>
+<span class="sd">         peak in the pair.</span>
+<span class="sd">       - If both peaks exist in the posterior sample</span>
+<span class="sd">         - Match the pair in the posterior samples</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">d1</span><span class="p">,</span><span class="n">d2</span> <span class="o">=</span> <span class="n">pdist</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span><span class="n">q1</span><span class="p">),</span><span class="n">pdist</span><span class="p">(</span><span class="n">z2</span><span class="p">,</span><span class="n">q2</span><span class="p">)</span>
+    <span class="n">i1</span><span class="p">,</span><span class="n">i2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanargmin</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">argmin</span><span class="p">(</span><span class="n">d2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">i1</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">&gt;=</span><span class="n">connection_radius</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">i2</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">d2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">&gt;=</span><span class="n">connection_radius</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">op2</span> <span class="o">=</span> <span class="n">int32</span><span class="p">(</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">z1</span><span class="p">)))</span><span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">op</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">k</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span> <span class="k">continue</span>
+        <span class="n">l</span><span class="p">,</span><span class="n">m</span> <span class="o">=</span> <span class="n">i1</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">i2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">l</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">m</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span> <span class="n">op2</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">=</span><span class="n">m</span>
+    
+    <span class="n">paired_indecies</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">op2</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">paired_indecies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">paired_indecies</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">return</span> <span class="n">paired_indecies</span></div>
+
+
+<div class="viewcode-block" id="maybe_aliased"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.maybe_aliased">[docs]</a><span class="k">def</span> <span class="nf">maybe_aliased</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">threshold</span><span class="o">=</span><span class="mf">1.05</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Deal with aliasing: </span>
+<span class="sd">    if matches look ambiguous, remove them.</span>
+<span class="sd">    </span>
+<span class="sd">    Fields are marked as postentially aliased if there</span>
+<span class="sd">    is another opposite-direction match closeby, or</span>
+<span class="sd">    if they are equally close to a different grid field</span>
+<span class="sd">    centroid. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a: 1D np.complex64</span>
+<span class="sd">        Peak locations in direction 1 as complex numbers</span>
+<span class="sd">    b: 1D np.complex64</span>
+<span class="sd">        Peak locations in direction 2 as complex numbers</span>
+<span class="sd">    c: 1D np.complex64</span>
+<span class="sd">        Field centroids as complex numbers</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bad: np.bool</span>
+<span class="sd">        Indicator list of which fields might be aliased. </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Is there another match with 5% of this distance? </span>
+    <span class="n">d</span>    <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span><span class="o">*</span><span class="n">threshold</span>
+    <span class="n">D</span>    <span class="o">=</span> <span class="n">pdist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="n">bad</span>  <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">D</span><span class="o">&lt;=</span><span class="n">d</span><span class="p">[:,</span><span class="kc">None</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">bad</span> <span class="o">|=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">D</span><span class="o">&lt;=</span><span class="n">d</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> 
+    <span class="c1"># Is there another centroid that is closer? </span>
+    <span class="n">bad</span> <span class="o">|=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">pdist</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">c</span><span class="p">)</span><span class="o">&lt;=</span><span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="o">-</span><span class="n">c</span><span class="p">)[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">threshold</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span>  
+    <span class="n">bad</span> <span class="o">|=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">pdist</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span><span class="o">&lt;=</span><span class="nb">abs</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">c</span><span class="p">)[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">*</span><span class="n">threshold</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> 
+    <span class="k">return</span> <span class="n">bad</span></div>
 </pre></div>
 
            </div>

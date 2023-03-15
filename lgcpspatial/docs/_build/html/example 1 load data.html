@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Example 1: Load data &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -32,15 +31,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -82,8 +85,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Example 1: Load data</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Example 1: Load data</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/example 1 load data.ipynb.txt" rel="nofollow"> View page source</a>
       </li>
@@ -203,10 +206,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -373,6 +377,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="Example-1:-Load-data">
 <h1>Example 1: Load data<a class="headerlink" href="#Example-1:-Load-data" title="Permalink to this heading"></a></h1>
+<p>This example illustrates the data preprocessing steps needed to bin grid cell activity and location before processing using GP regression. (We will fit the regression in example 2).</p>
 <section id="Load-example-data-from-matfile-and-convert-to-physical-units">
 <h2>Load example data from matfile and convert to physical units<a class="headerlink" href="#Load-example-data-from-matfile-and-convert-to-physical-units" title="Permalink to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
@@ -384,11 +389,10 @@ div.rendered_html tbody tr:hover {
 <span class="n">datadir</span> <span class="o">=</span> <span class="s1">&#39;../example data/&#39;</span>
 <span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s1">&#39;r2405_051216b_cell1816.mat&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;R11_20190607_EC_02.mat&#39;</span>
 <span class="p">]</span>
 
 <span class="c1"># Retrieve data from file</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">loadmat</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="n">datasets</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">squeeze_me</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">loadmat</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="n">datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">squeeze_me</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">xy_position_pixels</span>   <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;xy&#39;</span><span class="p">]</span>
 <span class="n">heading_degrees</span>      <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;dir&#39;</span><span class="p">]</span>
 <span class="n">position_sample_rate</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;pos_sample_rate&#39;</span><span class="p">]</span>
@@ -408,7 +412,7 @@ div.rendered_html tbody tr:hover {
 <section id="Plot-binned-data">
 <h2>Plot binned data<a class="headerlink" href="#Plot-binned-data" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -416,7 +420,7 @@ div.rendered_html tbody tr:hover {
 <span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span> <span class="kn">import</span> <span class="n">bin_spikes</span><span class="p">,</span> <span class="n">Dataset</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.plot</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">data</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="n">datasets</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="n">datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">L</span>    <span class="o">=</span> <span class="mi">128</span>
 <span class="n">N</span><span class="p">,</span><span class="n">K</span>  <span class="o">=</span> <span class="n">bin_spikes</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">px</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">py</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">spikes</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
 
@@ -425,10 +429,17 @@ div.rendered_html tbody tr:hover {
 
 <span class="n">subplot</span><span class="p">(</span><span class="mi">141</span><span class="p">)</span>
 <span class="n">TSHOW</span> <span class="o">=</span> <span class="mi">60</span><span class="o">*</span><span class="mi">20</span> <span class="c1"># seconds</span>
-<span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">xy_position_meters</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">position_sample_rate</span><span class="o">*</span><span class="n">TSHOW</span><span class="p">)]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">RUST</span><span class="p">,</span><span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">xy_position_meters</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">position_sample_rate</span><span class="o">*</span><span class="n">TSHOW</span><span class="p">)]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">BLACK</span><span class="p">,</span><span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;square&#39;</span><span class="p">)</span>
 <span class="n">xscalebar</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="s1">&#39;1 m&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">xy_position_meters</span><span class="p">[</span><span class="n">int32</span><span class="p">(</span><span class="n">position_sample_rate</span><span class="o">*</span><span class="n">spike_times_seconds</span><span class="p">[</span><span class="n">spike_times_seconds</span><span class="o">&lt;</span><span class="n">TSHOW</span><span class="p">])]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="n">scatter</span><span class="p">(</span><span class="o">*</span><span class="n">xy_position_meters</span><span class="p">[</span>
+    <span class="n">int32</span><span class="p">(</span>
+        <span class="n">position_sample_rate</span><span class="o">*</span><span class="n">spike_times_seconds</span><span class="p">[</span><span class="n">spike_times_seconds</span><span class="o">&lt;</span><span class="n">TSHOW</span><span class="p">]</span>
+    <span class="p">)]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+    <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">lw</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mf">.9</span><span class="p">,</span><span class="mf">.1</span><span class="p">,</span><span class="mf">.0</span><span class="p">))</span>
 <span class="n">xlim</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">extent</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
 <span class="n">ylim</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
 <span class="n">title</span><span class="p">(</span><span class="s1">&#39;20 minutes of data&#39;</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
@@ -468,22 +479,23 @@ div.rendered_html tbody tr:hover {
 <h2>Use <code class="docutils literal notranslate"><span class="pre">Dataset.prepare</span></code> to inspect data and guess grid-cell period<a class="headerlink" href="#Use-Dataset.prepare-to-inspect-data-and-guess-grid-cell-period" title="Permalink to this heading"></a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">Dataset.prepare</span></code> function loads a dataset, downsamples spike times, and bins spikes to a <span class="math notranslate nohighlight">\(L\times L\)</span> spatial grid. It also tries to estimate the grid-cell’s period using the radial autocorrelogram.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">L</span>       <span class="o">=</span> <span class="mi">128</span> <span class="c1"># Grid size for position bins</span>
 <span class="n">padding</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># Edge padding (Avoids circular convolution wrap-around)</span>
 <span class="n">Dataset</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="n">datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">doplot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">Dataset</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="n">datasets</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">doplot</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/example_1_load_data_6_0.png" src="_images/example_1_load_data_6_0.png" />
-</div>
+<div class="highlight"><pre>
+&lt;lgcpspatial.loaddata.Dataset at 0x7f13380a2140&gt;
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>lgcpspatial.plot module &mdash; Fast Log-Gaussian Point-Process Methods for Grid Cells 5 documentation</title>
@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" src="_static/jquery.js"></script>
+        <script integrity="sha384-lSZeSIVKp9myfKbDQ3GkN/KHjUc+mzg17VKDN4Y2kUeBSJioB9QSM639vM9fuY//" src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -29,15 +28,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Fast Log-Gaussian Point-Process Methods for Grid Cells
-            <img src="_static/logo.svg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fast Log-Gaussian Point-Process Methods for Grid Cells
+              <img src="_static/logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -79,8 +82,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>lgcpspatial.plot module</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">lgcpspatial.plot module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/lgcpspatial.plot.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -117,14 +120,14 @@
 <section id="module-lgcpspatial.plot">
 <span id="lgcpspatial-plot-module"></span><h1>lgcpspatial.plot module<a class="headerlink" href="#module-lgcpspatial.plot" title="Permalink to this heading"></a></h1>
 <p>plot.py: A subset of plotting helpers copied from
-<cite>neurotools/graphics/plot</cite>, and some new helper routines to reduce
+<code class="docutils literal notranslate"><span class="pre">neurotools/graphics/plot</span></code>, and some new helper routines to reduce
 notebook clutter</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.plot.simpleaxis">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">simpleaxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#simpleaxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.simpleaxis" title="Permalink to this definition"></a></dt>
 <dd><p>Only draw the bottom and left axis lines</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ax</strong> (<em>optional</em><em>, </em><em>defaults to plt.gca</em><em>(</em><em>) </em><em>if None</em>) – </p>
 </dd>
 </dl>
@@ -136,7 +139,7 @@ notebook clutter</p>
 <dd><p>Only draw the bottom and right axis lines.
 Move y axis to the right.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ax</strong> (<em>optional</em><em>, </em><em>defaults to plt.gca</em><em>(</em><em>) </em><em>if None</em>) – </p>
 </dd>
 </dl>
@@ -147,7 +150,7 @@ Move y axis to the right.</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">simpleraxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#simpleraxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.simpleraxis" title="Permalink to this definition"></a></dt>
 <dd><p>Only draw the left y axis, nothing else</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ax</strong> (<em>optiona</em><em>, </em><em>defaults to plt.gca</em><em>(</em><em>) </em><em>if None</em>) – </p>
 </dd>
 </dl>
@@ -158,7 +161,7 @@ Move y axis to the right.</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">simpleraxis2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#simpleraxis2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.simpleraxis2" title="Permalink to this definition"></a></dt>
 <dd><p>Only draw the left y axis, nothing else</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ax</strong> (<em>optiona</em><em>, </em><em>defaults to plt.gca</em><em>(</em><em>) </em><em>if None</em>) – </p>
 </dd>
 </dl>
@@ -169,7 +172,7 @@ Move y axis to the right.</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">noaxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#noaxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.noaxis" title="Permalink to this definition"></a></dt>
 <dd><p>Hide all axes</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ax</strong> (<em>optiona</em><em>, </em><em>defaults to plt.gca</em><em>(</em><em>) </em><em>if None</em>) – </p>
 </dd>
 </dl>
@@ -196,7 +199,7 @@ Move y axis to the right.</p>
 <dt class="sig sig-object py" id="lgcpspatial.plot.noxyaxes">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">noxyaxes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#noxyaxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.noxyaxes" title="Permalink to this definition"></a></dt>
 <dd><p>Hide all aspects of x and y axes.
-See <cite>nox</cite>, <cite>noy</cite>, and <cite>noaxis</cite></p>
+See <code class="docutils literal notranslate"><span class="pre">nox</span></code>, <code class="docutils literal notranslate"><span class="pre">noy</span></code>, and <code class="docutils literal notranslate"><span class="pre">noaxis</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -224,7 +227,7 @@ figure height scale</p>
 <dd><p>Moves the left x-axis limit, keeping the right limit intact.
 This changes the width of the plot.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dx</strong> (<em>number</em>) – Amount (in pixels) to adjust axis</p></li>
 <li><p><strong>ax</strong> (<em>axis</em><em>, </em><em>default None</em>) – If None, uses gca()</p></li>
@@ -239,7 +242,7 @@ This changes the width of the plot.</p>
 <dd><p>Moves the right x-axis limit, keeping the left limit intact.
 This changes the width of the plot.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dx</strong> (<em>number</em>) – Amount (in pixels) to adjust axis</p></li>
 <li><p><strong>ax</strong> (<em>axis</em><em>, </em><em>default None</em>) – If None, uses gca()</p></li>
@@ -253,7 +256,7 @@ This changes the width of the plot.</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">nudge_axis_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#nudge_axis_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.nudge_axis_x" title="Permalink to this definition"></a></dt>
 <dd><p>This does not change the width of the axis</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dx</strong> (<em>number</em>) – Amount (in pixels) to adjust axis</p></li>
 <li><p><strong>ax</strong> (<em>axis</em><em>, </em><em>default None</em>) – If None, uses gca()</p></li>
@@ -301,7 +304,7 @@ Does not change the baseline position of axis.</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">yscalebar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ycenter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yheight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'k'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'left'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#yscalebar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.yscalebar" title="Permalink to this definition"></a></dt>
 <dd><p>Add vertical scale bar to plot</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ax</strong> (<em>axis</em><em>, </em><em>if None</em><em> (</em><em>default</em><em>)</em><em>, </em><em>uses the current axis.</em>) – </p>
 </dd>
 </dl>
@@ -312,7 +315,7 @@ Does not change the baseline position of axis.</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">xscalebar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xcenter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'k'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#xscalebar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.xscalebar" title="Permalink to this definition"></a></dt>
 <dd><p>Add horizontal scale bar to plot</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>xcenter</strong> (<em>float</em>) – Horizontal center of the scale bar</p></li>
 <li><p><strong>xlength</strong> (<em>float</em>) – How wide the scale bar is</p></li>
@@ -324,7 +327,8 @@ Does not change the baseline position of axis.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.plot.arrow_between">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">arrow_between</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#arrow_between"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.arrow_between" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Draw a solid arrow between two axes</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.plot.nicey">
@@ -341,7 +345,7 @@ Does not change the baseline position of axis.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.plot.nicexy">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">nicexy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xby</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yby</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#nicexy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.nicexy" title="Permalink to this definition"></a></dt>
-<dd><p>Mark only the min/max value of y/y axis. See <cite>nicex</cite> and <cite>nicey</cite></p>
+<dd><p>Mark only the min/max value of y/y axis. See <code class="docutils literal notranslate"><span class="pre">nicex</span></code> and <code class="docutils literal notranslate"><span class="pre">nicey</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -351,7 +355,7 @@ Does not change the baseline position of axis.</p>
 This is less bad.
 r’$mathrm{mu V}^2$’</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vmin</strong> (<em>number</em>) – min value for colormap</p></li>
 <li><p><strong>vmax</strong> (<em>number</em>) – mac value for colormap</p></li>
@@ -366,10 +370,10 @@ r’$mathrm{mu V}^2$’</p>
 <li><p><strong>fontsize</strong> (<em>number</em>) – label font size, defaults to 12</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>colorbar axis</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>axis</p>
 </dd>
 </dl>
@@ -379,7 +383,7 @@ r’$mathrm{mu V}^2$’</p>
 <dt class="sig sig-object py" id="lgcpspatial.plot.subfigurelabel">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">subfigurelabel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">39</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#subfigurelabel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.subfigurelabel" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>label</em>) – </p>
 </dd>
 </dl>
@@ -417,9 +421,9 @@ scale</p>
 <dt class="sig sig-object py" id="lgcpspatial.plot.circular_gaussian_smooth">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">circular_gaussian_smooth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#circular_gaussian_smooth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.circular_gaussian_smooth" title="Permalink to this definition"></a></dt>
 <dd><p>Smooth signal x with gaussian of standard deviation
-<cite>sigma</cite>, circularly wrapped using Fourier transform.</p>
+<code class="docutils literal notranslate"><span class="pre">sigma</span></code>, circularly wrapped using Fourier transform.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sigma</strong> (<em>standard deviation</em>) – </p></li>
 <li><p><strong>x</strong> (<em>1D array-like signal</em>) – </p></li>
@@ -438,16 +442,16 @@ scale</p>
 </dl>
 <p>cm: color map, array-like of RGB tuples</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>cm</strong> (<em>colormap</em>) – </p></li>
 <li><p><strong>s</strong> (<em>smoothing radius</em>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>RBG</strong> – Colormap smoothed with circular boundary conditions.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
@@ -457,7 +461,7 @@ scale</p>
 <dt class="sig sig-object py" id="lgcpspatial.plot.force_aspect">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">force_aspect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#force_aspect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.force_aspect" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>aspect</strong> (<em>aspect ratio</em>) – </p>
 </dd>
 </dl>
@@ -468,7 +472,7 @@ scale</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">pscale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">99.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#pscale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.pscale" title="Permalink to this definition"></a></dt>
 <dd><p>Plot helper: Scale data by percentiles</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>np.float32</em>) – </p></li>
 <li><p><strong>q1</strong> (<em>float in</em><em> (</em><em>0</em><em>,</em><em>1</em><em>)</em><em>; default 0.5</em>) – Fraction of data below which we will set to zero.</p></li>
@@ -476,10 +480,10 @@ scale</p>
 <li><p><strong>mask</strong> (<em>np.bool; default None</em>) – Subset of points to consider</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>result</strong> – Rescaled data</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.array</p>
 </dd>
 </dl>
@@ -504,13 +508,13 @@ plot it.</p>
 <dd><p>Summarize the result of log-Gaussian process variational
 inference in four plots.</p>
 <p>This function exists to simplify the example notebooks,
-and isn’t designed for more general use.</p>
+and isn’t designed for general use.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> (<a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank" title="lgcpspatial.lgcp2d.DiagonalFourierLowrank"><em>lgcp2d.DiagonalFourierLowrank</em></a>) – Initialized model</p></li>
 <li><p><strong>fit</strong> (<em>tuple</em>) – Tuple of (low-rank mean, marginal variance, loss)
-returned by <cite>lgcp2d.coordinate_descent()</cite>.</p></li>
+returned by <code class="docutils literal notranslate"><span class="pre">lgcp2d.coordinate_descent()</span></code>.</p></li>
 <li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>loaddata.Dataset</em></a>) – Prepared dataset</p></li>
 <li><p><strong>ftitle</strong> (<em>str</em>) – Figure title</p></li>
 </ul>
@@ -523,17 +527,17 @@ returned by <cite>lgcp2d.coordinate_descent()</cite>.</p></li>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">plot_convex_hull</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">py</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#plot_convex_hull"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.plot_convex_hull" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate convex hull of points (px,py) and plot it.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>px</strong> (<em>length NPOINTS 1D np.float32</em>) – </p></li>
 <li><p><strong>py</strong> (<em>length NPOINTS 1D np.float32</em>) – </p></li>
-<li><p><strong>**kwargs</strong> (<em>dict</em>) – Keyword arguments are forwarded to <cite>pyplot.plot()</cite></p></li>
+<li><p><strong>**kwargs</strong> (<em>dict</em>) – Keyword arguments are forwarded to <code class="docutils literal notranslate"><span class="pre">pyplot.plot()</span></code></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>result</strong></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ConvexHull(points)</p>
 </dd>
 </dl>
@@ -548,7 +552,7 @@ returned by <cite>lgcp2d.coordinate_descent()</cite>.</p></li>
 <dt class="sig sig-object py" id="lgcpspatial.plot.covellipse_from_points">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">covellipse_from_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#covellipse_from_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.covellipse_from_points" title="Permalink to this definition"></a></dt>
 <dd><p>Helper to construct covariance ellipse from
-collection of 2D points <cite>q</cite> encoded as complex numbers.</p>
+collection of 2D points <code class="docutils literal notranslate"><span class="pre">q</span></code> encoded as complex numbers.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -569,7 +573,7 @@ collection of 2D points <cite>q</cite> encoded as complex numbers.</p>
 <li><p>Transform crosshairs into covariance basis</p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>S</strong> (<em>2D covariance matrix</em>) – </p></li>
 <li><p><strong>p</strong> (<em>fraction</em><em> of </em><em>data ellipse should enclose</em>) – </p></li>
@@ -581,10 +585,10 @@ If 1D, ellipse will represent threshold for p
 significance for a 1-tailed test in any direction.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>path</strong> – 2×NPOINTS array of (x,y) path data for plotting</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>np.float32</p>
 </dd>
 </dl>
@@ -597,7 +601,7 @@ significance for a 1-tailed test in any direction.</p></li>
 This is less bad.
 r’$mathrm{mu V}^2$’</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vmin</strong> – scalar
 min value for colormap</p></li>
@@ -633,10 +637,10 @@ Verrtical alignment; “bottom” (‘b’),
 “center” (‘c’), or “top” (‘t’)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>colorbar axis</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>axis</p>
 </dd>
 </dl>
@@ -645,15 +649,72 @@ Verrtical alignment; “bottom” (‘b’),
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.plot.draw_compass">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">draw_compass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xy0=(1.1+0.65j)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r=0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_fn=&lt;matplotlib.colors.LinearSegmentedColormap</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta=18</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#draw_compass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.draw_compass" title="Permalink to this definition"></a></dt>
-<dd><p>Draw a hue-wheel compass rose.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>xy0</strong> (<em>center</em><em> of </em><em>compass encoded as x+iy complex number</em>) – </p></li>
-<li><p><strong>r</strong> (<em>size</em><em> of </em><em>compass</em><em>, </em><em>defaults to 0.03</em>) – </p></li>
-<li><p><strong>cmap_fn</strong> (<em>circular colormap to use for compass</em>) – </p></li>
-<li><p><strong>delta</strong> (<em>displacement</em><em> of </em><em>lab</em>) – </p></li>
+<dd><p>Draw a hue-wheel compass rose.
+Equivalent of “colorbar” for polar data.</p>
+<p>This uses plot-coordinates for drawing, and assumes
+that the plot’s aspect-ratio is equal.</p>
+<p>This is designed to be used with the <code class="docutils literal notranslate"><span class="pre">riley</span></code>
+colormap from <code class="docutils literal notranslate"><span class="pre">lgcpspatial.plot</span></code>. This map starts at
+mauve, continues through rust, olive, blue, before
+circling back to mauve. We use these color–direction
+conventions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>North: blue/azure/cyan</p></li>
+<li><p>South: red/rust</p></li>
+<li><p>East:  green/olive</p></li>
+<li><p>West:  purple/mauve/magenta</p></li>
 </ul>
+</div></blockquote>
+<p>For comatibility, then, the direction ordering
+for the colormap parameter <code class="docutils literal notranslate"><span class="pre">color</span></code> should be</p>
+<blockquote>
+<div><p>{West, South, East, North}</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xy0</strong> (<em>np.complex64</em>) – Center of compass encoded as x+iy complex number.</p></li>
+<li><p><strong>r</strong> (<em>positive float; default 0.03</em>) – Size of compass (radius of circle).</p></li>
+<li><p><strong>cmap_fn</strong> (<em>matplotlib.colors.Colormap</em>) – circular colormap to use for compass.</p></li>
+<li><p><strong>delta</strong> (<em>positive float</em>) – Radial spacing for NSEW labels relative to the
+color wheel.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.tracking_match_plot">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">tracking_match_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centroids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">paths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldcolor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([0.70980394,</span> <span class="pre">0.41568628,</span> <span class="pre">0.7137255],</span> <span class="pre">dtype=float32)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#tracking_match_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.tracking_match_plot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.shiftplot">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">shiftplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zscore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_ellipse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#shiftplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.shiftplot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.plot.colored_shift_density_images">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">colored_shift_density_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NSEW_densities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">99.9</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#colored_shift_density_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.colored_shift_density_images" title="Permalink to this definition"></a></dt>
+<dd><p>Prepare colored (North - South) and (East - West)
+peak density shift images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>lgcpspatial.loaddata.Dataset</em></a>) – Prepared dataset object.</p></li>
+<li><p><strong>NSEW_densities</strong> (<em>list</em>) – Length 4 list of [N,S,E,W] results, each containing
+a <code class="docutils literal notranslate"><span class="pre">(L*resolution)×(L*resolution)</span></code> smoothed
+peak-density map.</p></li>
+<li><p><strong>pct</strong> (<em>float ∈</em><em>(</em><em>0</em><em>,</em><em>100</em><em>)</em><em>; default 99.9</em>) – Percentile of maximum saturation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>RGBNS</em> – Rendered RGB values for NS plot</p></li>
+<li><p><em>RGBEW</em> – Rendered RGB values for EW plot</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
