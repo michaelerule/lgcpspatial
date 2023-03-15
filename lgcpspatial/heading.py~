@@ -1163,6 +1163,7 @@ def sample_heading_angles(
         List of plotting colors for each heading angle
     confidence_mode: str; default 'quadratic'
         Can be ``'quadratic'`` or ``'voronoi'``
+    
     Returns
     -------
     samples: list

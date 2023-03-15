@@ -201,6 +201,7 @@ def get_peaks_at_heading_angles(
         the model evidence lower bound ``loss``
         (up to constants), and the posterior mean rate
         map ``rate``.
+    
     '''
     L,kv,P = model.L, model.kv, model.P
     
