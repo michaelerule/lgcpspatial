@@ -442,16 +442,13 @@ containing pairs of indecies (a,b):
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">plot_tracked_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perim=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compass=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=&lt;matplotlib.colors.LinearSegmentedColormap</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin='lower'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hideaxis=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compass_label_pad=15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#plot_tracked_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.plot_tracked_peaks" title="Permalink to this definition"></a></dt>
 <dd><p>Plot connected grid fields. Use this with
 <code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code> and <code class="docutils literal notranslate"><span class="pre">link_peaks()</span></code>.</p>
-<section id="angle-conventions">
-<h2>Angle conventions:<a class="headerlink" href="#angle-conventions" title="Permalink to this heading"></a></h2>
+<p><strong>Angle conventions:</strong></p>
 <p>The indecies <code class="docutils literal notranslate"><span class="pre">iφ</span> <span class="pre">∈</span> <span class="pre">{0,..,NANGLES-1}``into</span> <span class="pre">the</span> <span class="pre">length-</span>
 <span class="pre">``NANGLES</span></code> arguments <code class="docutils literal notranslate"><span class="pre">peaks</span></code> and <code class="docutils literal notranslate"><span class="pre">edges</span></code> are assumed
 to correpond to equally-spaced angles, starting at
 <code class="docutils literal notranslate"><span class="pre">φ=0</span></code>; that is,
 <code class="docutils literal notranslate"><span class="pre">phi</span> <span class="pre">=</span> <span class="pre">linspace(0,2*pi,NANGLES+1)[:-1]</span></code>.</p>
-</section>
-<section id="colors">
-<h2>Colors:<a class="headerlink" href="#colors" title="Permalink to this heading"></a></h2>
+<p><strong>Colors:</strong></p>
 <p>This is designed to be used with the <code class="docutils literal notranslate"><span class="pre">riley</span></code>
 colormap from <code class="docutils literal notranslate"><span class="pre">lgcpspatial.plot</span></code>. This map starts at
 mauve, continues through rust, olive, blue, before
@@ -468,9 +465,7 @@ for the colormap parameter <code class="docutils literal notranslate"><span clas
 <blockquote>
 <div><p>{West, South, East, North}</p>
 </div></blockquote>
-</section>
-<section id="axis-orientation">
-<h2>Axis orientation:<a class="headerlink" href="#axis-orientation" title="Permalink to this heading"></a></h2>
+<p><strong>Axis orientation:</strong></p>
 <p>If the keyword argument <code class="docutils literal notranslate"><span class="pre">origin</span></code> is <code class="docutils literal notranslate"><span class="pre">'lower'</span></code> (the
 default value), heading angles are interpreted as
 the usual definition of polar coordinates on the
@@ -504,73 +499,34 @@ top-left (northwest) corner.</p>
 <code class="docutils literal notranslate"><span class="pre">oring='upper'</span></code> will cause the y-axis to be flipped
 so that smaller <code class="docutils literal notranslate"><span class="pre">y</span></code> values are at the top.</p>
 <dl class="field-list simple">
-<dt class="field-odd">param peaks<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of 2xNPEAKS np.float32 arrays
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of 2xNPEAKS np.float32 arrays
 containing (rx,ry) peak locations at a list of
 heading angles, as returned  by
-<code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code>.</p>
-</dd>
-<dt class="field-even">type peaks<span class="colon">:</span></dt>
-<dd class="field-even"><p>list</p>
-</dd>
-<dt class="field-odd">param edges<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for each pair of
+<code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code>.</p></li>
+<li><p><strong>edges</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for each pair of
 headings, as returned by <code class="docutils literal notranslate"><span class="pre">match_peaks</span></code> or
 <code class="docutils literal notranslate"><span class="pre">link_peaks()</span></code>. Each list entry is a 2×NEDGES int32
 array. This contains pairs of indecies (a,b). For
 edge set i, index a is the index into peaks[i] (edge
 source) and index b is the index into
-peaks[(i+1)%Nφ] (edge target).</p>
-</dd>
-<dt class="field-even">type edges<span class="colon">:</span></dt>
-<dd class="field-even"><p>list</p>
-</dd>
-<dt class="field-odd">param perim<span class="colon">:</span></dt>
-<dd class="field-odd"><p>NPOINTS x 2 Array of (x,y) points of the arena
-perimeter to add to plot. Optional, default is None.</p>
-</dd>
-<dt class="field-even">type perim<span class="colon">:</span></dt>
-<dd class="field-even"><p>np.float32</p>
-</dd>
-<dt class="field-odd">param compass<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Draw colored compass rose if true</p>
-</dd>
-<dt class="field-even">type compass<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
-</dd>
-<dt class="field-odd">param cmap_fn<span class="colon">:</span></dt>
-<dd class="field-odd"><p>colormap to use for heading angles
+peaks[(i+1)%Nφ] (edge target).</p></li>
+<li><p><strong>perim</strong> (<em>np.float32</em>) – NPOINTS x 2 Array of (x,y) points of the arena
+perimeter to add to plot. Optional, default is None.</p></li>
+<li><p><strong>compass</strong> (<em>bool</em>) – Draw colored compass rose if true</p></li>
+<li><p><strong>cmap_fn</strong> (<em>matplotlib.colors.Colormap</em>) – colormap to use for heading angles
 defaults to the custom <code class="docutils literal notranslate"><span class="pre">riley</span></code> circular color map.
 Should be a callable :<code class="docutils literal notranslate"><span class="pre">[0,1]→(r,g,b,a)</span></code>
-where color components <code class="docutils literal notranslate"><span class="pre">rgba</span></code> are floats in <code class="docutils literal notranslate"><span class="pre">[0,1]</span></code>.</p>
-</dd>
-<dt class="field-even">type cmap_fn<span class="colon">:</span></dt>
-<dd class="field-even"><p>matplotlib.colors.Colormap</p>
-</dd>
-<dt class="field-odd">param origin<span class="colon">:</span></dt>
-<dd class="field-odd"><p>String in <code class="docutils literal notranslate"><span class="pre">{'lower','upper'}</span></code> (compare to
-<code class="docutils literal notranslate"><span class="pre">matplotlib.imshow()</span></code>).</p>
-</dd>
-<dt class="field-even">type origin<span class="colon">:</span></dt>
-<dd class="field-even"><p>str; default ‘lower’</p>
-</dd>
-<dt class="field-odd">param hideaxis<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Hide the axis</p>
-</dd>
-<dt class="field-even">type hideaxis<span class="colon">:</span></dt>
-<dd class="field-even"><p>boolean; default True</p>
-</dd>
-<dt class="field-odd">param compass_label_pad<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Spacing of compass NSEW labels.</p>
-</dd>
-<dt class="field-even">type compass_label_pad<span class="colon">:</span></dt>
-<dd class="field-even"><p>int; default 15</p>
-</dd>
-<dt class="field-odd">param **kwargs<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Forwarded to <code class="docutils literal notranslate"><span class="pre">plot()</span></code></p>
+where color components <code class="docutils literal notranslate"><span class="pre">rgba</span></code> are floats in <code class="docutils literal notranslate"><span class="pre">[0,1]</span></code>.</p></li>
+<li><p><strong>origin</strong> (<em>str; default 'lower'</em>) – String in <code class="docutils literal notranslate"><span class="pre">{'lower','upper'}</span></code> (compare to
+<code class="docutils literal notranslate"><span class="pre">matplotlib.imshow()</span></code>).</p></li>
+<li><p><strong>hideaxis</strong> (<em>boolean; default True</em>) – Hide the axis</p></li>
+<li><p><strong>compass_label_pad</strong> (<em>int; default 15</em>) – Spacing of compass NSEW labels.</p></li>
+<li><p><strong>**kwargs</strong> – Forwarded to <code class="docutils literal notranslate"><span class="pre">plot()</span></code></p></li>
+</ul>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py function">
@@ -843,9 +799,8 @@ peak density map.</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">match_with_tracked_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_peaks_opposite</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opposites_maxd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#match_with_tracked_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.match_with_tracked_peaks" title="Permalink to this definition"></a></dt>
 <dd><p>Match “fast-tracked” peak shifts with
 posterior-peak-density maps.</p>
-<section id="details">
-<h2>Details:<a class="headerlink" href="#details" title="Permalink to this heading"></a></h2>
-<p>In this workflow, we track shifts in single
+<p><strong>Details:</strong>
+In this workflow, we track shifts in single
 peaks over a broad range by re-fitting a single model
 over a high-resolution sweep of heading angles
 (“fast track”). Shifted peaks that are connected by a
@@ -884,50 +839,26 @@ fast-tracked component (if any).</p></li>
 </ol>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">param peaks<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of 2 × NPEAKS np.float32
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of 2 × NPEAKS np.float32
 arrays containing (rx,ry) peak locations at a list
 of heading angles, as returned by
-<code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code>.</p>
-</dd>
-<dt class="field-even">type peaks<span class="colon">:</span></dt>
-<dd class="field-even"><p>list</p>
-</dd>
-<dt class="field-odd">param edges<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for each pair of
+<code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code>.</p></li>
+<li><p><strong>edges</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for each pair of
 headings, as returned by <code class="docutils literal notranslate"><span class="pre">match_peaks</span></code> or
 <code class="docutils literal notranslate"><span class="pre">link_peaks()</span></code>. Each list entry is a 2 × NEDGES
 int32 array. This contains pairs of indecies
 <code class="docutils literal notranslate"><span class="pre">(a,b)</span></code>. For edge set <code class="docutils literal notranslate"><span class="pre">i</span></code>, index <code class="docutils literal notranslate"><span class="pre">a</span></code> is the index
 into <code class="docutils literal notranslate"><span class="pre">peaks[i]</span></code> (edge source) and index <code class="docutils literal notranslate"><span class="pre">b</span></code> is the
-index  into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code> (edge target).</p>
-</dd>
-<dt class="field-even">type edges<span class="colon">:</span></dt>
-<dd class="field-even"><p>list</p>
-</dd>
-<dt class="field-odd">param angle_index<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Which angle to match, represented as an index
-into the peaks/edges array.</p>
-</dd>
-<dt class="field-even">type angle_index<span class="colon">:</span></dt>
-<dd class="field-even"><p>int ∈ {0,..,NANGLES-1}</p>
-</dd>
-<dt class="field-odd">param target_peaks<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Reference peak-density centroids for heading
-direction <code class="docutils literal notranslate"><span class="pre">angle_index</span></code> to match.</p>
-</dd>
-<dt class="field-even">type target_peaks<span class="colon">:</span></dt>
-<dd class="field-even"><p>2 × NPEAKS_A np.float32</p>
-</dd>
-<dt class="field-odd">param target_peaks_opposite<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Reference peak-density centroids for heading
-direction <strong>opposite</strong> to <code class="docutils literal notranslate"><span class="pre">angle_index</span></code> to match.</p>
-</dd>
-<dt class="field-even">type target_peaks_opposite<span class="colon">:</span></dt>
-<dd class="field-even"><p>2 × NPEAKS_A np.float32</p>
-</dd>
-<dt class="field-odd">param opposites_maxd<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tolerance for matching opposite-direction peaks
+index  into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code> (edge target).</p></li>
+<li><p><strong>angle_index</strong> (<em>int ∈ {0</em><em>,</em><em>..</em><em>,</em><em>NANGLES-1}</em>) – Which angle to match, represented as an index
+into the peaks/edges array.</p></li>
+<li><p><strong>target_peaks</strong> (<em>2 × NPEAKS_A np.float32</em>) – Reference peak-density centroids for heading
+direction <code class="docutils literal notranslate"><span class="pre">angle_index</span></code> to match.</p></li>
+<li><p><strong>target_peaks_opposite</strong> (<em>2 × NPEAKS_A np.float32</em>) – Reference peak-density centroids for heading
+direction <strong>opposite</strong> to <code class="docutils literal notranslate"><span class="pre">angle_index</span></code> to match.</p></li>
+<li><p><strong>opposites_maxd</strong> (<em>positive float</em>) – Tolerance for matching opposite-direction peaks
 from the continuous tracking, in the same
 units as the points <code class="docutils literal notranslate"><span class="pre">peaks</span></code>. (This is most likely
 <strong>normalized [0,1]² coordinates</strong> if you’re
@@ -938,35 +869,27 @@ region where the posterior is very noisy.
 I suggest
 <code class="docutils literal notranslate"><span class="pre">opposites_maxd</span> <span class="pre">=</span> <span class="pre">P/L*0.75</span></code>, where <code class="docutils literal notranslate"><span class="pre">P</span></code> is the
 grid-cell period in pixels and <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
-resolution of the discrete bin (again, in pixels).</p>
-</dd>
-<dt class="field-even">type opposites_maxd<span class="colon">:</span></dt>
-<dd class="field-even"><p>positive float</p>
-</dd>
-<dt class="field-odd">param connection_radius<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tolerance for matching fast-tracked peaks with
+resolution of the discrete bin (again, in pixels).</p></li>
+<li><p><strong>connection_radius</strong> (<em>positive float</em>) – Tolerance for matching fast-tracked peaks with
 posterior-peak-density centroids, in the
 same units as <code class="docutils literal notranslate"><span class="pre">peaks.</span> <span class="pre">This</span> <span class="pre">is</span> <span class="pre">most</span> <span class="pre">likely</span>
 <span class="pre">**normalized</span> <span class="pre">[0,1]²</span> <span class="pre">coordinates**</span> <span class="pre">if</span> <span class="pre">you're</span>
 <span class="pre">following</span> <span class="pre">the</span> <span class="pre">provided</span> <span class="pre">example</span> <span class="pre">workflows).</span>
 <span class="pre">This</span> <span class="pre">should</span> <span class="pre">be</span> <span class="pre">small,</span> <span class="pre">since</span> <span class="pre">we're</span> <span class="pre">just</span> <span class="pre">trying</span> <span class="pre">to</span>
 <span class="pre">account</span> <span class="pre">for</span> <span class="pre">small</span> <span class="pre">changes.</span> <span class="pre">I</span> <span class="pre">suggest</span>
-<span class="pre">``connection_radius</span> <span class="pre">=</span> <span class="pre">P/L/5</span></code>.</p>
+<span class="pre">``connection_radius</span> <span class="pre">=</span> <span class="pre">P/L/5</span></code>.</p></li>
+</ul>
 </dd>
-<dt class="field-even">type connection_radius<span class="colon">:</span></dt>
-<dd class="field-even"><p>positive float</p>
-</dd>
-<dt class="field-odd">returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>paired_indecies</strong> – For each of the <code class="docutils literal notranslate"><span class="pre">NMATCHED</span></code> peak pairs,
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>paired_indecies</strong> – For each of the <code class="docutils literal notranslate"><span class="pre">NMATCHED</span></code> peak pairs,
 the first row is the index into
 <code class="docutils literal notranslate"><span class="pre">target_peaks</span></code> and the second an index into
 <code class="docutils literal notranslate"><span class="pre">target_peaks_opposite</span></code>.</p>
 </dd>
-<dt class="field-even">rtype<span class="colon">:</span></dt>
-<dd class="field-even"><p>2 × NMATCHED np.int32</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2 × NMATCHED np.int32</p>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py function">

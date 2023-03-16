@@ -1308,9 +1308,7 @@ def match_with_tracked_peaks(
     Match "fast-tracked" peak shifts with 
     posterior-peak-density maps.    
     
-    Details: 
-    ^^^^^^^^
-    
+    **Details:**
     In this workflow, we track shifts in single
     peaks over a broad range by re-fitting a single model
     over a high-resolution sweep of heading angles
@@ -1330,9 +1328,7 @@ def match_with_tracked_peaks(
     
     This function matches them. 
     
-    Procedure:
-    """"""""""
-    
+    **Procedure:**
     Fast-tracked peaks are stored as lists of peak locations
     ``peaks`` and edge-indecies ``edges``, for all heading 
     angles. These are computed using the 

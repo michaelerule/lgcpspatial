@@ -642,8 +642,7 @@ def plot_tracked_peaks(
     Plot connected grid fields. Use this with 
     ``get_peaks_at_heading_angles()`` and ``link_peaks()``.
     
-    Angle conventions:
-    ^^^^^^^^^^^^^^^^^^
+    **Angle conventions:**
     
     The indecies ``iφ ∈ {0,..,NANGLES-1}``into the length-
     ``NANGLES`` arguments ``peaks`` and ``edges`` are assumed 
@@ -652,8 +651,7 @@ def plot_tracked_peaks(
     ``phi = linspace(0,2*pi,NANGLES+1)[:-1]``.
     
     
-    Colors:
-    ^^^^^^^
+    **Colors:**
     
     This is designed to be used with the ``riley`` 
     colormap from ``lgcpspatial.plot``. This map starts at 
@@ -672,8 +670,7 @@ def plot_tracked_peaks(
         {West, South, East, North}
     
     
-    Axis orientation:
-    ^^^^^^^^^^^^^^^^^
+    **Axis orientation:**
     
     If the keyword argument ``origin`` is ``'lower'`` (the
     default value), heading angles are interpreted as
@@ -1308,9 +1305,7 @@ def match_with_tracked_peaks(
     Match "fast-tracked" peak shifts with 
     posterior-peak-density maps.    
     
-    Details: 
-    ^^^^^^^^
-    
+    **Details:**
     In this workflow, we track shifts in single
     peaks over a broad range by re-fitting a single model
     over a high-resolution sweep of heading angles
