@@ -431,7 +431,7 @@ containing pairs of indecies (a,b):
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.plot_tracked_peaks">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">plot_tracked_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perim=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compass=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=&lt;matplotlib.colors.LinearSegmentedColormap</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin='lower'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hideaxis=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#plot_tracked_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.plot_tracked_peaks" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">plot_tracked_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perim=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compass=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color=&lt;matplotlib.colors.LinearSegmentedColormap</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin='lower'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hideaxis=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compass_label_pad=15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#plot_tracked_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.plot_tracked_peaks" title="Permalink to this definition"></a></dt>
 <dd><p>Plot connected grid fields. Use this with
 <code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code> and <code class="docutils literal notranslate"><span class="pre">link_peaks()</span></code>.</p>
 <section id="angle-conventions">
@@ -439,7 +439,8 @@ containing pairs of indecies (a,b):
 <p>The indecies <code class="docutils literal notranslate"><span class="pre">iφ</span> <span class="pre">∈</span> <span class="pre">{0,..,NANGLES-1}``into</span> <span class="pre">the</span> <span class="pre">length-</span>
 <span class="pre">``NANGLES</span></code> arguments <code class="docutils literal notranslate"><span class="pre">peaks</span></code> and <code class="docutils literal notranslate"><span class="pre">edges</span></code> are assumed
 to correpond to equally-spaced angles, starting at
-<code class="docutils literal notranslate"><span class="pre">φ=0</span></code>; that is, <code class="docutils literal notranslate"><span class="pre">phi</span> <span class="pre">=</span> <span class="pre">linspace(0,2*pi,NANGLES+1)[:-1]</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">φ=0</span></code>; that is,
+<code class="docutils literal notranslate"><span class="pre">phi</span> <span class="pre">=</span> <span class="pre">linspace(0,2*pi,NANGLES+1)[:-1]</span></code>.</p>
 </section>
 <section id="colors">
 <h2>Colors:<a class="headerlink" href="#colors" title="Permalink to this heading"></a></h2>
@@ -550,6 +551,12 @@ where color components <code class="docutils literal notranslate"><span class="p
 </dd>
 <dt class="field-even">type hideaxis<span class="colon">:</span></dt>
 <dd class="field-even"><p>boolean; default True</p>
+</dd>
+<dt class="field-odd">param compass_label_pad<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Spacing of compass NSEW labels.</p>
+</dd>
+<dt class="field-even">type compass_label_pad<span class="colon">:</span></dt>
+<dd class="field-even"><p>int; default 15</p>
 </dd>
 <dt class="field-odd">param **kwargs<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Forwarded to <code class="docutils literal notranslate"><span class="pre">plot()</span></code></p>

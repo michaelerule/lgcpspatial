@@ -634,11 +634,11 @@ def plot_tracked_peaks(
     color=riley,
     origin='lower',
     hideaxis=True,
+    compass_label_pad=15,
     **kwargs):
     '''
     Plot connected grid fields. Use this with 
     ``get_peaks_at_heading_angles()`` and ``link_peaks()``.
-    
     
     Angle conventions:
     ^^^^^^^^^^^^^^^^^^
@@ -646,7 +646,8 @@ def plot_tracked_peaks(
     The indecies ``iφ ∈ {0,..,NANGLES-1}``into the length-
     ``NANGLES`` arguments ``peaks`` and ``edges`` are assumed 
     to correpond to equally-spaced angles, starting at 
-    ``φ=0``; that is, ``phi = linspace(0,2*pi,NANGLES+1)[:-1]``.
+    ``φ=0``; that is, 
+    ``phi = linspace(0,2*pi,NANGLES+1)[:-1]``.
     
     
     Colors:
@@ -734,6 +735,8 @@ def plot_tracked_peaks(
         ``matplotlib.imshow()``). 
     hideaxis: boolean; default True
         Hide the axis
+    compass_label_pad: int; default 15
+        Spacing of compass NSEW labels.
     **kwargs:
         Forwarded to ``plot()``
     
@@ -843,7 +846,7 @@ def plot_tracked_peaks(
         draw_compass(
             xy0   = p2c(xy0)+0.2*xyd[0] - .3j*xyd[1],
             r     = mean(abs(xyd))*0.04,
-            delta = 30,
+            delta = compass_label_pad,
             cmap_fn = color)
 
 
@@ -993,7 +996,7 @@ def fit_heading_variance(
         Heading angles for every time sample in Dataset
     NSEW: np.float32
         List of reference heading angles to recompute
-        
+    
     Other Parameters
     ----------------
     weight_function: str or function; default 'cos'
@@ -1047,7 +1050,7 @@ def fit_heading_variance(
 
         # Run grid search
         bestindex,bestpars,bestresult,allresults = grid_search(
-            pargrid,evaluate_ELBO)
+            pargrid,evaluate_ELBO)[:4]
         kv = kv0/bestpars[0]
         print('σ0   = %f'%kv0)
         print('β    = %f'%bestpars[0])
