@@ -1338,7 +1338,7 @@ def match_with_tracked_peaks(
     angles. These are computed using the 
     ``lgcpspatial.heading`` module as follows:
     
-    literal block. ::
+    ::
     
     >>  peaks = get_peaks_at_heading_angles(
     >>      data,model,angles,heading_angle)
