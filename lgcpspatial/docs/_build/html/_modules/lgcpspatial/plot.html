@@ -907,8 +907,8 @@
 
 <div class="viewcode-block" id="inference_summary_plot"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.inference_summary_plot">[docs]</a><span class="k">def</span> <span class="nf">inference_summary_plot</span><span class="p">(</span>
     <span class="n">model</span><span class="p">,</span>
-    <span class="n">fit</span><span class="p">,</span>
-    <span class="n">data</span><span class="p">,</span>
+    <span class="n">data</span>          <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fit</span>           <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">ftitle</span>        <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
     <span class="n">cmap</span>          <span class="o">=</span> <span class="s1">&#39;bone_r&#39;</span><span class="p">,</span>
     <span class="n">ax</span>            <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -925,17 +925,20 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    model: lgcp2d.DiagonalFourierLowrank</span>
-<span class="sd">        Initialized model</span>
-<span class="sd">    fit: tuple</span>
-<span class="sd">        Tuple of (low-rank mean, marginal variance, loss)</span>
-<span class="sd">        returned by ``lgcp2d.coordinate_descent()``.</span>
-<span class="sd">    data: loaddata.Dataset</span>
-<span class="sd">        Prepared dataset</span>
-<span class="sd">    ftitle: str</span>
+<span class="sd">    model: lgcp2d.LGCPResult</span>
+<span class="sd">        Result returned by ``lgcp2d.lgcpregress()``</span>
+<span class="sd">        </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    ftitle: str; default &#39;&#39;</span>
 <span class="sd">        Figure title</span>
-<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span> <span class="kn">import</span> <span class="n">LGCPResult</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">LGCPResult</span><span class="p">):</span>
+        <span class="n">data</span>  <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">fit</span>   <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">model</span>
+    
     <span class="n">y</span>       <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">y</span>
     <span class="n">L</span>       <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">L</span>
     <span class="n">mask</span>    <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span>
@@ -1382,7 +1385,8 @@
     <span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">force_aspect</span><span class="p">()</span></div>
-    
+
+
 <div class="viewcode-block" id="shiftplot"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.shiftplot">[docs]</a><span class="k">def</span> <span class="nf">shiftplot</span><span class="p">(</span>
     <span class="n">z1</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">z2</span><span class="p">,</span><span class="n">s2</span><span class="p">,</span>
     <span class="n">centers</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -1424,6 +1428,7 @@
     <span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">force_aspect</span><span class="p">()</span>
     <span class="n">noxyaxes</span><span class="p">()</span></div>
+
 
 <span class="kn">import</span> <span class="nn">lgcpspatial</span>
 <div class="viewcode-block" id="colored_shift_density_images"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.colored_shift_density_images">[docs]</a><span class="k">def</span> <span class="nf">colored_shift_density_images</span><span class="p">(</span>

@@ -14,6 +14,10 @@ from   scipy.special       import j0,jn_zeros
 from   scipy.linalg        import solve_triangular as stri 
 from   typing              import NamedTuple
 
+
+
+
+
 def coordinate_descent(gp,
     initialmean  = None,
     initialcov   = None,
@@ -724,6 +728,7 @@ class DiagonalFourierLowrank:
         posterior_marginal_variances: np.array
             Posterior marginal variance in the spatial 
             domain. Size L² float32 or float64
+        
         '''
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
@@ -1037,16 +1042,6 @@ def npdf(mu,sigma,x):
     x = (x-mu)*invsigma
     return (0.398942280401432678*invsigma)*_exp(-0.5*x**2)
     
-    
-    
-    
-    
-    
-    
-    
-          
-        
-        
 
 # It's useful to be able to control precision: float32 is
 # much faster, but sometimes doesn't work. Jax supports 
@@ -1090,6 +1085,7 @@ def _precision(x,copy=False):
         pass
     return (*map(_precision,x),)
 
+
 class CoordinateDescentResult(NamedTuple):
     '''
     Posterior mean in low-rank spatial frequency subspace.
@@ -1103,3 +1099,78 @@ class CoordinateDescentResult(NamedTuple):
     Value of the loss function.
     '''
     loss:np.ndarray
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+def lgcp_regression(
+
+    ):
+    '''
+    Convenience routine to initialize a 
+    ``DiagonalFourierLowrank`` instance for LGCP 
+    regression. 
+    
+    Parameters
+    ----------
+    
+    Returns
+    -------
+    '''
+    
+    
+def coordinate_descent(gp,
+    initialmean  = None,
+    initialcov   = None,
+    maxiter      = 40,
+    maxmeaniter  = 10,
+    maxvariter   = 1,
+    tol          = 1e-5,
+    showprogress = False):
+
+
+def __init__(self,
+    kv, # Prior variance
+    P,  # Kernel period
+    dataset       = None, # Dataset object;
+    L             = None,
+    n             = None,
+    y             = None,
+    prior_mean    = None,
+    lograte_guess = None,
+    γ             = 1.0,  # Dispersion correction
+    whitenoise    = 0.0,  # White noise kernel 
+    dc            = 1e3,  # DC kernel variance
+    mintol        = 1e-6, # tolerance
+    keep_frequencies         = None,
+    component_threshold_percent = 10.0,
+    kclip=3,    # J0 zero to truncate kernel
+    ):
+    
+
+# Load dataset R11_20190607_EC_02
+L        = 128 # Grid size for position bins
+dataset  = 'r2405_051216b_cell1816.mat'
+datadir  = '../example data/'
+fn       = datadir + dataset
+Fs       = loadmat(fn,squeeze_me=True)['pos_sample_rate']
+data     = Dataset.from_file(fn).prepare(L)
+
+# Use parameters found by optimize_hyperparameters.ipynb
+P        = 23.58975  # Grid period
+v0       = 0.4109905 # Log-rate prior covariance kernel peak variance (zero lag variance)
+model    = DiagonalFourierLowrank(v0,P,data)
+fit      = coordinate_descent(model,tol=1e-3)
+μh,v,vfe = fit
+inference_summary_plot(model,fit,data,dataset);

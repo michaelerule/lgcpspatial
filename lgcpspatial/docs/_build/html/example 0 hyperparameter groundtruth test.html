@@ -489,6 +489,7 @@ div.rendered_html tbody tr:hover {
 <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s1">&#39;Firing rates&#39;</span><span class="p">)</span>
 <span class="n">colorbar</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;spike/sample&#39;</span><span class="p">)</span>
+
 <span class="c1"># Plot the autocorrelation (mask out zero lag)</span>
 <span class="n">subplot2grid</span><span class="p">(</span><span class="n">grid</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 <span class="n">u</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">autocorrelation2</span><span class="p">)</span>
@@ -496,6 +497,7 @@ div.rendered_html tbody tr:hover {
 <span class="n">imshow</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
 <span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 <span class="n">title</span><span class="p">(</span><span class="s1">&#39;2D autocorrelogram&#39;</span><span class="p">)</span>
+
 <span class="c1"># Plot the radial autocorrelation</span>
 <span class="n">subplot2grid</span><span class="p">(</span><span class="n">grid</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">colspan</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">plot</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">radial_autocorr2</span><span class="p">)</span>
@@ -522,6 +524,7 @@ div.rendered_html tbody tr:hover {
     <span class="n">μz</span> <span class="o">=</span> <span class="n">log</span><span class="p">(</span><span class="n">μy</span><span class="p">)</span><span class="o">-</span><span class="n">s</span><span class="o">/</span><span class="mi">2</span>
     <span class="n">v1</span><span class="p">,</span><span class="n">v2</span> <span class="o">=</span> <span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="n">j0</span><span class="p">(</span><span class="n">jn_zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">s</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">μz</span> <span class="o">+</span> <span class="n">s</span><span class="p">)</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">*</span> <span class="n">observed</span><span class="o">/</span><span class="p">(</span><span class="n">v2</span><span class="o">-</span><span class="n">v1</span><span class="p">)</span>
+
 <span class="c1"># Plot calibrated &quot;ideal grid&quot; kernel (exponentiated)</span>
 <span class="c1"># This uses the moments of the multivariate log-Gaussian</span>
 <span class="n">x</span>    <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">-</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span>
@@ -567,8 +570,8 @@ Period (bins) average:               14.991677172191181
 True      period:  16.0
 Heuristic period:  14.991677172191181
 True log-variance: 0.3835029
-Scale (variance):  0.09504333
-Scale (Bessel):    0.5104032249918229
+Scale (variance):  0.10102901
+Scale (Bessel):    0.5294715025647331
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -586,16 +589,15 @@ Scale (Bessel):    0.5104032249918229
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">Arena</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>   <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span><span class="p">,</span> <span class="n">coordinate_descent</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>   <span class="kn">import</span> <span class="n">lgcpregress</span>
 
 <span class="n">P</span>     <span class="o">=</span> <span class="n">P_hat</span>
 <span class="n">data</span>  <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">create_posthoc</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">lograte_guess</span><span class="o">=</span><span class="n">μz</span><span class="p">)</span>
 <span class="n">data</span><span class="o">.</span><span class="n">arena</span> <span class="o">=</span> <span class="n">Arena</span><span class="o">.</span><span class="n">from_mask</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
 <span class="n">data</span><span class="o">.</span><span class="n">position_sample_rate</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># Hz, but this is fictional for simulated data</span>
 <span class="n">data</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="mf">.5</span> <span class="c1"># 1/Meters, but again: fictional</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">σ0</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">fit</span>   <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span> <span class="c1"># (μh,v,vfe)</span>
-<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">datasetname</span><span class="p">);</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">lgcpregress</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">σ0</span><span class="p">,</span><span class="n">P</span><span class="p">)</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">result</span><span class="p">,</span><span class="n">ftitle</span><span class="o">=</span><span class="n">datasetname</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -603,18 +605,34 @@ Scale (Bessel):    0.5104032249918229
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="_images/example_0_hyperparameter_groundtruth_test_6_0.png" src="_images/example_0_hyperparameter_groundtruth_test_6_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[3], line 10</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span> data<span style="color: rgb(98,98,98)">.</span>scale <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(98,98,98)">.5</span> <span style="color: rgb(95,135,135)"># 1/Meters, but again: fictional</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span> result <span style="color: rgb(98,98,98)">=</span> lgcpregress(data,σ0,P)
+<span class="ansi-green-fg">---&gt; 10</span> <span class="ansi-yellow-bg">inference_summary_plot</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">data</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg">result</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg">ftitle</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">datasetname</span><span class="ansi-yellow-bg">)</span>;
+
+File <span class="ansi-green-fg">~/Dropbox (Cambridge University)/Notebooks/PCV/20221024 lgcpspatial v7 github release/tutorials/../lgcpspatial/plot.py:848</span>, in <span class="ansi-cyan-fg">inference_summary_plot</span><span class="ansi-blue-fg">(model, data, fit, ftitle, cmap, ax, caxprops, titlesize, draw_scalebar)</span>
+<span class="ansi-green-intense-fg ansi-bold">    845</span>     fit   <span style="color: rgb(98,98,98)">=</span> model<span style="color: rgb(98,98,98)">.</span>fit
+<span class="ansi-green-intense-fg ansi-bold">    846</span>     model <span style="color: rgb(98,98,98)">=</span> model<span style="color: rgb(98,98,98)">.</span>model
+<span class="ansi-green-fg">--&gt; 848</span> y       <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">data</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">y</span>
+<span class="ansi-green-intense-fg ansi-bold">    849</span> L       <span style="color: rgb(98,98,98)">=</span> data<span style="color: rgb(98,98,98)">.</span>L
+<span class="ansi-green-intense-fg ansi-bold">    850</span> mask    <span style="color: rgb(98,98,98)">=</span> data<span style="color: rgb(98,98,98)">.</span>arena<span style="color: rgb(98,98,98)">.</span>mask
+
+<span class="ansi-red-fg">AttributeError</span>: &#39;LGCPResult&#39; object has no attribute &#39;y&#39;
+</pre></div></div>
 </div>
 </section>
 <section id="Identify-optimal-parameters-via-grid-search">
 <h2>Identify optimal parameters via grid search<a class="headerlink" href="#Identify-optimal-parameters-via-grid-search" title="Permalink to this heading"></a></h2>
 <p>See <code class="docutils literal notranslate"><span class="pre">example</span> <span class="pre">3</span> <span class="pre">optimize</span> <span class="pre">hyperparameters.ipynb</span></code> for more details.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.gridsearch</span> <span class="kn">import</span> <span class="n">grid_search</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span> <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span><span class="p">,</span> <span class="n">coordinate_descent</span>
 
 <span class="n">modelargs</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;L&#39;</span><span class="p">:</span><span class="n">L</span><span class="p">,</span><span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="n">N</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="n">y</span><span class="p">,</span>
@@ -663,53 +681,26 @@ Scale (Bessel):    0.5104032249918229
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[53,12](1.56e+01,5.75e+00) loss=2.345106e+04(done)
-
-Heuristic parameters
-P  = 14.991677
-σ² = 0.510403
-
-Optimized parameters:
-P  = 15.413151
-σ² = 0.088698
-
-True parameters:
-P  = 16.000000
-σ² = 0.383503
-</pre></div></div>
-</div>
 </section>
 <section id="Infer-rate-map-at-optimized-parameters">
 <h2>Infer rate map at optimized parameters<a class="headerlink" href="#Infer-rate-map-at-optimized-parameters" title="Permalink to this heading"></a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">P_use</span>  <span class="o">=</span> <span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">σ0_use</span> <span class="o">=</span> <span class="n">σ0</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">model</span>  <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">σ0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">dc</span><span class="o">=</span><span class="mf">1e6</span><span class="p">,</span><span class="o">**</span><span class="n">modelargs</span><span class="p">)</span>
 <span class="n">fit</span>    <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
-<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">datasetname</span><span class="p">);</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">ftitle</span><span class="o">=</span><span class="n">datasetname</span><span class="p">);</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_0_hyperparameter_groundtruth_test_10_0.png" src="_images/example_0_hyperparameter_groundtruth_test_10_0.png" />
 </div>
 </div>
 </section>
 <section id="Check-accuracy-of-inferred-rates-relative-to-ground-truth">
 <h2>Check accuracy of inferred rates relative to ground truth<a class="headerlink" href="#Check-accuracy-of-inferred-rates-relative-to-ground-truth" title="Permalink to this heading"></a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">fit</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
@@ -747,13 +738,6 @@ P  = 16.000000
 
 <span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_0_hyperparameter_groundtruth_test_12_0.png" src="_images/example_0_hyperparameter_groundtruth_test_12_0.png" />
 </div>
 </div>
 </section>

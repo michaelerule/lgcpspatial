@@ -104,7 +104,7 @@
 <span class="kn">from</span> <span class="nn">numpy.linalg</span>  <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span><span class="n">LinAlgError</span>
 
 <span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span> <span class="kn">import</span> <span class="n">bin_spikes</span><span class="p">,</span> <span class="n">Arena</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>   <span class="kn">import</span> <span class="n">chinv</span><span class="p">,</span><span class="n">chsolve</span><span class="p">,</span><span class="n">RI</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>   <span class="kn">import</span> <span class="n">chinv</span><span class="p">,</span><span class="n">chsolve</span><span class="p">,</span><span class="n">RI</span><span class="p">,</span><span class="n">LGCPResult</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>     <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.util</span>     <span class="kn">import</span> <span class="o">*</span>
 
@@ -410,6 +410,16 @@
 
 <div class="viewcode-block" id="PosteriorSample"><a class="viewcode-back" href="../../lgcpspatial.posterior.html#lgcpspatial.posterior.PosteriorSample">[docs]</a><span class="k">class</span> <span class="nc">PosteriorSample</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Sample the distribution of grid-field peaks from </span>
+<span class="sd">    a log-Gaussian posterior distribution.</span>
+
+<span class="sd">     1. Draw samples in the low-rank space</span>
+<span class="sd">     2. Convert them to spatial coordinates</span>
+<span class="sd">     3. Get probable location of each grid field peak</span>
+
+<span class="sd">    (Treat this class simply as a function with named</span>
+<span class="sd">    return values)</span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    density:</span>
@@ -436,6 +446,49 @@
 <span class="sd">    kde: np.float32</span>
 <span class="sd">        (L*resolution)x(L*resolution) smoothed peak </span>
 <span class="sd">        density map.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model: </span>
+<span class="sd">        a ``diagonal_fourier_lowrank`` model object </span>
+<span class="sd">    posterior_mean: </span>
+<span class="sd">        low-rank posterior mean returned by </span>
+<span class="sd">        ``coordinate_descent(model)``</span>
+<span class="sd">    posterior_variance: </span>
+<span class="sd">        marginal variances returned by </span>
+<span class="sd">        ``coordinate_descent(model)``</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    Arena: object</span>
+<span class="sd">        An object with an atrribute</span>
+<span class="sd">        hull: scipy.spatial._qhull.ConvexHull</span>
+<span class="sd">            Convex Hull object describing the arena </span>
+<span class="sd">            perimeter. Points will be clipped to this if</span>
+<span class="sd">            it is not None. Ensure this convex hull has </span>
+<span class="sd">            been scaled up by the same factor if </span>
+<span class="sd">            ``resolution`` is &gt;1.</span>
+<span class="sd">    nsamples: int&gt;1</span>
+<span class="sd">        Number of samples to draw; </span>
+<span class="sd">        Default is 200</span>
+<span class="sd">    resolution: int&gt;0</span>
+<span class="sd">        Upsampling factor compared to the bin-grid </span>
+<span class="sd">        resolution; Default is 2</span>
+<span class="sd">    radius: float</span>
+<span class="sd">        Local region (in units of pixels on the L×L</span>
+<span class="sd">        grid) that peaks should clear to be included.</span>
+<span class="sd">        I suggest P/2.5</span>
+<span class="sd">    edge_radius: float; Default 0</span>
+<span class="sd">        Remove peaks closer than ``edge_radius`` bins</span>
+<span class="sd">        to the arena&#39;s edge. The default value of 0</span>
+<span class="sd">        does not remove points within a margin of</span>
+<span class="sd">        the boundary.</span>
+<span class="sd">    height_threshold: float</span>
+<span class="sd">        Peak height threshold</span>
+<span class="sd">    prpeak_threshold: float</span>
+<span class="sd">        Probability threshold for including a peak,</span>
+<span class="sd">        in [0,1], based on the fractions of samples</span>
+<span class="sd">        that contain a given peak.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
         <span class="n">model</span><span class="p">,</span>
@@ -448,60 +501,6 @@
         <span class="n">edge_radius</span>      <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">height_threshold</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">prpeak_threshold</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Sample the distribution of grid-field peaks from </span>
-<span class="sd">        a log-Gaussian posterior distribution.</span>
-
-<span class="sd">         1. Draw samples in the low-rank space</span>
-<span class="sd">         2. Convert them to spatial coordinates</span>
-<span class="sd">         3. Get probable location of each grid field peak</span>
-<span class="sd">         </span>
-<span class="sd">        (Treat this class simply as a function with named</span>
-<span class="sd">        return values)</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        model: </span>
-<span class="sd">            a ``diagonal_fourier_lowrank`` model object </span>
-<span class="sd">        posterior_mean: </span>
-<span class="sd">            low-rank posterior mean returned by </span>
-<span class="sd">            ``coordinate_descent(model)``</span>
-<span class="sd">        posterior_variance: </span>
-<span class="sd">            marginal variances returned by </span>
-<span class="sd">            ``coordinate_descent(model)``</span>
-
-<span class="sd">        Other Parameters</span>
-<span class="sd">        ----------------</span>
-<span class="sd">        Arena: object</span>
-<span class="sd">            An object with an atrribute</span>
-<span class="sd">            hull: scipy.spatial._qhull.ConvexHull</span>
-<span class="sd">                Convex Hull object describing the arena </span>
-<span class="sd">                perimeter. Points will be clipped to this if</span>
-<span class="sd">                it is not None. Ensure this convex hull has </span>
-<span class="sd">                been scaled up by the same factor if </span>
-<span class="sd">                ``resolution`` is &gt;1.</span>
-<span class="sd">        nsamples: int&gt;1</span>
-<span class="sd">            Number of samples to draw; </span>
-<span class="sd">            Default is 200</span>
-<span class="sd">        resolution: int&gt;0</span>
-<span class="sd">            Upsampling factor compared to the bin-grid </span>
-<span class="sd">            resolution; Default is 2</span>
-<span class="sd">        radius: float</span>
-<span class="sd">            Local region (in units of pixels on the L×L</span>
-<span class="sd">            grid) that peaks should clear to be included.</span>
-<span class="sd">            I suggest P/2.5</span>
-<span class="sd">        edge_radius: float; Default 0</span>
-<span class="sd">            Remove peaks closer than ``edge_radius`` bins</span>
-<span class="sd">            to the arena&#39;s edge. The default value of 0</span>
-<span class="sd">            does not remove points within a margin of</span>
-<span class="sd">            the boundary.</span>
-<span class="sd">        height_threshold: float</span>
-<span class="sd">            Peak height threshold</span>
-<span class="sd">        prpeak_threshold: float</span>
-<span class="sd">            Probability threshold for including a peak,</span>
-<span class="sd">            in [0,1], based on the fractions of samples</span>
-<span class="sd">            that contain a given peak.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
         <span class="c1"># Get log-rate samples</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">sample_posterior_lograte</span><span class="p">(</span>
             <span class="n">model</span><span class="p">,</span>
@@ -574,7 +573,6 @@
             <span class="n">sigmas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;zN,ZN,N-&gt;zZ&#39;</span><span class="p">,</span><span class="n">delta</span><span class="p">,</span><span class="n">delta</span><span class="p">,</span><span class="n">pr</span><span class="p">)</span>
             <span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="o">=</span> <span class="n">c2p</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
         
-        <span class="nb">print</span><span class="p">(</span><span class="n">totals</span><span class="p">)</span>
         <span class="n">keep</span>   <span class="o">=</span> <span class="p">(</span><span class="n">totals</span> <span class="o">&gt;</span> <span class="n">prpeak_threshold</span><span class="o">*</span><span class="n">nsamples</span><span class="p">)</span> <span class="o">&amp;</span> \
             <span class="n">is_in_hull</span><span class="p">(</span><span class="n">means</span><span class="p">,</span><span class="n">arena</span><span class="o">.</span><span class="n">hull</span><span class="p">)</span>
         <span class="n">peaks</span>  <span class="o">=</span> <span class="n">peaks</span><span class="p">[:,</span><span class="n">keep</span><span class="p">]</span>
@@ -594,6 +592,24 @@
 
 <div class="viewcode-block" id="SampledConfidence"><a class="viewcode-back" href="../../lgcpspatial.posterior.html#lgcpspatial.posterior.SampledConfidence">[docs]</a><span class="k">class</span> <span class="nc">SampledConfidence</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Construct confidence intervals for grid-field peaks</span>
+<span class="sd">    using sampling, and (optionally) plot them.</span>
+
+<span class="sd">    **For small posterior variance:** The resulting</span>
+<span class="sd">    confidence intervals may be too large, since </span>
+<span class="sd">    spurious peaks near the edges of a field&#39;s Voronoi </span>
+<span class="sd">    cell are counted toward the posterior peak-location</span>
+<span class="sd">    variance. This is conservative.</span>
+
+<span class="sd">    **For large posterior variance:** We estimate the</span>
+<span class="sd">    uncertainty in a peak&#39;s location by measuring</span>
+<span class="sd">    the variance of each peak in the peak-density map.</span>
+<span class="sd">    These samples are limited to each peak&#39;s Voronoi </span>
+<span class="sd">    cell, which creates an upper bound on the </span>
+<span class="sd">    uncertainty. I.e. this will always report that</span>
+<span class="sd">    grid-field peaks are localized to within one </span>
+<span class="sd">    grid-cell period. </span>
+<span class="sd">    </span>
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    samples: PosteriorSample</span>
@@ -602,12 +618,71 @@
 <span class="sd">        NaN-delimeted (x,y) coordinates for plotting </span>
 <span class="sd">        confidence ellipses; </span>
 <span class="sd">    gaussians: List</span>
-<span class="sd">        (μ,Σ) 2D confidence Gaussians for all peaks.</span>
+<span class="sd">        (μ,Σ) 2D confidence Gaussians for all peaks.   </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    result: LGCPResult</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    radius: positive float; default 0.45</span>
+<span class="sd">        Region in which peak must be a local maximum to </span>
+<span class="sd">        be considered a grid field. </span>
+<span class="sd">        This is in units of </span>
+<span class="sd">        **fraction of the grid-cell period ``model.P``**.</span>
+<span class="sd">    edge_radius: positive float; Default 0.0</span>
+<span class="sd">        Remove peaks closer than ``edge_radius`` </span>
+<span class="sd">        to the arena&#39;s edge. The default value of 0</span>
+<span class="sd">        does not remove points within a margin of</span>
+<span class="sd">        the boundary.</span>
+<span class="sd">        This is in units of </span>
+<span class="sd">        **fraction of the grid-cell period ``model.P``**.</span>
+<span class="sd">    resolution: positive integer</span>
+<span class="sd">        Grid upsampling factor, defaults to 2</span>
+<span class="sd">    nsamples: positive integer</span>
+<span class="sd">        Number of samples to draw, defaults to 4000</span>
+<span class="sd">    height_threshold: float in (0,1)</span>
+<span class="sd">        Inclusion threshold for peak height in each </span>
+<span class="sd">        sample and probability peak over all samples,</span>
+<span class="sd">        default:0</span>
+<span class="sd">    prpeak_threshold: float</span>
+<span class="sd">        Probability threshold for including a peak,</span>
+<span class="sd">        in [0,1], based on the fractions of samples</span>
+<span class="sd">        that contain a given peak. Default is 0</span>
+<span class="sd">    pct: float in (0,100)</span>
+<span class="sd">        Percentile to use for confidence bounds,</span>
+<span class="sd">        default is 95%.</span>
+<span class="sd">    doplot: boolean</span>
+<span class="sd">        Plot resulting grid map? Default is False.</span>
+<span class="sd">    cmap: matplotlib.colormap</span>
+<span class="sd">        Forwarded to ``imshow()`` if ``doplot=True``</span>
+<span class="sd">    draw_scalebar: boolean; default True</span>
+<span class="sd">        Draw 1 meter scale bar?</span>
+<span class="sd">    draw_colorbar: boolean; default True</span>
+<span class="sd">        Add a color bar axis?</span>
+<span class="sd">    **kwargs:</span>
+<span class="sd">        Forwarded to ``plot()`` if ``doplot`` is True</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    SampledConfidence object with these attributes:</span>
+<span class="sd">        samples: PosteriorSample</span>
+<span class="sd">            A PosteriorSample object.</span>
+<span class="sd">        ellipses: </span>
+<span class="sd">            (x,y) coordinates for confidence ellipses,</span>
+<span class="sd">            NaN delimeted.</span>
+<span class="sd">        gaussians: </span>
+<span class="sd">            List of (μ,Σ) 2D confidence Gaussians.</span>
+<span class="sd">        arena: </span>
+<span class="sd">            An Arena object representing the experiment</span>
+<span class="sd">            arena at the upsampled resolution.</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">,</span>
-        <span class="n">model</span><span class="p">,</span>
-        <span class="n">fit</span><span class="p">,</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">fit</span>   <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">radius</span>           <span class="o">=</span> <span class="mf">0.45</span><span class="p">,</span>
         <span class="n">edge_radius</span>      <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">resolution</span>       <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
@@ -621,98 +696,19 @@
         <span class="n">draw_border</span>      <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">draw_colorbar</span>    <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;        </span>
-<span class="sd">        Construct confidence intervals for grid-field peaks</span>
-<span class="sd">        using sampling, and (optionally) plot them.</span>
-<span class="sd">                </span>
-<span class="sd">        **For small posterior variance:** The resulting</span>
-<span class="sd">        confidence intervals may be too large, since </span>
-<span class="sd">        spurious peaks near the edges of a field&#39;s Voronoi </span>
-<span class="sd">        cell are counted toward the posterior peak-location</span>
-<span class="sd">        variance. This is conservative.</span>
-<span class="sd">                </span>
-<span class="sd">        **For large posterior variance:** We estimate the</span>
-<span class="sd">        uncertainty in a peak&#39;s location by measuring</span>
-<span class="sd">        the variance of each peak in the peak-density map.</span>
-<span class="sd">        These samples are limited to each peak&#39;s Voronoi </span>
-<span class="sd">        cell, which creates an upper bound on the </span>
-<span class="sd">        uncertainty. I.e. this will always report that</span>
-<span class="sd">        grid-field peaks are localized to within one </span>
-<span class="sd">        grid-cell period. </span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        data : </span>
-<span class="sd">            Object containing the following attributes:</span>
-<span class="sd">        model: diagonal_fourier_lowrank</span>
-<span class="sd">            Model built from this data of type </span>
-<span class="sd">            lgcp2d.diagonal_fourier_lowrank</span>
-<span class="sd">        fit: </span>
-<span class="sd">            Fit posterior calculated by </span>
-<span class="sd">            lgcp2d.coordinate_descent</span>
-
-<span class="sd">        Other Parameters</span>
-<span class="sd">        ----------------</span>
-<span class="sd">        radius: positive float; default 0.45</span>
-<span class="sd">            Region in which peak must be a local maximum to </span>
-<span class="sd">            be considered a grid field. </span>
-<span class="sd">            This is in units of </span>
-<span class="sd">            **fraction of the grid-cell period ``model.P``**.</span>
-<span class="sd">        edge_radius: positive float; Default 0.0</span>
-<span class="sd">            Remove peaks closer than ``edge_radius`` </span>
-<span class="sd">            to the arena&#39;s edge. The default value of 0</span>
-<span class="sd">            does not remove points within a margin of</span>
-<span class="sd">            the boundary.</span>
-<span class="sd">            This is in units of </span>
-<span class="sd">            **fraction of the grid-cell period ``model.P``**.</span>
-<span class="sd">        resolution: positive integer</span>
-<span class="sd">            Grid upsampling factor, defaults to 2</span>
-<span class="sd">        nsamples: positive integer</span>
-<span class="sd">            Number of samples to draw, defaults to 4000</span>
-<span class="sd">        height_threshold: float in (0,1)</span>
-<span class="sd">            Inclusion threshold for peak height in each </span>
-<span class="sd">            sample and probability peak over all samples,</span>
-<span class="sd">            default:0</span>
-<span class="sd">        prpeak_threshold: float</span>
-<span class="sd">            Probability threshold for including a peak,</span>
-<span class="sd">            in [0,1], based on the fractions of samples</span>
-<span class="sd">            that contain a given peak. Default is 0</span>
-<span class="sd">        pct: float in (0,100)</span>
-<span class="sd">            Percentile to use for confidence bounds,</span>
-<span class="sd">            default is 95%.</span>
-<span class="sd">        doplot: boolean</span>
-<span class="sd">            Plot resulting grid map? Default is False.</span>
-<span class="sd">        cmap: matplotlib.colormap</span>
-<span class="sd">            Forwarded to ``imshow()`` if ``doplot=True``</span>
-<span class="sd">        draw_scalebar: boolean; default True</span>
-<span class="sd">            Draw 1 meter scale bar?</span>
-<span class="sd">        draw_colorbar: boolean; default True</span>
-<span class="sd">            Add a color bar axis?</span>
-<span class="sd">        **kwargs:</span>
-<span class="sd">            Forwarded to ``plot()`` if ``doplot`` is True</span>
-<span class="sd">            </span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        SampledConfidence object with these attributes:</span>
-<span class="sd">            samples: PosteriorSample</span>
-<span class="sd">                A PosteriorSample object.</span>
-<span class="sd">            ellipses: </span>
-<span class="sd">                (x,y) coordinates for confidence ellipses,</span>
-<span class="sd">                NaN delimeted.</span>
-<span class="sd">            gaussians: </span>
-<span class="sd">                List of (μ,Σ) 2D confidence Gaussians.</span>
-<span class="sd">            arena: </span>
-<span class="sd">                An Arena object representing the experiment</span>
-<span class="sd">                arena at the upsampled resolution.</span>
-
-<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">LGCPResult</span><span class="p">):</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model</span>
+            <span class="n">fit</span>   <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">fit</span>
+            <span class="n">data</span>  <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span>
+        
         <span class="n">L</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">L</span>
 
         <span class="c1"># Retrieve the posterior mode (in low-D frequency)</span>
         <span class="c1"># and variance (in space)</span>
         <span class="n">posterior_mean</span><span class="p">,</span><span class="n">posterior_variance</span> <span class="o">=</span> <span class="n">fit</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
         
-        <span class="n">radius</span> <span class="o">*=</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
+        <span class="n">radius</span>      <span class="o">*=</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
         <span class="n">edge_radius</span> <span class="o">*=</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
         
         <span class="c1"># Sample from the GP posterior (see posterior.py)</span>
@@ -814,11 +810,75 @@
 
 
 <div class="viewcode-block" id="QuadraticConfidence"><a class="viewcode-back" href="../../lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticConfidence">[docs]</a><span class="k">class</span> <span class="nc">QuadraticConfidence</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Locally-quadratic approximation of peak-location</span>
+<span class="sd">    confidence intervals.</span>
+
+<span class="sd">    **For small posterior variance:** The locally-</span>
+<span class="sd">    quadratic intervals tend to be smaller than the</span>
+<span class="sd">    peak-density map sampled intervals, because they</span>
+<span class="sd">    exclude spurious peaks at intermediate locations.</span>
+<span class="sd">    This has been spot-checked and found true using</span>
+<span class="sd">    shuffle tests on the Krupic data, but should be</span>
+<span class="sd">    verified again when using new data. </span>
+
+<span class="sd">    **For large posterior variance:** The locally-</span>
+<span class="sd">    quadratic intervals are not interpretable, since</span>
+<span class="sd">    they do not account for the fact that grid fields</span>
+<span class="sd">    are confined to a region related to the grid perid. </span>
+<span class="sd">    Incorrect, large values will be returned. These</span>
+<span class="sd">    should be discarded by setting the </span>
+<span class="sd">    ``localization_radius`` parameter.       </span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ellipses: list</span>
+<span class="sd">        List of x,y coordinates for plotting confidence </span>
+<span class="sd">        ellipses; NaN delimeted.</span>
+<span class="sd">    gaussians: list </span>
+<span class="sd">        List of (μ,Σ) 2D confidence Gaussians for </span>
+<span class="sd">        all peaks.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    result: LGCPResult</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    radius: float; Default 0.45</span>
+<span class="sd">        Region in which a peak must be a local maximum </span>
+<span class="sd">        to count as a grid field. </span>
+<span class="sd">        This is in units of </span>
+<span class="sd">        **fraction of the grid-cell period ``model.P``**.</span>
+<span class="sd">    localization_radius: float; Default 0.8</span>
+<span class="sd">        Drop peaks with confidence outside this radius.</span>
+<span class="sd">        Set to ``inf`` to retain all peaks. </span>
+<span class="sd">        This is in units of </span>
+<span class="sd">        **fraction of the grid-cell period ``model.P``**.</span>
+<span class="sd">    edge_radius: float; Default 0</span>
+<span class="sd">        Remove peaks closer than ``edge_radius`` bins</span>
+<span class="sd">        to the arena&#39;s edge. The default value of 0</span>
+<span class="sd">        does not remove points within a margin of</span>
+<span class="sd">        the boundary.</span>
+<span class="sd">    height_threshold: float in (0,1); default 0.5</span>
+<span class="sd">        Inclusion threshold for peak height in each </span>
+<span class="sd">        sample and probability peak over all samples,</span>
+<span class="sd">    prpeak_threshold: float</span>
+<span class="sd">        Probability threshold for including a peak,</span>
+<span class="sd">        iinterpolate_peaksn [0,1], based on the </span>
+<span class="sd">        fractions of samples that contain a given peak.</span>
+<span class="sd">    pct: float in (0,100); default 95.0</span>
+<span class="sd">        percentile to use for confidence bounds,</span>
+<span class="sd">    doplot: boolean, default True</span>
+<span class="sd">        Render a plot of the grid map? Default:False. </span>
+<span class="sd">    draw_border: boolean, default True</span>
+<span class="sd">        Whether to render the arena border if plotting.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">,</span>
-        <span class="n">model</span><span class="p">,</span>
-        <span class="n">fit</span><span class="p">,</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">fit</span>   <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">radius</span>              <span class="o">=</span> <span class="mf">0.45</span><span class="p">,</span>
         <span class="n">localization_radius</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
         <span class="n">edge_radius</span>         <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
@@ -827,79 +887,17 @@
         <span class="n">doplot</span>              <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">draw_border</span>         <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Locally-quadratic approximation of peak-location</span>
-<span class="sd">        confidence intervals.</span>
-<span class="sd">        </span>
-<span class="sd">        **For small posterior variance:** The locally-</span>
-<span class="sd">        quadratic intervals tend to be smaller than the</span>
-<span class="sd">        peak-density map sampled intervals, because they</span>
-<span class="sd">        exclude spurious peaks at intermediate locations.</span>
-<span class="sd">        This has been spot-checked and found true using</span>
-<span class="sd">        shuffle tests on the Krupic data, but should be</span>
-<span class="sd">        verified again when using new data. </span>
-<span class="sd">                </span>
-<span class="sd">        **For large posterior variance:** The locally-</span>
-<span class="sd">        quadratic intervals are not interpretable, since</span>
-<span class="sd">        they do not account for the fact that grid fields</span>
-<span class="sd">        are confined to a region related to the grid perid. </span>
-<span class="sd">        Incorrect, large values will be returned. These</span>
-<span class="sd">        should be discarded by setting the </span>
-<span class="sd">        ``localization_radius`` parameter.       </span>
-<span class="sd">    </span>
-<span class="sd">        Attributes</span>
-<span class="sd">        ----------</span>
-<span class="sd">        ellipses: list</span>
-<span class="sd">            List of x,y coordinates for plotting confidence </span>
-<span class="sd">            ellipses; NaN delimeted.</span>
-<span class="sd">        gaussians: list </span>
-<span class="sd">            List of (μ,Σ) 2D confidence Gaussians for </span>
-<span class="sd">            all peaks.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        data: Dataset </span>
-<span class="sd">        model: </span>
-<span class="sd">            Model built from this data of type </span>
-<span class="sd">            lgcp2d.diagonal_fourier_lowrank</span>
-<span class="sd">        fit: </span>
-<span class="sd">            Posterior fitted by lgcp2d.coordinate_descent</span>
-
-<span class="sd">        Other Parameters</span>
-<span class="sd">        ----------------</span>
-<span class="sd">        radius: float; Default 0.45</span>
-<span class="sd">            Region in which a peak must be a local maximum </span>
-<span class="sd">            to count as a grid field. </span>
-<span class="sd">            This is in units of </span>
-<span class="sd">            **fraction of the grid-cell period ``model.P``**.</span>
-<span class="sd">        localization_radius: float; Default 0.8</span>
-<span class="sd">            Drop peaks with confidence outside this radius.</span>
-<span class="sd">            Set to ``inf`` to retain all peaks. </span>
-<span class="sd">            This is in units of </span>
-<span class="sd">            **fraction of the grid-cell period ``model.P``**.</span>
-<span class="sd">        edge_radius: float; Default 0</span>
-<span class="sd">            Remove peaks closer than ``edge_radius`` bins</span>
-<span class="sd">            to the arena&#39;s edge. The default value of 0</span>
-<span class="sd">            does not remove points within a margin of</span>
-<span class="sd">            the boundary.</span>
-<span class="sd">        height_threshold: float in (0,1); default 0.5</span>
-<span class="sd">            Inclusion threshold for peak height in each </span>
-<span class="sd">            sample and probability peak over all samples,</span>
-<span class="sd">        prpeak_threshold: float</span>
-<span class="sd">            Probability threshold for including a peak,</span>
-<span class="sd">            iinterpolate_peaksn [0,1], based on the </span>
-<span class="sd">            fractions of samples that contain a given peak.</span>
-<span class="sd">        pct: float in (0,100); default 95.0</span>
-<span class="sd">            percentile to use for confidence bounds,</span>
-<span class="sd">        doplot: boolean, default True</span>
-<span class="sd">            Render a plot of the grid map? Default:False. </span>
-<span class="sd">        draw_border: boolean, default True</span>
-<span class="sd">            Whether to render the arena border if plotting.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">LGCPResult</span><span class="p">):</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model</span>
+            <span class="n">fit</span>   <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">fit</span>
+            <span class="n">data</span>  <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span>
+        
         <span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cached</span>
         <span class="n">P</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
-        <span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span><span class="o">*</span><span class="n">P</span>
+        <span class="n">radius</span>              <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span><span class="o">*</span><span class="n">P</span>
         <span class="n">localization_radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">localization_radius</span><span class="p">)</span><span class="o">*</span><span class="n">P</span>
+        <span class="n">edge_radius</span>         <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">edge_radius</span><span class="p">)</span><span class="o">*</span><span class="n">P</span>
 
         <span class="c1"># Retrieve the posterior mode (in low-D space) and </span>
         <span class="c1"># variance (in regular space)</span>
@@ -1016,10 +1014,61 @@
 
 
 <div class="viewcode-block" id="QuadraticConfidenceJoint"><a class="viewcode-back" href="../../lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticConfidenceJoint">[docs]</a><span class="k">class</span> <span class="nc">QuadraticConfidenceJoint</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Similar to QuadraticConfidence, but modified to </span>
+<span class="sd">    return the joint covariance to address correlations </span>
+<span class="sd">    between fields in the posterior introduced by the </span>
+<span class="sd">    GP prior. </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    result: LGCPResult</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    radius: float</span>
+<span class="sd">        Region in which a peak must be a local maximum </span>
+<span class="sd">        to count as a grid field. This is in units of </span>
+<span class="sd">        &quot;bins&quot; on the L×L grid.</span>
+<span class="sd">        **fraction of the grid-cell period ``model.P``**.</span>
+<span class="sd">    localization_radius: float</span>
+<span class="sd">        Drop peaks with confidence outside this radius.</span>
+<span class="sd">        **fraction of the grid-cell period ``model.P``**.</span>
+<span class="sd">    height_threshold: float in (0,1), default:.8</span>
+<span class="sd">        Inclusion threshold for peak height in each </span>
+<span class="sd">        sample  and probability peak over all samples, </span>
+<span class="sd">    pct: float in (0,100), default:95</span>
+<span class="sd">        percentile to use for confidence bounds</span>
+<span class="sd">    edge_radius: float; Default 0</span>
+<span class="sd">        Remove peaks closer than ``edge_radius`` bins</span>
+<span class="sd">        to the arena&#39;s edge. The default value of 0</span>
+<span class="sd">        does not remove points within a margin of</span>
+<span class="sd">        the boundary.</span>
+<span class="sd">    doplot: boolean, default:False. </span>
+<span class="sd">        Plot resulting the grid map? </span>
+<span class="sd">    **kwargs:</span>
+<span class="sd">        Forwarded to plot()</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    (rx,ry):</span>
+<span class="sd">        Field locations</span>
+<span class="sd">    ellipses: </span>
+<span class="sd">        NaN-delimeted x,y coordinates for plotting </span>
+<span class="sd">        confidence ellipses; </span>
+<span class="sd">    gaussians: list</span>
+<span class="sd">        (μ,Σ) 2D confidence Gaussians for all peaks.</span>
+<span class="sd">    ok: list&lt;int&gt;</span>
+<span class="sd">        Which of the ``(rx,ry)`` points were included </span>
+<span class="sd">        in Σx0</span>
+<span class="sd">    Σx0: </span>
+<span class="sd">        Joint covariance of all included points, packed</span>
+<span class="sd">        as ``(x,y)``</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">,</span>
-        <span class="n">model</span><span class="p">,</span>
-        <span class="n">fit</span><span class="p">,</span> 
+        <span class="n">model</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">fit</span>   <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">radius</span>              <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">localization_radius</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">edge_radius</span>         <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
@@ -1028,66 +1077,12 @@
         <span class="n">regularization</span>      <span class="o">=</span> <span class="mf">1e-5</span><span class="p">,</span>
         <span class="n">doplot</span>              <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Similar to QuadraticConfidence, but modified to </span>
-<span class="sd">        return the joint covariance to address correlations </span>
-<span class="sd">        between fields in the posterior introduced by the </span>
-<span class="sd">        GP prior. </span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        data : </span>
-<span class="sd">            Object containing the following fields:</span>
-<span class="sd">                TODO</span>
-<span class="sd">        model: </span>
-<span class="sd">            model built from this data of type </span>
-<span class="sd">            lgcp2d.diagonal_fourier_lowrank</span>
-<span class="sd">        fit: </span>
-<span class="sd">            fit posterior calculated by </span>
-<span class="sd">            lgcp2d.coordinate_descent</span>
-<span class="sd">        radius: float</span>
-<span class="sd">            Region in which a peak must be a local maximum </span>
-<span class="sd">            to count as a grid field. This is in units of </span>
-<span class="sd">            &quot;bins&quot; on the L×L grid.</span>
-<span class="sd">            **fraction of the grid-cell period ``model.P``**.</span>
-<span class="sd">        localization_radius: float</span>
-<span class="sd">            Drop peaks with confidence outside this radius.</span>
-<span class="sd">            **fraction of the grid-cell period ``model.P``**.</span>
-
-<span class="sd">        Other Parameters</span>
-<span class="sd">        ----------------</span>
-<span class="sd">        height_threshold: float in (0,1), default:.8</span>
-<span class="sd">            Inclusion threshold for peak height in each </span>
-<span class="sd">            sample  and probability peak over all samples, </span>
-<span class="sd">            </span>
-<span class="sd">        pct: float in (0,100), default:95</span>
-<span class="sd">            percentile to use for confidence bounds</span>
-<span class="sd">        edge_radius: float; Default 0</span>
-<span class="sd">            Remove peaks closer than ``edge_radius`` bins</span>
-<span class="sd">            to the arena&#39;s edge. The default value of 0</span>
-<span class="sd">            does not remove points within a margin of</span>
-<span class="sd">            the boundary.</span>
-<span class="sd">        doplot: boolean, default:False. </span>
-<span class="sd">            Plot resulting the grid map? </span>
-<span class="sd">        **kwargs:</span>
-<span class="sd">            Forwarded to plot()</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        (rx,ry):</span>
-<span class="sd">            Field locations</span>
-<span class="sd">        ellipses: </span>
-<span class="sd">            NaN-delimeted x,y coordinates for plotting </span>
-<span class="sd">            confidence ellipses; </span>
-<span class="sd">        gaussians: list</span>
-<span class="sd">            (μ,Σ) 2D confidence Gaussians for all peaks.</span>
-<span class="sd">        ok: list&lt;int&gt;</span>
-<span class="sd">            Which of the ``(rx,ry)`` points were included </span>
-<span class="sd">            in Σx0</span>
-<span class="sd">        Σx0: </span>
-<span class="sd">            Joint covariance of all included points, packed</span>
-<span class="sd">            as ``(x,y)``</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">LGCPResult</span><span class="p">):</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model</span>
+            <span class="n">fit</span>   <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">fit</span>
+            <span class="n">data</span>  <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span>
+        
         <span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cached</span>
         <span class="n">P</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
         <span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span><span class="o">*</span><span class="n">P</span>
@@ -1225,11 +1220,59 @@
 
 
 <div class="viewcode-block" id="QuadraticExponentialConfidence"><a class="viewcode-back" href="../../lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticExponentialConfidence">[docs]</a><span class="k">class</span> <span class="nc">QuadraticExponentialConfidence</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Locally-quadratic approximation based on the </span>
+<span class="sd">    posterior firing-rate moments. </span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ellipses: list</span>
+<span class="sd">        List of x,y coordinates for plotting confidence </span>
+<span class="sd">        ellipses; NaN delimeted.</span>
+<span class="sd">    gaussians: list </span>
+<span class="sd">        List of (μ,Σ) 2D confidence Gaussians for </span>
+<span class="sd">        all peaks.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    result: LGCPResult</span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    radius: float; Default 0.45</span>
+<span class="sd">        Region in which a peak must be a local maximum </span>
+<span class="sd">        to count as a grid field. </span>
+<span class="sd">        This is in units of </span>
+<span class="sd">        **fraction of the grid-cell period ``model.P``**.</span>
+<span class="sd">    localization_radius: float; Default 0.8</span>
+<span class="sd">        Drop peaks with confidence outside this radius.</span>
+<span class="sd">        Set to ``inf`` to retain all peaks. </span>
+<span class="sd">        This is in units of </span>
+<span class="sd">        **fraction of the grid-cell period ``model.P``**.</span>
+<span class="sd">    edge_radius: float; Default 0</span>
+<span class="sd">        Remove peaks closer than ``edge_radius`` bins</span>
+<span class="sd">        to the arena&#39;s edge. The default value of 0</span>
+<span class="sd">        does not remove points within a margin of</span>
+<span class="sd">        the boundary.</span>
+<span class="sd">    height_threshold: float in (0,1); default 0.5</span>
+<span class="sd">        Inclusion threshold for peak height in each </span>
+<span class="sd">        sample and probability peak over all samples,</span>
+<span class="sd">    prpeak_threshold: float</span>
+<span class="sd">        Probability threshold for including a peak,</span>
+<span class="sd">        iinterpolate_peaksn [0,1], based on the </span>
+<span class="sd">        fractions of samples that contain a given peak.</span>
+<span class="sd">    pct: float in (0,100); default 95.0</span>
+<span class="sd">        percentile to use for confidence bounds,</span>
+<span class="sd">    doplot: boolean, default True</span>
+<span class="sd">        Render a plot of the grid map? Default:False. </span>
+<span class="sd">    draw_border: boolean, default True</span>
+<span class="sd">        Whether to render the arena border if plotting.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">,</span>
-        <span class="n">model</span><span class="p">,</span>
-        <span class="n">fit</span><span class="p">,</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">fit</span>   <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">radius</span>              <span class="o">=</span> <span class="mf">0.45</span><span class="p">,</span>
         <span class="n">localization_radius</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
         <span class="n">edge_radius</span>         <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
@@ -1238,59 +1281,12 @@
         <span class="n">doplot</span>              <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">draw_border</span>         <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Locally-quadratic approximation based on the </span>
-<span class="sd">        posterior firing-rate moments. </span>
-<span class="sd">        </span>
-<span class="sd">        Attributes</span>
-<span class="sd">        ----------</span>
-<span class="sd">        ellipses: list</span>
-<span class="sd">            List of x,y coordinates for plotting confidence </span>
-<span class="sd">            ellipses; NaN delimeted.</span>
-<span class="sd">        gaussians: list </span>
-<span class="sd">            List of (μ,Σ) 2D confidence Gaussians for </span>
-<span class="sd">            all peaks.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        data: Dataset </span>
-<span class="sd">        model: </span>
-<span class="sd">            Model built from this data of type </span>
-<span class="sd">            lgcp2d.diagonal_fourier_lowrank</span>
-<span class="sd">        fit: </span>
-<span class="sd">            Posterior fitted by lgcp2d.coordinate_descent</span>
-
-<span class="sd">        Other Parameters</span>
-<span class="sd">        ----------------</span>
-<span class="sd">        radius: float; Default 0.45</span>
-<span class="sd">            Region in which a peak must be a local maximum </span>
-<span class="sd">            to count as a grid field. </span>
-<span class="sd">            This is in units of </span>
-<span class="sd">            **fraction of the grid-cell period ``model.P``**.</span>
-<span class="sd">        localization_radius: float; Default 0.8</span>
-<span class="sd">            Drop peaks with confidence outside this radius.</span>
-<span class="sd">            Set to ``inf`` to retain all peaks. </span>
-<span class="sd">            This is in units of </span>
-<span class="sd">            **fraction of the grid-cell period ``model.P``**.</span>
-<span class="sd">        edge_radius: float; Default 0</span>
-<span class="sd">            Remove peaks closer than ``edge_radius`` bins</span>
-<span class="sd">            to the arena&#39;s edge. The default value of 0</span>
-<span class="sd">            does not remove points within a margin of</span>
-<span class="sd">            the boundary.</span>
-<span class="sd">        height_threshold: float in (0,1); default 0.5</span>
-<span class="sd">            Inclusion threshold for peak height in each </span>
-<span class="sd">            sample and probability peak over all samples,</span>
-<span class="sd">        prpeak_threshold: float</span>
-<span class="sd">            Probability threshold for including a peak,</span>
-<span class="sd">            iinterpolate_peaksn [0,1], based on the </span>
-<span class="sd">            fractions of samples that contain a given peak.</span>
-<span class="sd">        pct: float in (0,100); default 95.0</span>
-<span class="sd">            percentile to use for confidence bounds,</span>
-<span class="sd">        doplot: boolean, default True</span>
-<span class="sd">            Render a plot of the grid map? Default:False. </span>
-<span class="sd">        draw_border: boolean, default True</span>
-<span class="sd">            Whether to render the arena border if plotting.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">LGCPResult</span><span class="p">):</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">model</span>
+            <span class="n">fit</span>   <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">fit</span>
+            <span class="n">data</span>  <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span>
+        
         <span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">R</span><span class="p">,</span><span class="n">use2d</span><span class="p">,</span><span class="n">F</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">h2e</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cached</span>
         <span class="n">P</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
         <span class="n">radius</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radius</span><span class="p">)</span><span class="o">*</span><span class="n">P</span>
@@ -1429,19 +1425,17 @@
 <span class="sd">    lie too close to the edge of the arena.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    data: Dataset</span>
 <span class="sd">    gaussians list</span>
 <span class="sd">        List of (μ,Σ) 2D Gaussians</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
-<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    -------</span>
 <span class="sd">    np.float32:</span>
 <span class="sd">        Fraction of each Gaussian within the dataset&#39;s</span>
 <span class="sd">        arena&#39;s convex hull. </span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="c1">#zg = zgrid(N*2+1)/N</span>
-    <span class="c1">#zg = c2p(zg[abs(zg)&lt;=1])</span>
     <span class="n">zg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
     <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">μ</span><span class="p">,</span><span class="n">Σ</span> <span class="ow">in</span> <span class="n">gaussians</span><span class="p">:</span>

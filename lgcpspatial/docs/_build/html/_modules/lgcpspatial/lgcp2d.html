@@ -108,6 +108,7 @@
 <span class="kn">from</span>   <span class="nn">scipy.linalg</span>        <span class="kn">import</span> <span class="n">solve_triangular</span> <span class="k">as</span> <span class="n">stri</span> 
 <span class="kn">from</span>   <span class="nn">typing</span>              <span class="kn">import</span> <span class="n">NamedTuple</span>
 
+
 <div class="viewcode-block" id="coordinate_descent"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.coordinate_descent">[docs]</a><span class="k">def</span> <span class="nf">coordinate_descent</span><span class="p">(</span><span class="n">gp</span><span class="p">,</span>
     <span class="n">initialmean</span>  <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">initialcov</span>   <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -278,6 +279,114 @@
 <span class="sd">    posterior covariance Σ = [ Λ + diag[p] ]¯¹. A low-rank </span>
 <span class="sd">    Fourier-space representation is used to approximate </span>
 <span class="sd">    this inverse.   </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    kv: float</span>
+<span class="sd">        A kernel hyperparameter: The overall height of </span>
+<span class="sd">        the prior covariance kernel. Related (albeit </span>
+<span class="sd">        indirectly) to the height of the grid as well as</span>
+<span class="sd">        the overall confidence in our measurements.</span>
+<span class="sd">    P: float&gt;0</span>
+<span class="sd">        A kernel hyperparameter: The grid cell&#39;s period </span>
+<span class="sd">        in units of bins on the L×L grid. </span>
+
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    dataset: object</span>
+<span class="sd">        This can be any object with the attributes:</span>
+<span class="sd">            L: int</span>
+<span class="sd">                Size of LxL grid for binned data.</span>
+<span class="sd">            n: np.float32</span>
+<span class="sd">                Length L² array of visits to each bin.</span>
+<span class="sd">            y: np.float32</span>
+<span class="sd">                Length L² array of spikes at each bin.</span>
+<span class="sd">            prior_mean: np.float32</span>
+<span class="sd">                Shape L×L or L² array with the prior </span>
+<span class="sd">                mean-log-rate. This should reflect </span>
+<span class="sd">                background rate variations unrelated to</span>
+<span class="sd">                the grid structure</span>
+<span class="sd">            lograte_guess: float32 array</span>
+<span class="sd">                Shape L×L or L² array with an initial </span>
+<span class="sd">                guess of the log rate above/below</span>
+<span class="sd">                ``prior_mean``</span>
+<span class="sd">        You can also omit the dataset argument and pass</span>
+<span class="sd">        these values as keyword arguments.</span>
+<span class="sd">    L: int</span>
+<span class="sd">        Size of LxL spatial grid for binned data.</span>
+<span class="sd">        This keyword argument can also be provided as an</span>
+<span class="sd">        attribute to the ``dataset`` keyword argumet </span>
+<span class="sd">        object. </span>
+<span class="sd">    n: np.float32</span>
+<span class="sd">        Length L² array of visits to each bin.</span>
+<span class="sd">        This keyword argument can also be provided as an</span>
+<span class="sd">        attribute to the ``dataset`` keyword argumet </span>
+<span class="sd">        object. </span>
+<span class="sd">    y: np.float32</span>
+<span class="sd">        Length L² array of spikes at each bin.</span>
+<span class="sd">        This keyword argument can also be provided as an</span>
+<span class="sd">        attribute to the ``dataset`` keyword argumet </span>
+<span class="sd">        object. </span>
+<span class="sd">    prior_mean: np.float32</span>
+<span class="sd">        Shape L×L or L² array with the prior </span>
+<span class="sd">        mean-log-rate. This should reflect </span>
+<span class="sd">        background rate variations unrelated to</span>
+<span class="sd">        the grid structure</span>
+<span class="sd">        This keyword argument can also be provided as an</span>
+<span class="sd">        attribute to the ``dataset`` keyword argumet </span>
+<span class="sd">        object. </span>
+<span class="sd">    lograte_guess: float32 array</span>
+<span class="sd">        Shape L×L or L² array with an initial </span>
+<span class="sd">        guess of the log rate above/below</span>
+<span class="sd">        ``prior_mean``. This keyword argument can also be</span>
+<span class="sd">        provided as an attribute to the ``dataset``</span>
+<span class="sd">        keyword argumet object. </span>
+<span class="sd">    γ: float&gt;0</span>
+<span class="sd">        A dispersion correction. The default is 1.0,</span>
+<span class="sd">        corresponding to Poisson observations---you </span>
+<span class="sd">        should probably leave it at 1.0. Values &lt;1 </span>
+<span class="sd">        correspond to over-dispersion, and values &gt;1 </span>
+<span class="sd">        correspond to under-dispersed observations.</span>
+<span class="sd">    whitenoise: default 0</span>
+<span class="sd">        A white-noise kernel hyperparameter. This </span>
+<span class="sd">        corresponds to a constant extra variance in </span>
+<span class="sd">        frequency space, and to locally (Dirac delta) </span>
+<span class="sd">        zero-lag variance in the spatial domain. White </span>
+<span class="sd">        noise contains powers at all frequencies, so is</span>
+<span class="sd">        generally incompatable with the approach of</span>
+<span class="sd">        using a low-rank subspace in the frequency</span>
+<span class="sd">        domain to speed things up. We apply white noise</span>
+<span class="sd">        AFTER selecting the low-rank subspace. This is</span>
+<span class="sd">        a bit wrong, but still might have its uses. </span>
+<span class="sd">    dc: float&gt;0</span>
+<span class="sd">        A kernel hyperparameter: Amount of DC variance</span>
+<span class="sd">        to add. This corresponds to uncertainty about</span>
+<span class="sd">        the average firing rate. If your prior is good,</span>
+<span class="sd">        this variance can be small. Setting it to</span>
+<span class="sd">        something large slows inference slightly. </span>
+<span class="sd">    mintol: float&gt;0</span>
+<span class="sd">        The tolerance used in the minimum residual</span>
+<span class="sd">        algorithm. The default is 1e-6</span>
+<span class="sd">    keep_frequencies:</span>
+<span class="sd">        A boolean array indicating which spatial</span>
+<span class="sd">        frequency components to use. If this is </span>
+<span class="sd">        ``None``, ``keep_frequencies`` is calculated </span>
+<span class="sd">        using ``component_threshold_percent``.</span>
+<span class="sd">    component_threshold_percent: float &gt;0 &lt;100</span>
+<span class="sd">        We determine which frequency components to keep</span>
+<span class="sd">        by finding the (nonzero) frequency with the</span>
+<span class="sd">        highest variance. We keep all frequency</span>
+<span class="sd">        components with at least </span>
+<span class="sd">        component_threshold_percent % of this.</span>
+<span class="sd">    kclip: int&gt;0; default 3</span>
+<span class="sd">        Bessel function zero to truncate the kernel at. </span>
+<span class="sd">        1: central lobe only, no periodicity</span>
+<span class="sd">        2: central lobe and inhibitory surround</span>
+<span class="sd">        3: central lobe and nearest neighbor grid field</span>
+<span class="sd">        4. + second-nearest inhibitory surround, etc</span>
+<span class="sd">        The default is (3), which corresponds to an</span>
+<span class="sd">        assumption of reasonable local grid order, but</span>
+<span class="sd">        no particular long-range order.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
         <span class="n">kv</span><span class="p">,</span> <span class="c1"># Prior variance</span>
@@ -296,115 +405,6 @@
         <span class="n">component_threshold_percent</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
         <span class="n">kclip</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>    <span class="c1"># J0 zero to truncate kernel</span>
         <span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        kv: float</span>
-<span class="sd">            A kernel hyperparameter: The overall height of </span>
-<span class="sd">            the prior covariance kernel. Related (albeit </span>
-<span class="sd">            indirectly) to the height of the grid as well as</span>
-<span class="sd">            the overall confidence in our measurements.</span>
-<span class="sd">        P: float&gt;0</span>
-<span class="sd">            A kernel hyperparameter: The grid cell&#39;s period </span>
-<span class="sd">            in units of bins on the L×L grid. </span>
-<span class="sd">        </span>
-<span class="sd">        Other Parameters</span>
-<span class="sd">        ----------------</span>
-<span class="sd">        dataset: object</span>
-<span class="sd">            This can be any object with the attributes:</span>
-<span class="sd">                L: int</span>
-<span class="sd">                    Size of LxL grid for binned data.</span>
-<span class="sd">                n: np.float32</span>
-<span class="sd">                    Length L² array of visits to each bin.</span>
-<span class="sd">                y: np.float32</span>
-<span class="sd">                    Length L² array of spikes at each bin.</span>
-<span class="sd">                prior_mean: np.float32</span>
-<span class="sd">                    Shape L×L or L² array with the prior </span>
-<span class="sd">                    mean-log-rate. This should reflect </span>
-<span class="sd">                    background rate variations unrelated to</span>
-<span class="sd">                    the grid structure</span>
-<span class="sd">                lograte_guess: float32 array</span>
-<span class="sd">                    Shape L×L or L² array with an initial </span>
-<span class="sd">                    guess of the log rate above/below</span>
-<span class="sd">                    ``prior_mean``</span>
-<span class="sd">            You can also omit the dataset argument and pass</span>
-<span class="sd">            these values as keyword arguments.</span>
-<span class="sd">        L: int</span>
-<span class="sd">            Size of LxL spatial grid for binned data.</span>
-<span class="sd">            This keyword argument can also be provided as an</span>
-<span class="sd">            attribute to the ``dataset`` keyword argumet </span>
-<span class="sd">            object. </span>
-<span class="sd">        n: np.float32</span>
-<span class="sd">            Length L² array of visits to each bin.</span>
-<span class="sd">            This keyword argument can also be provided as an</span>
-<span class="sd">            attribute to the ``dataset`` keyword argumet </span>
-<span class="sd">            object. </span>
-<span class="sd">        y: np.float32</span>
-<span class="sd">            Length L² array of spikes at each bin.</span>
-<span class="sd">            This keyword argument can also be provided as an</span>
-<span class="sd">            attribute to the ``dataset`` keyword argumet </span>
-<span class="sd">            object. </span>
-<span class="sd">        prior_mean: np.float32</span>
-<span class="sd">            Shape L×L or L² array with the prior </span>
-<span class="sd">            mean-log-rate. This should reflect </span>
-<span class="sd">            background rate variations unrelated to</span>
-<span class="sd">            the grid structure</span>
-<span class="sd">            This keyword argument can also be provided as an</span>
-<span class="sd">            attribute to the ``dataset`` keyword argumet </span>
-<span class="sd">            object. </span>
-<span class="sd">        lograte_guess: float32 array</span>
-<span class="sd">            Shape L×L or L² array with an initial </span>
-<span class="sd">            guess of the log rate above/below</span>
-<span class="sd">            ``prior_mean``. This keyword argument can also be</span>
-<span class="sd">            provided as an attribute to the ``dataset``</span>
-<span class="sd">            keyword argumet object. </span>
-<span class="sd">        γ: float&gt;0</span>
-<span class="sd">            A dispersion correction. The default is 1.0,</span>
-<span class="sd">            corresponding to Poisson observations---you </span>
-<span class="sd">            should probably leave it at 1.0. Values &lt;1 </span>
-<span class="sd">            correspond to over-dispersion, and values &gt;1 </span>
-<span class="sd">            correspond to under-dispersed observations.</span>
-<span class="sd">        whitenoise: default 0</span>
-<span class="sd">            A white-noise kernel hyperparameter. This </span>
-<span class="sd">            corresponds to a constant extra variance in </span>
-<span class="sd">            frequency space, and to locally (Dirac delta) </span>
-<span class="sd">            zero-lag variance in the spatial domain. White </span>
-<span class="sd">            noise contains powers at all frequencies, so is</span>
-<span class="sd">            generally incompatable with the approach of</span>
-<span class="sd">            using a low-rank subspace in the frequency</span>
-<span class="sd">            domain to speed things up. We apply white noise</span>
-<span class="sd">            AFTER selecting the low-rank subspace. This is</span>
-<span class="sd">            a bit wrong, but still might have its uses. </span>
-<span class="sd">        dc: float&gt;0</span>
-<span class="sd">            A kernel hyperparameter: Amount of DC variance</span>
-<span class="sd">            to add. This corresponds to uncertainty about</span>
-<span class="sd">            the average firing rate. If your prior is good,</span>
-<span class="sd">            this variance can be small. Setting it to</span>
-<span class="sd">            something large slows inference slightly. </span>
-<span class="sd">        mintol: float&gt;0</span>
-<span class="sd">            The tolerance used in the minimum residual</span>
-<span class="sd">            algorithm. The default is 1e-6</span>
-<span class="sd">        keep_frequencies:</span>
-<span class="sd">            A boolean array indicating which spatial</span>
-<span class="sd">            frequency components to use. If this is </span>
-<span class="sd">            ``None``, ``keep_frequencies`` is calculated </span>
-<span class="sd">            using ``component_threshold_percent``.</span>
-<span class="sd">        component_threshold_percent: float &gt;0 &lt;100</span>
-<span class="sd">            We determine which frequency components to keep</span>
-<span class="sd">            by finding the (nonzero) frequency with the</span>
-<span class="sd">            highest variance. We keep all frequency</span>
-<span class="sd">            components with at least </span>
-<span class="sd">            component_threshold_percent % of this.</span>
-<span class="sd">        kclip: int&gt;0; default 3</span>
-<span class="sd">            Bessel function zero to truncate the kernel at. </span>
-<span class="sd">            1: central lobe only, no periodicity</span>
-<span class="sd">            2: central lobe and inhibitory surround</span>
-<span class="sd">            3: central lobe and nearest neighbor grid field</span>
-<span class="sd">            4. + second-nearest inhibitory surround, etc</span>
-<span class="sd">            The default is (3), which corresponds to an</span>
-<span class="sd">            assumption of reasonable local grid order, but</span>
-<span class="sd">            no particular long-range order.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
         
         <span class="k">if</span> <span class="n">γ</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ValueErrror</span><span class="p">(</span>
@@ -1132,16 +1132,6 @@
     <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">mu</span><span class="p">)</span><span class="o">*</span><span class="n">invsigma</span>
     <span class="k">return</span> <span class="p">(</span><span class="mf">0.398942280401432678</span><span class="o">*</span><span class="n">invsigma</span><span class="p">)</span><span class="o">*</span><span class="n">_exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
     
-    
-    
-    
-    
-    
-    
-    
-          
-        
-        
 
 <span class="c1"># It&#39;s useful to be able to control precision: float32 is</span>
 <span class="c1"># much faster, but sometimes doesn&#39;t work. Jax supports </span>
@@ -1185,19 +1175,156 @@
         <span class="k">pass</span>
     <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="nb">map</span><span class="p">(</span><span class="n">_precision</span><span class="p">,</span><span class="n">x</span><span class="p">),)</span>
 
+
 <div class="viewcode-block" id="CoordinateDescentResult"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult">[docs]</a><span class="k">class</span> <span class="nc">CoordinateDescentResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Posterior mean in low-rank spatial frequency subspace.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">μh</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Posterior marginal log-rate variances in each spatial bin.</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Posterior mean in low-rank spatial frequency subspace.&#39;&#39;&#39;</span>
     <span class="n">v</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Posterior marginal log-rate variances in each spatial bin.&#39;&#39;&#39;</span>
+    <span class="n">loss</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Value of the loss function.&#39;&#39;&#39;</span></div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+<div class="viewcode-block" id="lgcpregress"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.lgcpregress">[docs]</a><span class="k">def</span> <span class="nf">lgcpregress</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span> <span class="c1"># Dataset object with L n y prior_mean lograte_guess</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>    <span class="c1"># Prior variance</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>    <span class="c1"># Kernel period</span>
+    <span class="n">model_kwargs</span>    <span class="o">=</span> <span class="p">{},</span>
+    <span class="n">optimize_kwargs</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Value of the loss function.</span>
+<span class="sd">    Convenience routine to initialize a </span>
+<span class="sd">    ``DiagonalFourierLowrank`` instance for LGCP </span>
+<span class="sd">    regression. </span>
+<span class="sd">    </span>
+<span class="sd">    This unpacks the low-rank result and computes</span>
+<span class="sd">    some useful quantities. </span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data: object</span>
+<span class="sd">        This can be any object with the attributes:</span>
+<span class="sd">            L: int</span>
+<span class="sd">                Size of LxL grid for binned data.</span>
+<span class="sd">            n: np.float32</span>
+<span class="sd">                Length L² array of visits to each bin.</span>
+<span class="sd">            y: np.float32</span>
+<span class="sd">                Length L² array of spikes at each bin.</span>
+<span class="sd">            prior_mean: np.float32</span>
+<span class="sd">                Shape L×L or L² array with the prior </span>
+<span class="sd">                mean-log-rate. This should reflect </span>
+<span class="sd">                background rate variations unrelated to</span>
+<span class="sd">                the grid structure</span>
+<span class="sd">            lograte_guess: float32 array</span>
+<span class="sd">                Shape L×L or L² array with an initial </span>
+<span class="sd">                guess of the log rate above/below</span>
+<span class="sd">                ``prior_mean``</span>
+<span class="sd">    </span>
+<span class="sd">    Other Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    v: float; default None.</span>
+<span class="sd">        If ``None``, we will use ``data.prior_variance``.</span>
+<span class="sd">        A kernel hyperparameter: The overall height of </span>
+<span class="sd">        the prior covariance kernel. Related (albeit </span>
+<span class="sd">        indirectly) to the height of the grid as well as</span>
+<span class="sd">        the overall confidence in our measurements.</span>
+<span class="sd">    p: float&gt;0; default None.</span>
+<span class="sd">        If ``None``, we will use ``data.P``.</span>
+<span class="sd">        A kernel hyperparameter: The grid cell&#39;s period </span>
+<span class="sd">        in units of bins on the L×L grid. </span>
+<span class="sd">    model_kwargs: dict</span>
+<span class="sd">        Keyword arguments forwarded to </span>
+<span class="sd">        ``DiagonalFourierLowrank()``</span>
+<span class="sd">    optimize_kwargs: dict</span>
+<span class="sd">        Keyword arguments forwarded to</span>
+<span class="sd">        ``coordinate_descent()``</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    result: LGCPResult</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">loss</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span></div>
+    <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">v</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">prior_variance</span>
+    <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">p</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">P</span>
+    
+    <span class="n">model</span>   <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="o">**</span><span class="n">model_kwargs</span><span class="p">)</span>
+    <span class="n">fit</span>     <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="o">**</span><span class="n">optimize_kwargs</span><span class="p">)</span>
+    <span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">vfe</span><span class="o">=</span> <span class="n">fit</span>
+    
+    <span class="n">y</span>       <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">L</span>       <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">L</span>
+    <span class="n">mask</span>    <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">mask</span>
+    <span class="n">nanmask</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">nanmask</span>
+    <span class="n">Fs</span>      <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">position_sample_rate</span>
+    <span class="n">scale</span>   <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">scale</span>
+    <span class="n">μz</span>      <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">prior_mean</span>
+    <span class="n">μh</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">loss</span>  <span class="o">=</span> <span class="n">fit</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">μz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">μz</span> <span class="o">=</span> <span class="n">μz</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    
+    <span class="c1"># Convert from frequency to spatial coordinates and add back prior mean</span>
+    <span class="n">Δμ</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">F</span><span class="o">.</span><span class="n">T</span><span class="nd">@μh</span>
+    <span class="n">μ</span>  <span class="o">=</span> <span class="n">Δμ</span><span class="o">+</span><span class="n">μz</span>
+    <span class="n">μλ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">μ</span><span class="o">+</span><span class="n">v</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">vλ</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">μ</span> <span class="o">+</span> <span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">vλ</span><span class="p">)</span><span class="o">/</span><span class="n">μλ</span>
+    
+    <span class="k">return</span> <span class="n">LGCPResult</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">,</span>
+        <span class="n">fit</span><span class="p">,</span>
+        <span class="n">loss</span><span class="p">,</span>
+        <span class="n">μh</span><span class="p">,</span>
+        <span class="n">Δμ</span><span class="p">,</span>
+        <span class="n">μ</span><span class="p">,</span>
+        <span class="n">v</span><span class="p">,</span>
+        <span class="n">μλ</span><span class="p">,</span>
+        <span class="n">vλ</span><span class="p">,</span>
+        <span class="n">μλ</span><span class="o">*</span><span class="n">Fs</span><span class="p">,</span>
+        <span class="n">vλ</span><span class="o">*</span><span class="n">Fs</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">cv</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LGCPResult"><a class="viewcode-back" href="../../lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult">[docs]</a><span class="k">class</span> <span class="nc">LGCPResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">object</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;reference to dataset used to train the model&#39;&#39;&#39;</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">DiagonalFourierLowrank</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;model used to compute the regression&#39;&#39;&#39;</span>
+    <span class="n">fit</span><span class="p">:</span> <span class="n">CoordinateDescentResult</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;object returned by ``coordinate_descent()`` (for compatibility only)&#39;&#39;&#39;</span>
+    <span class="n">loss</span><span class="p">:</span> <span class="n">number</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;value of the loss function at the fitted posterior&#39;&#39;&#39;</span>
+    <span class="n">delta_lograte_lowrank</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;posteior mean log-rate in low-rank frequency subspace&#39;&#39;&#39;</span>
+    <span class="n">delta_lograte</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;posterior mean log-rate in each spatial bin&#39;&#39;&#39;</span>
+    <span class="n">mean_lograte</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;posterior mean log-rate in each spatial bin&#39;&#39;&#39;</span>
+    <span class="n">lograte_marginal_variance</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;marginal variance of posterior log-firing rate in each spatial bin&#39;&#39;&#39;</span>
+    <span class="n">mean_rate</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;posterior mean rate in each spatial bin in spikes/sample&#39;&#39;&#39;</span>
+    <span class="n">rate_marginal_variance</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;marginal variance of posterior firing rate in each spatial bin in (spikes/sample)²&#39;&#39;&#39;</span>
+    <span class="n">mean_rate_Hz</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;posterior mean rate in each spatial bin in spikes/second&#39;&#39;&#39;</span>
+    <span class="n">rate_marginal_variance_Hz</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;marginal variance of posterior firing rate in each spatial bin in (spikes/second)²&#39;&#39;&#39;</span>
+    <span class="n">rate_cv</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;coefficient of variation of posterior firing rate&#39;&#39;&#39;</span></div>
 </pre></div>
 
            </div>

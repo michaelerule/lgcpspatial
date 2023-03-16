@@ -22,6 +22,7 @@ from lgcpspatial.plot          import *
 from lgcpspatial.savitskygolay import SGdifferentiate as ddt
 from lgcpspatial.loaddata      import bin_spikes, Arena
 from lgcpspatial.lgcp2d        import DiagonalFourierLowrank
+from lgcpspatial.lgcp2d        import LGCPResult
 from lgcpspatial.lgcp2d        import coordinate_descent
 from lgcpspatial.posterior     import interpolate_peaks
 from lgcpspatial.posterior     import SampledConfidence
@@ -93,8 +94,7 @@ def smoothed_heading_angle(px,py,Fs=50.0,Fl=2.0):
 
     
 def get_peaks_at_heading_angles(
-    data,
-    model,
+    result,
     heading_angles,
     threshold        = 10.0,
     Fs               = 50.0,
@@ -113,31 +113,8 @@ def get_peaks_at_heading_angles(
     
     Parameters
     ----------
-    data: lgcpspatial.loaddata.Dataset
-        An object with the following attributes:
-        
-        :L: float
-            Size of L×L spatial grid for binned data.
-        :n: np.float32
-            Length L² array of visits to each bin.
-        :y: np.float32
-            Length L² array of spikes at each bin.
-        :prior_mean: np.float32
-            Shape L×L or L² array containing the prior 
-            mean-log-rate. This should background rate
-            variations unrelated to the grid structure
-        :lograte_guess: float32 array
-            Shape L×L or L² array with an initial guess
-            for log rate. This should be expressed as a 
-            deviation from ``prior_mean``.
-        :arena.hull:
-            Convex Hull object describing the arena 
-            perimeter
-        
-    model: lgcpspatial.lgcp2d.DiagonalFourierLowrank 
-        parent model instance (fitted model without heading
-        filtering)
-        
+    data: lgcpspatial.lgcp2d.LGCPResult
+        Prepared result returned by `lgcp2d.lgcpregress()`
     heading_angles: np.float32 array
         List of heading angles to check. Westward is 0 
         degrees, then rotates counterclockwise through 
@@ -206,6 +183,8 @@ def get_peaks_at_heading_angles(
         map ``rate``.
     
     '''
+    data   = result.data
+    model  = result.model
     L,kv,P = model.L, model.kv, model.P
     
     clearance_radius *= model.P
@@ -972,8 +951,7 @@ def plot_connection_arrow(q1,q2,op=None,**kwargs):
 
 
 def fit_heading_variance(
-    data,
-    model,
+    result,
     θ,
     NSEW,
     weight_function='cos'
@@ -988,8 +966,8 @@ def fit_heading_variance(
     
     Parameters
     ----------
-    data: Dataset
-    model: Model
+    result: lgcp2d.LGCPResult
+        Result returned by ``lgcp2d.lgcpregress()``
     θ: np.float32
         Heading angles for every time sample in Dataset
     NSEW: np.float32
@@ -1017,6 +995,9 @@ def fit_heading_variance(
         optimizing the model for each heading angle in NSEW.
     
     '''
+    data  = result.data
+    model = result.model
+    
     # Prepare hyperparameter grid
     rβ = 4  # Range (ratio) to search for optimal kernel height
     Nβ = 21 # Kernel height search grid resolutions

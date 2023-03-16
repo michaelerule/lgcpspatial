@@ -179,46 +179,13 @@ of position.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.get_peaks_at_heading_angles">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">get_peaks_at_heading_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading_angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clearance_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_heights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_fits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cos'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#get_peaks_at_heading_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.get_peaks_at_heading_angles" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">get_peaks_at_heading_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading_angles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heading_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clearance_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_heights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_fits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cos'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#get_peaks_at_heading_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.get_peaks_at_heading_angles" title="Permalink to this definition"></a></dt>
 <dd><p>Check for location shifts based on heading. Re-weight
 data based on cosine similarity to target heading angle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>lgcpspatial.loaddata.Dataset</em></a>) – <p>An object with the following attributes:</p>
-<dl class="field-list simple">
-<dt class="field-odd">L<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float
-Size of L×L spatial grid for binned data.</p>
-</dd>
-<dt class="field-even">n<span class="colon">:</span></dt>
-<dd class="field-even"><p>np.float32
-Length L² array of visits to each bin.</p>
-</dd>
-<dt class="field-odd">y<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.float32
-Length L² array of spikes at each bin.</p>
-</dd>
-<dt class="field-even">prior_mean<span class="colon">:</span></dt>
-<dd class="field-even"><p>np.float32
-Shape L×L or L² array containing the prior
-mean-log-rate. This should background rate
-variations unrelated to the grid structure</p>
-</dd>
-<dt class="field-odd">lograte_guess<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float32 array
-Shape L×L or L² array with an initial guess
-for log rate. This should be expressed as a
-deviation from <code class="docutils literal notranslate"><span class="pre">prior_mean</span></code>.</p>
-</dd>
-<dt class="field-even">arena.hull<span class="colon">:</span></dt>
-<dd class="field-even"><p>Convex Hull object describing the arena
-perimeter</p>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>model</strong> (<a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank" title="lgcpspatial.lgcp2d.DiagonalFourierLowrank"><em>lgcpspatial.lgcp2d.DiagonalFourierLowrank</em></a>) – parent model instance (fitted model without heading
-filtering)</p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult" title="lgcpspatial.lgcp2d.LGCPResult"><em>lgcpspatial.lgcp2d.LGCPResult</em></a>) – Prepared result returned by <cite>lgcp2d.lgcpregress()</cite></p></li>
 <li><p><strong>heading_angles</strong> (<em>np.float32 array</em>) – List of heading angles to check. Westward is 0
 degrees, then rotates counterclockwise through
 southward, eastward, and northward.</p></li>
@@ -589,7 +556,7 @@ This should be <code class="docutils literal notranslate"><span class="pre">(</s
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.fit_heading_variance">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">fit_heading_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">θ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NSEW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cos'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#fit_heading_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.fit_heading_variance" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">fit_heading_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">θ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NSEW</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cos'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#fit_heading_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.fit_heading_variance" title="Permalink to this definition"></a></dt>
 <dd><p>Re-optimize the prior marginal variance for the
 given set of heading-weighted models.</p>
 <p>This is necessary for achieving interpretable posterior
@@ -598,8 +565,7 @@ less) of data are present for the different directions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>Dataset</em></a>) – </p></li>
-<li><p><strong>model</strong> (<em>Model</em>) – </p></li>
+<li><p><strong>result</strong> (<a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult" title="lgcpspatial.lgcp2d.LGCPResult"><em>lgcp2d.LGCPResult</em></a>) – Result returned by <code class="docutils literal notranslate"><span class="pre">lgcp2d.lgcpregress()</span></code></p></li>
 <li><p><strong>θ</strong> (<em>np.float32</em>) – Heading angles for every time sample in Dataset</p></li>
 <li><p><strong>NSEW</strong> (<em>np.float32</em>) – List of reference heading angles to recompute</p></li>
 <li><p><strong>weight_function</strong> (<em>str</em><em> or </em><em>function; default 'cos'</em>) – Function used to compute non-negative heading

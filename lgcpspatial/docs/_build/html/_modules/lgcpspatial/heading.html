@@ -116,6 +116,7 @@
 <span class="kn">from</span> <span class="nn">lgcpspatial.savitskygolay</span> <span class="kn">import</span> <span class="n">SGdifferentiate</span> <span class="k">as</span> <span class="n">ddt</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span>      <span class="kn">import</span> <span class="n">bin_spikes</span><span class="p">,</span> <span class="n">Arena</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>        <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>        <span class="kn">import</span> <span class="n">LGCPResult</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>        <span class="kn">import</span> <span class="n">coordinate_descent</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.posterior</span>     <span class="kn">import</span> <span class="n">interpolate_peaks</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.posterior</span>     <span class="kn">import</span> <span class="n">SampledConfidence</span>
@@ -187,8 +188,7 @@
 
     
 <div class="viewcode-block" id="get_peaks_at_heading_angles"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.get_peaks_at_heading_angles">[docs]</a><span class="k">def</span> <span class="nf">get_peaks_at_heading_angles</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">,</span>
-    <span class="n">model</span><span class="p">,</span>
+    <span class="n">result</span><span class="p">,</span>
     <span class="n">heading_angles</span><span class="p">,</span>
     <span class="n">threshold</span>        <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
     <span class="n">Fs</span>               <span class="o">=</span> <span class="mf">50.0</span><span class="p">,</span>
@@ -207,31 +207,8 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data: lgcpspatial.loaddata.Dataset</span>
-<span class="sd">        An object with the following attributes:</span>
-<span class="sd">        </span>
-<span class="sd">        :L: float</span>
-<span class="sd">            Size of L×L spatial grid for binned data.</span>
-<span class="sd">        :n: np.float32</span>
-<span class="sd">            Length L² array of visits to each bin.</span>
-<span class="sd">        :y: np.float32</span>
-<span class="sd">            Length L² array of spikes at each bin.</span>
-<span class="sd">        :prior_mean: np.float32</span>
-<span class="sd">            Shape L×L or L² array containing the prior </span>
-<span class="sd">            mean-log-rate. This should background rate</span>
-<span class="sd">            variations unrelated to the grid structure</span>
-<span class="sd">        :lograte_guess: float32 array</span>
-<span class="sd">            Shape L×L or L² array with an initial guess</span>
-<span class="sd">            for log rate. This should be expressed as a </span>
-<span class="sd">            deviation from ``prior_mean``.</span>
-<span class="sd">        :arena.hull:</span>
-<span class="sd">            Convex Hull object describing the arena </span>
-<span class="sd">            perimeter</span>
-<span class="sd">        </span>
-<span class="sd">    model: lgcpspatial.lgcp2d.DiagonalFourierLowrank </span>
-<span class="sd">        parent model instance (fitted model without heading</span>
-<span class="sd">        filtering)</span>
-<span class="sd">        </span>
+<span class="sd">    data: lgcpspatial.lgcp2d.LGCPResult</span>
+<span class="sd">        Prepared result returned by `lgcp2d.lgcpregress()`</span>
 <span class="sd">    heading_angles: np.float32 array</span>
 <span class="sd">        List of heading angles to check. Westward is 0 </span>
 <span class="sd">        degrees, then rotates counterclockwise through </span>
@@ -300,6 +277,8 @@
 <span class="sd">        map ``rate``.</span>
 <span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">data</span>   <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">model</span>  <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">model</span>
     <span class="n">L</span><span class="p">,</span><span class="n">kv</span><span class="p">,</span><span class="n">P</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">kv</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
     
     <span class="n">clearance_radius</span> <span class="o">*=</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
@@ -1066,8 +1045,7 @@
 
 
 <div class="viewcode-block" id="fit_heading_variance"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.fit_heading_variance">[docs]</a><span class="k">def</span> <span class="nf">fit_heading_variance</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">,</span>
-    <span class="n">model</span><span class="p">,</span>
+    <span class="n">result</span><span class="p">,</span>
     <span class="n">θ</span><span class="p">,</span>
     <span class="n">NSEW</span><span class="p">,</span>
     <span class="n">weight_function</span><span class="o">=</span><span class="s1">&#39;cos&#39;</span>
@@ -1082,8 +1060,8 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data: Dataset</span>
-<span class="sd">    model: Model</span>
+<span class="sd">    result: lgcp2d.LGCPResult</span>
+<span class="sd">        Result returned by ``lgcp2d.lgcpregress()``</span>
 <span class="sd">    θ: np.float32</span>
 <span class="sd">        Heading angles for every time sample in Dataset</span>
 <span class="sd">    NSEW: np.float32</span>
@@ -1111,6 +1089,9 @@
 <span class="sd">        optimizing the model for each heading angle in NSEW.</span>
 <span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">data</span>  <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">model</span>
+    
     <span class="c1"># Prepare hyperparameter grid</span>
     <span class="n">rβ</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># Range (ratio) to search for optimal kernel height</span>
     <span class="n">Nβ</span> <span class="o">=</span> <span class="mi">21</span> <span class="c1"># Kernel height search grid resolutions</span>

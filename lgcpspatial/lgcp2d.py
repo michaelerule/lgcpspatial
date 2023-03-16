@@ -14,6 +14,7 @@ from   scipy.special       import j0,jn_zeros
 from   scipy.linalg        import solve_triangular as stri 
 from   typing              import NamedTuple
 
+
 def coordinate_descent(gp,
     initialmean  = None,
     initialcov   = None,
@@ -184,6 +185,114 @@ class DiagonalFourierLowrank:
     posterior covariance Σ = [ Λ + diag[p] ]¯¹. A low-rank 
     Fourier-space representation is used to approximate 
     this inverse.   
+
+    Parameters
+    ----------
+    kv: float
+        A kernel hyperparameter: The overall height of 
+        the prior covariance kernel. Related (albeit 
+        indirectly) to the height of the grid as well as
+        the overall confidence in our measurements.
+    P: float>0
+        A kernel hyperparameter: The grid cell's period 
+        in units of bins on the L×L grid. 
+
+    Other Parameters
+    ----------------
+    dataset: object
+        This can be any object with the attributes:
+            L: int
+                Size of LxL grid for binned data.
+            n: np.float32
+                Length L² array of visits to each bin.
+            y: np.float32
+                Length L² array of spikes at each bin.
+            prior_mean: np.float32
+                Shape L×L or L² array with the prior 
+                mean-log-rate. This should reflect 
+                background rate variations unrelated to
+                the grid structure
+            lograte_guess: float32 array
+                Shape L×L or L² array with an initial 
+                guess of the log rate above/below
+                ``prior_mean``
+        You can also omit the dataset argument and pass
+        these values as keyword arguments.
+    L: int
+        Size of LxL spatial grid for binned data.
+        This keyword argument can also be provided as an
+        attribute to the ``dataset`` keyword argumet 
+        object. 
+    n: np.float32
+        Length L² array of visits to each bin.
+        This keyword argument can also be provided as an
+        attribute to the ``dataset`` keyword argumet 
+        object. 
+    y: np.float32
+        Length L² array of spikes at each bin.
+        This keyword argument can also be provided as an
+        attribute to the ``dataset`` keyword argumet 
+        object. 
+    prior_mean: np.float32
+        Shape L×L or L² array with the prior 
+        mean-log-rate. This should reflect 
+        background rate variations unrelated to
+        the grid structure
+        This keyword argument can also be provided as an
+        attribute to the ``dataset`` keyword argumet 
+        object. 
+    lograte_guess: float32 array
+        Shape L×L or L² array with an initial 
+        guess of the log rate above/below
+        ``prior_mean``. This keyword argument can also be
+        provided as an attribute to the ``dataset``
+        keyword argumet object. 
+    γ: float>0
+        A dispersion correction. The default is 1.0,
+        corresponding to Poisson observations---you 
+        should probably leave it at 1.0. Values <1 
+        correspond to over-dispersion, and values >1 
+        correspond to under-dispersed observations.
+    whitenoise: default 0
+        A white-noise kernel hyperparameter. This 
+        corresponds to a constant extra variance in 
+        frequency space, and to locally (Dirac delta) 
+        zero-lag variance in the spatial domain. White 
+        noise contains powers at all frequencies, so is
+        generally incompatable with the approach of
+        using a low-rank subspace in the frequency
+        domain to speed things up. We apply white noise
+        AFTER selecting the low-rank subspace. This is
+        a bit wrong, but still might have its uses. 
+    dc: float>0
+        A kernel hyperparameter: Amount of DC variance
+        to add. This corresponds to uncertainty about
+        the average firing rate. If your prior is good,
+        this variance can be small. Setting it to
+        something large slows inference slightly. 
+    mintol: float>0
+        The tolerance used in the minimum residual
+        algorithm. The default is 1e-6
+    keep_frequencies:
+        A boolean array indicating which spatial
+        frequency components to use. If this is 
+        ``None``, ``keep_frequencies`` is calculated 
+        using ``component_threshold_percent``.
+    component_threshold_percent: float >0 <100
+        We determine which frequency components to keep
+        by finding the (nonzero) frequency with the
+        highest variance. We keep all frequency
+        components with at least 
+        component_threshold_percent % of this.
+    kclip: int>0; default 3
+        Bessel function zero to truncate the kernel at. 
+        1: central lobe only, no periodicity
+        2: central lobe and inhibitory surround
+        3: central lobe and nearest neighbor grid field
+        4. + second-nearest inhibitory surround, etc
+        The default is (3), which corresponds to an
+        assumption of reasonable local grid order, but
+        no particular long-range order.
     '''
     def __init__(self,
         kv, # Prior variance
@@ -202,115 +311,6 @@ class DiagonalFourierLowrank:
         component_threshold_percent = 10.0,
         kclip=3,    # J0 zero to truncate kernel
         ):
-        '''
-        Parameters
-        ----------
-        kv: float
-            A kernel hyperparameter: The overall height of 
-            the prior covariance kernel. Related (albeit 
-            indirectly) to the height of the grid as well as
-            the overall confidence in our measurements.
-        P: float>0
-            A kernel hyperparameter: The grid cell's period 
-            in units of bins on the L×L grid. 
-        
-        Other Parameters
-        ----------------
-        dataset: object
-            This can be any object with the attributes:
-                L: int
-                    Size of LxL grid for binned data.
-                n: np.float32
-                    Length L² array of visits to each bin.
-                y: np.float32
-                    Length L² array of spikes at each bin.
-                prior_mean: np.float32
-                    Shape L×L or L² array with the prior 
-                    mean-log-rate. This should reflect 
-                    background rate variations unrelated to
-                    the grid structure
-                lograte_guess: float32 array
-                    Shape L×L or L² array with an initial 
-                    guess of the log rate above/below
-                    ``prior_mean``
-            You can also omit the dataset argument and pass
-            these values as keyword arguments.
-        L: int
-            Size of LxL spatial grid for binned data.
-            This keyword argument can also be provided as an
-            attribute to the ``dataset`` keyword argumet 
-            object. 
-        n: np.float32
-            Length L² array of visits to each bin.
-            This keyword argument can also be provided as an
-            attribute to the ``dataset`` keyword argumet 
-            object. 
-        y: np.float32
-            Length L² array of spikes at each bin.
-            This keyword argument can also be provided as an
-            attribute to the ``dataset`` keyword argumet 
-            object. 
-        prior_mean: np.float32
-            Shape L×L or L² array with the prior 
-            mean-log-rate. This should reflect 
-            background rate variations unrelated to
-            the grid structure
-            This keyword argument can also be provided as an
-            attribute to the ``dataset`` keyword argumet 
-            object. 
-        lograte_guess: float32 array
-            Shape L×L or L² array with an initial 
-            guess of the log rate above/below
-            ``prior_mean``. This keyword argument can also be
-            provided as an attribute to the ``dataset``
-            keyword argumet object. 
-        γ: float>0
-            A dispersion correction. The default is 1.0,
-            corresponding to Poisson observations---you 
-            should probably leave it at 1.0. Values <1 
-            correspond to over-dispersion, and values >1 
-            correspond to under-dispersed observations.
-        whitenoise: default 0
-            A white-noise kernel hyperparameter. This 
-            corresponds to a constant extra variance in 
-            frequency space, and to locally (Dirac delta) 
-            zero-lag variance in the spatial domain. White 
-            noise contains powers at all frequencies, so is
-            generally incompatable with the approach of
-            using a low-rank subspace in the frequency
-            domain to speed things up. We apply white noise
-            AFTER selecting the low-rank subspace. This is
-            a bit wrong, but still might have its uses. 
-        dc: float>0
-            A kernel hyperparameter: Amount of DC variance
-            to add. This corresponds to uncertainty about
-            the average firing rate. If your prior is good,
-            this variance can be small. Setting it to
-            something large slows inference slightly. 
-        mintol: float>0
-            The tolerance used in the minimum residual
-            algorithm. The default is 1e-6
-        keep_frequencies:
-            A boolean array indicating which spatial
-            frequency components to use. If this is 
-            ``None``, ``keep_frequencies`` is calculated 
-            using ``component_threshold_percent``.
-        component_threshold_percent: float >0 <100
-            We determine which frequency components to keep
-            by finding the (nonzero) frequency with the
-            highest variance. We keep all frequency
-            components with at least 
-            component_threshold_percent % of this.
-        kclip: int>0; default 3
-            Bessel function zero to truncate the kernel at. 
-            1: central lobe only, no periodicity
-            2: central lobe and inhibitory surround
-            3: central lobe and nearest neighbor grid field
-            4. + second-nearest inhibitory surround, etc
-            The default is (3), which corresponds to an
-            assumption of reasonable local grid order, but
-            no particular long-range order.
-        '''
         
         if γ<=0:
             raise ValueErrror(
@@ -1038,16 +1038,6 @@ def npdf(mu,sigma,x):
     x = (x-mu)*invsigma
     return (0.398942280401432678*invsigma)*_exp(-0.5*x**2)
     
-    
-    
-    
-    
-    
-    
-    
-          
-        
-        
 
 # It's useful to be able to control precision: float32 is
 # much faster, but sometimes doesn't work. Jax supports 
@@ -1091,16 +1081,153 @@ def _precision(x,copy=False):
         pass
     return (*map(_precision,x),)
 
+
 class CoordinateDescentResult(NamedTuple):
-    '''
-    Posterior mean in low-rank spatial frequency subspace.
-    '''
     μh:np.ndarray
-    '''
-    Posterior marginal log-rate variances in each spatial bin.
-    '''
+    '''Posterior mean in low-rank spatial frequency subspace.'''
     v:np.ndarray
-    '''
-    Value of the loss function.
-    '''
+    '''Posterior marginal log-rate variances in each spatial bin.'''
     loss:np.ndarray
+    '''Value of the loss function.'''
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+def lgcpregress(
+    data, # Dataset object with L n y prior_mean lograte_guess
+    v = None,    # Prior variance
+    p = None,    # Kernel period
+    model_kwargs    = {},
+    optimize_kwargs = {},
+    ):
+    '''
+    Convenience routine to initialize a 
+    ``DiagonalFourierLowrank`` instance for LGCP 
+    regression. 
+    
+    This unpacks the low-rank result and computes
+    some useful quantities. 
+    
+    Parameters
+    ----------
+    data: object
+        This can be any object with the attributes:
+            L: int
+                Size of LxL grid for binned data.
+            n: np.float32
+                Length L² array of visits to each bin.
+            y: np.float32
+                Length L² array of spikes at each bin.
+            prior_mean: np.float32
+                Shape L×L or L² array with the prior 
+                mean-log-rate. This should reflect 
+                background rate variations unrelated to
+                the grid structure
+            lograte_guess: float32 array
+                Shape L×L or L² array with an initial 
+                guess of the log rate above/below
+                ``prior_mean``
+    
+    Other Parameters
+    ----------------
+    v: float; default None.
+        If ``None``, we will use ``data.prior_variance``.
+        A kernel hyperparameter: The overall height of 
+        the prior covariance kernel. Related (albeit 
+        indirectly) to the height of the grid as well as
+        the overall confidence in our measurements.
+    p: float>0; default None.
+        If ``None``, we will use ``data.P``.
+        A kernel hyperparameter: The grid cell's period 
+        in units of bins on the L×L grid. 
+    model_kwargs: dict
+        Keyword arguments forwarded to 
+        ``DiagonalFourierLowrank()``
+    optimize_kwargs: dict
+        Keyword arguments forwarded to
+        ``coordinate_descent()``
+    
+    Returns
+    -------
+    result: LGCPResult
+    '''
+    if v is None: v = data.prior_variance
+    if p is None: p = data.P
+    
+    model   = DiagonalFourierLowrank(v,p,data,**model_kwargs)
+    fit     = coordinate_descent(model,**optimize_kwargs)
+    μh,v,vfe= fit
+    
+    y       = data.y
+    L       = data.L
+    mask    = data.arena.mask
+    nanmask = data.arena.nanmask
+    Fs      = data.position_sample_rate
+    scale   = data.scale
+    μz      = data.prior_mean
+    μh,v,loss  = fit
+    y = np.array(y).reshape(L,L)
+    v = np.array(v).ravel()
+    
+    if isinstance(μz, np.ndarray):
+        μz = μz.ravel()
+    
+    # Convert from frequency to spatial coordinates and add back prior mean
+    Δμ = model.F.T@μh
+    μ  = Δμ+μz
+    μλ = np.exp(μ+v/2).reshape(L,L)
+    vλ = (np.exp(2*μ + v)*(np.exp(v)-1)).reshape(L,L)
+    cv = np.sqrt(vλ)/μλ
+    
+    return LGCPResult(
+        data,
+        model,
+        fit,
+        loss,
+        μh,
+        Δμ,
+        μ,
+        v,
+        μλ,
+        vλ,
+        μλ*Fs,
+        vλ*Fs**2,
+        cv)
+
+class LGCPResult(NamedTuple):
+    data: object
+    '''reference to dataset used to train the model'''
+    model: DiagonalFourierLowrank
+    '''model used to compute the regression'''
+    fit: CoordinateDescentResult
+    '''object returned by ``coordinate_descent()`` (for compatibility only)'''
+    loss: number
+    '''value of the loss function at the fitted posterior'''
+    delta_lograte_lowrank: np.ndarray
+    '''posteior mean log-rate in low-rank frequency subspace'''
+    delta_lograte: np.ndarray
+    '''posterior mean log-rate in each spatial bin'''
+    mean_lograte: np.ndarray
+    '''posterior mean log-rate in each spatial bin'''
+    lograte_marginal_variance: np.ndarray
+    '''marginal variance of posterior log-firing rate in each spatial bin'''
+    mean_rate: np.ndarray
+    '''posterior mean rate in each spatial bin in spikes/sample'''
+    rate_marginal_variance: np.ndarray
+    '''marginal variance of posterior firing rate in each spatial bin in (spikes/sample)²'''
+    mean_rate_Hz: np.ndarray
+    '''posterior mean rate in each spatial bin in spikes/second'''
+    rate_marginal_variance_Hz: np.ndarray
+    '''marginal variance of posterior firing rate in each spatial bin in (spikes/second)²'''
+    rate_cv: np.ndarray
+    '''coefficient of variation of posterior firing rate'''

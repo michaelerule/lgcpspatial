@@ -14,4 +14,4 @@ cd ../
 rsync -avzru "./docs/_build/html/" "../docs"
 
 
-git pull && git add . && git commit -m 'bulit documentation' && git push
+#git pull && git add . && git commit -m 'bulit documentation' && git push

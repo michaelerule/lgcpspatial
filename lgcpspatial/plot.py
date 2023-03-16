@@ -813,8 +813,8 @@ def showim(x,t='',**kwargs):
 
 def inference_summary_plot(
     model,
-    fit,
-    data,
+    data          = None,
+    fit           = None,
     ftitle        = '',
     cmap          = 'bone_r',
     ax            = None,
@@ -831,17 +831,20 @@ def inference_summary_plot(
     
     Parameters
     ----------
-    model: lgcp2d.DiagonalFourierLowrank
-        Initialized model
-    fit: tuple
-        Tuple of (low-rank mean, marginal variance, loss)
-        returned by ``lgcp2d.coordinate_descent()``.
-    data: loaddata.Dataset
-        Prepared dataset
-    ftitle: str
+    model: lgcp2d.LGCPResult
+        Result returned by ``lgcp2d.lgcpregress()``
+        
+    Other Parameters
+    ----------------
+    ftitle: str; default ''
         Figure title
-    
     '''
+    from lgcpspatial.lgcp2d import LGCPResult
+    if isinstance(model, LGCPResult):
+        data  = model.data
+        fit   = model.fit
+        model = model.model
+    
     y       = data.y
     L       = data.L
     mask    = data.arena.mask
@@ -1288,7 +1291,8 @@ def tracking_match_plot(
     xlim(0,1)
     ylim(0,1)
     force_aspect()
-    
+
+
 def shiftplot(
     z1,s1,z2,s2,
     centers = None,
@@ -1330,6 +1334,7 @@ def shiftplot(
     ylim(0,1)
     force_aspect()
     noxyaxes()
+
 
 import lgcpspatial
 def colored_shift_density_images(
