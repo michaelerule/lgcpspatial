@@ -662,14 +662,13 @@
 <span class="sd">        returned by ``match_peaks``, but edges from peaks that</span>
 <span class="sd">        aren&#39;t tracked unambiguously over a range of heading </span>
 <span class="sd">        angles have been removed.</span>
-<span class="sd">        </span>
 <span class="sd">        This is a length ``NANGLES`` list of edge sets for </span>
 <span class="sd">        each pair of headings.</span>
 <span class="sd">        Each list entry is a 2×NEDGES int32 array.</span>
 <span class="sd">        containing pairs of indecies (a,b):</span>
-<span class="sd">        ``a`` is the index into peaks[i]</span>
+<span class="sd">        * ``a`` is the index into peaks[i]</span>
 <span class="sd">        (the node source of this edge);</span>
-<span class="sd">        ``b`` is the index into ``peaks[(i+1)%Nφ]`` </span>
+<span class="sd">        * ``b`` is the index into ``peaks[(i+1)%Nφ]`` </span>
 <span class="sd">        (the node target of this edge).</span>
 <span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -1403,7 +1402,8 @@
 <span class="sd">    Match &quot;fast-tracked&quot; peak shifts with </span>
 <span class="sd">    posterior-peak-density maps.    </span>
 <span class="sd">    </span>
-<span class="sd">    ### Details: </span>
+<span class="sd">    Details: </span>
+<span class="sd">    ^^^^^^^^</span>
 <span class="sd">    </span>
 <span class="sd">    In this workflow, we track shifts in single</span>
 <span class="sd">    peaks over a broad range by re-fitting a single model</span>

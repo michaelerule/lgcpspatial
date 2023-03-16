@@ -416,21 +416,20 @@ of a tracked peak.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p><strong>edges</strong> – A graph connecting peaks putatively associated with
+<dd class="field-even"><p><strong>edges</strong> – A graph connecting peaks putatively associated with
 the same grid field at different heading angles.
 The format is the same as the result
 returned by <code class="docutils literal notranslate"><span class="pre">match_peaks</span></code>, but edges from peaks that
 aren’t tracked unambiguously over a range of heading
-angles have been removed.</p>
-<p>This is a length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for
+angles have been removed.
+This is a length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for
 each pair of headings.
 Each list entry is a 2×NEDGES int32 array.
 containing pairs of indecies (a,b):
-<code class="docutils literal notranslate"><span class="pre">a</span></code> is the index into peaks[i]
+* <code class="docutils literal notranslate"><span class="pre">a</span></code> is the index into peaks[i]
 (the node source of this edge);
-<code class="docutils literal notranslate"><span class="pre">b</span></code> is the index into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code>
+* <code class="docutils literal notranslate"><span class="pre">b</span></code> is the index into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code>
 (the node target of this edge).</p>
-</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
@@ -844,7 +843,8 @@ peak density map.</p>
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">match_with_tracked_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_peaks_opposite</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opposites_maxd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#match_with_tracked_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.match_with_tracked_peaks" title="Permalink to this definition"></a></dt>
 <dd><p>Match “fast-tracked” peak shifts with
 posterior-peak-density maps.</p>
-<p>### Details:</p>
+<section id="details">
+<h2>Details:<a class="headerlink" href="#details" title="Permalink to this heading"></a></h2>
 <p>In this workflow, we track shifts in single
 peaks over a broad range by re-fitting a single model
 over a high-resolution sweep of heading angles
@@ -860,6 +860,7 @@ match the “fast-tracked” peaks, since they were
 computed using different procedures. They should,
 however, be <em>very</em> close.</p>
 <p>This function matches them.</p>
+</section>
 <section id="procedure">
 <h2>Procedure:<a class="headerlink" href="#procedure" title="Permalink to this heading"></a></h2>
 <p>Fast-tracked peaks are stored as lists of peak locations

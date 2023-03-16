@@ -568,14 +568,13 @@ def link_peaks(
         returned by ``match_peaks``, but edges from peaks that
         aren't tracked unambiguously over a range of heading 
         angles have been removed.
-        
         This is a length ``NANGLES`` list of edge sets for 
         each pair of headings.
         Each list entry is a 2×NEDGES int32 array.
         containing pairs of indecies (a,b):
-        ``a`` is the index into peaks[i]
+        * ``a`` is the index into peaks[i]
         (the node source of this edge);
-        ``b`` is the index into ``peaks[(i+1)%Nφ]`` 
+        * ``b`` is the index into ``peaks[(i+1)%Nφ]`` 
         (the node target of this edge).
     
     '''
@@ -1309,7 +1308,8 @@ def match_with_tracked_peaks(
     Match "fast-tracked" peak shifts with 
     posterior-peak-density maps.    
     
-    ### Details: 
+    Details: 
+    ^^^^^^^^
     
     In this workflow, we track shifts in single
     peaks over a broad range by re-fitting a single model
