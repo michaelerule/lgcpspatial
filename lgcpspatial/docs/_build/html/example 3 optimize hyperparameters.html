@@ -385,7 +385,7 @@ div.rendered_html tbody tr:hover {
 <section id="Grid-search-to-find-kernel-hyperparameters-with-best-evidence-lower-bound">
 <h2>Grid search to find kernel hyperparameters with best evidence lower-bound<a class="headerlink" href="#Grid-search-to-find-kernel-hyperparameters-with-best-evidence-lower-bound" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -405,7 +405,7 @@ div.rendered_html tbody tr:hover {
 <span class="n">data</span>   <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="n">dataset</span><span class="p">)</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">doplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="n">gridsearch_optimize</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">bestindex</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span> <span class="o">=</span> <span class="n">result</span>
+<span class="n">bestindex</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span><span class="p">,</span><span class="n">pargrid</span> <span class="o">=</span> <span class="n">result</span>
 </pre></div>
 </div>
 </div>
@@ -414,16 +414,16 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[99,105](2.39e+01,7.78e-01) loss=-9.535699e+033(done)
+[101,104](2.46e+01,8.18e-01) loss=-9.530985e+03(done)
 
 Heuristic parameters
 P  = 24.252948
 v0 = 0.319910
 
 Optimized parameters:
-P    = 23.589750
-β    = 0.778387
-v0/β = 0.410991
+P    = 24.252949
+β    = 0.818383
+v0/β = 0.390905
 </pre></div></div>
 </div>
 </section>
@@ -437,7 +437,7 @@ v0/β = 0.410991
 </ol>
 <p>This (negative) ELBO is also missing a <span class="math notranslate nohighlight">\(\ln(y!) = \ln\Gamma(y+1)\)</span> term from the Poisson negative log-likelihood. This doesn’t affect state or hyperparameter optimization, but it’s good to add it back for completeness.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span> <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span>
@@ -526,8 +526,8 @@ v0/β = 0.410991
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-23.58975
-0.4109905
+24.252949
+0.3909047
 </pre></div></div>
 </div>
 </section>

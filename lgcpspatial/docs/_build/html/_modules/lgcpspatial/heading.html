@@ -734,7 +734,8 @@
 <span class="sd">    ``get_peaks_at_heading_angles()`` and ``link_peaks()``.</span>
 <span class="sd">    </span>
 <span class="sd">    </span>
-<span class="sd">    #### Angle conventions:</span>
+<span class="sd">    Angle conventions:</span>
+<span class="sd">    ^^^^^^^^^^^^^^^^^^</span>
 <span class="sd">    </span>
 <span class="sd">    The indecies ``iφ ∈ {0,..,NANGLES-1}``into the length-</span>
 <span class="sd">    ``NANGLES`` arguments ``peaks`` and ``edges`` are assumed </span>
@@ -742,7 +743,8 @@
 <span class="sd">    ``φ=0``; that is, ``phi = linspace(0,2*pi,NANGLES+1)[:-1]``.</span>
 <span class="sd">    </span>
 <span class="sd">    </span>
-<span class="sd">    #### Colors:</span>
+<span class="sd">    Colors:</span>
+<span class="sd">    ^^^^^^^</span>
 <span class="sd">    </span>
 <span class="sd">    This is designed to be used with the ``riley`` </span>
 <span class="sd">    colormap from ``lgcpspatial.plot``. This map starts at </span>
@@ -761,7 +763,8 @@
 <span class="sd">        {West, South, East, North}</span>
 <span class="sd">    </span>
 <span class="sd">    </span>
-<span class="sd">    #### Axis orientation:</span>
+<span class="sd">    Axis orientation:</span>
+<span class="sd">    ^^^^^^^^^^^^^^^^^</span>
 <span class="sd">    </span>
 <span class="sd">    If the keyword argument ``origin`` is ``&#39;lower&#39;`` (the</span>
 <span class="sd">    default value), heading angles are interpreted as</span>
@@ -942,7 +945,8 @@
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    To be used on the result of calling match_peaks()</span>
 
-<span class="sd">    ### Algorithm: </span>
+<span class="sd">    Algorithm: </span>
+<span class="sd">    ^^^^^^^^^^</span>
 <span class="sd">    </span>
 <span class="sd">    * We have a list of edges between adjacent angles</span>
 <span class="sd">    * Starting from a seed, follow the graph in both </span>
@@ -1083,7 +1087,7 @@
 <span class="sd">        Heading angles for every time sample in Dataset</span>
 <span class="sd">    NSEW: np.float32</span>
 <span class="sd">        List of reference heading angles to recompute</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
 <span class="sd">    weight_function: str or function; default &#39;cos&#39;</span>
@@ -1093,7 +1097,7 @@
 <span class="sd">        orientation. Can be ``&#39;cos&#39;`` for </span>
 <span class="sd">        ``max(0,cos(Δθ))``, ``&#39;cos2&#39;`` for</span>
 <span class="sd">        ``max(0,cos(Δθ))²``, or a custom function. </span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    models: list</span>
@@ -1104,6 +1108,7 @@
 <span class="sd">        the ``(posterior_mean, posterior_variance, loss)``</span>
 <span class="sd">        tuple returned by ``coordinate_descent`` for </span>
 <span class="sd">        optimizing the model for each heading angle in NSEW.</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># Prepare hyperparameter grid</span>
     <span class="n">rβ</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># Range (ratio) to search for optimal kernel height</span>

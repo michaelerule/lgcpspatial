@@ -815,11 +815,11 @@ def inference_summary_plot(
     model,
     fit,
     data,
-    ftitle='',
-    cmap='bone_r',
-    ax=None,
-    caxprops=dict(fontsize=8,vscale=0.5,width=10),
-    titlesize = 10,
+    ftitle        = '',
+    cmap          = 'bone_r',
+    ax            = None,
+    caxprops      = dict(fontsize=8,vscale=0.5,width=10),
+    titlesize     = 10,
     draw_scalebar = True
     ):
     '''
@@ -840,6 +840,7 @@ def inference_summary_plot(
         Prepared dataset
     ftitle: str
         Figure title
+    
     '''
     y       = data.y
     L       = data.L
@@ -852,8 +853,11 @@ def inference_summary_plot(
     y = np.array(y).reshape(L,L)
     v = np.array(v).ravel()
     
+    if isinstance(μz, np.ndarray):
+        μz = μz.ravel()
+    
     # Convert from frequency to spatial coordinates and add back prior mean
-    μ  = model.F.T@μh+μz.ravel()
+    μ  = model.F.T@μh+μz
     μλ = np.exp(μ+v/2).reshape(L,L)*Fs
     vλ = (np.exp(2*μ + v)*(np.exp(v)-1)).reshape(L,L)*Fs**2
     σλ = np.sqrt(vλ)
@@ -914,7 +918,7 @@ def inference_summary_plot(
     axis('off')
 
     sca(ax[2])
-    toshow = 10*log10(exp(μ-μz.ravel())).reshape(L,L)*nanmask
+    toshow = 10*log10(exp(μ-μz)).reshape(L,L)*nanmask
     vmin,vmax = nanpercentile(toshow,[0,100])
     vmax += (vmax-vmin)*.2
     vmin = floor(vmin*10)/10

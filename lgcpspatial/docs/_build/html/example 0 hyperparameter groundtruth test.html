@@ -567,8 +567,8 @@ Period (bins) average:               14.991677172191181
 True      period:  16.0
 Heuristic period:  14.991677172191181
 True log-variance: 0.3835029
-Scale (variance):  0.09588305
-Scale (Bessel):    0.5063957437730227
+Scale (variance):  0.09504333
+Scale (Bessel):    0.5104032249918229
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -662,31 +662,36 @@ Scale (Bessel):    0.5063957437730227
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[53,12](1.56e+01,5.75e+00) loss=2.345106e+04(done)
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[50,12](1.50e+01,5.75e+00) loss=2.294728e+04(done)
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[4], line 32</span>
+<span class="ansi-green-intense-fg ansi-bold">     29</span> pargrid <span style="color: rgb(98,98,98)">=</span> [Ps,βs]
+<span class="ansi-green-intense-fg ansi-bold">     31</span> <span style="color: rgb(95,135,135)"># Run overall grid search</span>
+<span class="ansi-green-fg">---&gt; 32</span> bestindex,bestpars,bestresult,allresults <span style="color: rgb(98,98,98)">=</span> grid_search(pargrid,evaluate_ELBO)
+<span class="ansi-green-intense-fg ansi-bold">     34</span> <span style="color: rgb(0,135,0)">print</span>(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&#39;</span>)
+<span class="ansi-green-intense-fg ansi-bold">     35</span> <span style="color: rgb(0,135,0)">print</span>(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">Heuristic parameters</span><span style="color: rgb(175,0,0)">&#39;</span>)
 
-Heuristic parameters
-P  = 14.991677
-σ² = 0.506396
-
-Optimized parameters:
-P  = 14.785282
-σ² = 0.088001
-
-True parameters:
-P  = 16.000000
-σ² = 0.383503
+<span class="ansi-red-fg">ValueError</span>: too many values to unpack (expected 4)
 </pre></div></div>
 </div>
 </section>
 <section id="Infer-rate-map-at-optimized-parameters">
 <h2>Infer rate map at optimized parameters<a class="headerlink" href="#Infer-rate-map-at-optimized-parameters" title="Permalink to this heading"></a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">P_use</span>  <span class="o">=</span> <span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -697,18 +702,11 @@ P  = 16.000000
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_0_hyperparameter_groundtruth_test_10_0.png" src="_images/example_0_hyperparameter_groundtruth_test_10_0.png" />
-</div>
-</div>
 </section>
 <section id="Check-accuracy-of-inferred-rates-relative-to-ground-truth">
 <h2>Check accuracy of inferred rates relative to ground truth<a class="headerlink" href="#Check-accuracy-of-inferred-rates-relative-to-ground-truth" title="Permalink to this heading"></a></h2>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">fit</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
@@ -746,13 +744,6 @@ P  = 16.000000
 
 <span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_0_hyperparameter_groundtruth_test_12_0.png" src="_images/example_0_hyperparameter_groundtruth_test_12_0.png" />
 </div>
 </div>
 </section>

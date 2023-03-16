@@ -640,7 +640,8 @@ def plot_tracked_peaks(
     ``get_peaks_at_heading_angles()`` and ``link_peaks()``.
     
     
-    #### Angle conventions:
+    Angle conventions:
+    ^^^^^^^^^^^^^^^^^^
     
     The indecies ``iφ ∈ {0,..,NANGLES-1}``into the length-
     ``NANGLES`` arguments ``peaks`` and ``edges`` are assumed 
@@ -648,7 +649,8 @@ def plot_tracked_peaks(
     ``φ=0``; that is, ``phi = linspace(0,2*pi,NANGLES+1)[:-1]``.
     
     
-    #### Colors:
+    Colors:
+    ^^^^^^^
     
     This is designed to be used with the ``riley`` 
     colormap from ``lgcpspatial.plot``. This map starts at 
@@ -667,7 +669,8 @@ def plot_tracked_peaks(
         {West, South, East, North}
     
     
-    #### Axis orientation:
+    Axis orientation:
+    ^^^^^^^^^^^^^^^^^
     
     If the keyword argument ``origin`` is ``'lower'`` (the
     default value), heading angles are interpreted as
@@ -848,7 +851,8 @@ def locate_opposites(peaks,maxd,starti,edges):
     '''
     To be used on the result of calling match_peaks()
 
-    ### Algorithm: 
+    Algorithm: 
+    ^^^^^^^^^^
     
     * We have a list of edges between adjacent angles
     * Starting from a seed, follow the graph in both 
@@ -989,7 +993,7 @@ def fit_heading_variance(
         Heading angles for every time sample in Dataset
     NSEW: np.float32
         List of reference heading angles to recompute
-        
+    
     Other Parameters
     ----------------
     weight_function: str or function; default 'cos'
@@ -999,7 +1003,7 @@ def fit_heading_variance(
         orientation. Can be ``'cos'`` for 
         ``max(0,cos(Δθ))``, ``'cos2'`` for
         ``max(0,cos(Δθ))²``, or a custom function. 
-        
+    
     Returns
     -------
     models: list
@@ -1010,6 +1014,7 @@ def fit_heading_variance(
         the ``(posterior_mean, posterior_variance, loss)``
         tuple returned by ``coordinate_descent`` for 
         optimizing the model for each heading angle in NSEW.
+    
     '''
     # Prepare hyperparameter grid
     rβ = 4  # Range (ratio) to search for optimal kernel height
