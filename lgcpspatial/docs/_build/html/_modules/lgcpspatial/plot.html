@@ -309,12 +309,6 @@
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts a measurement in pixels to units of the current</span>
 <span class="sd">    figure width scale</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">ax</span>  <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span>  <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -326,12 +320,6 @@
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts a measurement in pixels to units of the current</span>
 <span class="sd">    figure height scale</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">ax</span>  <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span>  <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -400,12 +388,6 @@
 <span class="sd">    moves axis dy pixels.</span>
 <span class="sd">    Direction of dy may depend on axis orientation.</span>
 <span class="sd">    Does not change axis height.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
     <span class="n">bb</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span>
@@ -435,12 +417,6 @@
 <div class="viewcode-block" id="get_ax_size"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.get_ax_size">[docs]</a><span class="k">def</span> <span class="nf">get_ax_size</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Gets tha axis size in figure-relative units</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span>  <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -456,12 +432,6 @@
 <div class="viewcode-block" id="yunits_to_pixels"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.yunits_to_pixels">[docs]</a><span class="k">def</span> <span class="nf">yunits_to_pixels</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts a measurement in units of the current y-axis to pixels</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">ax</span>  <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span>  <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -473,12 +443,6 @@
 <div class="viewcode-block" id="xunits_to_pixels"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.xunits_to_pixels">[docs]</a><span class="k">def</span> <span class="nf">xunits_to_pixels</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts a measurement in units of the current x-axis to pixels</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">ax</span>  <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span>  <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -614,12 +578,6 @@
 <div class="viewcode-block" id="nicey"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.nicey">[docs]</a><span class="k">def</span> <span class="nf">nicey</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Mark only the min/max value of y axis</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">ylim</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">()[</span><span class="mi">1</span><span class="p">]])</span>
@@ -630,12 +588,6 @@
 <div class="viewcode-block" id="nicex"><a class="viewcode-back" href="../../lgcpspatial.plot.html#lgcpspatial.plot.nicex">[docs]</a><span class="k">def</span> <span class="nf">nicex</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Mark only the min/max value of x axis</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">xlim</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">]])</span>
@@ -681,8 +633,10 @@
 <span class="sd">        width    (number)  : width of colorbar in pixels. defaults to 15</span>
 <span class="sd">        labelpad (number)  : padding between colorbar and title in pixels, defaults to 10</span>
 <span class="sd">        fontsize (number)  : label font size, defaults to 12</span>
+<span class="sd">    </span>
 <span class="sd">    Returns:</span>
 <span class="sd">        axis: colorbar axis</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">vmin</span><span class="p">)</span><span class="o">==</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">AxesImage</span><span class="p">:</span>
         <span class="n">img</span>  <span class="o">=</span> <span class="n">vmin</span>
@@ -789,12 +743,6 @@
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts a measurement in pixels to units of the current y-axis</span>
 <span class="sd">    scale</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">ax</span>  <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">ax</span>  <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -813,9 +761,6 @@
 <span class="sd">    ----------</span>
 <span class="sd">    sigma: standard deviation</span>
 <span class="sd">    x: 1D array-like signal</span>
-<span class="sd">    </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
@@ -1112,7 +1057,7 @@
 <span class="sd">    ----------------</span>
 <span class="sd">    **kwargs: dict</span>
 <span class="sd">        Keyword arguments are forwarded to ``pyplot.plot()``        </span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    result: ConvexHull(points)</span>
@@ -1267,8 +1212,10 @@
 <span class="sd">        va: str</span>
 <span class="sd">            Verrtical alignment; &quot;bottom&quot; (&#39;b&#39;), </span>
 <span class="sd">            &quot;center&quot; (&#39;c&#39;), or &quot;top&quot; (&#39;t&#39;)</span>
+<span class="sd">    </span>
 <span class="sd">    Returns:</span>
 <span class="sd">        axis: colorbar axis</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">vmin</span><span class="p">)</span><span class="o">==</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">AxesImage</span><span class="p">:</span>
         <span class="n">img</span>  <span class="o">=</span> <span class="n">vmin</span>
@@ -1357,7 +1304,6 @@
 <span class="sd">    </span>
 <span class="sd">        {West, South, East, North}</span>
 
-<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    xy0: np.complex64</span>
@@ -1368,7 +1314,8 @@
 <span class="sd">        circular colormap to use for compass.</span>
 <span class="sd">    delta: positive float</span>
 <span class="sd">        Radial spacing for NSEW labels relative to the</span>
-<span class="sd">        color wheel. </span>
+<span class="sd">        color wheel.</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">y0</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="n">ylim</span><span class="p">()</span>
     <span class="n">flip</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">y1</span><span class="o">&lt;</span><span class="n">y0</span> <span class="k">else</span> <span class="mi">1</span>
@@ -1504,6 +1451,7 @@
 <span class="sd">        Rendered RGB values for NS plot</span>
 <span class="sd">    RGBEW:</span>
 <span class="sd">        Rendered RGB values for EW plot</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="c1"># Unpack reference result</span>

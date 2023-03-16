@@ -215,12 +215,6 @@ def pixels_to_xfigureunits(n,ax=None,fig=None):
     '''
     Converts a measurement in pixels to units of the current
     figure width scale
-    
-    Parameters
-    ----------
-    
-    Returns
-    -------
     '''
     if fig is None: fig = plt.gcf()
     if ax  is None: ax  = plt.gca()
@@ -232,12 +226,6 @@ def pixels_to_yfigureunits(n,ax=None,fig=None):
     '''
     Converts a measurement in pixels to units of the current
     figure height scale
-    
-    Parameters
-    ----------
-    
-    Returns
-    -------
     '''
     if fig is None: fig = plt.gcf()
     if ax  is None: ax  = plt.gca()
@@ -306,12 +294,6 @@ def nudge_axis_y_pixels(dy,ax=None):
     moves axis dy pixels.
     Direction of dy may depend on axis orientation.
     Does not change axis height.
-
-    Parameters
-    ----------
-    
-    Returns
-    -------
     '''
     if ax is None: ax=plt.gca()
     bb = ax.get_position()
@@ -341,12 +323,6 @@ def adjust_axis_height_pixels(dy,ax=None):
 def get_ax_size(ax=None,fig=None):
     '''
     Gets tha axis size in figure-relative units
-    
-    Parameters
-    ----------
-    
-    Returns
-    -------
     '''
     if fig is None: fig = plt.gcf()
     if ax is None: ax  = plt.gca()
@@ -362,12 +338,6 @@ def get_ax_size(ax=None,fig=None):
 def yunits_to_pixels(n,ax=None,fig=None):
     '''
     Converts a measurement in units of the current y-axis to pixels
-    
-    Parameters
-    ----------
-    
-    Returns
-    -------
     '''
     if fig is None: fig = plt.gcf()
     if ax  is None: ax  = plt.gca()
@@ -379,12 +349,6 @@ def yunits_to_pixels(n,ax=None,fig=None):
 def xunits_to_pixels(n,ax=None,fig=None):
     '''
     Converts a measurement in units of the current x-axis to pixels
-    
-    Parameters
-    ----------
-    
-    Returns
-    -------
     '''
     if fig is None: fig = plt.gcf()
     if ax  is None: ax  = plt.gca()
@@ -520,12 +484,6 @@ def arrow_between(A,B,size=None):
 def nicey(**kwargs):
     '''
     Mark only the min/max value of y axis
-    
-    Parameters
-    ----------
-    
-    Returns
-    -------
     '''
     if ylim()[0]<0:
         plt.yticks([plt.ylim()[0],0,plt.ylim()[1]])
@@ -536,12 +494,6 @@ def nicey(**kwargs):
 def nicex(**kwargs):
     '''
     Mark only the min/max value of x axis
-    
-    Parameters
-    ----------
-    
-    Returns
-    -------
     '''
     if xlim()[0]<0:
         plt.xticks([plt.xlim()[0],0,plt.xlim()[1]])
@@ -587,8 +539,10 @@ def hcolorbar(
         width    (number)  : width of colorbar in pixels. defaults to 15
         labelpad (number)  : padding between colorbar and title in pixels, defaults to 10
         fontsize (number)  : label font size, defaults to 12
+    
     Returns:
         axis: colorbar axis
+    
     '''
     if type(vmin)==matplotlib.image.AxesImage:
         img  = vmin
@@ -695,12 +649,6 @@ def pixels_to_yunits(n,ax=None,fig=None):
     '''
     Converts a measurement in pixels to units of the current y-axis
     scale
-    
-    Parameters
-    ----------
-    
-    Returns
-    -------
     '''
     if fig is None: fig = plt.gcf()
     if ax  is None: ax  = plt.gca()
@@ -719,9 +667,6 @@ def circular_gaussian_smooth(x,sigma):
     ----------
     sigma: standard deviation
     x: 1D array-like signal
-    
-    Returns
-    -------
     '''
     N = len(x)
     g = np.exp(-np.linspace(-N/2,N/2,N)**2/sigma**2)
@@ -1018,7 +963,7 @@ def plot_convex_hull(px,py,**kwargs):
     ----------------
     **kwargs: dict
         Keyword arguments are forwarded to ``pyplot.plot()``        
-        
+    
     Returns
     -------
     result: ConvexHull(points)
@@ -1173,8 +1118,10 @@ def good_colorbar(vmin=None,
         va: str
             Verrtical alignment; "bottom" ('b'), 
             "center" ('c'), or "top" ('t')
+    
     Returns:
         axis: colorbar axis
+    
     '''
     if type(vmin)==matplotlib.image.AxesImage:
         img  = vmin
@@ -1263,7 +1210,6 @@ def draw_compass(
     
         {West, South, East, North}
 
-    
     Parameters
     ----------
     xy0: np.complex64
@@ -1274,7 +1220,8 @@ def draw_compass(
         circular colormap to use for compass.
     delta: positive float
         Radial spacing for NSEW labels relative to the
-        color wheel. 
+        color wheel.
+    
     '''
     y0,y1 = ylim()
     flip = -1 if y1<y0 else 1
@@ -1410,6 +1357,7 @@ def colored_shift_density_images(
         Rendered RGB values for NS plot
     RGBEW:
         Rendered RGB values for EW plot
+    
     '''
     
     # Unpack reference result
