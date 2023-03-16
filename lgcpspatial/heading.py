@@ -1250,7 +1250,7 @@ def sample_heading_angles(
                 pct              = 95,
                 doplot           = True,
                 color            = (0,)*4,
-                scalebar         = i==0
+                draw_scalebar    = i==0
             ))
             QuadraticConfidence(
                 data,
@@ -1277,7 +1277,7 @@ def sample_heading_angles(
                 pct              = 95,
                 doplot           = doplot,
                 color            = None if colors is None else colors[i],
-                scalebar         = i==0
+                draw_scalebar    = i==0
             ))
         else: raise ValueError((
             'confidence_mode can be quadratic or voronoi, '

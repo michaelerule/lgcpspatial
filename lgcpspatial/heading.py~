@@ -1089,6 +1089,7 @@ def matched_cardinal_points(peaks,edges,indexNSEW):
         identifies which of the peaks at these heading
         indecies are part of the same grid field. Missing
         directions are filled in with ``NaN``. 
+    
     '''
     # Find NSEW pairings from the peak tracking
     # List of point locations
@@ -1249,7 +1250,7 @@ def sample_heading_angles(
                 pct              = 95,
                 doplot           = True,
                 color            = (0,)*4,
-                scalebar         = i==0
+                draw_scalebar    = i==0
             ))
             QuadraticConfidence(
                 data,
