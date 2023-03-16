@@ -855,11 +855,11 @@ def locate_opposites(peaks,maxd,starti,edges):
 
     **Algorithm:**
     
-    * We have a list of edges between adjacent angles
-    * Starting from a seed, follow the graph in both 
-      directions half-way around
-    * Hopefully, we'll come to a peak from the opposite 
-      heading direction
+    1. We have a list of edges between adjacent angles
+    2. Starting from a seed, follow the graph in both 
+       directions half-way around
+    3. Hopefully, we'll come to a peak from the opposite 
+       heading direction
     
     Parameters
     ----------

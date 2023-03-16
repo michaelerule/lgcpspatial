@@ -534,13 +534,13 @@ where color components <code class="docutils literal notranslate"><span class="p
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">locate_opposites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#locate_opposites"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.locate_opposites" title="Permalink to this definition"></a></dt>
 <dd><p>To be used on the result of calling match_peaks()</p>
 <p><strong>Algorithm:</strong></p>
-<ul class="simple">
+<ol class="arabic simple">
 <li><p>We have a list of edges between adjacent angles</p></li>
 <li><p>Starting from a seed, follow the graph in both
 directions half-way around</p></li>
 <li><p>Hopefully, we’ll come to a peak from the opposite
 heading direction</p></li>
-</ul>
+</ol>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
