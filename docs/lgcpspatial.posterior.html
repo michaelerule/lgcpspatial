@@ -59,9 +59,9 @@
 <p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate.html">simulate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.loaddata.html">loaddata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.gridsearch.html">gridsearch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
@@ -272,6 +272,17 @@ Default is 200</p></li>
 <dt class="sig sig-object py" id="lgcpspatial.posterior.PosteriorSample">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.posterior.</span></span><span class="sig-name descname"><span class="pre">PosteriorSample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posterior_variance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arena</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prpeak_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/posterior.html#PosteriorSample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.posterior.PosteriorSample" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Sample the distribution of grid-field peaks from
+a log-Gaussian posterior distribution.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Draw samples in the low-rank space</p></li>
+<li><p>Convert them to spatial coordinates</p></li>
+<li><p>Get probable location of each grid field peak</p></li>
+</ol>
+</div></blockquote>
+<p>(Treat this class simply as a function with named
+return values)</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="lgcpspatial.posterior.PosteriorSample.density">
 <span class="sig-name descname"><span class="pre">density</span></span><a class="headerlink" href="#lgcpspatial.posterior.PosteriorSample.density" title="Permalink to this definition"></a></dt>
@@ -353,12 +364,63 @@ density map.</p>
 </dl>
 </dd></dl>
 
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> – a <code class="docutils literal notranslate"><span class="pre">diagonal_fourier_lowrank</span></code> model object</p></li>
+<li><p><strong>posterior_mean</strong> – low-rank posterior mean returned by
+<code class="docutils literal notranslate"><span class="pre">coordinate_descent(model)</span></code></p></li>
+<li><p><strong>posterior_variance</strong> – marginal variances returned by
+<code class="docutils literal notranslate"><span class="pre">coordinate_descent(model)</span></code></p></li>
+<li><p><strong>Arena</strong> (<em>object</em>) – <p>An object with an atrribute
+hull: scipy.spatial._qhull.ConvexHull</p>
+<blockquote>
+<div><p>Convex Hull object describing the arena
+perimeter. Points will be clipped to this if
+it is not None. Ensure this convex hull has
+been scaled up by the same factor if
+<code class="docutils literal notranslate"><span class="pre">resolution</span></code> is &gt;1.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>nsamples</strong> (<em>int&gt;1</em>) – Number of samples to draw;
+Default is 200</p></li>
+<li><p><strong>resolution</strong> (<em>int&gt;0</em>) – Upsampling factor compared to the bin-grid
+resolution; Default is 2</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Local region (in units of pixels on the L×L
+grid) that peaks should clear to be included.
+I suggest P/2.5</p></li>
+<li><p><strong>edge_radius</strong> (<em>float; Default 0</em>) – Remove peaks closer than <code class="docutils literal notranslate"><span class="pre">edge_radius</span></code> bins
+to the arena’s edge. The default value of 0
+does not remove points within a margin of
+the boundary.</p></li>
+<li><p><strong>height_threshold</strong> (<em>float</em>) – Peak height threshold</p></li>
+<li><p><strong>prpeak_threshold</strong> (<em>float</em>) – Probability threshold for including a peak,
+in [0,1], based on the fractions of samples
+that contain a given peak.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="lgcpspatial.posterior.SampledConfidence">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.posterior.</span></span><span class="sig-name descname"><span class="pre">SampledConfidence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prpeak_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bone_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalebar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/posterior.html#SampledConfidence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.posterior.SampledConfidence" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.posterior.</span></span><span class="sig-name descname"><span class="pre">SampledConfidence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsamples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prpeak_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bone_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_scalebar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_colorbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/posterior.html#SampledConfidence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.posterior.SampledConfidence" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Construct confidence intervals for grid-field peaks
+using sampling, and (optionally) plot them.</p>
+<p><strong>For small posterior variance:</strong> The resulting
+confidence intervals may be too large, since
+spurious peaks near the edges of a field’s Voronoi
+cell are counted toward the posterior peak-location
+variance. This is conservative.</p>
+<p><strong>For large posterior variance:</strong> We estimate the
+uncertainty in a peak’s location by measuring
+the variance of each peak in the peak-density map.
+These samples are limited to each peak’s Voronoi
+cell, which creates an upper bound on the
+uncertainty. I.e. this will always report that
+grid-field peaks are localized to within one
+grid-cell period.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="lgcpspatial.posterior.SampledConfidence.samples">
 <span class="sig-name descname"><span class="pre">samples</span></span><a class="headerlink" href="#lgcpspatial.posterior.SampledConfidence.samples" title="Permalink to this definition"></a></dt>
@@ -388,24 +450,233 @@ confidence ellipses;</p>
 </dl>
 </dd></dl>
 
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>result</strong> (<a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult" title="lgcpspatial.lgcp2d.LGCPResult"><em>LGCPResult</em></a>) – </p></li>
+<li><p><strong>radius</strong> (<em>positive float; default 0.45</em>) – Region in which peak must be a local maximum to
+be considered a grid field.
+This is in units of
+<strong>fraction of the grid-cell period ``model.P``</strong>.</p></li>
+<li><p><strong>edge_radius</strong> (<em>positive float; Default 0.0</em>) – Remove peaks closer than <code class="docutils literal notranslate"><span class="pre">edge_radius</span></code>
+to the arena’s edge. The default value of 0
+does not remove points within a margin of
+the boundary.
+This is in units of
+<strong>fraction of the grid-cell period ``model.P``</strong>.</p></li>
+<li><p><strong>resolution</strong> (<em>positive integer</em>) – Grid upsampling factor, defaults to 2</p></li>
+<li><p><strong>nsamples</strong> (<em>positive integer</em>) – Number of samples to draw, defaults to 4000</p></li>
+<li><p><strong>height_threshold</strong> (<em>float in</em><em> (</em><em>0</em><em>,</em><em>1</em><em>)</em>) – Inclusion threshold for peak height in each
+sample and probability peak over all samples,
+default:0</p></li>
+<li><p><strong>prpeak_threshold</strong> (<em>float</em>) – Probability threshold for including a peak,
+in [0,1], based on the fractions of samples
+that contain a given peak. Default is 0</p></li>
+<li><p><strong>pct</strong> (<em>float in</em><em> (</em><em>0</em><em>,</em><em>100</em><em>)</em>) – Percentile to use for confidence bounds,
+default is 95%.</p></li>
+<li><p><strong>doplot</strong> (<em>boolean</em>) – Plot resulting grid map? Default is False.</p></li>
+<li><p><strong>cmap</strong> (<em>matplotlib.colormap</em>) – Forwarded to <code class="docutils literal notranslate"><span class="pre">imshow()</span></code> if <code class="docutils literal notranslate"><span class="pre">doplot=True</span></code></p></li>
+<li><p><strong>draw_scalebar</strong> (<em>boolean; default True</em>) – Draw 1 meter scale bar?</p></li>
+<li><p><strong>draw_colorbar</strong> (<em>boolean; default True</em>) – Add a color bar axis?</p></li>
+<li><p><strong>**kwargs</strong> – Forwarded to <code class="docutils literal notranslate"><span class="pre">plot()</span></code> if <code class="docutils literal notranslate"><span class="pre">doplot</span></code> is True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>samples: PosteriorSample</dt><dd><p>A PosteriorSample object.</p>
+</dd>
+<dt>ellipses:</dt><dd><p>(x,y) coordinates for confidence ellipses,
+NaN delimeted.</p>
+</dd>
+<dt>gaussians:</dt><dd><p>List of (μ,Σ) 2D confidence Gaussians.</p>
+</dd>
+<dt>arena:</dt><dd><p>An Arena object representing the experiment
+arena at the upsampled resolution.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>SampledConfidence object with these attributes</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="lgcpspatial.posterior.QuadraticConfidence">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.posterior.</span></span><span class="sig-name descname"><span class="pre">QuadraticConfidence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localization_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/posterior.html#QuadraticConfidence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.posterior.QuadraticConfidence" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.posterior.</span></span><span class="sig-name descname"><span class="pre">QuadraticConfidence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localization_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/posterior.html#QuadraticConfidence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.posterior.QuadraticConfidence" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Locally-quadratic approximation of peak-location
+confidence intervals.</p>
+<p><strong>For small posterior variance:</strong> The locally-
+quadratic intervals tend to be smaller than the
+peak-density map sampled intervals, because they
+exclude spurious peaks at intermediate locations.
+This has been spot-checked and found true using
+shuffle tests on the Krupic data, but should be
+verified again when using new data.</p>
+<p><strong>For large posterior variance:</strong> The locally-
+quadratic intervals are not interpretable, since
+they do not account for the fact that grid fields
+are confined to a region related to the grid perid.
+Incorrect, large values will be returned. These
+should be discarded by setting the
+<code class="docutils literal notranslate"><span class="pre">localization_radius</span></code> parameter.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.posterior.QuadraticConfidence.ellipses">
+<span class="sig-name descname"><span class="pre">ellipses</span></span><a class="headerlink" href="#lgcpspatial.posterior.QuadraticConfidence.ellipses" title="Permalink to this definition"></a></dt>
+<dd><p>List of x,y coordinates for plotting confidence
+ellipses; NaN delimeted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.posterior.QuadraticConfidence.gaussians">
+<span class="sig-name descname"><span class="pre">gaussians</span></span><a class="headerlink" href="#lgcpspatial.posterior.QuadraticConfidence.gaussians" title="Permalink to this definition"></a></dt>
+<dd><p>List of (μ,Σ) 2D confidence Gaussians for
+all peaks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>result</strong> (<a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult" title="lgcpspatial.lgcp2d.LGCPResult"><em>LGCPResult</em></a>) – </p></li>
+<li><p><strong>radius</strong> (<em>float; Default 0.45</em>) – Region in which a peak must be a local maximum
+to count as a grid field.
+This is in units of
+<strong>fraction of the grid-cell period ``model.P``</strong>.</p></li>
+<li><p><strong>localization_radius</strong> (<em>float; Default 0.8</em>) – Drop peaks with confidence outside this radius.
+Set to <code class="docutils literal notranslate"><span class="pre">inf</span></code> to retain all peaks.
+This is in units of
+<strong>fraction of the grid-cell period ``model.P``</strong>.</p></li>
+<li><p><strong>edge_radius</strong> (<em>float; Default 0</em>) – Remove peaks closer than <code class="docutils literal notranslate"><span class="pre">edge_radius</span></code> bins
+to the arena’s edge. The default value of 0
+does not remove points within a margin of
+the boundary.</p></li>
+<li><p><strong>height_threshold</strong> (<em>float in</em><em> (</em><em>0</em><em>,</em><em>1</em><em>)</em><em>; default 0.5</em>) – Inclusion threshold for peak height in each
+sample and probability peak over all samples,</p></li>
+<li><p><strong>prpeak_threshold</strong> (<em>float</em>) – Probability threshold for including a peak,
+iinterpolate_peaksn [0,1], based on the
+fractions of samples that contain a given peak.</p></li>
+<li><p><strong>pct</strong> (<em>float in</em><em> (</em><em>0</em><em>,</em><em>100</em><em>)</em><em>; default 95.0</em>) – percentile to use for confidence bounds,</p></li>
+<li><p><strong>doplot</strong> (<em>boolean</em><em>, </em><em>default True</em>) – Render a plot of the grid map? Default:False.</p></li>
+<li><p><strong>draw_border</strong> (<em>boolean</em><em>, </em><em>default True</em>) – Whether to render the arena border if plotting.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="lgcpspatial.posterior.QuadraticConfidenceJoint">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.posterior.</span></span><span class="sig-name descname"><span class="pre">QuadraticConfidenceJoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localization_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regularization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/posterior.html#QuadraticConfidenceJoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.posterior.QuadraticConfidenceJoint" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.posterior.</span></span><span class="sig-name descname"><span class="pre">QuadraticConfidenceJoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localization_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regularization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/posterior.html#QuadraticConfidenceJoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.posterior.QuadraticConfidenceJoint" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Similar to QuadraticConfidence, but modified to
+return the joint covariance to address correlations
+between fields in the posterior introduced by the
+GP prior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>result</strong> (<a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult" title="lgcpspatial.lgcp2d.LGCPResult"><em>LGCPResult</em></a>) – </p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Region in which a peak must be a local maximum
+to count as a grid field. This is in units of
+“bins” on the L×L grid.
+<strong>fraction of the grid-cell period ``model.P``</strong>.</p></li>
+<li><p><strong>localization_radius</strong> (<em>float</em>) – Drop peaks with confidence outside this radius.
+<strong>fraction of the grid-cell period ``model.P``</strong>.</p></li>
+<li><p><strong>height_threshold</strong> (<em>float in</em><em> (</em><em>0</em><em>,</em><em>1</em><em>)</em><em>, </em><em>default:.8</em>) – Inclusion threshold for peak height in each
+sample  and probability peak over all samples,</p></li>
+<li><p><strong>pct</strong> (<em>float in</em><em> (</em><em>0</em><em>,</em><em>100</em><em>)</em><em>, </em><em>default:95</em>) – percentile to use for confidence bounds</p></li>
+<li><p><strong>edge_radius</strong> (<em>float; Default 0</em>) – Remove peaks closer than <code class="docutils literal notranslate"><span class="pre">edge_radius</span></code> bins
+to the arena’s edge. The default value of 0
+does not remove points within a margin of
+the boundary.</p></li>
+<li><p><strong>doplot</strong> (<em>boolean</em><em>, </em><em>default:False.</em>) – Plot resulting the grid map?</p></li>
+<li><p><strong>**kwargs</strong> – Forwarded to plot()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>(rx,ry)</em> – Field locations</p></li>
+<li><p><em>ellipses</em> – NaN-delimeted x,y coordinates for plotting
+confidence ellipses;</p></li>
+<li><p><strong>gaussians</strong> (<em>list</em>) – (μ,Σ) 2D confidence Gaussians for all peaks.</p></li>
+<li><p><strong>ok</strong> (<em>list&lt;int&gt;</em>) – Which of the <code class="docutils literal notranslate"><span class="pre">(rx,ry)</span></code> points were included
+in Σx0</p></li>
+<li><p><em>Σx0</em> – Joint covariance of all included points, packed
+as <code class="docutils literal notranslate"><span class="pre">(x,y)</span></code></p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="lgcpspatial.posterior.QuadraticExponentialConfidence">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.posterior.</span></span><span class="sig-name descname"><span class="pre">QuadraticExponentialConfidence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localization_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/posterior.html#QuadraticExponentialConfidence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.posterior.QuadraticExponentialConfidence" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.posterior.</span></span><span class="sig-name descname"><span class="pre">QuadraticExponentialConfidence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localization_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/posterior.html#QuadraticExponentialConfidence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.posterior.QuadraticExponentialConfidence" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Locally-quadratic approximation based on the
+posterior firing-rate moments.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.posterior.QuadraticExponentialConfidence.ellipses">
+<span class="sig-name descname"><span class="pre">ellipses</span></span><a class="headerlink" href="#lgcpspatial.posterior.QuadraticExponentialConfidence.ellipses" title="Permalink to this definition"></a></dt>
+<dd><p>List of x,y coordinates for plotting confidence
+ellipses; NaN delimeted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.posterior.QuadraticExponentialConfidence.gaussians">
+<span class="sig-name descname"><span class="pre">gaussians</span></span><a class="headerlink" href="#lgcpspatial.posterior.QuadraticExponentialConfidence.gaussians" title="Permalink to this definition"></a></dt>
+<dd><p>List of (μ,Σ) 2D confidence Gaussians for
+all peaks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>result</strong> (<a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult" title="lgcpspatial.lgcp2d.LGCPResult"><em>LGCPResult</em></a>) – </p></li>
+<li><p><strong>radius</strong> (<em>float; Default 0.45</em>) – Region in which a peak must be a local maximum
+to count as a grid field.
+This is in units of
+<strong>fraction of the grid-cell period ``model.P``</strong>.</p></li>
+<li><p><strong>localization_radius</strong> (<em>float; Default 0.8</em>) – Drop peaks with confidence outside this radius.
+Set to <code class="docutils literal notranslate"><span class="pre">inf</span></code> to retain all peaks.
+This is in units of
+<strong>fraction of the grid-cell period ``model.P``</strong>.</p></li>
+<li><p><strong>edge_radius</strong> (<em>float; Default 0</em>) – Remove peaks closer than <code class="docutils literal notranslate"><span class="pre">edge_radius</span></code> bins
+to the arena’s edge. The default value of 0
+does not remove points within a margin of
+the boundary.</p></li>
+<li><p><strong>height_threshold</strong> (<em>float in</em><em> (</em><em>0</em><em>,</em><em>1</em><em>)</em><em>; default 0.5</em>) – Inclusion threshold for peak height in each
+sample and probability peak over all samples,</p></li>
+<li><p><strong>prpeak_threshold</strong> (<em>float</em>) – Probability threshold for including a peak,
+iinterpolate_peaksn [0,1], based on the
+fractions of samples that contain a given peak.</p></li>
+<li><p><strong>pct</strong> (<em>float in</em><em> (</em><em>0</em><em>,</em><em>100</em><em>)</em><em>; default 95.0</em>) – percentile to use for confidence bounds,</p></li>
+<li><p><strong>doplot</strong> (<em>boolean</em><em>, </em><em>default True</em>) – Render a plot of the grid map? Default:False.</p></li>
+<li><p><strong>draw_border</strong> (<em>boolean</em><em>, </em><em>default True</em>) – Whether to render the arena border if plotting.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

@@ -19,7 +19,9 @@
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="lgcpspatial.hyperparameters module" href="lgcpspatial.hyperparameters.html" />
+    <link rel="prev" title="lgcpspatial.loaddata module" href="lgcpspatial.loaddata.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -55,11 +57,11 @@
 <li class="toctree-l1"><a class="reference internal" href="example%205%20heading%20dependence.html">Example 5: Heading dependence</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate.html">simulate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.loaddata.html">loaddata</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">gridsearch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
@@ -170,12 +172,56 @@ Grid points that were not evaluated are None.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="lgcpspatial.gridsearch.GridsearchResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.gridsearch.</span></span><span class="sig-name descname"><span class="pre">GridsearchResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">best</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bestresult</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allresults</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pargrid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/gridsearch.html#GridsearchResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.gridsearch.GridsearchResult" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<p>best index into parameter grid</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.gridsearch.GridsearchResult.best">
+<span class="sig-name descname"><span class="pre">best</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.gridsearch.GridsearchResult.best" title="Permalink to this definition"></a></dt>
+<dd><p>values of best parameters</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.gridsearch.GridsearchResult.pars">
+<span class="sig-name descname"><span class="pre">pars</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.gridsearch.GridsearchResult.pars" title="Permalink to this definition"></a></dt>
+<dd><p>(state, likelihood, info) at best parameters.
+<code class="docutils literal notranslate"><span class="pre">info</span></code> is determined by the third element in the
+3-tuple return-value of the <code class="docutils literal notranslate"><span class="pre">evaluate</span></code> function,
+passed by the user. <code class="docutils literal notranslate"><span class="pre">state</span></code> is also user-defined.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.gridsearch.GridsearchResult.bestresult">
+<span class="sig-name descname"><span class="pre">bestresult</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></em><a class="headerlink" href="#lgcpspatial.gridsearch.GridsearchResult.bestresult" title="Permalink to this definition"></a></dt>
+<dd><p>All other results as an object array.
+Grid points that were not evaluated are None.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.gridsearch.GridsearchResult.allresults">
+<span class="sig-name descname"><span class="pre">allresults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.gridsearch.GridsearchResult.allresults" title="Permalink to this definition"></a></dt>
+<dd><p>Parameter grid that has been searched</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.gridsearch.GridsearchResult.pargrid">
+<span class="sig-name descname"><span class="pre">pargrid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.gridsearch.GridsearchResult.pargrid" title="Permalink to this definition"></a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="lgcpspatial.loaddata.html" class="btn btn-neutral float-left" title="lgcpspatial.loaddata module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="lgcpspatial.hyperparameters.html" class="btn btn-neutral float-right" title="lgcpspatial.hyperparameters module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

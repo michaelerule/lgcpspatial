@@ -57,9 +57,9 @@
 <p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate.html">simulate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.loaddata.html">loaddata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.gridsearch.html">gridsearch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
@@ -132,6 +132,14 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.gridsearch.html">lgcpspatial.gridsearch module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.gridsearch.html#lgcpspatial.gridsearch.grid_search"><code class="docutils literal notranslate"><span class="pre">grid_search()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.gridsearch.html#lgcpspatial.gridsearch.GridsearchResult"><code class="docutils literal notranslate"><span class="pre">GridsearchResult</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.gridsearch.html#lgcpspatial.gridsearch.GridsearchResult.best"><code class="docutils literal notranslate"><span class="pre">GridsearchResult.best</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.gridsearch.html#lgcpspatial.gridsearch.GridsearchResult.pars"><code class="docutils literal notranslate"><span class="pre">GridsearchResult.pars</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.gridsearch.html#lgcpspatial.gridsearch.GridsearchResult.bestresult"><code class="docutils literal notranslate"><span class="pre">GridsearchResult.bestresult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.gridsearch.html#lgcpspatial.gridsearch.GridsearchResult.allresults"><code class="docutils literal notranslate"><span class="pre">GridsearchResult.allresults</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.gridsearch.html#lgcpspatial.gridsearch.GridsearchResult.pargrid"><code class="docutils literal notranslate"><span class="pre">GridsearchResult.pargrid</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">lgcpspatial.heading module</a><ul>
@@ -163,12 +171,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcpspatial.lgcp2d module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult"><code class="docutils literal notranslate"><span class="pre">CoordinateDescentResult</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult.h"><code class="docutils literal notranslate"><span class="pre">CoordinateDescentResult.μh</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult.v"><code class="docutils literal notranslate"><span class="pre">CoordinateDescentResult.v</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult.loss"><code class="docutils literal notranslate"><span class="pre">CoordinateDescentResult.loss</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.coordinate_descent"><code class="docutils literal notranslate"><span class="pre">coordinate_descent()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.make_kernel_ft"><code class="docutils literal notranslate"><span class="pre">make_kernel_ft()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank"><code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank</span></code></a><ul>
@@ -196,6 +198,29 @@
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.logdet"><code class="docutils literal notranslate"><span class="pre">logdet()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.RI"><code class="docutils literal notranslate"><span class="pre">RI()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.npdf"><code class="docutils literal notranslate"><span class="pre">npdf()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult"><code class="docutils literal notranslate"><span class="pre">CoordinateDescentResult</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult.h"><code class="docutils literal notranslate"><span class="pre">CoordinateDescentResult.μh</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult.v"><code class="docutils literal notranslate"><span class="pre">CoordinateDescentResult.v</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.CoordinateDescentResult.loss"><code class="docutils literal notranslate"><span class="pre">CoordinateDescentResult.loss</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.lgcpregress"><code class="docutils literal notranslate"><span class="pre">lgcpregress()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult"><code class="docutils literal notranslate"><span class="pre">LGCPResult</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.data"><code class="docutils literal notranslate"><span class="pre">LGCPResult.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.model"><code class="docutils literal notranslate"><span class="pre">LGCPResult.model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.fit"><code class="docutils literal notranslate"><span class="pre">LGCPResult.fit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.loss"><code class="docutils literal notranslate"><span class="pre">LGCPResult.loss</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.delta_lograte_lowrank"><code class="docutils literal notranslate"><span class="pre">LGCPResult.delta_lograte_lowrank</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.delta_lograte"><code class="docutils literal notranslate"><span class="pre">LGCPResult.delta_lograte</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.mean_lograte"><code class="docutils literal notranslate"><span class="pre">LGCPResult.mean_lograte</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.lograte_marginal_variance"><code class="docutils literal notranslate"><span class="pre">LGCPResult.lograte_marginal_variance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.mean_rate"><code class="docutils literal notranslate"><span class="pre">LGCPResult.mean_rate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.rate_marginal_variance"><code class="docutils literal notranslate"><span class="pre">LGCPResult.rate_marginal_variance</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.mean_rate_Hz"><code class="docutils literal notranslate"><span class="pre">LGCPResult.mean_rate_Hz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.rate_marginal_variance_Hz"><code class="docutils literal notranslate"><span class="pre">LGCPResult.rate_marginal_variance_Hz</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult.rate_cv"><code class="docutils literal notranslate"><span class="pre">LGCPResult.rate_cv</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.loaddata.html">lgcpspatial.loaddata module</a><ul>
@@ -316,9 +341,17 @@
 <li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.SampledConfidence.gaussians"><code class="docutils literal notranslate"><span class="pre">SampledConfidence.gaussians</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticConfidence"><code class="docutils literal notranslate"><span class="pre">QuadraticConfidence</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticConfidence"><code class="docutils literal notranslate"><span class="pre">QuadraticConfidence</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticConfidence.ellipses"><code class="docutils literal notranslate"><span class="pre">QuadraticConfidence.ellipses</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticConfidence.gaussians"><code class="docutils literal notranslate"><span class="pre">QuadraticConfidence.gaussians</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticConfidenceJoint"><code class="docutils literal notranslate"><span class="pre">QuadraticConfidenceJoint</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticExponentialConfidence"><code class="docutils literal notranslate"><span class="pre">QuadraticExponentialConfidence</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticExponentialConfidence"><code class="docutils literal notranslate"><span class="pre">QuadraticExponentialConfidence</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticExponentialConfidence.ellipses"><code class="docutils literal notranslate"><span class="pre">QuadraticExponentialConfidence.ellipses</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.QuadraticExponentialConfidence.gaussians"><code class="docutils literal notranslate"><span class="pre">QuadraticExponentialConfidence.gaussians</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="lgcpspatial.posterior.html#lgcpspatial.posterior.fraction_within_arena"><code class="docutils literal notranslate"><span class="pre">fraction_within_arena()</span></code></a></li>
 </ul>
 </li>

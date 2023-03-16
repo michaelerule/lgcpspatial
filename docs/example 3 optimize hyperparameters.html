@@ -61,9 +61,9 @@
 <p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate.html">simulate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.loaddata.html">loaddata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.gridsearch.html">gridsearch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
@@ -385,27 +385,22 @@ div.rendered_html tbody tr:hover {
 <section id="Grid-search-to-find-kernel-hyperparameters-with-best-evidence-lower-bound">
 <h2>Grid search to find kernel hyperparameters with best evidence lower-bound<a class="headerlink" href="#Grid-search-to-find-kernel-hyperparameters-with-best-evidence-lower-bound" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span> <span class="kn">import</span> <span class="n">Dataset</span>
-
-<span class="n">datadir</span>  <span class="o">=</span> <span class="s1">&#39;../example data/&#39;</span>
-<span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;r2405_051216b_cell1816.mat&#39;</span><span class="p">,</span>
-<span class="p">]</span>
-
+<span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span>        <span class="kn">import</span> <span class="n">Dataset</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.hyperparameters</span> <span class="kn">import</span> <span class="n">gridsearch_optimize</span>
 
 <span class="c1"># Load a dataset</span>
-<span class="n">L</span>      <span class="o">=</span> <span class="mi">128</span> <span class="c1"># Grid size for position bins</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">data</span>   <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="n">dataset</span><span class="p">)</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">doplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">L</span>       <span class="o">=</span> <span class="mi">128</span> <span class="c1"># Grid size for position bins</span>
+<span class="n">datadir</span> <span class="o">=</span> <span class="s1">&#39;../example data/&#39;</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="s1">&#39;r2405_051216b_cell1816.mat&#39;</span>
+<span class="n">data</span>    <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="n">dataset</span><span class="p">)</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">L</span><span class="p">,</span><span class="n">doplot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="n">gridsearch_optimize</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<span class="n">bestindex</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span> <span class="o">=</span> <span class="n">result</span>
+<span class="n">bestindex</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span><span class="p">,</span><span class="n">pargrid</span> <span class="o">=</span> <span class="n">result</span>
 </pre></div>
 </div>
 </div>
@@ -414,16 +409,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[99,105](2.39e+01,7.78e-01) loss=-9.535699e+033(done)
-
-Heuristic parameters
-P  = 24.252948
-v0 = 0.319910
-
-Optimized parameters:
-P    = 23.589750
-β    = 0.778387
-v0/β = 0.410991
+[100,99](2.43e+01,1.05e+00) loss=-9.533342e+033
 </pre></div></div>
 </div>
 </section>
@@ -436,12 +422,13 @@ v0/β = 0.410991
 <li><p>Multiplying by samples/second to get bits per second</p></li>
 </ol>
 <p>This (negative) ELBO is also missing a <span class="math notranslate nohighlight">\(\ln(y!) = \ln\Gamma(y+1)\)</span> term from the Poisson negative log-likelihood. This doesn’t affect state or hyperparameter optimization, but it’s good to add it back for completeness.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span> <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span> <span class="kn">import</span> <span class="n">coordinate_descent</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span> <span class="kn">import</span> <span class="n">lgcpregress</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span>      <span class="kn">import</span> <span class="n">loggamma</span> <span class="k">as</span> <span class="n">lnΓ</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.plot</span>   <span class="kn">import</span> <span class="o">*</span>
 
@@ -470,65 +457,35 @@ v0/β = 0.410991
 
 <span class="n">P_use</span>  <span class="o">=</span> <span class="n">P</span><span class="o">*</span><span class="mi">2</span>
 <span class="n">v0_use</span> <span class="o">=</span> <span class="n">kv</span>
-<span class="n">model</span>  <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">fit</span>    <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: bad parameters, ELBO=</span><span class="si">%0.3f</span><span class="s1"> bits/second&#39;</span><span class="o">%</span>\
-         <span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="n">to_bps</span><span class="p">(</span><span class="n">fit</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">lgcpregress</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">v0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">)</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span>
+    <span class="n">result</span><span class="p">,</span>
+    <span class="n">ftitle</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: Bad parameters, ELBO=</span><span class="si">%0.3f</span><span class="s1"> bits/second&#39;</span><span class="o">%</span>\
+    <span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="n">to_bps</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">loss</span><span class="p">)))</span>
 <span class="n">show</span><span class="p">()</span>
 
 <span class="n">P_use</span>  <span class="o">=</span> <span class="n">P</span>
 <span class="n">v0_use</span> <span class="o">=</span> <span class="n">kv</span>
-<span class="n">model</span>  <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">fit</span>    <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: heuristic parameters, ELBO=</span><span class="si">%0.3f</span><span class="s1"> bits/second&#39;</span><span class="o">%</span>\
-         <span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="n">to_bps</span><span class="p">(</span><span class="n">fit</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">lgcpregress</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">v0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">)</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span>
+    <span class="n">result</span><span class="p">,</span>
+    <span class="n">ftitle</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: Heuristic parameters, ELBO=</span><span class="si">%0.3f</span><span class="s1"> bits/second&#39;</span><span class="o">%</span>\
+    <span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="n">to_bps</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">loss</span><span class="p">)))</span>
 <span class="n">show</span><span class="p">()</span>
 
 <span class="n">P_use</span>  <span class="o">=</span> <span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">v0_use</span> <span class="o">=</span> <span class="n">kv</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">model</span>  <span class="o">=</span> <span class="n">DiagonalFourierLowrank</span><span class="p">(</span><span class="n">v0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">fit</span>    <span class="o">=</span> <span class="n">coordinate_descent</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-<span class="n">inference_summary_plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">fit</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: Optimised parameters, ELBO=</span><span class="si">%0.3f</span><span class="s1"> bits/second&#39;</span><span class="o">%</span>\
-         <span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="n">to_bps</span><span class="p">(</span><span class="n">fit</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">lgcpregress</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">v0_use</span><span class="p">,</span><span class="n">P_use</span><span class="p">)</span>
+<span class="n">inference_summary_plot</span><span class="p">(</span>
+    <span class="n">result</span><span class="p">,</span>
+    <span class="n">ftitle</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: Optimised parameters, ELBO=</span><span class="si">%0.3f</span><span class="s1"> bits/second&#39;</span><span class="o">%</span>\
+    <span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="n">to_bps</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">loss</span><span class="p">)))</span>
 <span class="n">show</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">P_use</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">v0_use</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_3_optimize_hyperparameters_4_0.png" src="_images/example_3_optimize_hyperparameters_4_0.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_3_optimize_hyperparameters_4_1.png" src="_images/example_3_optimize_hyperparameters_4_1.png" />
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_3_optimize_hyperparameters_4_2.png" src="_images/example_3_optimize_hyperparameters_4_2.png" />
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-23.58975
-0.4109905
-</pre></div></div>
 </div>
 </section>
 </section>

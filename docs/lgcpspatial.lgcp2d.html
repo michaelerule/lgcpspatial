@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="lgcpspatial.simulate_data module" href="lgcpspatial.simulate_data.html" />
+    <link rel="next" title="lgcpspatial.simulate module" href="lgcpspatial.simulate.html" />
     <link rel="prev" title="Example 5: Heading dependence" href="example%205%20heading%20dependence.html" /> 
 </head>
 
@@ -59,9 +59,9 @@
 <p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">lgcp2d</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate.html">simulate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.loaddata.html">loaddata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.gridsearch.html">gridsearch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
@@ -120,30 +120,6 @@
 </style>
 <section id="module-lgcpspatial.lgcp2d">
 <span id="lgcpspatial-lgcp2d-module"></span><h1>lgcpspatial.lgcp2d module<a class="headerlink" href="#module-lgcpspatial.lgcp2d" title="Permalink to this heading"></a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">CoordinateDescentResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">μh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#CoordinateDescentResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.h">
-<span class="sig-name descname"><span class="pre">μh</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.h" title="Permalink to this definition"></a></dt>
-<dd><p>Alias for field number 0</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.v">
-<span class="sig-name descname"><span class="pre">v</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.v" title="Permalink to this definition"></a></dt>
-<dd><p>Alias for field number 1</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.loss">
-<span class="sig-name descname"><span class="pre">loss</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.loss" title="Permalink to this definition"></a></dt>
-<dd><p>Alias for field number 2</p>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.coordinate_descent">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">coordinate_descent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialmean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialcov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxmeaniter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxvariter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showprogress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#coordinate_descent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.coordinate_descent" title="Permalink to this definition"></a></dt>
@@ -151,7 +127,11 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gp</strong> (<em>Model</em>) – Gaussian-Process model instance.</p></li>
+<li><p><strong>gp</strong> (<em>Model</em>) – Gaussian-Process model instance.
+This can be any object providing the functions
+<code class="docutils literal notranslate"><span class="pre">initialmean()</span></code>, <code class="docutils literal notranslate"><span class="pre">initialcov()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mean_update(μ,Σ)</span></code>, <code class="docutils literal notranslate"><span class="pre">variance_update(μ,Σ)</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">loss(μ,Σ)</span></code>.</p></li>
 <li><p><strong>initialmean</strong> (<em>np.float32</em>) – Initial guess for mean, in whatever format
 gp expects for calculating derivatives.
 if None, <code class="docutils literal notranslate"><span class="pre">coordiante_descent</span></code> will initialize this
@@ -225,12 +205,110 @@ negligeble variance is another option.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.DiagonalFourierLowrank">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">DiagonalFourierLowrank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lograte_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">γ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whitenoise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mintol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use2d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">component_threshold_percent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kclip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">DiagonalFourierLowrank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prior_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lograte_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">γ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whitenoise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mintol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_frequencies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">component_threshold_percent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kclip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class representing variational GP inference with
 posterior covariance Σ = [ Λ + diag[p] ]¯¹. A low-rank
 Fourier-space representation is used to approximate
 this inverse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kv</strong> (<em>float</em>) – A kernel hyperparameter: The overall height of
+the prior covariance kernel. Related (albeit
+indirectly) to the height of the grid as well as
+the overall confidence in our measurements.</p></li>
+<li><p><strong>P</strong> (<em>float&gt;0</em>) – A kernel hyperparameter: The grid cell’s period
+in units of bins on the L×L grid.</p></li>
+<li><p><strong>dataset</strong> (<em>object</em>) – <dl class="simple">
+<dt>This can be any object with the attributes:</dt><dd><dl class="simple">
+<dt>L: int</dt><dd><p>Size of LxL grid for binned data.</p>
+</dd>
+<dt>n: np.float32</dt><dd><p>Length L² array of visits to each bin.</p>
+</dd>
+<dt>y: np.float32</dt><dd><p>Length L² array of spikes at each bin.</p>
+</dd>
+<dt>prior_mean: np.float32</dt><dd><p>Shape L×L or L² array with the prior
+mean-log-rate. This should reflect
+background rate variations unrelated to
+the grid structure</p>
+</dd>
+<dt>lograte_guess: float32 array</dt><dd><p>Shape L×L or L² array with an initial
+guess of the log rate above/below
+<code class="docutils literal notranslate"><span class="pre">prior_mean</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>You can also omit the dataset argument and pass
+these values as keyword arguments.</p>
+</p></li>
+<li><p><strong>L</strong> (<em>int</em>) – Size of LxL spatial grid for binned data.
+This keyword argument can also be provided as an
+attribute to the <code class="docutils literal notranslate"><span class="pre">dataset</span></code> keyword argumet
+object.</p></li>
+<li><p><strong>n</strong> (<em>np.float32</em>) – Length L² array of visits to each bin.
+This keyword argument can also be provided as an
+attribute to the <code class="docutils literal notranslate"><span class="pre">dataset</span></code> keyword argumet
+object.</p></li>
+<li><p><strong>y</strong> (<em>np.float32</em>) – Length L² array of spikes at each bin.
+This keyword argument can also be provided as an
+attribute to the <code class="docutils literal notranslate"><span class="pre">dataset</span></code> keyword argumet
+object.</p></li>
+<li><p><strong>prior_mean</strong> (<em>np.float32</em>) – Shape L×L or L² array with the prior
+mean-log-rate. This should reflect
+background rate variations unrelated to
+the grid structure
+This keyword argument can also be provided as an
+attribute to the <code class="docutils literal notranslate"><span class="pre">dataset</span></code> keyword argumet
+object.</p></li>
+<li><p><strong>lograte_guess</strong> (<em>float32 array</em>) – Shape L×L or L² array with an initial
+guess of the log rate above/below
+<code class="docutils literal notranslate"><span class="pre">prior_mean</span></code>. This keyword argument can also be
+provided as an attribute to the <code class="docutils literal notranslate"><span class="pre">dataset</span></code>
+keyword argumet object.</p></li>
+<li><p><strong>γ</strong> (<em>float&gt;0</em>) – A dispersion correction. The default is 1.0,
+corresponding to Poisson observations—you
+should probably leave it at 1.0. Values &lt;1
+correspond to over-dispersion, and values &gt;1
+correspond to under-dispersed observations.</p></li>
+<li><p><strong>whitenoise</strong> (<em>default 0</em>) – A white-noise kernel hyperparameter. This
+corresponds to a constant extra variance in
+frequency space, and to locally (Dirac delta)
+zero-lag variance in the spatial domain. White
+noise contains powers at all frequencies, so is
+generally incompatable with the approach of
+using a low-rank subspace in the frequency
+domain to speed things up. We apply white noise
+AFTER selecting the low-rank subspace. This is
+a bit wrong, but still might have its uses.</p></li>
+<li><p><strong>dc</strong> (<em>float&gt;0</em>) – A kernel hyperparameter: Amount of DC variance
+to add. This corresponds to uncertainty about
+the average firing rate. If your prior is good,
+this variance can be small. Setting it to
+something large slows inference slightly.</p></li>
+<li><p><strong>mintol</strong> (<em>float&gt;0</em>) – The tolerance used in the minimum residual
+algorithm. The default is 1e-6</p></li>
+<li><p><strong>keep_frequencies</strong> – A boolean array indicating which spatial
+frequency components to use. If this is
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, <code class="docutils literal notranslate"><span class="pre">keep_frequencies</span></code> is calculated
+using <code class="docutils literal notranslate"><span class="pre">component_threshold_percent</span></code>.</p></li>
+<li><p><strong>component_threshold_percent</strong> (<em>float &gt;0 &lt;100</em>) – We determine which frequency components to keep
+by finding the (nonzero) frequency with the
+highest variance. We keep all frequency
+components with at least
+component_threshold_percent % of this.</p></li>
+<li><p><strong>kclip</strong> (<em>int&gt;0; default 3</em>) – Bessel function zero to truncate the kernel at.
+1: central lobe only, no periodicity
+2: central lobe and inhibitory surround
+3: central lobe and nearest neighbor grid field
+4. + second-nearest inhibitory surround, etc
+The default is (3), which corresponds to an
+assumption of reasonable local grid order, but
+no particular long-range order.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="lgcpspatial.lgcp2d.DiagonalFourierLowrank.update_cached">
 <span class="sig-name descname"><span class="pre">update_cached</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#DiagonalFourierLowrank.update_cached"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank.update_cached" title="Permalink to this definition"></a></dt>
@@ -637,6 +715,169 @@ complex-valued array</p>
 </dl>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">CoordinateDescentResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">μh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#CoordinateDescentResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.h">
+<span class="sig-name descname"><span class="pre">μh</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.h" title="Permalink to this definition"></a></dt>
+<dd><p>Posterior mean in low-rank spatial frequency subspace.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.v">
+<span class="sig-name descname"><span class="pre">v</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.v" title="Permalink to this definition"></a></dt>
+<dd><p>Posterior marginal log-rate variances in each spatial bin.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.CoordinateDescentResult.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.CoordinateDescentResult.loss" title="Permalink to this definition"></a></dt>
+<dd><p>Value of the loss function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.lgcpregress">
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">lgcpregress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#lgcpregress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.lgcpregress" title="Permalink to this definition"></a></dt>
+<dd><p>Convenience routine to initialize a
+<code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank</span></code> instance for LGCP
+regression.</p>
+<p>This unpacks the low-rank result and computes
+some useful quantities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>object</em>) – <dl class="simple">
+<dt>This can be any object with the attributes:</dt><dd><dl class="simple">
+<dt>L: int</dt><dd><p>Size of LxL grid for binned data.</p>
+</dd>
+<dt>n: np.float32</dt><dd><p>Length L² array of visits to each bin.</p>
+</dd>
+<dt>y: np.float32</dt><dd><p>Length L² array of spikes at each bin.</p>
+</dd>
+<dt>prior_mean: np.float32</dt><dd><p>Shape L×L or L² array with the prior
+mean-log-rate. This should reflect
+background rate variations unrelated to
+the grid structure</p>
+</dd>
+<dt>lograte_guess: float32 array</dt><dd><p>Shape L×L or L² array with an initial
+guess of the log rate above/below
+<code class="docutils literal notranslate"><span class="pre">prior_mean</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>v</strong> (<em>float; default None.</em>) – If <code class="docutils literal notranslate"><span class="pre">None</span></code>, we will use <code class="docutils literal notranslate"><span class="pre">data.prior_variance</span></code>.
+A kernel hyperparameter: The overall height of
+the prior covariance kernel. Related (albeit
+indirectly) to the height of the grid as well as
+the overall confidence in our measurements.</p></li>
+<li><p><strong>p</strong> (<em>float&gt;0; default None.</em>) – If <code class="docutils literal notranslate"><span class="pre">None</span></code>, we will use <code class="docutils literal notranslate"><span class="pre">data.P</span></code>.
+A kernel hyperparameter: The grid cell’s period
+in units of bins on the L×L grid.</p></li>
+<li><p><strong>model_kwargs</strong> (<em>dict</em>) – Keyword arguments forwarded to
+<code class="docutils literal notranslate"><span class="pre">DiagonalFourierLowrank()</span></code></p></li>
+<li><p><strong>optimize_kwargs</strong> (<em>dict</em>) – Keyword arguments forwarded to
+<code class="docutils literal notranslate"><span class="pre">coordinate_descent()</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>result</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#lgcpspatial.lgcp2d.LGCPResult" title="lgcpspatial.lgcp2d.LGCPResult">LGCPResult</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lgcpspatial.lgcp2d.</span></span><span class="sig-name descname"><span class="pre">LGCPResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_lograte_lowrank</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_lograte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_lograte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lograte_marginal_variance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_marginal_variance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_rate_Hz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_marginal_variance_Hz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate_cv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/lgcp2d.html#LGCPResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">object</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.data" title="Permalink to this definition"></a></dt>
+<dd><p>reference to dataset used to train the model</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lgcpspatial.lgcp2d.DiagonalFourierLowrank" title="lgcpspatial.lgcp2d.DiagonalFourierLowrank"><span class="pre">DiagonalFourierLowrank</span></a></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.model" title="Permalink to this definition"></a></dt>
+<dd><p>model used to compute the regression</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#lgcpspatial.lgcp2d.CoordinateDescentResult" title="lgcpspatial.lgcp2d.CoordinateDescentResult"><span class="pre">CoordinateDescentResult</span></a></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.fit" title="Permalink to this definition"></a></dt>
+<dd><p>object returned by <code class="docutils literal notranslate"><span class="pre">coordinate_descent()</span></code> (for compatibility only)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.loss">
+<span class="sig-name descname"><span class="pre">loss</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">number</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.loss" title="Permalink to this definition"></a></dt>
+<dd><p>value of the loss function at the fitted posterior</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.delta_lograte_lowrank">
+<span class="sig-name descname"><span class="pre">delta_lograte_lowrank</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.delta_lograte_lowrank" title="Permalink to this definition"></a></dt>
+<dd><p>posteior mean log-rate in low-rank frequency subspace</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.delta_lograte">
+<span class="sig-name descname"><span class="pre">delta_lograte</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.delta_lograte" title="Permalink to this definition"></a></dt>
+<dd><p>posterior mean log-rate in each spatial bin</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.mean_lograte">
+<span class="sig-name descname"><span class="pre">mean_lograte</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.mean_lograte" title="Permalink to this definition"></a></dt>
+<dd><p>posterior mean log-rate in each spatial bin</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.lograte_marginal_variance">
+<span class="sig-name descname"><span class="pre">lograte_marginal_variance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.lograte_marginal_variance" title="Permalink to this definition"></a></dt>
+<dd><p>marginal variance of posterior log-firing rate in each spatial bin</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.mean_rate">
+<span class="sig-name descname"><span class="pre">mean_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.mean_rate" title="Permalink to this definition"></a></dt>
+<dd><p>posterior mean rate in each spatial bin in spikes/sample</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.rate_marginal_variance">
+<span class="sig-name descname"><span class="pre">rate_marginal_variance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.rate_marginal_variance" title="Permalink to this definition"></a></dt>
+<dd><p>marginal variance of posterior firing rate in each spatial bin in (spikes/sample)²</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.mean_rate_Hz">
+<span class="sig-name descname"><span class="pre">mean_rate_Hz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.mean_rate_Hz" title="Permalink to this definition"></a></dt>
+<dd><p>posterior mean rate in each spatial bin in spikes/second</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.rate_marginal_variance_Hz">
+<span class="sig-name descname"><span class="pre">rate_marginal_variance_Hz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.rate_marginal_variance_Hz" title="Permalink to this definition"></a></dt>
+<dd><p>marginal variance of posterior firing rate in each spatial bin in (spikes/second)²</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lgcpspatial.lgcp2d.LGCPResult.rate_cv">
+<span class="sig-name descname"><span class="pre">rate_cv</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#lgcpspatial.lgcp2d.LGCPResult.rate_cv" title="Permalink to this definition"></a></dt>
+<dd><p>coefficient of variation of posterior firing rate</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
@@ -644,7 +885,7 @@ complex-valued array</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="example%205%20heading%20dependence.html" class="btn btn-neutral float-left" title="Example 5: Heading dependence" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="lgcpspatial.simulate_data.html" class="btn btn-neutral float-right" title="lgcpspatial.simulate_data module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="lgcpspatial.simulate.html" class="btn btn-neutral float-right" title="lgcpspatial.simulate module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

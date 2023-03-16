@@ -58,9 +58,9 @@
 <p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.lgcp2d.html">lgcp2d</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate_data.html">simulate_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.simulate.html">simulate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.loaddata.html">loaddata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lgcpspatial.gridsearch.html">gridsearch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lgcpspatial.heading.html">heading</a></li>
@@ -119,9 +119,9 @@
 </style>
 <section id="module-lgcpspatial.plot">
 <span id="lgcpspatial-plot-module"></span><h1>lgcpspatial.plot module<a class="headerlink" href="#module-lgcpspatial.plot" title="Permalink to this heading"></a></h1>
-<p>plot.py: A subset of plotting helpers copied from
-<code class="docutils literal notranslate"><span class="pre">neurotools/graphics/plot</span></code>, and some new helper routines to reduce
-notebook clutter</p>
+<p>Plotting helpers copied from
+<code class="docutils literal notranslate"><span class="pre">neurotools.graphics.plot</span></code>, and some new
+routines to reduce notebook clutter.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.plot.simpleaxis">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">simpleaxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#simpleaxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.simpleaxis" title="Permalink to this definition"></a></dt>
@@ -504,19 +504,16 @@ plot it.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.plot.inference_summary_plot">
-<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">inference_summary_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#inference_summary_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.inference_summary_plot" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">lgcpspatial.plot.</span></span><span class="sig-name descname"><span class="pre">inference_summary_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftitle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bone_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caxprops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'fontsize':</span> <span class="pre">8,</span> <span class="pre">'vscale':</span> <span class="pre">0.5,</span> <span class="pre">'width':</span> <span class="pre">10}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">titlesize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draw_scalebar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/plot.html#inference_summary_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.plot.inference_summary_plot" title="Permalink to this definition"></a></dt>
 <dd><p>Summarize the result of log-Gaussian process variational
 inference in four plots.</p>
 <p>This function exists to simplify the example notebooks,
-and isn’t designed for general use.</p>
+it is not for general use.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.DiagonalFourierLowrank" title="lgcpspatial.lgcp2d.DiagonalFourierLowrank"><em>lgcp2d.DiagonalFourierLowrank</em></a>) – Initialized model</p></li>
-<li><p><strong>fit</strong> (<em>tuple</em>) – Tuple of (low-rank mean, marginal variance, loss)
-returned by <code class="docutils literal notranslate"><span class="pre">lgcp2d.coordinate_descent()</span></code>.</p></li>
-<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>loaddata.Dataset</em></a>) – Prepared dataset</p></li>
-<li><p><strong>ftitle</strong> (<em>str</em>) – Figure title</p></li>
+<li><p><strong>model</strong> (<a class="reference internal" href="lgcpspatial.lgcp2d.html#lgcpspatial.lgcp2d.LGCPResult" title="lgcpspatial.lgcp2d.LGCPResult"><em>lgcp2d.LGCPResult</em></a>) – Result returned by <code class="docutils literal notranslate"><span class="pre">lgcp2d.lgcpregress()</span></code></p></li>
+<li><p><strong>ftitle</strong> (<em>str; default ''</em>) – Figure title</p></li>
 </ul>
 </dd>
 </dl>

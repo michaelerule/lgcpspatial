@@ -56,9 +56,9 @@
 <p class="caption" role="heading"><span class="caption-text">Modules in the lgcpspatial package:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.lgcp2d.html">lgcp2d</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate_data.html">simulate_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.load_data.html">load_data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.grid_search.html">grid_search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.simulate.html">simulate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.loaddata.html">loaddata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.gridsearch.html">gridsearch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.hyperparameters.html">hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.posterior.html">posterior</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../lgcpspatial.heading.html">heading</a></li>
@@ -98,8 +98,8 @@
 <span class="sd">heading.py: Subroutines used in </span>
 <span class="sd">``example 5: heading dependence``.</span>
 
-<span class="sd">Several of these routines overlap and will likely be </span>
-<span class="sd">merged in a clean-up of this code in future commits.</span>
+<span class="sd">Some of these routines overlap and will likely be </span>
+<span class="sd">merged in a later clean-up.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
@@ -116,6 +116,7 @@
 <span class="kn">from</span> <span class="nn">lgcpspatial.savitskygolay</span> <span class="kn">import</span> <span class="n">SGdifferentiate</span> <span class="k">as</span> <span class="n">ddt</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.loaddata</span>      <span class="kn">import</span> <span class="n">bin_spikes</span><span class="p">,</span> <span class="n">Arena</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>        <span class="kn">import</span> <span class="n">DiagonalFourierLowrank</span>
+<span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>        <span class="kn">import</span> <span class="n">LGCPResult</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.lgcp2d</span>        <span class="kn">import</span> <span class="n">coordinate_descent</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.posterior</span>     <span class="kn">import</span> <span class="n">interpolate_peaks</span>
 <span class="kn">from</span> <span class="nn">lgcpspatial.posterior</span>     <span class="kn">import</span> <span class="n">SampledConfidence</span>
@@ -133,11 +134,11 @@
 <span class="sd">    increasing from left to right, the heading angles</span>
 <span class="sd">    are as follows: </span>
 
-<span class="sd">      - 0   : rightwards (eastwards)</span>
-<span class="sd">      - π/2 : upwards    (northwards)</span>
-<span class="sd">      - π   : leftwards  (westwards)</span>
-<span class="sd">      - 3π/2: downwards  (southwards)</span>
-<span class="sd">      </span>
+<span class="sd">    * 0   : rightwards (eastwards)</span>
+<span class="sd">    * π/2 : upwards    (northwards)</span>
+<span class="sd">    * π   : leftwards  (westwards)</span>
+<span class="sd">    * 3π/2: downwards  (southwards)</span>
+<span class="sd">    </span>
 <span class="sd">    Note: For the Krupic lab datasets, the convention is</span>
 <span class="sd">    *not* the standard cartesian plane.</span>
 <span class="sd">    ***Smaller** ``y`` values correspond to &quot;more north&quot;, </span>
@@ -154,11 +155,10 @@
 <span class="sd">    For image-convention coordinates, angles should</span>
 <span class="sd">    instead be interpreted as:</span>
 <span class="sd">    </span>
-<span class="sd">      - 0   : rightwards (eastwards)</span>
-<span class="sd">      - π/2 : downwards  (southwards)</span>
-<span class="sd">      - π   : leftwards  (westwards)</span>
-<span class="sd">      - 3π/2: upwards    (northwards)</span>
-<span class="sd">      </span>
+<span class="sd">    * 0   : rightwards (eastwards)</span>
+<span class="sd">    * π/2 : downwards  (southwards)</span>
+<span class="sd">    * π   : leftwards  (westwards)</span>
+<span class="sd">    * 3π/2: upwards    (northwards)</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -179,6 +179,7 @@
 <span class="sd">    heading_angle: np.float32</span>
 <span class="sd">        Heading angle based on the low-pass derivative </span>
 <span class="sd">        of position.</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">dx</span> <span class="o">=</span> <span class="n">ddt</span><span class="p">(</span><span class="n">px</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">Fs</span><span class="o">/</span><span class="n">Fl</span><span class="o">*</span><span class="mi">4</span><span class="p">),</span><span class="n">Fl</span><span class="p">,</span><span class="n">Fs</span><span class="p">)</span>
     <span class="n">dy</span> <span class="o">=</span> <span class="n">ddt</span><span class="p">(</span><span class="n">py</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">Fs</span><span class="o">/</span><span class="n">Fl</span><span class="o">*</span><span class="mi">4</span><span class="p">),</span><span class="n">Fl</span><span class="p">,</span><span class="n">Fs</span><span class="p">)</span>
@@ -187,8 +188,7 @@
 
     
 <div class="viewcode-block" id="get_peaks_at_heading_angles"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.get_peaks_at_heading_angles">[docs]</a><span class="k">def</span> <span class="nf">get_peaks_at_heading_angles</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">,</span>
-    <span class="n">model</span><span class="p">,</span>
+    <span class="n">result</span><span class="p">,</span>
     <span class="n">heading_angles</span><span class="p">,</span>
     <span class="n">threshold</span>        <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span>
     <span class="n">Fs</span>               <span class="o">=</span> <span class="mf">50.0</span><span class="p">,</span>
@@ -207,28 +207,8 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data: lgcpspatial.loaddata.Dataset</span>
-<span class="sd">        An object with the following attributes:</span>
-<span class="sd">            L: float</span>
-<span class="sd">                Size of L×L spatial grid for binned data.</span>
-<span class="sd">            n: np.float32</span>
-<span class="sd">                Length L² array of visits to each bin.</span>
-<span class="sd">            y: np.float32</span>
-<span class="sd">                Length L² array of spikes at each bin.</span>
-<span class="sd">            prior_mean: np.float32</span>
-<span class="sd">                Shape L×L or L² array containing the prior </span>
-<span class="sd">                mean-log-rate. This should background rate</span>
-<span class="sd">                variations unrelated to the grid structure</span>
-<span class="sd">            lograte_guess: float32 array</span>
-<span class="sd">                Shape L×L or L² array with an initial guess</span>
-<span class="sd">                for log rate. This should be expressed as a </span>
-<span class="sd">                deviation from ``prior_mean``.</span>
-<span class="sd">            arena.hull:</span>
-<span class="sd">                Convex Hull object describing the arena </span>
-<span class="sd">                perimeter</span>
-<span class="sd">    model: lgcpspatial.lgcp2d.DiagonalFourierLowrank </span>
-<span class="sd">        parent model instance (fitted model without heading</span>
-<span class="sd">        filtering)</span>
+<span class="sd">    data: lgcpspatial.lgcp2d.LGCPResult</span>
+<span class="sd">        Prepared result returned by `lgcp2d.lgcpregress()`</span>
 <span class="sd">    heading_angles: np.float32 array</span>
 <span class="sd">        List of heading angles to check. Westward is 0 </span>
 <span class="sd">        degrees, then rotates counterclockwise through </span>
@@ -295,7 +275,10 @@
 <span class="sd">        the model evidence lower bound ``loss``</span>
 <span class="sd">        (up to constants), and the posterior mean rate</span>
 <span class="sd">        map ``rate``.</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">data</span>   <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">model</span>  <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">model</span>
     <span class="n">L</span><span class="p">,</span><span class="n">kv</span><span class="p">,</span><span class="n">P</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">kv</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
     
     <span class="n">clearance_radius</span> <span class="o">*=</span> <span class="n">model</span><span class="o">.</span><span class="n">P</span>
@@ -366,13 +349,13 @@
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Matching algorithm:</span>
 <span class="sd">    </span>
-<span class="sd">     - Assume q come from an array of angles on [0,2pi)</span>
-<span class="sd">     - Get distances between all adjacent angles</span>
-<span class="sd">     - Build directed graph joining fields of adjacent angles</span>
-<span class="sd">     - Greedy approach</span>
-<span class="sd">        - If you&#39;re my closest match, and I&#39;m yours, pair up.</span>
-<span class="sd">        - Repeat until no more edges closer than ``maxd``</span>
-
+<span class="sd">    * Assume q come from an array of angles on [0,2pi)</span>
+<span class="sd">    * Get distances between all adjacent angles</span>
+<span class="sd">    * Build directed graph joining fields of adjacent angles</span>
+<span class="sd">    * Greedy approach</span>
+<span class="sd">       * If you&#39;re my closest match, and I&#39;m yours, pair up.</span>
+<span class="sd">       * Repeat until no more edges closer than ``maxd``</span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    peaks: list</span>
@@ -382,18 +365,19 @@
 <span class="sd">    maxd: </span>
 <span class="sd">        The maximum distance between peaks allowed when </span>
 <span class="sd">        connecting them (in the same units as ``peaks``).</span>
-
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    edges: list</span>
 <span class="sd">        A length ``NANGLES`` list of edge sets for </span>
 <span class="sd">        each pair of headings.</span>
-<span class="sd">        Each list entry is a 2×NEDGES int32 array.</span>
-<span class="sd">         - This contains pairs of indecies (a,b).</span>
-<span class="sd">           - ``a`` is the index into peaks[i]</span>
-<span class="sd">             (the node source of this edge)</span>
-<span class="sd">          - ``b`` is the index into ``peaks[(i+1)%Nφ]`` </span>
-<span class="sd">            (the node target of this edge).</span>
+<span class="sd">        Each list entry is a 2×NEDGES int32 array, which</span>
+<span class="sd">        contains pairs of indecies (a,b):</span>
+<span class="sd">        ``a`` is the index into peaks[i]</span>
+<span class="sd">        (the node source of this edge);</span>
+<span class="sd">        ``b`` is the index into ``peaks[(i+1)%Nφ]`` </span>
+<span class="sd">        (the node target of this edge).</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">q</span>  <span class="o">=</span> <span class="p">[</span><span class="n">p2c</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
     <span class="n">Nφ</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
@@ -647,7 +631,7 @@
 <span class="sd">    max_end_distance: float</span>
 <span class="sd">        Maximum distance allowed between endpoints</span>
 <span class="sd">        of a tracked peak.</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    edges: list</span>
@@ -657,15 +641,15 @@
 <span class="sd">        returned by ``match_peaks``, but edges from peaks that</span>
 <span class="sd">        aren&#39;t tracked unambiguously over a range of heading </span>
 <span class="sd">        angles have been removed.</span>
-<span class="sd">         - This is a length ``NANGLES`` list of edge sets for </span>
+<span class="sd">        This is a length ``NANGLES`` list of edge sets for </span>
 <span class="sd">        each pair of headings.</span>
-<span class="sd">         - Each list entry is a 2×NEDGES int32 array.</span>
-<span class="sd">           - This contains pairs of indecies (a,b).</span>
-<span class="sd">             - ``a`` is the index into peaks[i]</span>
-<span class="sd">               (the node source of this edge)</span>
-<span class="sd">            - ``b`` is the index into ``peaks[(i+1)%Nφ]`` </span>
-<span class="sd">              (the node target of this edge).</span>
-<span class="sd">        </span>
+<span class="sd">        Each list entry is a 2×NEDGES int32 array.</span>
+<span class="sd">        containing pairs of indecies (a,b):</span>
+<span class="sd">        * ``a`` is the index into peaks[i]</span>
+<span class="sd">        (the node source of this edge);</span>
+<span class="sd">        * ``b`` is the index into ``peaks[(i+1)%Nφ]`` </span>
+<span class="sd">        (the node target of this edge).</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">edges</span> <span class="o">=</span> <span class="n">match_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">maxd</span><span class="p">)</span>    
@@ -725,21 +709,22 @@
     <span class="n">color</span><span class="o">=</span><span class="n">riley</span><span class="p">,</span>
     <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
     <span class="n">hideaxis</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">compass_label_pad</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Plot connected grid fields. Use this with </span>
 <span class="sd">    ``get_peaks_at_heading_angles()`` and ``link_peaks()``.</span>
 <span class="sd">    </span>
-<span class="sd">    </span>
-<span class="sd">    #### Angle conventions:</span>
+<span class="sd">    **Angle conventions:**</span>
 <span class="sd">    </span>
 <span class="sd">    The indecies ``iφ ∈ {0,..,NANGLES-1}``into the length-</span>
 <span class="sd">    ``NANGLES`` arguments ``peaks`` and ``edges`` are assumed </span>
 <span class="sd">    to correpond to equally-spaced angles, starting at </span>
-<span class="sd">    ``φ=0``; that is, ``phi = linspace(0,2*pi,NANGLES+1)[:-1]``.</span>
+<span class="sd">    ``φ=0``; that is, </span>
+<span class="sd">    ``phi = linspace(0,2*pi,NANGLES+1)[:-1]``.</span>
 <span class="sd">    </span>
 <span class="sd">    </span>
-<span class="sd">    #### Colors:</span>
+<span class="sd">    **Colors:**</span>
 <span class="sd">    </span>
 <span class="sd">    This is designed to be used with the ``riley`` </span>
 <span class="sd">    colormap from ``lgcpspatial.plot``. This map starts at </span>
@@ -747,10 +732,10 @@
 <span class="sd">    circling back to mauve. We use these color–direction</span>
 <span class="sd">    conventions: </span>
 <span class="sd">    </span>
-<span class="sd">     - North: blue/azure/cyan</span>
-<span class="sd">     - South: red/rust</span>
-<span class="sd">     - East:  green/olive</span>
-<span class="sd">     - West:  purple/mauve/magenta</span>
+<span class="sd">    * North: blue/azure/cyan</span>
+<span class="sd">    * South: red/rust</span>
+<span class="sd">    * East:  green/olive</span>
+<span class="sd">    * West:  purple/mauve/magenta</span>
 <span class="sd">    </span>
 <span class="sd">    For comatibility, then, the direction ordering</span>
 <span class="sd">    for the colormap parameter ``color`` should be</span>
@@ -758,7 +743,7 @@
 <span class="sd">        {West, South, East, North}</span>
 <span class="sd">    </span>
 <span class="sd">    </span>
-<span class="sd">    #### Axis orientation:</span>
+<span class="sd">    **Axis orientation:**</span>
 <span class="sd">    </span>
 <span class="sd">    If the keyword argument ``origin`` is ``&#39;lower&#39;`` (the</span>
 <span class="sd">    default value), heading angles are interpreted as</span>
@@ -769,10 +754,10 @@
 <span class="sd">    at ``0`` for &quot;East&quot;, then increasing as we rotate</span>
 <span class="sd">    counter-clockwise:</span>
 <span class="sd">    </span>
-<span class="sd">      - 0   : rightwards (eastwards)</span>
-<span class="sd">      - π/2 : upwards    (northwards)</span>
-<span class="sd">      - π   : leftwards  (westwards)</span>
-<span class="sd">      - 3π/2: downwards  (southwards)</span>
+<span class="sd">     * 0   : rightwards (eastwards)</span>
+<span class="sd">     * π/2 : upwards    (northwards)</span>
+<span class="sd">     * π   : leftwards  (westwards)</span>
+<span class="sd">     * 3π/2: downwards  (southwards)</span>
 <span class="sd">    </span>
 <span class="sd">    If the keyword argument ``origin`` is ``&#39;upper&#39;``, use</span>
 <span class="sd">    image-coordinate conventions. This is the convention </span>
@@ -780,10 +765,10 @@
 <span class="sd">    For image coordinates, ``(x,y)=(0,0)`` corresponds to the</span>
 <span class="sd">    top-left (northwest) corner. </span>
 <span class="sd">    </span>
-<span class="sd">      - 0   : rightwards (eastwards)</span>
-<span class="sd">      - π/2 : downwards  (southwards)</span>
-<span class="sd">      - π   : leftwards  (westwards)</span>
-<span class="sd">      - 3π/2: upwards    (northwards)</span>
+<span class="sd">     * 0   : rightwards (eastwards)</span>
+<span class="sd">     * π/2 : downwards  (southwards)</span>
+<span class="sd">     * π   : leftwards  (westwards)</span>
+<span class="sd">     * 3π/2: upwards    (northwards)</span>
 <span class="sd">    </span>
 <span class="sd">    **Note:** Unlike ``matplotlib.imshow()``, using</span>
 <span class="sd">    ``oring=&#39;upper&#39;`` will cause the y-axis to be flipped</span>
@@ -804,7 +789,7 @@
 <span class="sd">        edge set i, index a is the index into peaks[i] (edge </span>
 <span class="sd">        source) and index b is the index into </span>
 <span class="sd">        peaks[(i+1)%Nφ] (edge target).</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
 <span class="sd">    perim: np.float32</span>
@@ -822,8 +807,11 @@
 <span class="sd">        ``matplotlib.imshow()``). </span>
 <span class="sd">    hideaxis: boolean; default True</span>
 <span class="sd">        Hide the axis</span>
+<span class="sd">    compass_label_pad: int; default 15</span>
+<span class="sd">        Spacing of compass NSEW labels.</span>
 <span class="sd">    **kwargs:</span>
 <span class="sd">        Forwarded to ``plot()``</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="c1"># Argument validation</span>
@@ -867,15 +855,15 @@
 <span class="sd">            ### For ``origin=&#39;lower&#39;``: </span>
 <span class="sd">            </span>
 <span class="sd">            Color map order + conventions: </span>
-<span class="sd">             - 0.00 West:  purple/mauve/magenta</span>
-<span class="sd">             - 0.25 South: red/rust</span>
-<span class="sd">             - 0.50 East:  green/olive</span>
-<span class="sd">             - 0.75 North: blue/azure/cyan</span>
+<span class="sd">            * 0.00 West:  purple/mauve/magenta</span>
+<span class="sd">            * 0.25 South: red/rust</span>
+<span class="sd">            * 0.50 East:  green/olive</span>
+<span class="sd">            * 0.75 North: blue/azure/cyan</span>
 <span class="sd">            Angle order (r * 2π):</span>
-<span class="sd">             - 0   : rightwards (eastwards)</span>
-<span class="sd">             - π/2 : upwards    (northwards)</span>
-<span class="sd">             - π   : leftwards  (westwards)</span>
-<span class="sd">             - 3π/2: downwards  (southwards)</span>
+<span class="sd">            * 0   : rightwards (eastwards)</span>
+<span class="sd">            * π/2 : upwards    (northwards)</span>
+<span class="sd">            * π   : leftwards  (westwards)</span>
+<span class="sd">            * 3π/2: downwards  (southwards)</span>
 <span class="sd">            We need to re-map as this: </span>
 <span class="sd">                0.00 → 0.50</span>
 <span class="sd">                0.25 → 0.75</span>
@@ -887,10 +875,10 @@
 <span class="sd">            ### For ``origin=&#39;upper&#39;``:</span>
 <span class="sd">            </span>
 <span class="sd">            Angle order (r * 2π):</span>
-<span class="sd">             - 0   : rightwards (eastwards)</span>
-<span class="sd">             - π/2 : downwards  (southwards)</span>
-<span class="sd">             - π   : leftwards  (westwards)</span>
-<span class="sd">             - 3π/2: upwards    (northwards)</span>
+<span class="sd">            * 0   : rightwards (eastwards)</span>
+<span class="sd">            * π/2 : downwards  (southwards)</span>
+<span class="sd">            * π   : leftwards  (westwards)</span>
+<span class="sd">            * 3π/2: upwards    (northwards)</span>
 
 <span class="sd">            We need to re-map as this: </span>
 
@@ -930,7 +918,7 @@
         <span class="n">draw_compass</span><span class="p">(</span>
             <span class="n">xy0</span>   <span class="o">=</span> <span class="n">p2c</span><span class="p">(</span><span class="n">xy0</span><span class="p">)</span><span class="o">+</span><span class="mf">0.2</span><span class="o">*</span><span class="n">xyd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">.3</span><span class="n">j</span><span class="o">*</span><span class="n">xyd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
             <span class="n">r</span>     <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">xyd</span><span class="p">))</span><span class="o">*</span><span class="mf">0.04</span><span class="p">,</span>
-            <span class="n">delta</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">compass_label_pad</span><span class="p">,</span>
             <span class="n">cmap_fn</span> <span class="o">=</span> <span class="n">color</span><span class="p">)</span></div>
 
 
@@ -938,12 +926,12 @@
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    To be used on the result of calling match_peaks()</span>
 
-<span class="sd">    ### Algorithm: </span>
+<span class="sd">    **Algorithm:**</span>
 <span class="sd">    </span>
-<span class="sd">     - We have a list of edges between adjacent angles</span>
-<span class="sd">     - Starting from a seed, follow the graph in both </span>
+<span class="sd">    1. We have a list of edges between adjacent angles</span>
+<span class="sd">    2. Starting from a seed, follow the graph in both </span>
 <span class="sd">       directions half-way around</span>
-<span class="sd">     - Hopefully, we&#39;ll come to a peak from the opposite </span>
+<span class="sd">    3. Hopefully, we&#39;ll come to a peak from the opposite </span>
 <span class="sd">       heading direction</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -952,7 +940,7 @@
 <span class="sd">        Length ``NANGLES`` list of ``2×NPEAKS`` ``np.float32`` </span>
 <span class="sd">        arrays with (x,y) locations of peaks at each </span>
 <span class="sd">        heading angle.</span>
-<span class="sd">    maxd: </span>
+<span class="sd">    maxd: number</span>
 <span class="sd">        The maximum distance between peaks allowed when </span>
 <span class="sd">        connecting them</span>
 <span class="sd">    starti: int ∈ {0,..,``NANGLES``-1}</span>
@@ -961,7 +949,7 @@
 <span class="sd">        lenghth ``NANGLES`` list of ``2×NCONNECTED`` edge sets </span>
 <span class="sd">        containing indecies into the point sets (source) and</span>
 <span class="sd">        targets in  the next adjacent direction.</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    iop: int (scalar)</span>
@@ -975,7 +963,7 @@
 <span class="sd">        (or -1 is no match exists).</span>
 <span class="sd">    dd: float32</span>
 <span class="sd">        Distance to matched peak, or NaN it not matched.</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">q</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="n">j</span><span class="p">]</span><span class="nd">@pk</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
     <span class="n">Nφ</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
@@ -1057,8 +1045,7 @@
 
 
 <div class="viewcode-block" id="fit_heading_variance"><a class="viewcode-back" href="../../lgcpspatial.heading.html#lgcpspatial.heading.fit_heading_variance">[docs]</a><span class="k">def</span> <span class="nf">fit_heading_variance</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">,</span>
-    <span class="n">model</span><span class="p">,</span>
+    <span class="n">result</span><span class="p">,</span>
     <span class="n">θ</span><span class="p">,</span>
     <span class="n">NSEW</span><span class="p">,</span>
     <span class="n">weight_function</span><span class="o">=</span><span class="s1">&#39;cos&#39;</span>
@@ -1073,13 +1060,13 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data: Dataset</span>
-<span class="sd">    model: Model</span>
+<span class="sd">    result: lgcp2d.LGCPResult</span>
+<span class="sd">        Result returned by ``lgcp2d.lgcpregress()``</span>
 <span class="sd">    θ: np.float32</span>
 <span class="sd">        Heading angles for every time sample in Dataset</span>
 <span class="sd">    NSEW: np.float32</span>
 <span class="sd">        List of reference heading angles to recompute</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
 <span class="sd">    weight_function: str or function; default &#39;cos&#39;</span>
@@ -1089,7 +1076,7 @@
 <span class="sd">        orientation. Can be ``&#39;cos&#39;`` for </span>
 <span class="sd">        ``max(0,cos(Δθ))``, ``&#39;cos2&#39;`` for</span>
 <span class="sd">        ``max(0,cos(Δθ))²``, or a custom function. </span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    models: list</span>
@@ -1100,7 +1087,11 @@
 <span class="sd">        the ``(posterior_mean, posterior_variance, loss)``</span>
 <span class="sd">        tuple returned by ``coordinate_descent`` for </span>
 <span class="sd">        optimizing the model for each heading angle in NSEW.</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">data</span>  <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">model</span>
+    
     <span class="c1"># Prepare hyperparameter grid</span>
     <span class="n">rβ</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># Range (ratio) to search for optimal kernel height</span>
     <span class="n">Nβ</span> <span class="o">=</span> <span class="mi">21</span> <span class="c1"># Kernel height search grid resolutions</span>
@@ -1132,7 +1123,7 @@
 
         <span class="c1"># Run grid search</span>
         <span class="n">bestindex</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span> <span class="o">=</span> <span class="n">grid_search</span><span class="p">(</span>
-            <span class="n">pargrid</span><span class="p">,</span><span class="n">evaluate_ELBO</span><span class="p">)</span>
+            <span class="n">pargrid</span><span class="p">,</span><span class="n">evaluate_ELBO</span><span class="p">)[:</span><span class="mi">4</span><span class="p">]</span>
         <span class="n">kv</span> <span class="o">=</span> <span class="n">kv0</span><span class="o">/</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;σ0   = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">kv0</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;β    = </span><span class="si">%f</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">bestpars</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -1163,7 +1154,7 @@
 <span class="sd">    indexNSEW: list</span>
 <span class="sd">        list of indecies into peaks and edges for the</span>
 <span class="sd">        directions of interest (presumed to be N,S,E,W).</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    points: np.array</span>
@@ -1171,6 +1162,7 @@
 <span class="sd">        identifies which of the peaks at these heading</span>
 <span class="sd">        indecies are part of the same grid field. Missing</span>
 <span class="sd">        directions are filled in with ``NaN``. </span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># Find NSEW pairings from the peak tracking</span>
     <span class="c1"># List of point locations</span>
@@ -1223,7 +1215,7 @@
 <span class="sd">        List of N fits returned by ``coordinate_descent``</span>
 <span class="sd">    angles: list of floats</span>
 <span class="sd">        List of heading directions for each model</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
 <span class="sd">    radius: positive float; default 0.45</span>
@@ -1256,6 +1248,7 @@
 <span class="sd">        List of plotting colors for each heading angle</span>
 <span class="sd">    confidence_mode: str; default &#39;quadratic&#39;</span>
 <span class="sd">        Can be ``&#39;quadratic&#39;`` or ``&#39;voronoi&#39;``</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    samples: list</span>
@@ -1263,45 +1256,51 @@
 <span class="sd">        maps. Each element is a </span>
 <span class="sd">        ``lgcpspatial.posterior.SampledConfidence`` </span>
 <span class="sd">        object with attributes:</span>
-<span class="sd">            ellipses: np.float32</span>
-<span class="sd">                NaN-delimeted (x,y) coordinates for plotting </span>
-<span class="sd">                confidence ellipses; </span>
-<span class="sd">            gaussians: list</span>
-<span class="sd">                List of mean, covariance for each peak;</span>
-<span class="sd">                each entry is a tuple of</span>
-<span class="sd">                    μ: shape (2,) np.float32</span>
-<span class="sd">                        The peak mean</span>
-<span class="sd">                    Σ: shape (2,2) np.float32</span>
-<span class="sd">                        Covariance of gaussian convidence</span>
-<span class="sd">                        interval.</span>
-<span class="sd">            samples: PosteriorSample</span>
-<span class="sd">                A PosteriorSample object with attributes:</span>
-<span class="sd">                density:</span>
-<span class="sd">                    Counts of total number of times a field </span>
-<span class="sd">                    peak appeared at each location for all </span>
-<span class="sd">                    samples.</span>
-<span class="sd">                pfield:</span>
-<span class="sd">                    Normalized (sum to 1) density of peak </span>
-<span class="sd">                    locations for each grid field. Grid </span>
-<span class="sd">                    fields are defined as a local region </span>
-<span class="sd">                    around each local maximum in the peak </span>
-<span class="sd">                    ``density`` map.</span>
-<span class="sd">                peaks: np.float32</span>
-<span class="sd">                    2xNPEAKS array of grid-field-peak (x,y) </span>
-<span class="sd">                    coordinates.</span>
-<span class="sd">                totals:</span>
-<span class="sd">                    Number of samples within each peak basin</span>
-<span class="sd">                    that actually contained a peak.</span>
-<span class="sd">                means: np.float32</span>
-<span class="sd">                    Center of mass of each peak</span>
-<span class="sd">                sigmas: np.float32</span>
-<span class="sd">                    2D sampled covariance of each peak</span>
-<span class="sd">                nearest: np.float32</span>
-<span class="sd">                    (L*resolution)x(L*resolution) map of </span>
-<span class="sd">                    Voronoi regions for each peak</span>
-<span class="sd">                kde: np.float32</span>
-<span class="sd">                    ``(L*resolution)×(L*resolution)`` smoothed </span>
-<span class="sd">                    peak density map.</span>
+<span class="sd">        </span>
+<span class="sd">        :ellipses: np.float32</span>
+<span class="sd">            NaN-delimeted (x,y) coordinates for plotting </span>
+<span class="sd">            confidence ellipses; </span>
+<span class="sd">        :gaussians: list</span>
+<span class="sd">            List of mean, covariance for each peak;</span>
+<span class="sd">            each entry is a tuple of</span>
+<span class="sd">            </span>
+<span class="sd">            :μ: shape (2,) np.float32</span>
+<span class="sd">                The peak mean</span>
+<span class="sd">            :Σ: shape (2,2) np.float32</span>
+<span class="sd">                Covariance of gaussian convidence</span>
+<span class="sd">                interval.</span>
+<span class="sd">        :samples: PosteriorSample</span>
+<span class="sd">            A PosteriorSample object with attributes:</span>
+<span class="sd">            </span>
+<span class="sd">            :density:</span>
+<span class="sd">                Counts of total number of times a field </span>
+<span class="sd">                peak appeared at each location for all </span>
+<span class="sd">                samples.</span>
+<span class="sd">            :pfield:</span>
+<span class="sd">                Normalized (sum to 1) density of peak af</span>
+<span class="sd">                locations for each grid field. Grid </span>
+<span class="sd">                fields are defined as a local region </span>
+<span class="sd">                around each local maximum in the peak </span>
+<span class="sd">                ``density`` map.</span>
+<span class="sd">            :peaks: np.float32</span>
+<span class="sd">                2xNPEAKS array of grid-field-peak (x,y) </span>
+<span class="sd">                coordinates.</span>
+<span class="sd">            :totals:</span>
+<span class="sd">                Number of samples within each peak basin</span>
+<span class="sd">                that actually contained a peak.</span>
+<span class="sd">            :means: np.float32</span>
+<span class="sd">                Center of mass of each peak</span>
+<span class="sd">            :sigmas: np.float32</span>
+<span class="sd">                2D sampled covariance of each peak</span>
+<span class="sd">            :nearest: np.float32</span>
+<span class="sd">                (L*resolution)x(L*resolution) map of </span>
+<span class="sd">                Voronoi regions for each peak</span>
+<span class="sd">            :kde: np.float32</span>
+<span class="sd">                ``(L*resolution)×(L*resolution)`` smoothed </span>
+<span class="sd">                peak density map.</span>
+<span class="sd">            </span>
+<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="n">kplot</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1330,7 +1329,7 @@
                 <span class="n">pct</span>              <span class="o">=</span> <span class="mi">95</span><span class="p">,</span>
                 <span class="n">doplot</span>           <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                 <span class="n">color</span>            <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,)</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span>
-                <span class="n">scalebar</span>         <span class="o">=</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span>
+                <span class="n">draw_scalebar</span>    <span class="o">=</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span>
             <span class="p">))</span>
             <span class="n">QuadraticConfidence</span><span class="p">(</span>
                 <span class="n">data</span><span class="p">,</span>
@@ -1357,7 +1356,7 @@
                 <span class="n">pct</span>              <span class="o">=</span> <span class="mi">95</span><span class="p">,</span>
                 <span class="n">doplot</span>           <span class="o">=</span> <span class="n">doplot</span><span class="p">,</span>
                 <span class="n">color</span>            <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                <span class="n">scalebar</span>         <span class="o">=</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span>
+                <span class="n">draw_scalebar</span>    <span class="o">=</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span>
             <span class="p">))</span>
         <span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span>
             <span class="s1">&#39;confidence_mode can be quadratic or voronoi, &#39;</span>
@@ -1380,8 +1379,7 @@
 <span class="sd">    Match &quot;fast-tracked&quot; peak shifts with </span>
 <span class="sd">    posterior-peak-density maps.    </span>
 <span class="sd">    </span>
-<span class="sd">    ### Details: </span>
-<span class="sd">    </span>
+<span class="sd">    **Details:**</span>
 <span class="sd">    In this workflow, we track shifts in single</span>
 <span class="sd">    peaks over a broad range by re-fitting a single model</span>
 <span class="sd">    over a high-resolution sweep of heading angles</span>
@@ -1401,18 +1399,17 @@
 <span class="sd">    </span>
 <span class="sd">    This function matches them. </span>
 <span class="sd">    </span>
-<span class="sd">    ### Procedure:</span>
-<span class="sd">    </span>
+<span class="sd">    **Procedure:**</span>
 <span class="sd">    Fast-tracked peaks are stored as lists of peak locations</span>
 <span class="sd">    ``peaks`` and edge-indecies ``edges``, for all heading </span>
 <span class="sd">    angles. These are computed using the </span>
 <span class="sd">    ``lgcpspatial.heading`` module as follows:</span>
 <span class="sd">    </span>
-<span class="sd">        ``</span>
-<span class="sd">        peaks = get_peaks_at_heading_angles(</span>
-<span class="sd">            data,model,angles,heading_angle)</span>
-<span class="sd">        edges = link_peaks(peaks,maximum_point_distance)  </span>
-<span class="sd">        ``</span>
+<span class="sd">    ::</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;  peaks = get_peaks_at_heading_angles(</span>
+<span class="sd">    &gt;&gt;      data,model,angles,heading_angle)</span>
+<span class="sd">    &gt;&gt;  edges = link_peaks(peaks,maximum_point_distance)  </span>
 <span class="sd">    </span>
 <span class="sd">    To figure out which shifted peaks are copies of the</span>
 <span class="sd">    same field, we: </span>
@@ -1425,7 +1422,7 @@
 <span class="sd">        in ``target_peaks_opposite`` connected to the same</span>
 <span class="sd">        fast-tracked component (if any).</span>
 <span class="sd">    </span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    peaks: list </span>
@@ -1453,9 +1450,10 @@
 <span class="sd">    opposites_maxd: positive float</span>
 <span class="sd">        Tolerance for matching opposite-direction peaks </span>
 <span class="sd">        from the continuous tracking, in the same</span>
-<span class="sd">        units as the points ``peaks``. (This is most likely</span>
-<span class="sd">        **normalized [0,1]² coordinates** if you&#39;re </span>
-<span class="sd">        following the provided example workflows). </span>
+<span class="sd">        units as the points ``peaks``. </span>
+<span class="sd">        (This is probably in **normalized [0,1]² coordinates** </span>
+<span class="sd">        if you&#39;re </span>
+<span class="sd">        following the example workflows). </span>
 <span class="sd">        This should be similar to the grid scale, to avoid </span>
 <span class="sd">        associating peaks from different fields in the </span>
 <span class="sd">        region where the posterior is very noisy. </span>
@@ -1466,13 +1464,13 @@
 <span class="sd">    connection_radius: positive float</span>
 <span class="sd">        Tolerance for matching fast-tracked peaks with</span>
 <span class="sd">        posterior-peak-density centroids, in the </span>
-<span class="sd">        same units as ``peaks. This is most likely</span>
+<span class="sd">        same units as ``peaks``. This is most likely</span>
 <span class="sd">        **normalized [0,1]² coordinates** if you&#39;re </span>
 <span class="sd">        following the provided example workflows). </span>
 <span class="sd">        This should be small, since we&#39;re just trying to </span>
 <span class="sd">        account for small changes. I suggest</span>
 <span class="sd">        ``connection_radius = P/L/5``.</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    paired_indecies: 2 × NMATCHED np.int32</span>
@@ -1480,6 +1478,7 @@
 <span class="sd">        the first row is the index into </span>
 <span class="sd">        ``target_peaks`` and the second an index into</span>
 <span class="sd">        ``target_peaks_opposite``.</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="c1"># Validate arguments </span>
@@ -1511,6 +1510,7 @@
 <span class="sd">        Indecies of matching field in direction </span>
 <span class="sd">        ``peaks[iop]`` for each field ``peaks[istart]``</span>
 <span class="sd">        (or -1 is no match exists).</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">iop</span><span class="p">,</span><span class="n">op</span> <span class="o">=</span> <span class="n">locate_opposites</span><span class="p">(</span>
         <span class="n">peaks</span><span class="p">,</span>
@@ -1538,17 +1538,17 @@
 <span class="sd">    These should be close, but aren&#39;t exactly equal</span>
 <span class="sd">    Match them based on proximity.</span>
 
-<span class="sd">     - Get pairwise distances in each direction d1, d2</span>
-<span class="sd">     - Get the closest matches in each direction i1, i2</span>
-<span class="sd">     - Remove pairs too far apart</span>
-<span class="sd">     - Check the paired-opposite-heading-peaks computed </span>
+<span class="sd">    * Get pairwise distances in each direction d1, d2</span>
+<span class="sd">    * Get the closest matches in each direction i1, i2</span>
+<span class="sd">    * Remove pairs too far apart</span>
+<span class="sd">    * Check the paired-opposite-heading-peaks computed </span>
 <span class="sd">       earlier</span>
-<span class="sd">     - For each (heading, opposite-heading) pair</span>
-<span class="sd">       - Skip pairs with no match</span>
-<span class="sd">       - Retrieve the posterior-sample peak index for each</span>
+<span class="sd">    * For each (heading, opposite-heading) pair</span>
+<span class="sd">      * Skip pairs with no match</span>
+<span class="sd">      * Retrieve the posterior-sample peak index for each</span>
 <span class="sd">         peak in the pair.</span>
-<span class="sd">       - If both peaks exist in the posterior sample</span>
-<span class="sd">         - Match the pair in the posterior samples</span>
+<span class="sd">      * If both peaks exist in the posterior sample</span>
+<span class="sd">        * Match the pair in the posterior samples</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">d1</span><span class="p">,</span><span class="n">d2</span> <span class="o">=</span> <span class="n">pdist</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span><span class="n">q1</span><span class="p">),</span><span class="n">pdist</span><span class="p">(</span><span class="n">z2</span><span class="p">,</span><span class="n">q2</span><span class="p">)</span>
     <span class="n">i1</span><span class="p">,</span><span class="n">i2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanargmin</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">argmin</span><span class="p">(</span><span class="n">d2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
