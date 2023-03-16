@@ -115,23 +115,24 @@ def get_peaks_at_heading_angles(
     ----------
     data: lgcpspatial.loaddata.Dataset
         An object with the following attributes:
-            :L: float
-                Size of L×L spatial grid for binned data.
-            :n: np.float32
-                Length L² array of visits to each bin.
-            :y: np.float32
-                Length L² array of spikes at each bin.
-            :prior_mean: np.float32
-                Shape L×L or L² array containing the prior 
-                mean-log-rate. This should background rate
-                variations unrelated to the grid structure
-            :lograte_guess: float32 array
-                Shape L×L or L² array with an initial guess
-                for log rate. This should be expressed as a 
-                deviation from ``prior_mean``.
-            :arena.hull:
-                Convex Hull object describing the arena 
-                perimeter
+        
+        :L: float
+            Size of L×L spatial grid for binned data.
+        :n: np.float32
+            Length L² array of visits to each bin.
+        :y: np.float32
+            Length L² array of spikes at each bin.
+        :prior_mean: np.float32
+            Shape L×L or L² array containing the prior 
+            mean-log-rate. This should background rate
+            variations unrelated to the grid structure
+        :lograte_guess: float32 array
+            Shape L×L or L² array with an initial guess
+            for log rate. This should be expressed as a 
+            deviation from ``prior_mean``.
+        :arena.hull:
+            Convex Hull object describing the arena 
+            perimeter
         
     model: lgcpspatial.lgcp2d.DiagonalFourierLowrank 
         parent model instance (fitted model without heading
@@ -1191,6 +1192,7 @@ def sample_heading_angles(
         :gaussians: list
             List of mean, covariance for each peak;
             each entry is a tuple of
+            
             :μ: shape (2,) np.float32
                 The peak mean
             :Σ: shape (2,2) np.float32
@@ -1198,12 +1200,13 @@ def sample_heading_angles(
                 interval.
         :samples: PosteriorSample
             A PosteriorSample object with attributes:
+            
             :density:
                 Counts of total number of times a field 
                 peak appeared at each location for all 
                 samples.
             :pfield:
-                Normalized (sum to 1) density of peak 
+                Normalized (sum to 1) density of peak af
                 locations for each grid field. Grid 
                 fields are defined as a local region 
                 around each local maximum in the peak 

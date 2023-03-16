@@ -185,34 +185,34 @@ data based on cosine similarity to target heading angle.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>lgcpspatial.loaddata.Dataset</em></a>) – <p>An object with the following attributes:
-:L: float</p>
-<blockquote>
-<div><p>Size of L×L spatial grid for binned data.</p>
-</div></blockquote>
+<li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>lgcpspatial.loaddata.Dataset</em></a>) – <p>An object with the following attributes:</p>
 <dl class="field-list simple">
-<dt class="field-odd">n<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.float32
+<dt class="field-odd">L<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float
+Size of L×L spatial grid for binned data.</p>
+</dd>
+<dt class="field-even">n<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.float32
 Length L² array of visits to each bin.</p>
 </dd>
-<dt class="field-even">y<span class="colon">:</span></dt>
-<dd class="field-even"><p>np.float32
+<dt class="field-odd">y<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.float32
 Length L² array of spikes at each bin.</p>
 </dd>
-<dt class="field-odd">prior_mean<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.float32
+<dt class="field-even">prior_mean<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.float32
 Shape L×L or L² array containing the prior
 mean-log-rate. This should background rate
 variations unrelated to the grid structure</p>
 </dd>
-<dt class="field-even">lograte_guess<span class="colon">:</span></dt>
-<dd class="field-even"><p>float32 array
+<dt class="field-odd">lograte_guess<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float32 array
 Shape L×L or L² array with an initial guess
 for log rate. This should be expressed as a
 deviation from <code class="docutils literal notranslate"><span class="pre">prior_mean</span></code>.</p>
 </dd>
-<dt class="field-odd">arena.hull<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Convex Hull object describing the arena
+<dt class="field-even">arena.hull<span class="colon">:</span></dt>
+<dd class="field-even"><p>Convex Hull object describing the arena
 perimeter</p>
 </dd>
 </dl>
@@ -762,70 +762,69 @@ to be included</p></li>
 <dd class="field-even"><p><p><strong>samples</strong> – Length <code class="docutils literal notranslate"><span class="pre">len(angles)</span></code> list of sampled peak-density
 maps. Each element is a
 <code class="docutils literal notranslate"><span class="pre">lgcpspatial.posterior.SampledConfidence</span></code>
-object with attributes:
-:ellipses: np.float32</p>
-<blockquote>
-<div><p>NaN-delimeted (x,y) coordinates for plotting
-confidence ellipses;</p>
-</div></blockquote>
-<dl class="field-list">
-<dt class="field-odd">gaussians<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list
-List of mean, covariance for each peak;
-each entry is a tuple of
-:μ: shape (2,) np.float32</p>
-<blockquote>
-<div><p>The peak mean</p>
-</div></blockquote>
+object with attributes:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Σ<span class="colon">:</span></dt>
-<dd class="field-odd"><p>shape (2,2) np.float32
+<dt class="field-odd">ellipses<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.float32
+NaN-delimeted (x,y) coordinates for plotting
+confidence ellipses;</p>
+</dd>
+<dt class="field-even">gaussians<span class="colon">:</span></dt>
+<dd class="field-even"><p>list
+List of mean, covariance for each peak;
+each entry is a tuple of</p>
+<dl class="field-list simple">
+<dt class="field-odd">μ<span class="colon">:</span></dt>
+<dd class="field-odd"><p>shape (2,) np.float32
+The peak mean</p>
+</dd>
+<dt class="field-even">Σ<span class="colon">:</span></dt>
+<dd class="field-even"><p>shape (2,2) np.float32
 Covariance of gaussian convidence
 interval.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">samples<span class="colon">:</span></dt>
-<dd class="field-even"><p>PosteriorSample
-A PosteriorSample object with attributes:
-:density:</p>
-<blockquote>
-<div><p>Counts of total number of times a field
+<dt class="field-odd">samples<span class="colon">:</span></dt>
+<dd class="field-odd"><p>PosteriorSample
+A PosteriorSample object with attributes:</p>
+<dl class="field-list simple">
+<dt class="field-odd">density<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Counts of total number of times a field
 peak appeared at each location for all
 samples.</p>
-</div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">pfield<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Normalized (sum to 1) density of peak af
+</dd>
+<dt class="field-even">pfield<span class="colon">:</span></dt>
+<dd class="field-even"><p>Normalized (sum to 1) density of peak af
 locations for each grid field. Grid
 fields are defined as a local region
 around each local maximum in the peak
 <code class="docutils literal notranslate"><span class="pre">density</span></code> map.</p>
 </dd>
-<dt class="field-even">peaks<span class="colon">:</span></dt>
-<dd class="field-even"><p>np.float32
+<dt class="field-odd">peaks<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.float32
 2xNPEAKS array of grid-field-peak (x,y)
 coordinates.</p>
 </dd>
-<dt class="field-odd">totals<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Number of samples within each peak basin
+<dt class="field-even">totals<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of samples within each peak basin
 that actually contained a peak.</p>
 </dd>
-<dt class="field-even">means<span class="colon">:</span></dt>
-<dd class="field-even"><p>np.float32
+<dt class="field-odd">means<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.float32
 Center of mass of each peak</p>
 </dd>
-<dt class="field-odd">sigmas<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.float32
+<dt class="field-even">sigmas<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.float32
 2D sampled covariance of each peak</p>
 </dd>
-<dt class="field-even">nearest<span class="colon">:</span></dt>
-<dd class="field-even"><p>np.float32
+<dt class="field-odd">nearest<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.float32
 (L*resolution)x(L*resolution) map of
 Voronoi regions for each peak</p>
 </dd>
-<dt class="field-odd">kde<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.float32
+<dt class="field-even">kde<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.float32
 <code class="docutils literal notranslate"><span class="pre">(L*resolution)×(L*resolution)</span></code> smoothed
 peak density map.</p>
 </dd>

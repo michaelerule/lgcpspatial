@@ -115,6 +115,7 @@ def get_peaks_at_heading_angles(
     ----------
     data: lgcpspatial.loaddata.Dataset
         An object with the following attributes:
+        
         :L: float
             Size of L×L spatial grid for binned data.
         :n: np.float32
@@ -1185,12 +1186,14 @@ def sample_heading_angles(
         maps. Each element is a 
         ``lgcpspatial.posterior.SampledConfidence`` 
         object with attributes:
+        
         :ellipses: np.float32
             NaN-delimeted (x,y) coordinates for plotting 
             confidence ellipses; 
         :gaussians: list
             List of mean, covariance for each peak;
             each entry is a tuple of
+            
             :μ: shape (2,) np.float32
                 The peak mean
             :Σ: shape (2,2) np.float32
@@ -1198,6 +1201,7 @@ def sample_heading_angles(
                 interval.
         :samples: PosteriorSample
             A PosteriorSample object with attributes:
+            
             :density:
                 Counts of total number of times a field 
                 peak appeared at each location for all 
