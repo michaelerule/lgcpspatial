@@ -1415,18 +1415,17 @@
 <span class="sd">    </span>
 <span class="sd">    This function matches them. </span>
 <span class="sd">    </span>
-<span class="sd">    ### Procedure:</span>
+<span class="sd">    Procedure:</span>
+<span class="sd">    ^^^^^^^^^^</span>
 <span class="sd">    </span>
 <span class="sd">    Fast-tracked peaks are stored as lists of peak locations</span>
 <span class="sd">    ``peaks`` and edge-indecies ``edges``, for all heading </span>
 <span class="sd">    angles. These are computed using the </span>
 <span class="sd">    ``lgcpspatial.heading`` module as follows:</span>
 <span class="sd">    </span>
-<span class="sd">        ``</span>
-<span class="sd">        peaks = get_peaks_at_heading_angles(</span>
-<span class="sd">            data,model,angles,heading_angle)</span>
-<span class="sd">        edges = link_peaks(peaks,maximum_point_distance)  </span>
-<span class="sd">        ``</span>
+<span class="sd">    &gt;&gt;  peaks = get_peaks_at_heading_angles(</span>
+<span class="sd">    &gt;&gt;      data,model,angles,heading_angle)</span>
+<span class="sd">    &gt;&gt;  edges = link_peaks(peaks,maximum_point_distance)  </span>
 <span class="sd">    </span>
 <span class="sd">    To figure out which shifted peaks are copies of the</span>
 <span class="sd">    same field, we: </span>
@@ -1439,7 +1438,7 @@
 <span class="sd">        in ``target_peaks_opposite`` connected to the same</span>
 <span class="sd">        fast-tracked component (if any).</span>
 <span class="sd">    </span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    peaks: list </span>
@@ -1486,7 +1485,7 @@
 <span class="sd">        This should be small, since we&#39;re just trying to </span>
 <span class="sd">        account for small changes. I suggest</span>
 <span class="sd">        ``connection_radius = P/L/5``.</span>
-<span class="sd">        </span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    paired_indecies: 2 × NMATCHED np.int32</span>
@@ -1494,6 +1493,7 @@
 <span class="sd">        the first row is the index into </span>
 <span class="sd">        ``target_peaks`` and the second an index into</span>
 <span class="sd">        ``target_peaks_opposite``.</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="c1"># Validate arguments </span>
@@ -1525,6 +1525,7 @@
 <span class="sd">        Indecies of matching field in direction </span>
 <span class="sd">        ``peaks[iop]`` for each field ``peaks[istart]``</span>
 <span class="sd">        (or -1 is no match exists).</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">iop</span><span class="p">,</span><span class="n">op</span> <span class="o">=</span> <span class="n">locate_opposites</span><span class="p">(</span>
         <span class="n">peaks</span><span class="p">,</span>

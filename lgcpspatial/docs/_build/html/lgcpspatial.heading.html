@@ -834,20 +834,15 @@ match the “fast-tracked” peaks, since they were
 computed using different procedures. They should,
 however, be <em>very</em> close.</p>
 <p>This function matches them.</p>
-<p>### Procedure:</p>
+<section id="procedure">
+<h2>Procedure:<a class="headerlink" href="#procedure" title="Permalink to this heading"></a></h2>
 <p>Fast-tracked peaks are stored as lists of peak locations
 <code class="docutils literal notranslate"><span class="pre">peaks</span></code> and edge-indecies <code class="docutils literal notranslate"><span class="pre">edges</span></code>, for all heading
 angles. These are computed using the
 <code class="docutils literal notranslate"><span class="pre">lgcpspatial.heading</span></code> module as follows:</p>
-<blockquote>
-<div><p>``
-peaks = get_peaks_at_heading_angles(</p>
-<blockquote>
-<div><p>data,model,angles,heading_angle)</p>
-</div></blockquote>
-<p>edges = link_peaks(peaks,maximum_point_distance)
-``</p>
-</div></blockquote>
+<p>&gt;&gt;  peaks = get_peaks_at_heading_angles(
+&gt;&gt;      data,model,angles,heading_angle)
+&gt;&gt;  edges = link_peaks(peaks,maximum_point_distance)</p>
 <p>To figure out which shifted peaks are copies of the
 same field, we:</p>
 <blockquote>
@@ -862,26 +857,50 @@ fast-tracked component (if any).</p></li>
 </ol>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>peaks</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of 2 × NPEAKS np.float32
+<dt class="field-odd">param peaks<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of 2 × NPEAKS np.float32
 arrays containing (rx,ry) peak locations at a list
 of heading angles, as returned by
-<code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code>.</p></li>
-<li><p><strong>edges</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for each pair of
+<code class="docutils literal notranslate"><span class="pre">get_peaks_at_heading_angles()</span></code>.</p>
+</dd>
+<dt class="field-even">type peaks<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+<dt class="field-odd">param edges<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for each pair of
 headings, as returned by <code class="docutils literal notranslate"><span class="pre">match_peaks</span></code> or
 <code class="docutils literal notranslate"><span class="pre">link_peaks()</span></code>. Each list entry is a 2 × NEDGES
 int32 array. This contains pairs of indecies
 <code class="docutils literal notranslate"><span class="pre">(a,b)</span></code>. For edge set <code class="docutils literal notranslate"><span class="pre">i</span></code>, index <code class="docutils literal notranslate"><span class="pre">a</span></code> is the index
 into <code class="docutils literal notranslate"><span class="pre">peaks[i]</span></code> (edge source) and index <code class="docutils literal notranslate"><span class="pre">b</span></code> is the
-index  into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code> (edge target).</p></li>
-<li><p><strong>angle_index</strong> (<em>int ∈ {0</em><em>,</em><em>..</em><em>,</em><em>NANGLES-1}</em>) – Which angle to match, represented as an index
-into the peaks/edges array.</p></li>
-<li><p><strong>target_peaks</strong> (<em>2 × NPEAKS_A np.float32</em>) – Reference peak-density centroids for heading
-direction <code class="docutils literal notranslate"><span class="pre">angle_index</span></code> to match.</p></li>
-<li><p><strong>target_peaks_opposite</strong> (<em>2 × NPEAKS_A np.float32</em>) – Reference peak-density centroids for heading
-direction <strong>opposite</strong> to <code class="docutils literal notranslate"><span class="pre">angle_index</span></code> to match.</p></li>
-<li><p><strong>opposites_maxd</strong> (<em>positive float</em>) – Tolerance for matching opposite-direction peaks
+index  into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code> (edge target).</p>
+</dd>
+<dt class="field-even">type edges<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+<dt class="field-odd">param angle_index<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Which angle to match, represented as an index
+into the peaks/edges array.</p>
+</dd>
+<dt class="field-even">type angle_index<span class="colon">:</span></dt>
+<dd class="field-even"><p>int ∈ {0,..,NANGLES-1}</p>
+</dd>
+<dt class="field-odd">param target_peaks<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Reference peak-density centroids for heading
+direction <code class="docutils literal notranslate"><span class="pre">angle_index</span></code> to match.</p>
+</dd>
+<dt class="field-even">type target_peaks<span class="colon">:</span></dt>
+<dd class="field-even"><p>2 × NPEAKS_A np.float32</p>
+</dd>
+<dt class="field-odd">param target_peaks_opposite<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Reference peak-density centroids for heading
+direction <strong>opposite</strong> to <code class="docutils literal notranslate"><span class="pre">angle_index</span></code> to match.</p>
+</dd>
+<dt class="field-even">type target_peaks_opposite<span class="colon">:</span></dt>
+<dd class="field-even"><p>2 × NPEAKS_A np.float32</p>
+</dd>
+<dt class="field-odd">param opposites_maxd<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tolerance for matching opposite-direction peaks
 from the continuous tracking, in the same
 units as the points <code class="docutils literal notranslate"><span class="pre">peaks</span></code>. (This is most likely
 <strong>normalized [0,1]² coordinates</strong> if you’re
@@ -892,27 +911,35 @@ region where the posterior is very noisy.
 I suggest
 <code class="docutils literal notranslate"><span class="pre">opposites_maxd</span> <span class="pre">=</span> <span class="pre">P/L*0.75</span></code>, where <code class="docutils literal notranslate"><span class="pre">P</span></code> is the
 grid-cell period in pixels and <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
-resolution of the discrete bin (again, in pixels).</p></li>
-<li><p><strong>connection_radius</strong> (<em>positive float</em>) – Tolerance for matching fast-tracked peaks with
+resolution of the discrete bin (again, in pixels).</p>
+</dd>
+<dt class="field-even">type opposites_maxd<span class="colon">:</span></dt>
+<dd class="field-even"><p>positive float</p>
+</dd>
+<dt class="field-odd">param connection_radius<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tolerance for matching fast-tracked peaks with
 posterior-peak-density centroids, in the
 same units as <code class="docutils literal notranslate"><span class="pre">peaks.</span> <span class="pre">This</span> <span class="pre">is</span> <span class="pre">most</span> <span class="pre">likely</span>
 <span class="pre">**normalized</span> <span class="pre">[0,1]²</span> <span class="pre">coordinates**</span> <span class="pre">if</span> <span class="pre">you're</span>
 <span class="pre">following</span> <span class="pre">the</span> <span class="pre">provided</span> <span class="pre">example</span> <span class="pre">workflows).</span>
 <span class="pre">This</span> <span class="pre">should</span> <span class="pre">be</span> <span class="pre">small,</span> <span class="pre">since</span> <span class="pre">we're</span> <span class="pre">just</span> <span class="pre">trying</span> <span class="pre">to</span>
 <span class="pre">account</span> <span class="pre">for</span> <span class="pre">small</span> <span class="pre">changes.</span> <span class="pre">I</span> <span class="pre">suggest</span>
-<span class="pre">``connection_radius</span> <span class="pre">=</span> <span class="pre">P/L/5</span></code>.</p></li>
-</ul>
+<span class="pre">``connection_radius</span> <span class="pre">=</span> <span class="pre">P/L/5</span></code>.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>paired_indecies</strong> – For each of the <code class="docutils literal notranslate"><span class="pre">NMATCHED</span></code> peak pairs,
+<dt class="field-even">type connection_radius<span class="colon">:</span></dt>
+<dd class="field-even"><p>positive float</p>
+</dd>
+<dt class="field-odd">returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>paired_indecies</strong> – For each of the <code class="docutils literal notranslate"><span class="pre">NMATCHED</span></code> peak pairs,
 the first row is the index into
 <code class="docutils literal notranslate"><span class="pre">target_peaks</span></code> and the second an index into
 <code class="docutils literal notranslate"><span class="pre">target_peaks_opposite</span></code>.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2 × NMATCHED np.int32</p>
+<dt class="field-even">rtype<span class="colon">:</span></dt>
+<dd class="field-even"><p>2 × NMATCHED np.int32</p>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py function">

@@ -1277,7 +1277,7 @@ def sample_heading_angles(
                 pct              = 95,
                 doplot           = doplot,
                 color            = None if colors is None else colors[i],
-                scalebar         = i==0
+                draw_scalebar    = i==0
             ))
         else: raise ValueError((
             'confidence_mode can be quadratic or voronoi, '
@@ -1321,18 +1321,17 @@ def match_with_tracked_peaks(
     
     This function matches them. 
     
-    ### Procedure:
+    Procedure:
+    ^^^^^^^^^^
     
     Fast-tracked peaks are stored as lists of peak locations
     ``peaks`` and edge-indecies ``edges``, for all heading 
     angles. These are computed using the 
     ``lgcpspatial.heading`` module as follows:
     
-        ``
-        peaks = get_peaks_at_heading_angles(
-            data,model,angles,heading_angle)
-        edges = link_peaks(peaks,maximum_point_distance)  
-        ``
+    >>  peaks = get_peaks_at_heading_angles(
+    >>      data,model,angles,heading_angle)
+    >>  edges = link_peaks(peaks,maximum_point_distance)  
     
     To figure out which shifted peaks are copies of the
     same field, we: 
@@ -1345,7 +1344,7 @@ def match_with_tracked_peaks(
         in ``target_peaks_opposite`` connected to the same
         fast-tracked component (if any).
     
-        
+    
     Parameters
     ----------
     peaks: list 
@@ -1392,7 +1391,7 @@ def match_with_tracked_peaks(
         This should be small, since we're just trying to 
         account for small changes. I suggest
         ``connection_radius = P/L/5``.
-        
+    
     Returns
     -------
     paired_indecies: 2 × NMATCHED np.int32
@@ -1400,6 +1399,7 @@ def match_with_tracked_peaks(
         the first row is the index into 
         ``target_peaks`` and the second an index into
         ``target_peaks_opposite``.
+    
     '''
     
     # Validate arguments 
