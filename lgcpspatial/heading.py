@@ -1330,9 +1330,7 @@ def match_with_tracked_peaks(
     
     This function matches them. 
     
-    Procedure:
-    """"""""""
-    
+    **Procedure:**
     Fast-tracked peaks are stored as lists of peak locations
     ``peaks`` and edge-indecies ``edges``, for all heading 
     angles. These are computed using the 
