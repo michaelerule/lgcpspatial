@@ -766,50 +766,72 @@ maps. Each element is a
 <code class="docutils literal notranslate"><span class="pre">lgcpspatial.posterior.SampledConfidence</span></code>
 object with attributes:</p>
 <blockquote>
-<div><dl>
-<dt>ellipses: np.float32</dt><dd><p>NaN-delimeted (x,y) coordinates for plotting
+<div><dl class="field-list">
+<dt class="field-odd">ellipses<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.float32
+NaN-delimeted (x,y) coordinates for plotting
 confidence ellipses;</p>
 </dd>
-<dt>gaussians: list</dt><dd><p>List of mean, covariance for each peak;
+<dt class="field-even">gaussians<span class="colon">:</span></dt>
+<dd class="field-even"><p>list
+List of mean, covariance for each peak;
 each entry is a tuple of</p>
 <blockquote>
-<div><dl class="simple">
-<dt>μ: shape (2,) np.float32</dt><dd><p>The peak mean</p>
+<div><dl class="field-list simple">
+<dt class="field-odd">μ<span class="colon">:</span></dt>
+<dd class="field-odd"><p>shape (2,) np.float32
+The peak mean</p>
 </dd>
-<dt>Σ: shape (2,2) np.float32</dt><dd><p>Covariance of gaussian convidence
+<dt class="field-even">Σ<span class="colon">:</span></dt>
+<dd class="field-even"><p>shape (2,2) np.float32
+Covariance of gaussian convidence
 interval.</p>
 </dd>
 </dl>
 </div></blockquote>
 </dd>
-<dt>samples: PosteriorSample</dt><dd><p>A PosteriorSample object with attributes:
-density:</p>
+<dt class="field-odd">samples<span class="colon">:</span></dt>
+<dd class="field-odd"><p>PosteriorSample
+A PosteriorSample object with attributes:
+:density:</p>
 <blockquote>
 <div><p>Counts of total number of times a field
 peak appeared at each location for all
 samples.</p>
 </div></blockquote>
-<dl class="simple">
-<dt>pfield:</dt><dd><p>Normalized (sum to 1) density of peak
+<dl class="field-list simple">
+<dt class="field-odd">pfield<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Normalized (sum to 1) density of peak
 locations for each grid field. Grid
 fields are defined as a local region
 around each local maximum in the peak
 <code class="docutils literal notranslate"><span class="pre">density</span></code> map.</p>
 </dd>
-<dt>peaks: np.float32</dt><dd><p>2xNPEAKS array of grid-field-peak (x,y)
+<dt class="field-even">peaks<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.float32
+2xNPEAKS array of grid-field-peak (x,y)
 coordinates.</p>
 </dd>
-<dt>totals:</dt><dd><p>Number of samples within each peak basin
+<dt class="field-odd">totals<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Number of samples within each peak basin
 that actually contained a peak.</p>
 </dd>
-<dt>means: np.float32</dt><dd><p>Center of mass of each peak</p>
+<dt class="field-even">means<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.float32
+Center of mass of each peak</p>
 </dd>
-<dt>sigmas: np.float32</dt><dd><p>2D sampled covariance of each peak</p>
+<dt class="field-odd">sigmas<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.float32
+2D sampled covariance of each peak</p>
 </dd>
-<dt>nearest: np.float32</dt><dd><p>(L*resolution)x(L*resolution) map of
+<dt class="field-even">nearest<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.float32
+(L*resolution)x(L*resolution) map of
 Voronoi regions for each peak</p>
 </dd>
-<dt>kde: np.float32</dt><dd><p><code class="docutils literal notranslate"><span class="pre">(L*resolution)×(L*resolution)</span></code> smoothed
+<dt class="field-odd">kde<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.float32
+<code class="docutils literal notranslate"><span class="pre">(L*resolution)×(L*resolution)</span></code> smoothed
 peak density map.</p>
 </dd>
 </dl>

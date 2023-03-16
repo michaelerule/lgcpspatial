@@ -132,10 +132,11 @@ def get_peaks_at_heading_angles(
             :arena.hull:
                 Convex Hull object describing the arena 
                 perimeter
-            
+        
     model: lgcpspatial.lgcp2d.DiagonalFourierLowrank 
         parent model instance (fitted model without heading
         filtering)
+        
     heading_angles: np.float32 array
         List of heading angles to check. Westward is 0 
         degrees, then rotates counterclockwise through 
@@ -1184,45 +1185,50 @@ def sample_heading_angles(
         maps. Each element is a 
         ``lgcpspatial.posterior.SampledConfidence`` 
         object with attributes:
-            ellipses: np.float32
+            :ellipses: np.float32
                 NaN-delimeted (x,y) coordinates for plotting 
                 confidence ellipses; 
-            gaussians: list
+            
+            :gaussians: list
                 List of mean, covariance for each peak;
                 each entry is a tuple of
-                    μ: shape (2,) np.float32
+                    :μ: shape (2,) np.float32
                         The peak mean
-                    Σ: shape (2,2) np.float32
+                    :Σ: shape (2,2) np.float32
                         Covariance of gaussian convidence
                         interval.
-            samples: PosteriorSample
+            
+            :samples: PosteriorSample
                 A PosteriorSample object with attributes:
-                density:
+                :density:
                     Counts of total number of times a field 
                     peak appeared at each location for all 
                     samples.
-                pfield:
+                :pfield:
                     Normalized (sum to 1) density of peak 
                     locations for each grid field. Grid 
                     fields are defined as a local region 
                     around each local maximum in the peak 
                     ``density`` map.
-                peaks: np.float32
+                :peaks: np.float32
                     2xNPEAKS array of grid-field-peak (x,y) 
                     coordinates.
-                totals:
+                :totals:
                     Number of samples within each peak basin
                     that actually contained a peak.
-                means: np.float32
+                :means: np.float32
                     Center of mass of each peak
-                sigmas: np.float32
+                :sigmas: np.float32
                     2D sampled covariance of each peak
-                nearest: np.float32
+                :nearest: np.float32
                     (L*resolution)x(L*resolution) map of 
                     Voronoi regions for each peak
-                kde: np.float32
+                :kde: np.float32
                     ``(L*resolution)×(L*resolution)`` smoothed 
                     peak density map.
+            
+        
+    
     '''
     
     kplot = None

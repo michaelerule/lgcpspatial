@@ -467,7 +467,7 @@ div.rendered_html tbody tr:hover {
 <section id="Identify-shifted-versions-of-the-same-grid-field">
 <h2>Identify shifted versions of the same grid field<a class="headerlink" href="#Identify-shifted-versions-of-the-same-grid-field" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">match_peaks</span>
@@ -526,7 +526,7 @@ div.rendered_html tbody tr:hover {
 <p>Re-optimizing the kernel variance will adjust the posterior confidence intervals to account for the fact that, due to heading-dependent weighting, each heading direction now has a different effective number of sampled.</p>
 <p>We are focus on opposite heading directions because these are fit on entirely non-overlapping sets of data, due to the heading weights tapering to zero for opposing directions.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">smoothed_heading_angle</span>
@@ -555,21 +555,14 @@ div.rendered_html tbody tr:hover {
 σ0   = 0.311473
 β    = 0.870551
 σ0/β = 0.357788
-[8](1.32e+00) loss=-2.874970e+033(done)
-σ0   = 0.357788
-β    = 1.148698
-σ0/β = 0.311473
-[9](1.15e+00) loss=-3.067678e+033(done)
-σ0   = 0.311473
-β    = 1.000000
-σ0/β = 0.311473
+[11](8.71e-01) loss=-2.875971e+03
 </pre></div></div>
 </div>
 <section id="Get-sampled-confidence-intervals-for-each-direction">
 <h3>Get sampled confidence intervals for each direction<a class="headerlink" href="#Get-sampled-confidence-intervals-for-each-direction" title="Permalink to this heading"></a></h3>
 <p>The reason we fit separate models, as opposed to introducing heading as a new dimension in our Gaussian process, is that we want the resulting posteriors to be statistically independent for opposing directions. For a Gaussian process, even if the prior kernel for heading angle were to taper to zero for opposing directions, this would nor guarantee that the GP posteriors for oppsing directions are statistically independent.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.heading</span> <span class="kn">import</span> <span class="n">sample_heading_angles</span>
@@ -593,28 +586,6 @@ div.rendered_html tbody tr:hover {
     <span class="n">names</span>      <span class="o">=</span> <span class="n">titleNSEW</span><span class="p">,</span>
     <span class="n">colors</span>     <span class="o">=</span> <span class="n">colorNSEW</span><span class="p">)</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[ 95.51392    78.80118    91.45306    93.83997   113.22203    98.22581
- 117.67576     4.3657284 104.42321  ]
-[ 96.01545   111.10637    93.78258    94.726364   94.45514    87.77164
-  96.84285   109.13427     0.7023584]
-[ 94.00195   96.931206  85.079185  93.650566  98.50727   93.89559
-  85.473564 126.48308 ]
-[ 95.2492  102.80487  93.82434  95.89875 102.72701 107.62679 101.24793
- 108.31914 101.35543  93.97093]
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="_images/example_5_heading_dependence_11_1.png" src="_images/example_5_heading_dependence_11_1.png" />
 </div>
 </div>
 </section>
