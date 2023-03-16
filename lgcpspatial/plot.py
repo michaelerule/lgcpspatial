@@ -866,7 +866,17 @@ def showim(x,t='',**kwargs):
     title(t);
     
 
-def inference_summary_plot(model,fit,data,ftitle=''):
+def inference_summary_plot(
+    model,
+    fit,
+    data,
+    ftitle='',
+    cmap='bone_r',
+    ax=None,
+    caxprops=dict(fontsize=8,vscale=0.5,width=10),
+    titlesize = 10,
+    draw_scalebar = True
+    ):
     '''
     Summarize the result of log-Gaussian process variational 
     inference in four plots.
@@ -904,54 +914,64 @@ def inference_summary_plot(model,fit,data,ftitle=''):
     σλ = np.sqrt(vλ)
     cv = σλ/μλ
     
-    cmap = matplotlib.pyplot.get_cmap('bone_r')
+    if isinstance(cmap,str):
+        cmap = matplotlib.pyplot.get_cmap(cmap)
     
-    figure(figsize=(9,2.5),dpi=120)
-    subplots_adjust(left=0.0,right=0.95,top=.8,wspace=0.8)
-    ax={}
+    if ax is None:
+        figure(figsize=(9,2.5),dpi=120)
+        subplots_adjust(left=0.0,right=0.95,top=.8,wspace=0.8)
+        ax={}
+        ax[1]=subplot(141)
+        ax[2]=subplot(142)
+        ax[3]=subplot(143)
+        ax[4]=subplot(144)
+    cax = {}
+    
+    q = 0.5/data.L
+    extent = (0-q,1-q)*2
 
-    ax[1]=subplot(141)
+    sca(ax[1])
     toshow = y*Fs*nanmask
-    vmin,vmax = nanpercentile(toshow,[1,99])
+    vmin,vmax = nanpercentile(toshow,[1,97.5])
     vmin = floor(vmin*10)/10
     vmax = ceil (vmax*10)/10
-    im = plt.imshow(toshow,vmin=vmin,vmax=vmax,cmap=cmap)
-    title('Rate histogram "y"',pad=0,fontsize=12)
+    im = plt.imshow(y*Fs,vmin=vmin,vmax=vmax,cmap=cmap,extent=extent)
+    title('Rate histogram',pad=0,fontsize=titlesize)
     axis('off')
-    # Add a scale bar
-    x0 = where(any(mask,axis=0))[0][0]
-    x1 = x0 + scale*(L+1)
-    y0 = where(any(mask,axis=1))[0][0]-L//25
-    xscalebar((x0+x1)/2,x1-x0,'1 m',y=y0)
-    # Add color bar with marker for neurons mean-rate
-    cax = good_colorbar(vmin,vmax,title='Hz',
-                        fontsize=8,vscale=0.8,width=10,cmap=cmap)
-    sca(cax)
-    μy = mean(y[mask])*Fs
-    axhline(μy,color='w',lw=0.8)
-    text(xlim()[1]+.6,μy,r'$\langle y \rangle$=%0.2f'%μy,va='center',fontsize=7)
-
     
-    ax[3]=subplot(143)
+    # Add a scale bar
+    if draw_scalebar:
+        x0 = where(any(mask,axis=0))[0][0]
+        x1 = x0 + scale*(L+1)
+        y0 = where(any(mask,axis=1))[0][0]-L//25
+        xscalebar((x0+x1)/2/L,(x1-x0)/L,'1 m',y=y0/L)
+    
+    # Add color bar with marker for neurons mean-rate
+    cax[1] = good_colorbar(vmin,vmax,title='Hz',cmap=cmap,**caxprops)
+    sca(cax[1])
+    μy = mean(y[mask])*Fs
+    #axhline(μy,color='w',lw=0.8)
+    #text(xlim()[1]+.6,μy,r'$\langle y \rangle$:%0.2f Hz'%μy,va='center',fontsize=7)
+
+    sca(ax[3])
     #vmin,vmax = nanpercentile(μλ[mask],[.5,99.5])
     #vmin = floor(vmin*10)/10
     #vmax = ceil (vmax*10)/10
-    q = .5/data.L
     plt.imshow(
         μλ.reshape(L,L)*nanmask,
         vmin=vmin,
         vmax=vmax,
         cmap=cmap,
-        extent=(0-q,1-q)*2)
+        extent=extent)
     plt.plot(*data.arena.perimeter.T,lw=2,color='w')
-    title('Posterior mean $\\langle \lambda\\rangle$',pad=0,fontsize=12)
-    good_colorbar(vmin,vmax,title='Hz',
-                  fontsize=8,vscale=0.8,width=10,cmap=cmap)
+    title('Mean Rate',pad=0,fontsize=titlesize)
+    cax[3]=good_colorbar(vmin,vmax,title='Hz',cmap=cmap,**caxprops)
     axis('off')
 
-    ax[2]=subplot(142)
+    sca(ax[2])
     toshow = 10*log10(exp(μ-μz.ravel())).reshape(L,L)*nanmask
-    vmin,vmax = nanpercentile(toshow,[.25,99.75])
+    vmin,vmax = nanpercentile(toshow,[0,100])
+    vmax += (vmax-vmin)*.2
     vmin = floor(vmin*10)/10
     vmax = ceil (vmax*10)/10
     im = plt.imshow(
@@ -959,14 +979,13 @@ def inference_summary_plot(model,fit,data,ftitle=''):
         vmin=vmin,
         vmax=vmax,
         cmap=cmap,
-        extent=(0-q,1-q)*2)
+        extent=extent)
     plt.plot(*data.arena.perimeter.T,lw=2,color='w')
-    title('Posterior mean (Δ log-rate)',pad=0,fontsize=12)
+    title('Log-Rate (minus background)',pad=0,fontsize=titlesize)
     axis('off')
-    good_colorbar(vmin,vmax,title='ΔdB from background',
-                  fontsize=8,vscale=0.8,width=10,labelpad=30,cmap=cmap)
+    cax[2]=good_colorbar(vmin,vmax,title='ΔdB',labelpad=30,cmap=cmap,**caxprops)
     
-    ax[4]=subplot(144)
+    sca(ax[4])
     toshow = cv*nanmask
     vmin,vmax = nanpercentile(toshow,[.5,99.5])
     vmin = floor(vmin*100)/100
@@ -976,15 +995,14 @@ def inference_summary_plot(model,fit,data,ftitle=''):
         vmin=vmin,
         vmax=vmax,
         cmap=cmap,
-        extent=(0-q,1-q)*2)
+        extent=extent)
     plt.plot(*data.arena.perimeter.T,lw=2,color='w')
-    title('Marginal c.v. of λ (σ/μ)',pad=0,fontsize=12)
-    good_colorbar(vmin,vmax,title='σ/μ',
-                  fontsize=8,vscale=0.8,width=10,cmap=cmap)
+    title('Marginal c.v. of λ (σ/μ)',pad=0,fontsize=titlesize)
+    cax[4] = good_colorbar(vmin,vmax,title='σ/μ',cmap=cmap,**caxprops)
     axis('off')
     
     suptitle(ftitle)
-    return ax
+    return ax,cax
 
 
 def plot_convex_hull(px,py,**kwargs):

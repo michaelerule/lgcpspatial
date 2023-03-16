@@ -691,7 +691,7 @@ class SampledConfidence:
                   '\n Ellipses: 95'\
                   +truepct+' confidence')
 
-            if draw_scalebar:
+            if scalebar:
                 # Add a scale bar
                 y0 = where(any(arena.mask,axis=1)
                     )[0][-1]/(L*resolution)
