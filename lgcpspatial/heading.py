@@ -1376,9 +1376,10 @@ def match_with_tracked_peaks(
     opposites_maxd: positive float
         Tolerance for matching opposite-direction peaks 
         from the continuous tracking, in the same
-        units as the points ``peaks``. (This is most likely
-        **normalized [0,1]² coordinates** if you're 
-        following the provided example workflows). 
+        units as the points ``peaks``. 
+        (This is probably in **normalized [0,1]² coordinates** 
+        if you're 
+        following the example workflows). 
         This should be similar to the grid scale, to avoid 
         associating peaks from different fields in the 
         region where the posterior is very noisy. 
