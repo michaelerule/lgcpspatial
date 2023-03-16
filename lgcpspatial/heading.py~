@@ -1431,6 +1431,7 @@ def match_with_tracked_peaks(
         Indecies of matching field in direction 
         ``peaks[iop]`` for each field ``peaks[istart]``
         (or -1 is no match exists).
+    
     '''
     iop,op = locate_opposites(
         peaks,

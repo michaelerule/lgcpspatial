@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 """
-plot.py: Some plotting helpers copied from 
+Plotting helpers copied from 
 ``neurotools.graphics.plot``, and some new 
 routines to reduce notebook clutter.
 """

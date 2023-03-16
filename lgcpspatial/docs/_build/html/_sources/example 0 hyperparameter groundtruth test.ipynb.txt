@@ -290,7 +290,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": null,
    "id": "ccfb1674-67fb-4d06-bad2-2db6f6cd51e2",
    "metadata": {},
    "outputs": [
@@ -298,18 +298,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "[53,12](1.56e+01,5.75e+00) loss=2.345106e+04(done)\n"
-     ]
-    },
-    {
-     "ename": "ValueError",
-     "evalue": "too many values to unpack (expected 4)",
-     "output_type": "error",
-     "traceback": [
-      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
-      "\u001b[0;31mValueError\u001b[0m                                Traceback (most recent call last)",
-      "Cell \u001b[0;32mIn[4], line 32\u001b[0m\n\u001b[1;32m     29\u001b[0m pargrid \u001b[38;5;241m=\u001b[39m [Ps,βs]\n\u001b[1;32m     31\u001b[0m \u001b[38;5;66;03m# Run overall grid search\u001b[39;00m\n\u001b[0;32m---> 32\u001b[0m bestindex,bestpars,bestresult,allresults \u001b[38;5;241m=\u001b[39m grid_search(pargrid,evaluate_ELBO)\n\u001b[1;32m     34\u001b[0m \u001b[38;5;28mprint\u001b[39m(\u001b[38;5;124m'\u001b[39m\u001b[38;5;124m'\u001b[39m)\n\u001b[1;32m     35\u001b[0m \u001b[38;5;28mprint\u001b[39m(\u001b[38;5;124m'\u001b[39m\u001b[38;5;124mHeuristic parameters\u001b[39m\u001b[38;5;124m'\u001b[39m)\n",
-      "\u001b[0;31mValueError\u001b[0m: too many values to unpack (expected 4)"
+      "[49,43](1.48e+01,1.38e+00) loss=2.291628e+04"
      ]
     }
    ],
@@ -345,7 +334,8 @@
     "pargrid = [Ps,βs]\n",
     "\n",
     "# Run overall grid search\n",
-    "bestindex,bestpars,bestresult,allresults = grid_search(pargrid,evaluate_ELBO)\n",
+    "result = grid_search(pargrid,evaluate_ELBO)\n",
+    "bestindex,bestpars,bestresult,allresults,pargrid = result\n",
     "\n",
     "print('')\n",
     "print('Heuristic parameters')\n",

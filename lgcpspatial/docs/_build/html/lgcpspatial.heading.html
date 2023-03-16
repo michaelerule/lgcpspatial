@@ -186,22 +186,33 @@ data based on cosine similarity to target heading angle.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<a class="reference internal" href="lgcpspatial.loaddata.html#lgcpspatial.loaddata.Dataset" title="lgcpspatial.loaddata.Dataset"><em>lgcpspatial.loaddata.Dataset</em></a>) – <dl class="simple">
-<dt>An object with the following attributes:</dt><dd><dl class="simple">
-<dt>L: float</dt><dd><p>Size of L×L spatial grid for binned data.</p>
+<dt>An object with the following attributes:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">L<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float
+Size of L×L spatial grid for binned data.</p>
 </dd>
-<dt>n: np.float32</dt><dd><p>Length L² array of visits to each bin.</p>
+<dt class="field-even">n<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.float32
+Length L² array of visits to each bin.</p>
 </dd>
-<dt>y: np.float32</dt><dd><p>Length L² array of spikes at each bin.</p>
+<dt class="field-odd">y<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.float32
+Length L² array of spikes at each bin.</p>
 </dd>
-<dt>prior_mean: np.float32</dt><dd><p>Shape L×L or L² array containing the prior
+<dt class="field-even">prior_mean<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.float32
+Shape L×L or L² array containing the prior
 mean-log-rate. This should background rate
 variations unrelated to the grid structure</p>
 </dd>
-<dt>lograte_guess: float32 array</dt><dd><p>Shape L×L or L² array with an initial guess
+<dt class="field-odd">lograte_guess<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float32 array
+Shape L×L or L² array with an initial guess
 for log rate. This should be expressed as a
 deviation from <code class="docutils literal notranslate"><span class="pre">prior_mean</span></code>.</p>
 </dd>
-<dt>arena.hull:</dt><dd><p>Convex Hull object describing the arena
+<dt class="field-even">arena.hull<span class="colon">:</span></dt>
+<dd class="field-even"><p>Convex Hull object describing the arena
 perimeter</p>
 </dd>
 </dl>

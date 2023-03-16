@@ -611,7 +611,7 @@ Scale (Bessel):    0.5104032249918229
 <h2>Identify optimal parameters via grid search<a class="headerlink" href="#Identify-optimal-parameters-via-grid-search" title="Permalink to this heading"></a></h2>
 <p>See <code class="docutils literal notranslate"><span class="pre">example</span> <span class="pre">3</span> <span class="pre">optimize</span> <span class="pre">hyperparameters.ipynb</span></code> for more details.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lgcpspatial.gridsearch</span> <span class="kn">import</span> <span class="n">grid_search</span>
@@ -645,7 +645,8 @@ Scale (Bessel):    0.5104032249918229
 <span class="n">pargrid</span> <span class="o">=</span> <span class="p">[</span><span class="n">Ps</span><span class="p">,</span><span class="n">βs</span><span class="p">]</span>
 
 <span class="c1"># Run overall grid search</span>
-<span class="n">bestindex</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span> <span class="o">=</span> <span class="n">grid_search</span><span class="p">(</span><span class="n">pargrid</span><span class="p">,</span><span class="n">evaluate_ELBO</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">grid_search</span><span class="p">(</span><span class="n">pargrid</span><span class="p">,</span><span class="n">evaluate_ELBO</span><span class="p">)</span>
+<span class="n">bestindex</span><span class="p">,</span><span class="n">bestpars</span><span class="p">,</span><span class="n">bestresult</span><span class="p">,</span><span class="n">allresults</span><span class="p">,</span><span class="n">pargrid</span> <span class="o">=</span> <span class="n">result</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Heuristic parameters&#39;</span><span class="p">)</span>
@@ -662,29 +663,12 @@ Scale (Bessel):    0.5104032249918229
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[53,12](1.56e+01,5.75e+00) loss=2.345106e+04(done)
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[4], line 32</span>
-<span class="ansi-green-intense-fg ansi-bold">     29</span> pargrid <span style="color: rgb(98,98,98)">=</span> [Ps,βs]
-<span class="ansi-green-intense-fg ansi-bold">     31</span> <span style="color: rgb(95,135,135)"># Run overall grid search</span>
-<span class="ansi-green-fg">---&gt; 32</span> bestindex,bestpars,bestresult,allresults <span style="color: rgb(98,98,98)">=</span> grid_search(pargrid,evaluate_ELBO)
-<span class="ansi-green-intense-fg ansi-bold">     34</span> <span style="color: rgb(0,135,0)">print</span>(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">&#39;</span>)
-<span class="ansi-green-intense-fg ansi-bold">     35</span> <span style="color: rgb(0,135,0)">print</span>(<span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">Heuristic parameters</span><span style="color: rgb(175,0,0)">&#39;</span>)
-
-<span class="ansi-red-fg">ValueError</span>: too many values to unpack (expected 4)
+[49,43](1.48e+01,1.38e+00) loss=2.291628e+04
 </pre></div></div>
 </div>
 </section>

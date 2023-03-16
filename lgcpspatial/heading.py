@@ -115,23 +115,24 @@ def get_peaks_at_heading_angles(
     ----------
     data: lgcpspatial.loaddata.Dataset
         An object with the following attributes:
-            L: float
+            :L: float
                 Size of L×L spatial grid for binned data.
-            n: np.float32
+            :n: np.float32
                 Length L² array of visits to each bin.
-            y: np.float32
+            :y: np.float32
                 Length L² array of spikes at each bin.
-            prior_mean: np.float32
+            :prior_mean: np.float32
                 Shape L×L or L² array containing the prior 
                 mean-log-rate. This should background rate
                 variations unrelated to the grid structure
-            lograte_guess: float32 array
+            :lograte_guess: float32 array
                 Shape L×L or L² array with an initial guess
                 for log rate. This should be expressed as a 
                 deviation from ``prior_mean``.
-            arena.hull:
+            :arena.hull:
                 Convex Hull object describing the arena 
                 perimeter
+            
     model: lgcpspatial.lgcp2d.DiagonalFourierLowrank 
         parent model instance (fitted model without heading
         filtering)

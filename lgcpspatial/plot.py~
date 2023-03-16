@@ -2,9 +2,10 @@
 # -*- coding: UTF-8 -*-
 
 """
-plot.py: Some plotting helpers copied from 
+Plotting helpers copied from 
 ``neurotools.graphics.plot``, and some new 
 routines to reduce notebook clutter.
+
 """
 
 import os
@@ -852,6 +853,9 @@ def inference_summary_plot(
     μh,v,_  = fit
     y = np.array(y).reshape(L,L)
     v = np.array(v).ravel()
+    
+    if isinstance(μz, np.ndarray):
+        μz = μz.ravel()
     
     # Convert from frequency to spatial coordinates and add back prior mean
     μ  = model.F.T@μh+μz
