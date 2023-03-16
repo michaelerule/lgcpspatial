@@ -133,14 +133,12 @@ position data.</p>
 increasing from bottom to top, and the x axis
 increasing from left to right, the heading angles
 are as follows:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p>0   : rightwards (eastwards)</p></li>
 <li><p>π/2 : upwards    (northwards)</p></li>
 <li><p>π   : leftwards  (westwards)</p></li>
 <li><p>3π/2: downwards  (southwards)</p></li>
 </ul>
-</div></blockquote>
 <p>Note: For the Krupic lab datasets, the convention is
 <em>not</em> the standard cartesian plane.
 <strong>*Smaller</strong> <code class="docutils literal notranslate"><span class="pre">y</span></code> values correspond to “more north”,
@@ -154,14 +152,12 @@ match Krupic-lab conventions in previously published
 manuscripts.</p>
 <p>For image-convention coordinates, angles should
 instead be interpreted as:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p>0   : rightwards (eastwards)</p></li>
 <li><p>π/2 : downwards  (southwards)</p></li>
 <li><p>π   : leftwards  (westwards)</p></li>
 <li><p>3π/2: upwards    (northwards)</p></li>
 </ul>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -273,8 +269,7 @@ map <code class="docutils literal notranslate"><span class="pre">rate</span></co
 <dt class="sig sig-object py" id="lgcpspatial.heading.match_peaks">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">match_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#match_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.match_peaks" title="Permalink to this definition"></a></dt>
 <dd><p>Matching algorithm:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p>Assume q come from an array of angles on [0,2pi)</p></li>
 <li><p>Get distances between all adjacent angles</p></li>
 <li><p>Build directed graph joining fields of adjacent angles</p></li>
@@ -287,7 +282,6 @@ map <code class="docutils literal notranslate"><span class="pre">rate</span></co
 </dl>
 </li>
 </ul>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -299,26 +293,14 @@ connecting them (in the same units as <code class="docutils literal notranslate"
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p><strong>edges</strong> – A length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for
+<dd class="field-even"><p><strong>edges</strong> – A length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of edge sets for
 each pair of headings.
-Each list entry is a 2×NEDGES int32 array.</p>
-<blockquote>
-<div><ul>
-<li><p>This contains pairs of indecies (a,b).
-- <code class="docutils literal notranslate"><span class="pre">a</span></code> is the index into peaks[i]</p>
-<blockquote>
-<div><p>(the node source of this edge)</p>
-</div></blockquote>
-</li>
-</ul>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> is the index into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code>
-(the node target of this edge).</p></li>
-</ul>
-</div></blockquote>
-</div></blockquote>
-</p>
+Each list entry is a 2×NEDGES int32 array, which
+contains pairs of indecies (a,b):
+<code class="docutils literal notranslate"><span class="pre">a</span></code> is the index into peaks[i]
+(the node source of this edge);
+<code class="docutils literal notranslate"><span class="pre">b</span></code> is the index into <code class="docutils literal notranslate"><span class="pre">peaks[(i+1)%Nφ]</span></code>
+(the node target of this edge).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
@@ -463,14 +445,12 @@ colormap from <code class="docutils literal notranslate"><span class="pre">lgcps
 mauve, continues through rust, olive, blue, before
 circling back to mauve. We use these color–direction
 conventions:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p>North: blue/azure/cyan</p></li>
 <li><p>South: red/rust</p></li>
 <li><p>East:  green/olive</p></li>
 <li><p>West:  purple/mauve/magenta</p></li>
 </ul>
-</div></blockquote>
 <p>For comatibility, then, the direction ordering
 for the colormap parameter <code class="docutils literal notranslate"><span class="pre">color</span></code> should be</p>
 <blockquote>
@@ -544,15 +524,19 @@ where color components <code class="docutils literal notranslate"><span class="p
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">locate_opposites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#locate_opposites"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.locate_opposites" title="Permalink to this definition"></a></dt>
 <dd><p>To be used on the result of calling match_peaks()</p>
 <p>### Algorithm:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p>We have a list of edges between adjacent angles</p></li>
-<li><p>Starting from a seed, follow the graph in both
-directions half-way around</p></li>
-<li><p>Hopefully, we’ll come to a peak from the opposite
-heading direction</p></li>
+<li><dl class="simple">
+<dt>Starting from a seed, follow the graph in both</dt><dd><p>directions half-way around</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Hopefully, we’ll come to a peak from the opposite</dt><dd><p>heading direction</p>
+</dd>
+</dl>
+</li>
 </ul>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

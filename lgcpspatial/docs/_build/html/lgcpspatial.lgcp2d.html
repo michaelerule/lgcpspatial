@@ -127,7 +127,11 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gp</strong> (<em>Model</em>) – Gaussian-Process model instance.</p></li>
+<li><p><strong>gp</strong> (<em>Model</em>) – Gaussian-Process model instance.
+This can be any object providing the functions
+<code class="docutils literal notranslate"><span class="pre">initialmean()</span></code>, <code class="docutils literal notranslate"><span class="pre">initialcov()</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mean_update(μ,Σ)</span></code>, <code class="docutils literal notranslate"><span class="pre">variance_update(μ,Σ)</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">loss(μ,Σ)</span></code>.</p></li>
 <li><p><strong>initialmean</strong> (<em>np.float32</em>) – Initial guess for mean, in whatever format
 gp expects for calculating derivatives.
 if None, <code class="docutils literal notranslate"><span class="pre">coordiante_descent</span></code> will initialize this

@@ -123,6 +123,10 @@
 <span class="sd">    ----------</span>
 <span class="sd">    gp: Model</span>
 <span class="sd">        Gaussian-Process model instance. </span>
+<span class="sd">        This can be any object providing the functions </span>
+<span class="sd">        ``initialmean()``, ``initialcov()``, </span>
+<span class="sd">        ``mean_update(μ,Σ)``, ``variance_update(μ,Σ)``, </span>
+<span class="sd">        and ``loss(μ,Σ)``.</span>
 <span class="sd">        </span>
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------</span>
@@ -256,15 +260,15 @@
 <span class="sd">        Using a low-rank subspace to discard components with</span>
 <span class="sd">        negligeble variance is another option.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">coords</span>  <span class="o">=</span> <span class="n">zgrid</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
-    <span class="n">window</span>  <span class="o">=</span> <span class="n">hanning</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
-    <span class="n">window</span>  <span class="o">=</span> <span class="n">fftshift</span><span class="p">(</span><span class="n">outer</span><span class="p">(</span><span class="n">window</span><span class="p">,</span><span class="n">window</span><span class="p">))</span>
-    <span class="n">kern</span>    <span class="o">=</span> <span class="n">j0</span><span class="p">(</span><span class="n">fftshift</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">coords</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="n">P</span><span class="p">)))</span><span class="o">*</span><span class="n">window</span>
-    <span class="n">clip</span>    <span class="o">=</span> <span class="n">fftshift</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span><span class="o">&lt;</span><span class="n">P</span><span class="o">*</span><span class="n">jn_zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">))</span>
-    <span class="n">kern</span>    <span class="o">=</span> <span class="n">kern</span><span class="o">*</span><span class="n">clip</span>
-    <span class="n">kern</span>    <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">kern</span><span class="p">,</span><span class="n">P</span><span class="o">/</span><span class="n">pi</span><span class="p">)</span>
-    <span class="n">kern</span>    <span class="o">=</span> <span class="n">repair_small_eigenvalues</span><span class="p">(</span><span class="n">kern</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">kern</span><span class="p">),</span><span class="n">eps</span><span class="p">)</span>
-    <span class="n">Kf</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">fft2</span><span class="p">(</span><span class="n">kern</span><span class="p">)))</span>
+    <span class="n">coords</span> <span class="o">=</span> <span class="n">zgrid</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="n">hanning</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="n">fftshift</span><span class="p">(</span><span class="n">outer</span><span class="p">(</span><span class="n">window</span><span class="p">,</span><span class="n">window</span><span class="p">))</span>
+    <span class="n">kern</span>   <span class="o">=</span> <span class="n">j0</span><span class="p">(</span><span class="n">fftshift</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">coords</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="n">P</span><span class="p">)))</span><span class="o">*</span><span class="n">window</span>
+    <span class="n">clip</span>   <span class="o">=</span> <span class="n">fftshift</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span><span class="o">&lt;</span><span class="n">P</span><span class="o">*</span><span class="n">jn_zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">))</span>
+    <span class="n">kern</span>   <span class="o">=</span> <span class="n">kern</span><span class="o">*</span><span class="n">clip</span>
+    <span class="n">kern</span>   <span class="o">=</span> <span class="n">blur</span><span class="p">(</span><span class="n">kern</span><span class="p">,</span><span class="n">P</span><span class="o">/</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">kern</span>   <span class="o">=</span> <span class="n">repair_small_eigenvalues</span><span class="p">(</span><span class="n">kern</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">kern</span><span class="p">),</span><span class="n">eps</span><span class="p">)</span>
+    <span class="n">Kf</span>     <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">real</span><span class="p">(</span><span class="n">fft2</span><span class="p">(</span><span class="n">kern</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">rtype</span><span class="p">(</span><span class="n">Kf</span><span class="p">)</span></div>
 
 
@@ -419,17 +423,13 @@
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span><span class="s1">&#39;lograte_guess&#39;</span><span class="p">):</span> 
                 <span class="n">lograte_guess</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">lograte_guess</span>
                 
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">prior_mean</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">prior_mean</span><span class="p">)):</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s1">&#39;prior_mean contained non-finite values&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">lograte_guess</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">lograte_guess</span><span class="p">)):</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s1">&#39;lograte_guess contained non-finite values&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">n</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">n</span><span class="p">)):</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s1">&#39;n contained non-finite values&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">isfinite</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s1">&#39;y contained non-finite values&#39;</span><span class="p">)</span>
         
         <span class="n">bg</span> <span class="o">=</span> <span class="n">rtype</span><span class="p">(</span><span class="n">prior_mean</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
@@ -818,6 +818,7 @@
 <span class="sd">        posterior_marginal_variances: np.array</span>
 <span class="sd">            Posterior marginal variance in the spatial </span>
 <span class="sd">            domain. Size L² float32 or float64</span>
+<span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">μh</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_arguments</span><span class="p">(</span>
             <span class="n">lowrank_posterior_mean</span><span class="p">,</span>

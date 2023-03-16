@@ -29,6 +29,10 @@ def coordinate_descent(gp,
     ----------
     gp: Model
         Gaussian-Process model instance. 
+        This can be any object providing the functions 
+        ``initialmean()``, ``initialcov()``, 
+        ``mean_update(μ,Σ)``, ``variance_update(μ,Σ)``, 
+        and ``loss(μ,Σ)``.
         
     Other Parameters
     ----------
@@ -162,15 +166,15 @@ def make_kernel_ft(L,P,
         Using a low-rank subspace to discard components with
         negligeble variance is another option.
     '''
-    coords  = zgrid(L)
-    window  = hanning(L)
-    window  = fftshift(outer(window,window))
-    kern    = j0(fftshift(abs(coords*2*pi/P)))*window
-    clip    = fftshift(abs(coords)<P*jn_zeros(0,k)[-1]/(2*pi))
-    kern    = kern*clip
-    kern    = blur(kern,P/pi)
-    kern    = repair_small_eigenvalues(kern/np.max(kern),eps)
-    Kf      = np.array(real(fft2(kern)))
+    coords = zgrid(L)
+    window = hanning(L)
+    window = fftshift(outer(window,window))
+    kern   = j0(fftshift(abs(coords*2*pi/P)))*window
+    clip   = fftshift(abs(coords)<P*jn_zeros(0,k)[-1]/(2*pi))
+    kern   = kern*clip
+    kern   = blur(kern,P/pi)
+    kern   = repair_small_eigenvalues(kern/np.max(kern),eps)
+    Kf     = np.array(real(fft2(kern)))
     return rtype(Kf)
 
 
@@ -275,7 +279,7 @@ class DiagonalFourierLowrank:
             generally incompatable with the approach of
             using a low-rank subspace in the frequency
             domain to speed things up. We apply white noise
-            AFTER selecting the low -rank subspace. This is
+            AFTER selecting the low-rank subspace. This is
             a bit wrong, but still might have its uses. 
         dc: float>0
             A kernel hyperparameter: Amount of DC variance
@@ -325,17 +329,13 @@ class DiagonalFourierLowrank:
             if hasattr(dataset,'lograte_guess'): 
                 lograte_guess = dataset.lograte_guess
                 
-        if not all(isfinite(prior_mean)):
-            raise ValueError(
+        if not all(isfinite(prior_mean)): raise ValueError(
             'prior_mean contained non-finite values')
-        if not all(isfinite(lograte_guess)):
-            raise ValueError(
+        if not all(isfinite(lograte_guess)): raise ValueError(
             'lograte_guess contained non-finite values')
-        if not all(isfinite(n)):
-            raise ValueError(
+        if not all(isfinite(n)): raise ValueError(
             'n contained non-finite values')
-        if not all(isfinite(y)):
-            raise ValueError(
+        if not all(isfinite(y)): raise ValueError(
             'y contained non-finite values')
         
         bg = rtype(prior_mean).ravel()

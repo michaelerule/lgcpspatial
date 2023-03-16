@@ -133,10 +133,10 @@
 <span class="sd">    increasing from left to right, the heading angles</span>
 <span class="sd">    are as follows: </span>
 
-<span class="sd">      - 0   : rightwards (eastwards)</span>
-<span class="sd">      - π/2 : upwards    (northwards)</span>
-<span class="sd">      - π   : leftwards  (westwards)</span>
-<span class="sd">      - 3π/2: downwards  (southwards)</span>
+<span class="sd">    * 0   : rightwards (eastwards)</span>
+<span class="sd">    * π/2 : upwards    (northwards)</span>
+<span class="sd">    * π   : leftwards  (westwards)</span>
+<span class="sd">    * 3π/2: downwards  (southwards)</span>
 <span class="sd">    </span>
 <span class="sd">    Note: For the Krupic lab datasets, the convention is</span>
 <span class="sd">    *not* the standard cartesian plane.</span>
@@ -154,11 +154,10 @@
 <span class="sd">    For image-convention coordinates, angles should</span>
 <span class="sd">    instead be interpreted as:</span>
 <span class="sd">    </span>
-<span class="sd">      - 0   : rightwards (eastwards)</span>
-<span class="sd">      - π/2 : downwards  (southwards)</span>
-<span class="sd">      - π   : leftwards  (westwards)</span>
-<span class="sd">      - 3π/2: upwards    (northwards)</span>
-<span class="sd">    </span>
+<span class="sd">    * 0   : rightwards (eastwards)</span>
+<span class="sd">    * π/2 : downwards  (southwards)</span>
+<span class="sd">    * π   : leftwards  (westwards)</span>
+<span class="sd">    * 3π/2: upwards    (northwards)</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -368,12 +367,12 @@
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Matching algorithm:</span>
 <span class="sd">    </span>
-<span class="sd">     - Assume q come from an array of angles on [0,2pi)</span>
-<span class="sd">     - Get distances between all adjacent angles</span>
-<span class="sd">     - Build directed graph joining fields of adjacent angles</span>
-<span class="sd">     - Greedy approach</span>
-<span class="sd">        - If you&#39;re my closest match, and I&#39;m yours, pair up.</span>
-<span class="sd">        - Repeat until no more edges closer than ``maxd``</span>
+<span class="sd">    * Assume q come from an array of angles on [0,2pi)</span>
+<span class="sd">    * Get distances between all adjacent angles</span>
+<span class="sd">    * Build directed graph joining fields of adjacent angles</span>
+<span class="sd">    * Greedy approach</span>
+<span class="sd">       * If you&#39;re my closest match, and I&#39;m yours, pair up.</span>
+<span class="sd">       * Repeat until no more edges closer than ``maxd``</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -390,12 +389,12 @@
 <span class="sd">    edges: list</span>
 <span class="sd">        A length ``NANGLES`` list of edge sets for </span>
 <span class="sd">        each pair of headings.</span>
-<span class="sd">        Each list entry is a 2×NEDGES int32 array.</span>
-<span class="sd">         - This contains pairs of indecies (a,b).</span>
-<span class="sd">           - ``a`` is the index into peaks[i]</span>
-<span class="sd">             (the node source of this edge)</span>
-<span class="sd">          - ``b`` is the index into ``peaks[(i+1)%Nφ]`` </span>
-<span class="sd">            (the node target of this edge).</span>
+<span class="sd">        Each list entry is a 2×NEDGES int32 array, which</span>
+<span class="sd">        contains pairs of indecies (a,b):</span>
+<span class="sd">        ``a`` is the index into peaks[i]</span>
+<span class="sd">        (the node source of this edge);</span>
+<span class="sd">        ``b`` is the index into ``peaks[(i+1)%Nφ]`` </span>
+<span class="sd">        (the node target of this edge).</span>
 <span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">q</span>  <span class="o">=</span> <span class="p">[</span><span class="n">p2c</span><span class="p">(</span><span class="n">pk</span><span class="p">)</span> <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">peaks</span><span class="p">]</span>
@@ -751,10 +750,10 @@
 <span class="sd">    circling back to mauve. We use these color–direction</span>
 <span class="sd">    conventions: </span>
 <span class="sd">    </span>
-<span class="sd">     - North: blue/azure/cyan</span>
-<span class="sd">     - South: red/rust</span>
-<span class="sd">     - East:  green/olive</span>
-<span class="sd">     - West:  purple/mauve/magenta</span>
+<span class="sd">    * North: blue/azure/cyan</span>
+<span class="sd">    * South: red/rust</span>
+<span class="sd">    * East:  green/olive</span>
+<span class="sd">    * West:  purple/mauve/magenta</span>
 <span class="sd">    </span>
 <span class="sd">    For comatibility, then, the direction ordering</span>
 <span class="sd">    for the colormap parameter ``color`` should be</span>
@@ -773,10 +772,10 @@
 <span class="sd">    at ``0`` for &quot;East&quot;, then increasing as we rotate</span>
 <span class="sd">    counter-clockwise:</span>
 <span class="sd">    </span>
-<span class="sd">      - 0   : rightwards (eastwards)</span>
-<span class="sd">      - π/2 : upwards    (northwards)</span>
-<span class="sd">      - π   : leftwards  (westwards)</span>
-<span class="sd">      - 3π/2: downwards  (southwards)</span>
+<span class="sd">     * 0   : rightwards (eastwards)</span>
+<span class="sd">     * π/2 : upwards    (northwards)</span>
+<span class="sd">     * π   : leftwards  (westwards)</span>
+<span class="sd">     * 3π/2: downwards  (southwards)</span>
 <span class="sd">    </span>
 <span class="sd">    If the keyword argument ``origin`` is ``&#39;upper&#39;``, use</span>
 <span class="sd">    image-coordinate conventions. This is the convention </span>
@@ -784,10 +783,10 @@
 <span class="sd">    For image coordinates, ``(x,y)=(0,0)`` corresponds to the</span>
 <span class="sd">    top-left (northwest) corner. </span>
 <span class="sd">    </span>
-<span class="sd">      - 0   : rightwards (eastwards)</span>
-<span class="sd">      - π/2 : downwards  (southwards)</span>
-<span class="sd">      - π   : leftwards  (westwards)</span>
-<span class="sd">      - 3π/2: upwards    (northwards)</span>
+<span class="sd">     * 0   : rightwards (eastwards)</span>
+<span class="sd">     * π/2 : downwards  (southwards)</span>
+<span class="sd">     * π   : leftwards  (westwards)</span>
+<span class="sd">     * 3π/2: upwards    (northwards)</span>
 <span class="sd">    </span>
 <span class="sd">    **Note:** Unlike ``matplotlib.imshow()``, using</span>
 <span class="sd">    ``oring=&#39;upper&#39;`` will cause the y-axis to be flipped</span>
@@ -872,15 +871,15 @@
 <span class="sd">            ### For ``origin=&#39;lower&#39;``: </span>
 <span class="sd">            </span>
 <span class="sd">            Color map order + conventions: </span>
-<span class="sd">             - 0.00 West:  purple/mauve/magenta</span>
-<span class="sd">             - 0.25 South: red/rust</span>
-<span class="sd">             - 0.50 East:  green/olive</span>
-<span class="sd">             - 0.75 North: blue/azure/cyan</span>
+<span class="sd">            * 0.00 West:  purple/mauve/magenta</span>
+<span class="sd">            * 0.25 South: red/rust</span>
+<span class="sd">            * 0.50 East:  green/olive</span>
+<span class="sd">            * 0.75 North: blue/azure/cyan</span>
 <span class="sd">            Angle order (r * 2π):</span>
-<span class="sd">             - 0   : rightwards (eastwards)</span>
-<span class="sd">             - π/2 : upwards    (northwards)</span>
-<span class="sd">             - π   : leftwards  (westwards)</span>
-<span class="sd">             - 3π/2: downwards  (southwards)</span>
+<span class="sd">            * 0   : rightwards (eastwards)</span>
+<span class="sd">            * π/2 : upwards    (northwards)</span>
+<span class="sd">            * π   : leftwards  (westwards)</span>
+<span class="sd">            * 3π/2: downwards  (southwards)</span>
 <span class="sd">            We need to re-map as this: </span>
 <span class="sd">                0.00 → 0.50</span>
 <span class="sd">                0.25 → 0.75</span>
@@ -892,10 +891,10 @@
 <span class="sd">            ### For ``origin=&#39;upper&#39;``:</span>
 <span class="sd">            </span>
 <span class="sd">            Angle order (r * 2π):</span>
-<span class="sd">             - 0   : rightwards (eastwards)</span>
-<span class="sd">             - π/2 : downwards  (southwards)</span>
-<span class="sd">             - π   : leftwards  (westwards)</span>
-<span class="sd">             - 3π/2: upwards    (northwards)</span>
+<span class="sd">            * 0   : rightwards (eastwards)</span>
+<span class="sd">            * π/2 : downwards  (southwards)</span>
+<span class="sd">            * π   : leftwards  (westwards)</span>
+<span class="sd">            * 3π/2: upwards    (northwards)</span>
 
 <span class="sd">            We need to re-map as this: </span>
 
@@ -945,10 +944,10 @@
 
 <span class="sd">    ### Algorithm: </span>
 <span class="sd">    </span>
-<span class="sd">     - We have a list of edges between adjacent angles</span>
-<span class="sd">     - Starting from a seed, follow the graph in both </span>
+<span class="sd">    * We have a list of edges between adjacent angles</span>
+<span class="sd">    * Starting from a seed, follow the graph in both </span>
 <span class="sd">       directions half-way around</span>
-<span class="sd">     - Hopefully, we&#39;ll come to a peak from the opposite </span>
+<span class="sd">    * Hopefully, we&#39;ll come to a peak from the opposite </span>
 <span class="sd">       heading direction</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -1544,17 +1543,17 @@
 <span class="sd">    These should be close, but aren&#39;t exactly equal</span>
 <span class="sd">    Match them based on proximity.</span>
 
-<span class="sd">     - Get pairwise distances in each direction d1, d2</span>
-<span class="sd">     - Get the closest matches in each direction i1, i2</span>
-<span class="sd">     - Remove pairs too far apart</span>
-<span class="sd">     - Check the paired-opposite-heading-peaks computed </span>
+<span class="sd">    * Get pairwise distances in each direction d1, d2</span>
+<span class="sd">    * Get the closest matches in each direction i1, i2</span>
+<span class="sd">    * Remove pairs too far apart</span>
+<span class="sd">    * Check the paired-opposite-heading-peaks computed </span>
 <span class="sd">       earlier</span>
-<span class="sd">     - For each (heading, opposite-heading) pair</span>
-<span class="sd">       - Skip pairs with no match</span>
-<span class="sd">       - Retrieve the posterior-sample peak index for each</span>
+<span class="sd">    * For each (heading, opposite-heading) pair</span>
+<span class="sd">      * Skip pairs with no match</span>
+<span class="sd">      * Retrieve the posterior-sample peak index for each</span>
 <span class="sd">         peak in the pair.</span>
-<span class="sd">       - If both peaks exist in the posterior sample</span>
-<span class="sd">         - Match the pair in the posterior samples</span>
+<span class="sd">      * If both peaks exist in the posterior sample</span>
+<span class="sd">        * Match the pair in the posterior samples</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">d1</span><span class="p">,</span><span class="n">d2</span> <span class="o">=</span> <span class="n">pdist</span><span class="p">(</span><span class="n">z1</span><span class="p">,</span><span class="n">q1</span><span class="p">),</span><span class="n">pdist</span><span class="p">(</span><span class="n">z2</span><span class="p">,</span><span class="n">q2</span><span class="p">)</span>
     <span class="n">i1</span><span class="p">,</span><span class="n">i2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanargmin</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">argmin</span><span class="p">(</span><span class="n">d2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>

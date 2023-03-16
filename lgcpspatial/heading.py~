@@ -39,10 +39,10 @@ def smoothed_heading_angle(px,py,Fs=50.0,Fl=2.0):
     increasing from left to right, the heading angles
     are as follows: 
 
-      - 0   : rightwards (eastwards)
-      - π/2 : upwards    (northwards)
-      - π   : leftwards  (westwards)
-      - 3π/2: downwards  (southwards)
+    * 0   : rightwards (eastwards)
+    * π/2 : upwards    (northwards)
+    * π   : leftwards  (westwards)
+    * 3π/2: downwards  (southwards)
     
     Note: For the Krupic lab datasets, the convention is
     *not* the standard cartesian plane.
@@ -60,11 +60,10 @@ def smoothed_heading_angle(px,py,Fs=50.0,Fl=2.0):
     For image-convention coordinates, angles should
     instead be interpreted as:
     
-      - 0   : rightwards (eastwards)
-      - π/2 : downwards  (southwards)
-      - π   : leftwards  (westwards)
-      - 3π/2: upwards    (northwards)
-    
+    * 0   : rightwards (eastwards)
+    * π/2 : downwards  (southwards)
+    * π   : leftwards  (westwards)
+    * 3π/2: upwards    (northwards)
     
     Parameters
     ----------
@@ -296,12 +295,12 @@ def match_peaks(peaks,maxd):
     edges: list
         A length ``NANGLES`` list of edge sets for 
         each pair of headings.
-        Each list entry is a 2×NEDGES int32 array.
-         - This contains pairs of indecies (a,b).
-           - ``a`` is the index into peaks[i]
-             (the node source of this edge)
-          - ``b`` is the index into ``peaks[(i+1)%Nφ]`` 
-            (the node target of this edge).
+        Each list entry is a 2×NEDGES int32 array, which
+        contains pairs of indecies (a,b):
+        ``a`` is the index into peaks[i]
+        (the node source of this edge);
+        ``b`` is the index into ``peaks[(i+1)%Nφ]`` 
+        (the node target of this edge).
     
     '''
     q  = [p2c(pk) for pk in peaks]
@@ -872,7 +871,7 @@ def locate_opposites(peaks,maxd,starti,edges):
         lenghth ``NANGLES`` list of ``2×NCONNECTED`` edge sets 
         containing indecies into the point sets (source) and
         targets in  the next adjacent direction.
-        
+    
     Returns
     -------
     iop: int (scalar)

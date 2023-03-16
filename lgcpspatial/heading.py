@@ -39,10 +39,10 @@ def smoothed_heading_angle(px,py,Fs=50.0,Fl=2.0):
     increasing from left to right, the heading angles
     are as follows: 
 
-      - 0   : rightwards (eastwards)
-      - π/2 : upwards    (northwards)
-      - π   : leftwards  (westwards)
-      - 3π/2: downwards  (southwards)
+    * 0   : rightwards (eastwards)
+    * π/2 : upwards    (northwards)
+    * π   : leftwards  (westwards)
+    * 3π/2: downwards  (southwards)
     
     Note: For the Krupic lab datasets, the convention is
     *not* the standard cartesian plane.
@@ -60,11 +60,10 @@ def smoothed_heading_angle(px,py,Fs=50.0,Fl=2.0):
     For image-convention coordinates, angles should
     instead be interpreted as:
     
-      - 0   : rightwards (eastwards)
-      - π/2 : downwards  (southwards)
-      - π   : leftwards  (westwards)
-      - 3π/2: upwards    (northwards)
-    
+    * 0   : rightwards (eastwards)
+    * π/2 : downwards  (southwards)
+    * π   : leftwards  (westwards)
+    * 3π/2: upwards    (northwards)
     
     Parameters
     ----------
@@ -274,12 +273,12 @@ def match_peaks(peaks,maxd):
     '''
     Matching algorithm:
     
-     - Assume q come from an array of angles on [0,2pi)
-     - Get distances between all adjacent angles
-     - Build directed graph joining fields of adjacent angles
-     - Greedy approach
-        - If you're my closest match, and I'm yours, pair up.
-        - Repeat until no more edges closer than ``maxd``
+    * Assume q come from an array of angles on [0,2pi)
+    * Get distances between all adjacent angles
+    * Build directed graph joining fields of adjacent angles
+    * Greedy approach
+       * If you're my closest match, and I'm yours, pair up.
+       * Repeat until no more edges closer than ``maxd``
     
     Parameters
     ----------
@@ -296,12 +295,12 @@ def match_peaks(peaks,maxd):
     edges: list
         A length ``NANGLES`` list of edge sets for 
         each pair of headings.
-        Each list entry is a 2×NEDGES int32 array.
-         - This contains pairs of indecies (a,b).
-           - ``a`` is the index into peaks[i]
-             (the node source of this edge)
-          - ``b`` is the index into ``peaks[(i+1)%Nφ]`` 
-            (the node target of this edge).
+        Each list entry is a 2×NEDGES int32 array, which
+        contains pairs of indecies (a,b):
+        ``a`` is the index into peaks[i]
+        (the node source of this edge);
+        ``b`` is the index into ``peaks[(i+1)%Nφ]`` 
+        (the node target of this edge).
     
     '''
     q  = [p2c(pk) for pk in peaks]
@@ -657,10 +656,10 @@ def plot_tracked_peaks(
     circling back to mauve. We use these color–direction
     conventions: 
     
-     - North: blue/azure/cyan
-     - South: red/rust
-     - East:  green/olive
-     - West:  purple/mauve/magenta
+    * North: blue/azure/cyan
+    * South: red/rust
+    * East:  green/olive
+    * West:  purple/mauve/magenta
     
     For comatibility, then, the direction ordering
     for the colormap parameter ``color`` should be
@@ -679,10 +678,10 @@ def plot_tracked_peaks(
     at ``0`` for "East", then increasing as we rotate
     counter-clockwise:
     
-      - 0   : rightwards (eastwards)
-      - π/2 : upwards    (northwards)
-      - π   : leftwards  (westwards)
-      - 3π/2: downwards  (southwards)
+     * 0   : rightwards (eastwards)
+     * π/2 : upwards    (northwards)
+     * π   : leftwards  (westwards)
+     * 3π/2: downwards  (southwards)
     
     If the keyword argument ``origin`` is ``'upper'``, use
     image-coordinate conventions. This is the convention 
@@ -690,10 +689,10 @@ def plot_tracked_peaks(
     For image coordinates, ``(x,y)=(0,0)`` corresponds to the
     top-left (northwest) corner. 
     
-      - 0   : rightwards (eastwards)
-      - π/2 : downwards  (southwards)
-      - π   : leftwards  (westwards)
-      - 3π/2: upwards    (northwards)
+     * 0   : rightwards (eastwards)
+     * π/2 : downwards  (southwards)
+     * π   : leftwards  (westwards)
+     * 3π/2: upwards    (northwards)
     
     **Note:** Unlike ``matplotlib.imshow()``, using
     ``oring='upper'`` will cause the y-axis to be flipped
@@ -778,15 +777,15 @@ def plot_tracked_peaks(
             ### For ``origin='lower'``: 
             
             Color map order + conventions: 
-             - 0.00 West:  purple/mauve/magenta
-             - 0.25 South: red/rust
-             - 0.50 East:  green/olive
-             - 0.75 North: blue/azure/cyan
+            * 0.00 West:  purple/mauve/magenta
+            * 0.25 South: red/rust
+            * 0.50 East:  green/olive
+            * 0.75 North: blue/azure/cyan
             Angle order (r * 2π):
-             - 0   : rightwards (eastwards)
-             - π/2 : upwards    (northwards)
-             - π   : leftwards  (westwards)
-             - 3π/2: downwards  (southwards)
+            * 0   : rightwards (eastwards)
+            * π/2 : upwards    (northwards)
+            * π   : leftwards  (westwards)
+            * 3π/2: downwards  (southwards)
             We need to re-map as this: 
                 0.00 → 0.50
                 0.25 → 0.75
@@ -798,10 +797,10 @@ def plot_tracked_peaks(
             ### For ``origin='upper'``:
             
             Angle order (r * 2π):
-             - 0   : rightwards (eastwards)
-             - π/2 : downwards  (southwards)
-             - π   : leftwards  (westwards)
-             - 3π/2: upwards    (northwards)
+            * 0   : rightwards (eastwards)
+            * π/2 : downwards  (southwards)
+            * π   : leftwards  (westwards)
+            * 3π/2: upwards    (northwards)
 
             We need to re-map as this: 
 
@@ -851,10 +850,10 @@ def locate_opposites(peaks,maxd,starti,edges):
 
     ### Algorithm: 
     
-     - We have a list of edges between adjacent angles
-     - Starting from a seed, follow the graph in both 
+    * We have a list of edges between adjacent angles
+    * Starting from a seed, follow the graph in both 
        directions half-way around
-     - Hopefully, we'll come to a peak from the opposite 
+    * Hopefully, we'll come to a peak from the opposite 
        heading direction
     
     Parameters
@@ -1450,17 +1449,17 @@ def match_with_tracked_peaks(
     These should be close, but aren't exactly equal
     Match them based on proximity.
 
-     - Get pairwise distances in each direction d1, d2
-     - Get the closest matches in each direction i1, i2
-     - Remove pairs too far apart
-     - Check the paired-opposite-heading-peaks computed 
+    * Get pairwise distances in each direction d1, d2
+    * Get the closest matches in each direction i1, i2
+    * Remove pairs too far apart
+    * Check the paired-opposite-heading-peaks computed 
        earlier
-     - For each (heading, opposite-heading) pair
-       - Skip pairs with no match
-       - Retrieve the posterior-sample peak index for each
+    * For each (heading, opposite-heading) pair
+      * Skip pairs with no match
+      * Retrieve the posterior-sample peak index for each
          peak in the pair.
-       - If both peaks exist in the posterior sample
-         - Match the pair in the posterior samples
+      * If both peaks exist in the posterior sample
+        * Match the pair in the posterior samples
     '''
     d1,d2 = pdist(z1,q1),pdist(z2,q2)
     i1,i2 = np.nanargmin(d1,0),argmin(d2,0)
