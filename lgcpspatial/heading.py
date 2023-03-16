@@ -853,14 +853,13 @@ def locate_opposites(peaks,maxd,starti,edges):
     '''
     To be used on the result of calling match_peaks()
 
-    Algorithm: 
-    ^^^^^^^^^^
+    **Algorithm:**
     
     * We have a list of edges between adjacent angles
     * Starting from a seed, follow the graph in both 
-       directions half-way around
+      directions half-way around
     * Hopefully, we'll come to a peak from the opposite 
-       heading direction
+      heading direction
     
     Parameters
     ----------
@@ -868,7 +867,7 @@ def locate_opposites(peaks,maxd,starti,edges):
         Length ``NANGLES`` list of ``2×NPEAKS`` ``np.float32`` 
         arrays with (x,y) locations of peaks at each 
         heading angle.
-    maxd: 
+    maxd: number
         The maximum distance between peaks allowed when 
         connecting them
     starti: int ∈ {0,..,``NANGLES``-1}

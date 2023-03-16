@@ -947,14 +947,13 @@
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    To be used on the result of calling match_peaks()</span>
 
-<span class="sd">    Algorithm: </span>
-<span class="sd">    ^^^^^^^^^^</span>
+<span class="sd">    **Algorithm:**</span>
 <span class="sd">    </span>
 <span class="sd">    * We have a list of edges between adjacent angles</span>
 <span class="sd">    * Starting from a seed, follow the graph in both </span>
-<span class="sd">       directions half-way around</span>
+<span class="sd">      directions half-way around</span>
 <span class="sd">    * Hopefully, we&#39;ll come to a peak from the opposite </span>
-<span class="sd">       heading direction</span>
+<span class="sd">      heading direction</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -962,7 +961,7 @@
 <span class="sd">        Length ``NANGLES`` list of ``2×NPEAKS`` ``np.float32`` </span>
 <span class="sd">        arrays with (x,y) locations of peaks at each </span>
 <span class="sd">        heading angle.</span>
-<span class="sd">    maxd: </span>
+<span class="sd">    maxd: number</span>
 <span class="sd">        The maximum distance between peaks allowed when </span>
 <span class="sd">        connecting them</span>
 <span class="sd">    starti: int ∈ {0,..,``NANGLES``-1}</span>

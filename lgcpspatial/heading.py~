@@ -853,14 +853,13 @@ def locate_opposites(peaks,maxd,starti,edges):
     '''
     To be used on the result of calling match_peaks()
 
-    Algorithm: 
-    ^^^^^^^^^^
+    **Algorithm:**
     
     * We have a list of edges between adjacent angles
     * Starting from a seed, follow the graph in both 
-       directions half-way around
+      directions half-way around
     * Hopefully, we'll come to a peak from the opposite 
-       heading direction
+      heading direction
     
     Parameters
     ----------
@@ -1390,7 +1389,7 @@ def match_with_tracked_peaks(
     connection_radius: positive float
         Tolerance for matching fast-tracked peaks with
         posterior-peak-density centroids, in the 
-        same units as ``peaks. This is most likely
+        same units as ``peaks``. This is most likely
         **normalized [0,1]² coordinates** if you're 
         following the provided example workflows). 
         This should be small, since we're just trying to 

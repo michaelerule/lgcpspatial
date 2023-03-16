@@ -533,50 +533,30 @@ where color components <code class="docutils literal notranslate"><span class="p
 <dt class="sig sig-object py" id="lgcpspatial.heading.locate_opposites">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">locate_opposites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edges</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#locate_opposites"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.locate_opposites" title="Permalink to this definition"></a></dt>
 <dd><p>To be used on the result of calling match_peaks()</p>
-<section id="algorithm">
-<h2>Algorithm:<a class="headerlink" href="#algorithm" title="Permalink to this heading"></a></h2>
+<p><strong>Algorithm:</strong></p>
 <ul class="simple">
 <li><p>We have a list of edges between adjacent angles</p></li>
-<li><dl class="simple">
-<dt>Starting from a seed, follow the graph in both</dt><dd><p>directions half-way around</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>Hopefully, we’ll come to a peak from the opposite</dt><dd><p>heading direction</p>
-</dd>
-</dl>
-</li>
+<li><p>Starting from a seed, follow the graph in both
+directions half-way around</p></li>
+<li><p>Hopefully, we’ll come to a peak from the opposite
+heading direction</p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">param peaks<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of <code class="docutils literal notranslate"><span class="pre">2×NPEAKS</span></code> <code class="docutils literal notranslate"><span class="pre">np.float32</span></code>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> (<em>list</em>) – Length <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of <code class="docutils literal notranslate"><span class="pre">2×NPEAKS</span></code> <code class="docutils literal notranslate"><span class="pre">np.float32</span></code>
 arrays with (x,y) locations of peaks at each
-heading angle.</p>
-</dd>
-<dt class="field-even">type peaks<span class="colon">:</span></dt>
-<dd class="field-even"><p>list</p>
-</dd>
-<dt class="field-odd">param maxd<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The maximum distance between peaks allowed when
-connecting them</p>
-</dd>
-<dt class="field-even">param starti<span class="colon">:</span></dt>
-<dd class="field-even"><p>The angle (index) to start at as a “seed”.</p>
-</dd>
-<dt class="field-odd">type starti<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int ∈ {0,..,``NANGLES``-1}</p>
-</dd>
-<dt class="field-even">param edges<span class="colon">:</span></dt>
-<dd class="field-even"><p>lenghth <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of <code class="docutils literal notranslate"><span class="pre">2×NCONNECTED</span></code> edge sets
+heading angle.</p></li>
+<li><p><strong>maxd</strong> (<em>number</em>) – The maximum distance between peaks allowed when
+connecting them</p></li>
+<li><p><strong>starti</strong> (<em>int ∈ {0</em><em>,</em><em>..</em><em>,</em><em>``NANGLES``-1}</em>) – The angle (index) to start at as a “seed”.</p></li>
+<li><p><strong>edges</strong> (<em>returned by match_peaks</em><em>(</em><em>Nφ</em><em>,</em><em>q</em><em>,</em><em>maxd</em><em>)</em>) – lenghth <code class="docutils literal notranslate"><span class="pre">NANGLES</span></code> list of <code class="docutils literal notranslate"><span class="pre">2×NCONNECTED</span></code> edge sets
 containing indecies into the point sets (source) and
-targets in  the next adjacent direction.</p>
+targets in  the next adjacent direction.</p></li>
+</ul>
 </dd>
-<dt class="field-odd">type edges<span class="colon">:</span></dt>
-<dd class="field-odd"><p>returned by match_peaks(Nφ,q,maxd)</p>
-</dd>
-<dt class="field-even">returns<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
 <li><p><strong>iop</strong> (<em>int (scalar)</em>) – Index <code class="docutils literal notranslate"><span class="pre">iop</span> <span class="pre">∈</span> <span class="pre">{0,..,NANGLES-1}</span></code> opposite of the
 direction associated with the seed index given by
 <code class="docutils literal notranslate"><span class="pre">starti</span> <span class="pre">∈</span> <span class="pre">{0,..,NANGLES-1}</span></code>.
@@ -586,9 +566,9 @@ This should be <code class="docutils literal notranslate"><span class="pre">(</s
 (or -1 is no match exists).</p></li>
 <li><p><strong>dd</strong> (<em>float32</em>) – Distance to matched peak, or NaN it not matched.</p></li>
 </ul>
+</p>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py function">
