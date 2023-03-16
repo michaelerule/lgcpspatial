@@ -132,10 +132,11 @@ def get_peaks_at_heading_angles(
             :arena.hull:
                 Convex Hull object describing the arena 
                 perimeter
-            
+        
     model: lgcpspatial.lgcp2d.DiagonalFourierLowrank 
         parent model instance (fitted model without heading
         filtering)
+        
     heading_angles: np.float32 array
         List of heading angles to check. Westward is 0 
         degrees, then rotates counterclockwise through 
