@@ -1390,7 +1390,7 @@ def match_with_tracked_peaks(
     connection_radius: positive float
         Tolerance for matching fast-tracked peaks with
         posterior-peak-density centroids, in the 
-        same units as ``peaks. This is most likely
+        same units as ``peaks``. This is most likely
         **normalized [0,1]² coordinates** if you're 
         following the provided example workflows). 
         This should be small, since we're just trying to 
