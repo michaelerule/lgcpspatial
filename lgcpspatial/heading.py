@@ -115,23 +115,23 @@ def get_peaks_at_heading_angles(
     ----------
     data: lgcpspatial.loaddata.Dataset
         An object with the following attributes:
-            :L: float
-                Size of L×L spatial grid for binned data.
-            :n: np.float32
-                Length L² array of visits to each bin.
-            :y: np.float32
-                Length L² array of spikes at each bin.
-            :prior_mean: np.float32
-                Shape L×L or L² array containing the prior 
-                mean-log-rate. This should background rate
-                variations unrelated to the grid structure
-            :lograte_guess: float32 array
-                Shape L×L or L² array with an initial guess
-                for log rate. This should be expressed as a 
-                deviation from ``prior_mean``.
-            :arena.hull:
-                Convex Hull object describing the arena 
-                perimeter
+        :L: float
+            Size of L×L spatial grid for binned data.
+        :n: np.float32
+            Length L² array of visits to each bin.
+        :y: np.float32
+            Length L² array of spikes at each bin.
+        :prior_mean: np.float32
+            Shape L×L or L² array containing the prior 
+            mean-log-rate. This should background rate
+            variations unrelated to the grid structure
+        :lograte_guess: float32 array
+            Shape L×L or L² array with an initial guess
+            for log rate. This should be expressed as a 
+            deviation from ``prior_mean``.
+        :arena.hull:
+            Convex Hull object describing the arena 
+            perimeter
         
     model: lgcpspatial.lgcp2d.DiagonalFourierLowrank 
         parent model instance (fitted model without heading
@@ -1185,45 +1185,45 @@ def sample_heading_angles(
         maps. Each element is a 
         ``lgcpspatial.posterior.SampledConfidence`` 
         object with attributes:
-            :ellipses: np.float32
-                NaN-delimeted (x,y) coordinates for plotting 
-                confidence ellipses; 
-            :gaussians: list
-                List of mean, covariance for each peak;
-                each entry is a tuple of
-                    :μ: shape (2,) np.float32
-                        The peak mean
-                    :Σ: shape (2,2) np.float32
-                        Covariance of gaussian convidence
-                        interval.
-            :samples: PosteriorSample
-                A PosteriorSample object with attributes:
-                :density:
-                    Counts of total number of times a field 
-                    peak appeared at each location for all 
-                    samples.
-                :pfield:
-                    Normalized (sum to 1) density of peak 
-                    locations for each grid field. Grid 
-                    fields are defined as a local region 
-                    around each local maximum in the peak 
-                    ``density`` map.
-                :peaks: np.float32
-                    2xNPEAKS array of grid-field-peak (x,y) 
-                    coordinates.
-                :totals:
-                    Number of samples within each peak basin
-                    that actually contained a peak.
-                :means: np.float32
-                    Center of mass of each peak
-                :sigmas: np.float32
-                    2D sampled covariance of each peak
-                :nearest: np.float32
-                    (L*resolution)x(L*resolution) map of 
-                    Voronoi regions for each peak
-                :kde: np.float32
-                    ``(L*resolution)×(L*resolution)`` smoothed 
-                    peak density map.
+        :ellipses: np.float32
+            NaN-delimeted (x,y) coordinates for plotting 
+            confidence ellipses; 
+        :gaussians: list
+            List of mean, covariance for each peak;
+            each entry is a tuple of
+            :μ: shape (2,) np.float32
+                The peak mean
+            :Σ: shape (2,2) np.float32
+                Covariance of gaussian convidence
+                interval.
+        :samples: PosteriorSample
+            A PosteriorSample object with attributes:
+            :density:
+                Counts of total number of times a field 
+                peak appeared at each location for all 
+                samples.
+            :pfield:
+                Normalized (sum to 1) density of peak af
+                locations for each grid field. Grid 
+                fields are defined as a local region 
+                around each local maximum in the peak 
+                ``density`` map.
+            :peaks: np.float32
+                2xNPEAKS array of grid-field-peak (x,y) 
+                coordinates.
+            :totals:
+                Number of samples within each peak basin
+                that actually contained a peak.
+            :means: np.float32
+                Center of mass of each peak
+            :sigmas: np.float32
+                2D sampled covariance of each peak
+            :nearest: np.float32
+                (L*resolution)x(L*resolution) map of 
+                Voronoi regions for each peak
+            :kde: np.float32
+                ``(L*resolution)×(L*resolution)`` smoothed 
+                peak density map.
             
         
     
