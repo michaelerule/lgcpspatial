@@ -4,8 +4,8 @@
 heading.py: Subroutines used in 
 ``example 5: heading dependence``.
 
-Several of these routines overlap and will likely be 
-merged in a clean-up of this code in future commits.
+Some of these routines overlap and will likely be 
+merged in a later clean-up.
 """
 
 import warnings
@@ -1337,6 +1337,8 @@ def match_with_tracked_peaks(
     ``peaks`` and edge-indecies ``edges``, for all heading 
     angles. These are computed using the 
     ``lgcpspatial.heading`` module as follows:
+    
+    literal block. ::
     
     >>  peaks = get_peaks_at_heading_angles(
     >>      data,model,angles,heading_angle)

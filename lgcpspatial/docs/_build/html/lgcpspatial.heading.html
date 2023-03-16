@@ -122,8 +122,8 @@
 <span id="lgcpspatial-heading-module"></span><h1>lgcpspatial.heading module<a class="headerlink" href="#module-lgcpspatial.heading" title="Permalink to this heading"></a></h1>
 <p>heading.py: Subroutines used in
 <code class="docutils literal notranslate"><span class="pre">example</span> <span class="pre">5:</span> <span class="pre">heading</span> <span class="pre">dependence</span></code>.</p>
-<p>Several of these routines overlap and will likely be
-merged in a clean-up of this code in future commits.</p>
+<p>Some of these routines overlap and will likely be
+merged in a later clean-up.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="lgcpspatial.heading.smoothed_heading_angle">
 <span class="sig-prename descclassname"><span class="pre">lgcpspatial.heading.</span></span><span class="sig-name descname"><span class="pre">smoothed_heading_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">px</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">py</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lgcpspatial/heading.html#smoothed_heading_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lgcpspatial.heading.smoothed_heading_angle" title="Permalink to this definition"></a></dt>
@@ -867,9 +867,12 @@ however, be <em>very</em> close.</p>
 <code class="docutils literal notranslate"><span class="pre">peaks</span></code> and edge-indecies <code class="docutils literal notranslate"><span class="pre">edges</span></code>, for all heading
 angles. These are computed using the
 <code class="docutils literal notranslate"><span class="pre">lgcpspatial.heading</span></code> module as follows:</p>
-<p>&gt;&gt;  peaks = get_peaks_at_heading_angles(
-&gt;&gt;      data,model,angles,heading_angle)
-&gt;&gt;  edges = link_peaks(peaks,maximum_point_distance)</p>
+<p>literal block.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span>  <span class="n">peaks</span> <span class="o">=</span> <span class="n">get_peaks_at_heading_angles</span><span class="p">(</span>
+<span class="o">&gt;&gt;</span>      <span class="n">data</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">angles</span><span class="p">,</span><span class="n">heading_angle</span><span class="p">)</span>
+<span class="o">&gt;&gt;</span>  <span class="n">edges</span> <span class="o">=</span> <span class="n">link_peaks</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="n">maximum_point_distance</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>To figure out which shifted peaks are copies of the
 same field, we:</p>
 <blockquote>

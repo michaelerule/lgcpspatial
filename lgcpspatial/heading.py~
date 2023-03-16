@@ -4,8 +4,8 @@
 heading.py: Subroutines used in 
 ``example 5: heading dependence``.
 
-Several of these routines overlap and will likely be 
-merged in a clean-up of this code in future commits.
+Some of these routines overlap and will likely be 
+merged in a later clean-up.
 """
 
 import warnings
@@ -1308,7 +1308,8 @@ def match_with_tracked_peaks(
     Match "fast-tracked" peak shifts with 
     posterior-peak-density maps.    
     
-    ### Details: 
+    Details: 
+    ^^^^^^^^
     
     In this workflow, we track shifts in single
     peaks over a broad range by re-fitting a single model
