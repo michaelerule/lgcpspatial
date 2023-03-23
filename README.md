@@ -16,3 +16,6 @@ If you're brave enough to test it, please get in touch. I need feedback on
  - Are there simple ways to improve the API? 
 
 There will be bugs and issues; Let's work them out before this thing goes to peer review. I don't have much time these days, but will be able to make a few more passes to tidy things up before we reach a "version of record".
+
+
+One common pitfall of code like this: The kernels have only two parameters, but the optimization routines have about two-dozen configurable values, which could affect speed, accuracy, and stability for your particular use-case. I've dialed these in for the test data I have, but they may not be universal. If you have other data that seems to benefit from different defaults, let me know. It would be good to make all of this as painless as possible.
