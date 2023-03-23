@@ -11,7 +11,7 @@ Log-Gaussian Cox process Python library designed for analyzing grid cells (and p
 If you're brave enough to test it, please get in touch. I need feedback on
  
  - Does this actually work outside of the datasets its been tested on?
- - Does this actually perform well on other hardware configuration?
+ - Does this actually perform well on other hardware configurations?
  - How hard is it to start using? Is it missing dependencies? 
  - Are there simple ways to improve the API? 
 
