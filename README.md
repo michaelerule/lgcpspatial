@@ -8,6 +8,8 @@ Log-Gaussian Cox process Python library designed for analyzing grid cells (and p
 
 
 
+## Pre-alpha testing
+
 If you're brave enough to test it, please get in touch. I need feedback on
  
  - Does this actually work outside of the datasets its been tested on?
