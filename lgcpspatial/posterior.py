@@ -243,7 +243,7 @@ def get_peak_density(z,resolution,r=1,height_threshold=None):
     the results to a spatial grid with linear interpolation.
     
     Parameters
-    --------------------------------------------------------
+    ----------
     z: ndarray, L×L×NSAMPLES
         A 3D array of 2D grid field samples,
         where the LAST axis is the sample numer. 
@@ -251,7 +251,7 @@ def get_peak_density(z,resolution,r=1,height_threshold=None):
         Upsampling factor for binned peal locations
         
     Other Parameters
-    --------------------------------------------------------
+    ----------------
     r: int (default 1)
         Radius over which point must be local maximum to include. 
     height_threshold: float
@@ -284,13 +284,13 @@ def sample_posterior_lograte(model,posterior_mean,v,nsamples=200):
         ``coordinate_descent(model)``
         
     Other Parameters
-    --------------------------------------------------------
+    ----------------
     nsamples: int>1
         Number of samples to draw; 
         Default is 200
         
     Returns
-    --------------------------------------------------------
+    -------
     z: L×L×nsamples float32 array
     '''
     

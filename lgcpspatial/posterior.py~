@@ -10,7 +10,7 @@ from scipy.spatial import ConvexHull
 from numpy.linalg  import norm,LinAlgError
 
 from lgcpspatial.loaddata import bin_spikes, Arena
-from lgcpspatial.lgcp2d   import chinv,chsolve,RI
+from lgcpspatial.lgcp2d   import chinv,chsolve,RI,LGCPResult
 from lgcpspatial.plot     import *
 from lgcpspatial.util     import *
 
@@ -284,13 +284,13 @@ def sample_posterior_lograte(model,posterior_mean,v,nsamples=200):
         ``coordinate_descent(model)``
         
     Other Parameters
-    --------------------------------------------------------
+    ----------------
     nsamples: int>1
         Number of samples to draw; 
         Default is 200
         
     Returns
-    --------------------------------------------------------
+    -------
     z: L×L×nsamples float32 array
     '''
     
@@ -316,6 +316,16 @@ def sample_posterior_lograte(model,posterior_mean,v,nsamples=200):
 
 class PosteriorSample:
     '''
+    Sample the distribution of grid-field peaks from 
+    a log-Gaussian posterior distribution.
+
+     1. Draw samples in the low-rank space
+     2. Convert them to spatial coordinates
+     3. Get probable location of each grid field peak
+
+    (Treat this class simply as a function with named
+    return values)
+
     Attributes
     ----------
     density:
@@ -342,6 +352,49 @@ class PosteriorSample:
     kde: np.float32
         (L*resolution)x(L*resolution) smoothed peak 
         density map.
+    
+    Parameters
+    ----------
+    model: 
+        a ``diagonal_fourier_lowrank`` model object 
+    posterior_mean: 
+        low-rank posterior mean returned by 
+        ``coordinate_descent(model)``
+    posterior_variance: 
+        marginal variances returned by 
+        ``coordinate_descent(model)``
+
+    Other Parameters
+    ----------------
+    Arena: object
+        An object with an atrribute
+        hull: scipy.spatial._qhull.ConvexHull
+            Convex Hull object describing the arena 
+            perimeter. Points will be clipped to this if
+            it is not None. Ensure this convex hull has 
+            been scaled up by the same factor if 
+            ``resolution`` is >1.
+    nsamples: int>1
+        Number of samples to draw; 
+        Default is 200
+    resolution: int>0
+        Upsampling factor compared to the bin-grid 
+        resolution; Default is 2
+    radius: float
+        Local region (in units of pixels on the L×L
+        grid) that peaks should clear to be included.
+        I suggest P/2.5
+    edge_radius: float; Default 0
+        Remove peaks closer than ``edge_radius`` bins
+        to the arena's edge. The default value of 0
+        does not remove points within a margin of
+        the boundary.
+    height_threshold: float
+        Peak height threshold
+    prpeak_threshold: float
+        Probability threshold for including a peak,
+        in [0,1], based on the fractions of samples
+        that contain a given peak.
     '''
     def __init__(self,
         model,
@@ -354,60 +407,6 @@ class PosteriorSample:
         edge_radius      = 0.0,
         height_threshold = 0,
         prpeak_threshold = 0):
-        '''
-        Sample the distribution of grid-field peaks from 
-        a log-Gaussian posterior distribution.
-
-         1. Draw samples in the low-rank space
-         2. Convert them to spatial coordinates
-         3. Get probable location of each grid field peak
-         
-        (Treat this class simply as a function with named
-        return values)
-
-        Parameters
-        ----------
-        model: 
-            a ``diagonal_fourier_lowrank`` model object 
-        posterior_mean: 
-            low-rank posterior mean returned by 
-            ``coordinate_descent(model)``
-        posterior_variance: 
-            marginal variances returned by 
-            ``coordinate_descent(model)``
-
-        Other Parameters
-        ----------------
-        Arena: object
-            An object with an atrribute
-            hull: scipy.spatial._qhull.ConvexHull
-                Convex Hull object describing the arena 
-                perimeter. Points will be clipped to this if
-                it is not None. Ensure this convex hull has 
-                been scaled up by the same factor if 
-                ``resolution`` is >1.
-        nsamples: int>1
-            Number of samples to draw; 
-            Default is 200
-        resolution: int>0
-            Upsampling factor compared to the bin-grid 
-            resolution; Default is 2
-        radius: float
-            Local region (in units of pixels on the L×L
-            grid) that peaks should clear to be included.
-            I suggest P/2.5
-        edge_radius: float; Default 0
-            Remove peaks closer than ``edge_radius`` bins
-            to the arena's edge. The default value of 0
-            does not remove points within a margin of
-            the boundary.
-        height_threshold: float
-            Peak height threshold
-        prpeak_threshold: float
-            Probability threshold for including a peak,
-            in [0,1], based on the fractions of samples
-            that contain a given peak.
-        '''
         # Get log-rate samples
         z = sample_posterior_lograte(
             model,
@@ -480,7 +479,6 @@ class PosteriorSample:
             sigmas[i] = einsum('zN,ZN,N->zZ',delta,delta,pr)
             means[i]  = c2p(mu)
         
-        print(totals)
         keep   = (totals > prpeak_threshold*nsamples) & \
             is_in_hull(means,arena.hull)
         peaks  = peaks[:,keep]
@@ -500,6 +498,24 @@ class PosteriorSample:
 
 class SampledConfidence:
     '''
+    Construct confidence intervals for grid-field peaks
+    using sampling, and (optionally) plot them.
+
+    **For small posterior variance:** The resulting
+    confidence intervals may be too large, since 
+    spurious peaks near the edges of a field's Voronoi 
+    cell are counted toward the posterior peak-location
+    variance. This is conservative.
+
+    **For large posterior variance:** We estimate the
+    uncertainty in a peak's location by measuring
+    the variance of each peak in the peak-density map.
+    These samples are limited to each peak's Voronoi 
+    cell, which creates an upper bound on the 
+    uncertainty. I.e. this will always report that
+    grid-field peaks are localized to within one 
+    grid-cell period. 
+    
     Attributes
     ----------
     samples: PosteriorSample
@@ -508,12 +524,71 @@ class SampledConfidence:
         NaN-delimeted (x,y) coordinates for plotting 
         confidence ellipses; 
     gaussians: List
-        (μ,Σ) 2D confidence Gaussians for all peaks.
+        (μ,Σ) 2D confidence Gaussians for all peaks.   
+    
+    Parameters
+    ----------
+    result: LGCPResult
+    
+    Other Parameters
+    ----------------
+    radius: positive float; default 0.45
+        Region in which peak must be a local maximum to 
+        be considered a grid field. 
+        This is in units of 
+        **fraction of the grid-cell period ``model.P``**.
+    edge_radius: positive float; Default 0.0
+        Remove peaks closer than ``edge_radius`` 
+        to the arena's edge. The default value of 0
+        does not remove points within a margin of
+        the boundary.
+        This is in units of 
+        **fraction of the grid-cell period ``model.P``**.
+    resolution: positive integer
+        Grid upsampling factor, defaults to 2
+    nsamples: positive integer
+        Number of samples to draw, defaults to 4000
+    height_threshold: float in (0,1)
+        Inclusion threshold for peak height in each 
+        sample and probability peak over all samples,
+        default:0
+    prpeak_threshold: float
+        Probability threshold for including a peak,
+        in [0,1], based on the fractions of samples
+        that contain a given peak. Default is 0
+    pct: float in (0,100)
+        Percentile to use for confidence bounds,
+        default is 95%.
+    doplot: boolean
+        Plot resulting grid map? Default is False.
+    cmap: matplotlib.colormap
+        Forwarded to ``imshow()`` if ``doplot=True``
+    draw_scalebar: boolean; default True
+        Draw 1 meter scale bar?
+    draw_colorbar: boolean; default True
+        Add a color bar axis?
+    **kwargs:
+        Forwarded to ``plot()`` if ``doplot`` is True
+    
+    Returns
+    -------
+    SampledConfidence object with these attributes:
+        samples: PosteriorSample
+            A PosteriorSample object.
+        ellipses: 
+            (x,y) coordinates for confidence ellipses,
+            NaN delimeted.
+        gaussians: 
+            List of (μ,Σ) 2D confidence Gaussians.
+        arena: 
+            An Arena object representing the experiment
+            arena at the upsampled resolution.
+    
     '''
     def __init__(self,
         data,
-        model,
-        fit,
+        model = None,
+        fit   = None,
         radius           = 0.45,
         edge_radius      = 0.0,
         resolution       = 2,
@@ -527,98 +602,19 @@ class SampledConfidence:
         draw_border      = True,
         draw_colorbar    = True,
         **kwargs):
-        '''        
-        Construct confidence intervals for grid-field peaks
-        using sampling, and (optionally) plot them.
-                
-        **For small posterior variance:** The resulting
-        confidence intervals may be too large, since 
-        spurious peaks near the edges of a field's Voronoi 
-        cell are counted toward the posterior peak-location
-        variance. This is conservative.
-                
-        **For large posterior variance:** We estimate the
-        uncertainty in a peak's location by measuring
-        the variance of each peak in the peak-density map.
-        These samples are limited to each peak's Voronoi 
-        cell, which creates an upper bound on the 
-        uncertainty. I.e. this will always report that
-        grid-field peaks are localized to within one 
-        grid-cell period. 
-
-        Parameters
-        ----------
-        data : 
-            Object containing the following attributes:
-        model: diagonal_fourier_lowrank
-            Model built from this data of type 
-            lgcp2d.diagonal_fourier_lowrank
-        fit: 
-            Fit posterior calculated by 
-            lgcp2d.coordinate_descent
-
-        Other Parameters
-        ----------------
-        radius: positive float; default 0.45
-            Region in which peak must be a local maximum to 
-            be considered a grid field. 
-            This is in units of 
-            **fraction of the grid-cell period ``model.P``**.
-        edge_radius: positive float; Default 0.0
-            Remove peaks closer than ``edge_radius`` 
-            to the arena's edge. The default value of 0
-            does not remove points within a margin of
-            the boundary.
-            This is in units of 
-            **fraction of the grid-cell period ``model.P``**.
-        resolution: positive integer
-            Grid upsampling factor, defaults to 2
-        nsamples: positive integer
-            Number of samples to draw, defaults to 4000
-        height_threshold: float in (0,1)
-            Inclusion threshold for peak height in each 
-            sample and probability peak over all samples,
-            default:0
-        prpeak_threshold: float
-            Probability threshold for including a peak,
-            in [0,1], based on the fractions of samples
-            that contain a given peak. Default is 0
-        pct: float in (0,100)
-            Percentile to use for confidence bounds,
-            default is 95%.
-        doplot: boolean
-            Plot resulting grid map? Default is False.
-        cmap: matplotlib.colormap
-            Forwarded to ``imshow()`` if ``doplot=True``
-        draw_scalebar: boolean; default True
-            Draw 1 meter scale bar?
-        draw_colorbar: boolean; default True
-            Add a color bar axis?
-        **kwargs:
-            Forwarded to ``plot()`` if ``doplot`` is True
-            
-        Returns
-        -------
-        SampledConfidence object with these attributes:
-            samples: PosteriorSample
-                A PosteriorSample object.
-            ellipses: 
-                (x,y) coordinates for confidence ellipses,
-                NaN delimeted.
-            gaussians: 
-                List of (μ,Σ) 2D confidence Gaussians.
-            arena: 
-                An Arena object representing the experiment
-                arena at the upsampled resolution.
-
-        '''
+        
+        if isinstance(data,LGCPResult):
+            model = data.model
+            fit   = data.fit
+            data  = data.data
+        
         L = data.L
 
         # Retrieve the posterior mode (in low-D frequency)
         # and variance (in space)
         posterior_mean,posterior_variance = fit[:2]
         
-        radius *= model.P
+        radius      *= model.P
         edge_radius *= model.P
         
         # Sample from the GP posterior (see posterior.py)
@@ -691,7 +687,7 @@ class SampledConfidence:
                   '\n Ellipses: 95'\
                   +truepct+' confidence')
 
-            if scalebar:
+            if draw_scalebar:
                 # Add a scale bar
                 y0 = where(any(arena.mask,axis=1)
                     )[0][-1]/(L*resolution)
@@ -720,11 +716,75 @@ class SampledConfidence:
 
 
 class QuadraticConfidence:
+    '''
+    Locally-quadratic approximation of peak-location
+    confidence intervals.
+
+    **For small posterior variance:** The locally-
+    quadratic intervals tend to be smaller than the
+    peak-density map sampled intervals, because they
+    exclude spurious peaks at intermediate locations.
+    This has been spot-checked and found true using
+    shuffle tests on the Krupic data, but should be
+    verified again when using new data. 
+
+    **For large posterior variance:** The locally-
+    quadratic intervals are not interpretable, since
+    they do not account for the fact that grid fields
+    are confined to a region related to the grid perid. 
+    Incorrect, large values will be returned. These
+    should be discarded by setting the 
+    ``localization_radius`` parameter.       
+
+    Attributes
+    ----------
+    ellipses: list
+        List of x,y coordinates for plotting confidence 
+        ellipses; NaN delimeted.
+    gaussians: list 
+        List of (μ,Σ) 2D confidence Gaussians for 
+        all peaks.
+
+    Parameters
+    ----------
+    result: LGCPResult
+
+    Other Parameters
+    ----------------
+    radius: float; Default 0.45
+        Region in which a peak must be a local maximum 
+        to count as a grid field. 
+        This is in units of 
+        **fraction of the grid-cell period ``model.P``**.
+    localization_radius: float; Default 0.8
+        Drop peaks with confidence outside this radius.
+        Set to ``inf`` to retain all peaks. 
+        This is in units of 
+        **fraction of the grid-cell period ``model.P``**.
+    edge_radius: float; Default 0
+        Remove peaks closer than ``edge_radius`` bins
+        to the arena's edge. The default value of 0
+        does not remove points within a margin of
+        the boundary.
+    height_threshold: float in (0,1); default 0.5
+        Inclusion threshold for peak height in each 
+        sample and probability peak over all samples,
+    prpeak_threshold: float
+        Probability threshold for including a peak,
+        iinterpolate_peaksn [0,1], based on the 
+        fractions of samples that contain a given peak.
+    pct: float in (0,100); default 95.0
+        percentile to use for confidence bounds,
+    doplot: boolean, default True
+        Render a plot of the grid map? Default:False. 
+    draw_border: boolean, default True
+        Whether to render the arena border if plotting.
+    '''
     def __init__(
         self,
         data,
-        model,
-        fit,
+        model = None,
+        fit   = None,
         radius              = 0.45,
         localization_radius = 0.8,
         edge_radius         = 0,
@@ -733,79 +793,17 @@ class QuadraticConfidence:
         doplot              = False,
         draw_border         = True,
         **kwargs):
-        '''
-        Locally-quadratic approximation of peak-location
-        confidence intervals.
         
-        **For small posterior variance:** The locally-
-        quadratic intervals tend to be smaller than the
-        peak-density map sampled intervals, because they
-        exclude spurious peaks at intermediate locations.
-        This has been spot-checked and found true using
-        shuffle tests on the Krupic data, but should be
-        verified again when using new data. 
-                
-        **For large posterior variance:** The locally-
-        quadratic intervals are not interpretable, since
-        they do not account for the fact that grid fields
-        are confined to a region related to the grid perid. 
-        Incorrect, large values will be returned. These
-        should be discarded by setting the 
-        ``localization_radius`` parameter.       
-    
-        Attributes
-        ----------
-        ellipses: list
-            List of x,y coordinates for plotting confidence 
-            ellipses; NaN delimeted.
-        gaussians: list 
-            List of (μ,Σ) 2D confidence Gaussians for 
-            all peaks.
-
-        Parameters
-        ----------
-        data: Dataset 
-        model: 
-            Model built from this data of type 
-            lgcp2d.diagonal_fourier_lowrank
-        fit: 
-            Posterior fitted by lgcp2d.coordinate_descent
-
-        Other Parameters
-        ----------------
-        radius: float; Default 0.45
-            Region in which a peak must be a local maximum 
-            to count as a grid field. 
-            This is in units of 
-            **fraction of the grid-cell period ``model.P``**.
-        localization_radius: float; Default 0.8
-            Drop peaks with confidence outside this radius.
-            Set to ``inf`` to retain all peaks. 
-            This is in units of 
-            **fraction of the grid-cell period ``model.P``**.
-        edge_radius: float; Default 0
-            Remove peaks closer than ``edge_radius`` bins
-            to the arena's edge. The default value of 0
-            does not remove points within a margin of
-            the boundary.
-        height_threshold: float in (0,1); default 0.5
-            Inclusion threshold for peak height in each 
-            sample and probability peak over all samples,
-        prpeak_threshold: float
-            Probability threshold for including a peak,
-            iinterpolate_peaksn [0,1], based on the 
-            fractions of samples that contain a given peak.
-        pct: float in (0,100); default 95.0
-            percentile to use for confidence bounds,
-        doplot: boolean, default True
-            Render a plot of the grid map? Default:False. 
-        draw_border: boolean, default True
-            Whether to render the arena border if plotting.
-        '''
+        if isinstance(data,LGCPResult):
+            model = data.model
+            fit   = data.fit
+            data  = data.data
+        
         _,_,_,L,R,use2d,F,_,h2e,_ = model.cached
         P = model.P
-        radius = float(radius)*P
+        radius              = float(radius)*P
         localization_radius = float(localization_radius)*P
+        edge_radius         = float(edge_radius)*P
 
         # Retrieve the posterior mode (in low-D space) and 
         # variance (in regular space)
@@ -922,10 +920,61 @@ class QuadraticConfidence:
 
 
 class QuadraticConfidenceJoint:
+    '''
+    Similar to QuadraticConfidence, but modified to 
+    return the joint covariance to address correlations 
+    between fields in the posterior introduced by the 
+    GP prior. 
+
+    Parameters
+    ----------
+    result: LGCPResult
+
+    Other Parameters
+    ----------------
+    radius: float
+        Region in which a peak must be a local maximum 
+        to count as a grid field. This is in units of 
+        "bins" on the L×L grid.
+        **fraction of the grid-cell period ``model.P``**.
+    localization_radius: float
+        Drop peaks with confidence outside this radius.
+        **fraction of the grid-cell period ``model.P``**.
+    height_threshold: float in (0,1), default:.8
+        Inclusion threshold for peak height in each 
+        sample  and probability peak over all samples, 
+    pct: float in (0,100), default:95
+        percentile to use for confidence bounds
+    edge_radius: float; Default 0
+        Remove peaks closer than ``edge_radius`` bins
+        to the arena's edge. The default value of 0
+        does not remove points within a margin of
+        the boundary.
+    doplot: boolean, default:False. 
+        Plot resulting the grid map? 
+    **kwargs:
+        Forwarded to plot()
+
+    Returns
+    -------
+    (rx,ry):
+        Field locations
+    ellipses: 
+        NaN-delimeted x,y coordinates for plotting 
+        confidence ellipses; 
+    gaussians: list
+        (μ,Σ) 2D confidence Gaussians for all peaks.
+    ok: list<int>
+        Which of the ``(rx,ry)`` points were included 
+        in Σx0
+    Σx0: 
+        Joint covariance of all included points, packed
+        as ``(x,y)``
+    '''
     def __init__(self,
         data,
-        model,
-        fit, 
+        model = None,
+        fit   = None,
         radius              = None,
         localization_radius = None,
         edge_radius         = 0,
@@ -934,66 +983,12 @@ class QuadraticConfidenceJoint:
         regularization      = 1e-5,
         doplot              = False,
         **kwargs):
-        '''
-        Similar to QuadraticConfidence, but modified to 
-        return the joint covariance to address correlations 
-        between fields in the posterior introduced by the 
-        GP prior. 
-
-        Parameters
-        ----------
-        data : 
-            Object containing the following fields:
-                TODO
-        model: 
-            model built from this data of type 
-            lgcp2d.diagonal_fourier_lowrank
-        fit: 
-            fit posterior calculated by 
-            lgcp2d.coordinate_descent
-        radius: float
-            Region in which a peak must be a local maximum 
-            to count as a grid field. This is in units of 
-            "bins" on the L×L grid.
-            **fraction of the grid-cell period ``model.P``**.
-        localization_radius: float
-            Drop peaks with confidence outside this radius.
-            **fraction of the grid-cell period ``model.P``**.
-
-        Other Parameters
-        ----------------
-        height_threshold: float in (0,1), default:.8
-            Inclusion threshold for peak height in each 
-            sample  and probability peak over all samples, 
-            
-        pct: float in (0,100), default:95
-            percentile to use for confidence bounds
-        edge_radius: float; Default 0
-            Remove peaks closer than ``edge_radius`` bins
-            to the arena's edge. The default value of 0
-            does not remove points within a margin of
-            the boundary.
-        doplot: boolean, default:False. 
-            Plot resulting the grid map? 
-        **kwargs:
-            Forwarded to plot()
-
-        Returns
-        -------
-        (rx,ry):
-            Field locations
-        ellipses: 
-            NaN-delimeted x,y coordinates for plotting 
-            confidence ellipses; 
-        gaussians: list
-            (μ,Σ) 2D confidence Gaussians for all peaks.
-        ok: list<int>
-            Which of the ``(rx,ry)`` points were included 
-            in Σx0
-        Σx0: 
-            Joint covariance of all included points, packed
-            as ``(x,y)``
-        '''
+        
+        if isinstance(data,LGCPResult):
+            model = data.model
+            fit   = data.fit
+            data  = data.data
+        
         _,_,_,L,R,use2d,F,_,h2e,_ = model.cached
         P = model.P
         radius = float(radius)*P
@@ -1131,11 +1126,59 @@ class QuadraticConfidenceJoint:
 
 
 class QuadraticExponentialConfidence:
+    '''
+    Locally-quadratic approximation based on the 
+    posterior firing-rate moments. 
+
+    Attributes
+    ----------
+    ellipses: list
+        List of x,y coordinates for plotting confidence 
+        ellipses; NaN delimeted.
+    gaussians: list 
+        List of (μ,Σ) 2D confidence Gaussians for 
+        all peaks.
+
+    Parameters
+    ----------
+    result: LGCPResult
+
+    Other Parameters
+    ----------------
+    radius: float; Default 0.45
+        Region in which a peak must be a local maximum 
+        to count as a grid field. 
+        This is in units of 
+        **fraction of the grid-cell period ``model.P``**.
+    localization_radius: float; Default 0.8
+        Drop peaks with confidence outside this radius.
+        Set to ``inf`` to retain all peaks. 
+        This is in units of 
+        **fraction of the grid-cell period ``model.P``**.
+    edge_radius: float; Default 0
+        Remove peaks closer than ``edge_radius`` bins
+        to the arena's edge. The default value of 0
+        does not remove points within a margin of
+        the boundary.
+    height_threshold: float in (0,1); default 0.5
+        Inclusion threshold for peak height in each 
+        sample and probability peak over all samples,
+    prpeak_threshold: float
+        Probability threshold for including a peak,
+        iinterpolate_peaksn [0,1], based on the 
+        fractions of samples that contain a given peak.
+    pct: float in (0,100); default 95.0
+        percentile to use for confidence bounds,
+    doplot: boolean, default True
+        Render a plot of the grid map? Default:False. 
+    draw_border: boolean, default True
+        Whether to render the arena border if plotting.
+    '''
     def __init__(
         self,
         data,
-        model,
-        fit,
+        model = None,
+        fit   = None,
         radius              = 0.45,
         localization_radius = 0.8,
         edge_radius         = 0,
@@ -1144,59 +1187,12 @@ class QuadraticExponentialConfidence:
         doplot              = False,
         draw_border         = True,
         **kwargs):
-        '''
-        Locally-quadratic approximation based on the 
-        posterior firing-rate moments. 
         
-        Attributes
-        ----------
-        ellipses: list
-            List of x,y coordinates for plotting confidence 
-            ellipses; NaN delimeted.
-        gaussians: list 
-            List of (μ,Σ) 2D confidence Gaussians for 
-            all peaks.
-
-        Parameters
-        ----------
-        data: Dataset 
-        model: 
-            Model built from this data of type 
-            lgcp2d.diagonal_fourier_lowrank
-        fit: 
-            Posterior fitted by lgcp2d.coordinate_descent
-
-        Other Parameters
-        ----------------
-        radius: float; Default 0.45
-            Region in which a peak must be a local maximum 
-            to count as a grid field. 
-            This is in units of 
-            **fraction of the grid-cell period ``model.P``**.
-        localization_radius: float; Default 0.8
-            Drop peaks with confidence outside this radius.
-            Set to ``inf`` to retain all peaks. 
-            This is in units of 
-            **fraction of the grid-cell period ``model.P``**.
-        edge_radius: float; Default 0
-            Remove peaks closer than ``edge_radius`` bins
-            to the arena's edge. The default value of 0
-            does not remove points within a margin of
-            the boundary.
-        height_threshold: float in (0,1); default 0.5
-            Inclusion threshold for peak height in each 
-            sample and probability peak over all samples,
-        prpeak_threshold: float
-            Probability threshold for including a peak,
-            iinterpolate_peaksn [0,1], based on the 
-            fractions of samples that contain a given peak.
-        pct: float in (0,100); default 95.0
-            percentile to use for confidence bounds,
-        doplot: boolean, default True
-            Render a plot of the grid map? Default:False. 
-        draw_border: boolean, default True
-            Whether to render the arena border if plotting.
-        '''
+        if isinstance(data,LGCPResult):
+            model = data.model
+            fit   = data.fit
+            data  = data.data
+        
         _,_,_,L,R,use2d,F,_,h2e,_ = model.cached
         P = model.P
         radius = float(radius)*P
@@ -1335,19 +1331,17 @@ def fraction_within_arena(data, gaussians, N=1000):
     lie too close to the edge of the arena.
     
     Parameters
-    --------------------------------------------------------
+    ----------
     data: Dataset
     gaussians list
         List of (μ,Σ) 2D Gaussians
     
     Returns
-    --------------------------------------------------------
+    -------
     np.float32:
         Fraction of each Gaussian within the dataset's
         arena's convex hull. 
     '''
-    #zg = zgrid(N*2+1)/N
-    #zg = c2p(zg[abs(zg)<=1])
     zg = np.random.randn(2,200)
     results = []
     for μ,Σ in gaussians:

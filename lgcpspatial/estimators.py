@@ -64,7 +64,7 @@ def biased_rate(N,K,rho=0.9,gamma=0.5,alpha=None):
     the other estimators are.
     
     Parameters
-    --------------------------------------------------------
+    ----------
     N: 2D np.array
         Number of visits to each location
     K: 2D np.array
@@ -76,7 +76,7 @@ def biased_rate(N,K,rho=0.9,gamma=0.5,alpha=None):
         Bias parameter; defaults to 0.5
     
     Returns
-    --------------------------------------------------------
+    -------
     2D array: Regularized (biased) estimate of firing rate in each bin
     '''
     if alpha is None: alpha=sum(K)/sum(N)
@@ -90,7 +90,7 @@ def kde(N,K,sigma,mask=None,**kwargs):
     histogram, but worse than a Gaussian-Process estimator. 
     
     Parameters
-    --------------------------------------------------------
+    ----------
     N: 2D np.array
         Number of visits to each location
     K: 2D np.array
@@ -100,7 +100,7 @@ def kde(N,K,sigma,mask=None,**kwargs):
         in x and y ×⎷2)
     
     Returns
-    --------------------------------------------------------
+    -------
     2D array: KDE rate estimate of firing rate in each bin
     '''
     if mask is None:
@@ -135,7 +135,7 @@ def linearGP(N,K,sigma,mask,tol=1e-4,reg=1e-5):
     (convolutional) covariance priors using the FFT. 
     
     Parameters
-    --------------------------------------------------------
+    ----------
     N: 2D np.array
         Number of visits to each location
     K: 2D np.array
@@ -145,7 +145,7 @@ def linearGP(N,K,sigma,mask,tol=1e-4,reg=1e-5):
         in x and y ×⎷2)
     
     Returns
-    --------------------------------------------------------
+    -------
     rate: 2D np.array 
         GP rate estimate of firing rate in each bin
     kern: 2D np.array 
@@ -187,13 +187,13 @@ def convolutionalLinearGP(N,K,sigma,mask,pad=None,tol=1e-4,reg=1e-5):
     estimate are instructive.
     
     Parameters
-    --------------------------------------------------------
+    ----------
     N (2D np.array): Number of visits to each location
     K (2D np.array): Number of spikes observed at each location
     sigma (float): kernel radius exp(-x²/sigma) (standard deviation in x and y ×⎷2)
     
     Returns
-    --------------------------------------------------------
+    -------
     λcnv (2D np.array): GP rate estimate of firing rate in each bin
     gft (2D np.array): Fourier transform of computed convolution kernel
     '''

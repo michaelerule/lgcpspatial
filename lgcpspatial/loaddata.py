@@ -34,7 +34,7 @@ def patch_position_data(px,py,delta_threshold=0.01):
     position tracking.
     
     Parameters
-    --------------------------------------------------------
+    ----------
     px: np.float32
     '''
     pz = px + 1j*py
@@ -45,53 +45,71 @@ def patch_position_data(px,py,delta_threshold=0.01):
     return z.real,z.imag
 
 
-def bin_spikes(px,py,s,L,w=None):
+def bin_spikes(
+    px,
+    py,
+    s,
+    L,
+    w=None,
+    method='linear'
+    ):
     '''
     Bin spikes, using linear interpolation to distribute 
     point mass to four nearest pixels, weighted by distance. 
     
-    Parameters:
-        px (np.flaot32): x location of points
-        py (np.float32): y location of points
-        s (np.array): spike count at each point
-        L (int): number of spatial bins for the LxL grid
-        w (np.float32): weights to apply to each point 
-            (default is None for no weigting)
+    Parameters
+    ----------
+    px: np.flaot32
+        ``x`` location of points
+    py: np.float32
+        ``y`` location of points
+    s: np.ndarray
+        Spike count at each point
+    L: int
+        Number of spatial bins for the LxL grid
+    w: np.float32
+        Weights to apply to each point 
+        (default is None for no weigting)
+    method: str
+        Method to use; Can be ``"linear"`` or ``"nearest"``.
     '''
-    # Bin spike counts simple version
-    #N=histogram2d(y,x,(bins,bins),density=0,weights=w)[0]
-    #ws=s if w is None else array(s)*array(w)
-    #K=histogram2d(y,x,(bins,bins),density=0,weights=ws)[0]
-    #return N,K
     
-    if w is None:
-        w = ones(len(px))
-        
-    assert np.max(px)<1 and np.max(py)<1 \
-        and np.min(px)>=0 and np.min(py)>=0
-    ix,fx = divmod(px*L,1)
-    iy,fy = divmod(py*L,1)
-    
-    assert np.max(ix)<L-1 and np.max(iy<L-1)
-    
-    w11 = fx*fy*w
-    w10 = fx*(1-fy)*w
-    w01 = (1-fx)*fy*w
-    w00 = (1-fx)*(1-fy)*w
-    
-    qx  = concatenate([ix,ix+1,ix,ix+1])
-    qy  = concatenate([iy,iy,iy+1,iy+1])
-    z   = concatenate([w00,w10,w01,w11])
-    
-    ibins = arange(L+1)
-    N   = histogram2d(qy,qx,(ibins,ibins),
-                      density=False,weights=z)[0]
-    ws  = z*concatenate((s,)*4)
-    K   = histogram2d(qy,qx,(ibins,ibins),
-                      density=0,weights=ws)[0]
-    
-    return float32(N),float32(K)
-
+    if method=='nearest':
+        # Bin spike counts simple version
+        N  = np.histogram2d(y,x,(bins,bins),density=0,weights=w)[0]
+        ws = s if w is None else np.array(s)*np.array(w)
+        K  = np.histogram2d(y,x,(bins,bins),density=0,weights=ws)[0]
+        return N,K
+    if method=='linear':
+        if w is None: w = ones(len(px))
+        # The 2D coordinates (px,py) should be normalized to
+        # lie with the unit square [0,1)²
+        assert np.max(px)<1 and np.max(py)<1 \
+           and np.min(px)>=0 and np.min(py)>=0
+        # The integer parts of the coordinate tells us the 
+        # top-right bin location of the 2×2 neighborhood. 
+        # The fractional parts will tell us how to 
+        # distribute the point mass within this 
+        # neighborhood.
+        ix,fx = divmod(px*L,1)
+        iy,fy = divmod(py*L,1)
+        assert np.max(ix)<L and np.max(iy)<L
+        w11 = fx*fy*w
+        w10 = fx*(1-fy)*w
+        w01 = (1-fx)*fy*w
+        w00 = (1-fx)*(1-fy)*w
+        qx  = np.concatenate([ix,ix+1,ix,ix+1])
+        qy  = np.concatenate([iy,iy,iy+1,iy+1])
+        z   = np.concatenate([w00,w10,w01,w11])
+        ibins = np.arange(L+1)
+        N   = np.histogram2d(qy,qx,(ibins,ibins),
+                          density=False,weights=z)[0]
+        ws  = z*np.concatenate((s,)*4)
+        K   = np.histogram2d(qy,qx,(ibins,ibins),
+                          density=0,weights=ws)[0]
+        return np.float32(N),np.float32(K)
+    raise ValueError(
+        '`method` should be "linear" or "nearest"'
 
 class Arena:
     '''
@@ -383,17 +401,17 @@ class Dataset:
         # Define normalized coordinates to bin data to grid
         minx,maxx = nanmin(x),nanmax(x)
         miny,maxy = nanmin(y),nanmax(y)
+        midx,midy = (minx+maxx)/2.0, (miny+maxy)/2.0;
         delta = nanmax([maxx-minx,maxy-miny])
         pad   = .5 + margin
-        scale = (1-1e-6)/(delta*pad*2)
-        xofst = (maxx+minx)/2-delta*pad
-        yofst = (maxy+miny)/2-delta*pad
-        px    = (x-(maxx+minx)/2+delta*pad)*scale
-        py    = (y-(maxy+miny)/2+delta*pad)*scale
-        x0    = (maxx+minx)/2-delta*pad
-        y0    = (maxy+miny)/2-delta*pad
-        x1    = 1/scale+(maxx+minx)/2-delta*pad
-        y1    = 1/scale+(maxy+miny)/2-delta*pad
+        edge  = delta*pad
+        scale = (1-1e-6)/(edge*2)
+        px    = (x-midx+edge)*scale
+        py    = (y-midy+edge)*scale
+        x0    = midx-edge
+        y0    = midy-edge
+        x1    = 1/scale+x0
+        y1    = 1/scale+y0
 
         self.extent = (x0,x1,y0,y1)
         self.px=px
@@ -457,7 +475,7 @@ class Dataset:
         NSPIKES             = len(spike_times_samples)
         NSAMPLES            = len(head_direction_deg)
 
-        # Downspample spikes to position sampling
+        # Downspample spikes to position sampling rate
         it,ft  = divmod(spike_times_seconds/dt,1)
         w      = ones(NSPIKES)
         wt     = concatenate([1-ft,ft])
@@ -668,7 +686,7 @@ class Dataset:
         kde_blur_radius = P/pi              # bins
         bg_blur_radius  = kde_blur_radius*5 # bins
         λhat = kde(N,K,kde_blur_radius)     # KDE rate
-        λbg  = kde(N,K,bg_blur_radius)      # Bkgnd rate
+        λbg  = kde(N,K,bg_blur_radius )     # Bkgnd rate
         lλh  = slog(λhat)                   # Log rate
         prior_mean    = slog(λbg)           # Log bkgnd
         lograte_guess = lλh - prior_mean    # Fgnd lograte

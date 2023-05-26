@@ -24,7 +24,9 @@ def coordinate_descent(gp,
     tol          = 1e-5,
     showprogress = False):
     '''
-    Abstract mean/variance coordinate descent subroutine
+    Abstract mean/variance coordinate-descent subroutine.
+    This iteratively updates the variational mean and 
+    variational covariance. 
     
     Parameters
     ----------
@@ -124,9 +126,11 @@ def coordinate_descent(gp,
         return CoordinateDescentResult(μ,Σ,inf)
 
 
-def make_kernel_ft(L,P,
-                   k=3,    # Bessel zero to truncate kernel
-                   eps=1e-5):
+def make_kernel_ft(
+    L,
+    P,
+    k=3, # Bessel zero to truncate kernel
+    eps=1e-5):
     '''
     Generate grid kernel and return its Fourier transform.
     
@@ -139,7 +143,7 @@ def make_kernel_ft(L,P,
     L: int>1
         This should be an integer describing the number of 
         spatial bins used to prepare n, y, lograte_guess,
-        and initialmean. I've found 128² to be a good 
+        and initialmean. ``L=128`` is a good 
         compromise between speed, resolution, and numerical
         stability.
     P: float>0
@@ -163,7 +167,7 @@ def make_kernel_ft(L,P,
         that both the prior and posterior covariance will 
         not have an inverse. The simplest way to fix this is
         to clamp zero (or near zero) eigenvalues to some
-        small but finite number. The default is eps = 1e-5.
+        small but finite number. The default is ``eps = 1e-5``.
         Using a low-rank subspace to discard components with
         negligeble variance is another option.
     '''
@@ -174,9 +178,10 @@ def make_kernel_ft(L,P,
     clip   = fftshift(abs(coords)<P*jn_zeros(0,k)[-1]/(2*pi))
     kern   = kern*clip
     kern   = blur(kern,P/pi)
-    kern   = repair_small_eigenvalues(kern/np.max(kern),eps)
-    Kf     = np.array(real(fft2(kern)))
-    return rtype(Kf)
+    kern   = kern/np.max(kern)
+    kern   = repair_small_eigenvalues(kern,eps)
+    Kf     = rtype(real(fft2(kern)))
+    return Kf
 
 
 class DiagonalFourierLowrank:
@@ -273,10 +278,10 @@ class DiagonalFourierLowrank:
     mintol: float>0
         The tolerance used in the minimum residual
         algorithm. The default is 1e-6
-    keep_frequencies:
+    keep_freqs:
         A boolean array indicating which spatial
         frequency components to use. If this is 
-        ``None``, ``keep_frequencies`` is calculated 
+        ``None``, ``keep_freqs`` is calculated 
         using ``component_threshold_percent``.
     component_threshold_percent: float >0 <100
         We determine which frequency components to keep
@@ -307,7 +312,7 @@ class DiagonalFourierLowrank:
         whitenoise    = 0.0,  # White noise kernel 
         dc            = 1e3,  # DC kernel variance
         mintol        = 1e-6, # tolerance
-        keep_frequencies         = None,
+        keep_freqs    = None,
         component_threshold_percent = 10.0,
         kclip=3,    # J0 zero to truncate kernel
         ):
@@ -361,16 +366,17 @@ class DiagonalFourierLowrank:
         # - Store the number of components retained 'R'
         # - Define operator F for converting to/from low-rank space
         thr = array(sorted(abs(Kf).ravel())
-                   )[-2]/component_threshold_percent 
-        if keep_frequencies is None:
-            keep_frequencies  = abs(Kf)>thr
-            keep_frequencies  = keep_frequencies | keep_frequencies.T
-        self.keep_frequencies = keep_frequencies
-        self.R = sum(keep_frequencies)
-        self.F = LinearOperator((self.R,L*L),
-                                matvec  = self.Fu,
-                                rmatvec = self.Ftu,
-                                rmatmat = self.Ftu)
+                   )[-2]*(component_threshold_percent/100.0)
+        if keep_freqs is None:
+            keep_freqs  = abs(Kf)>thr
+            keep_freqs  = keep_freqs | keep_freqs.T
+        self.keep_freqs = keep_freqs
+        self.R = sum(keep_freqs)
+        self.F = LinearOperator(
+            (self.R,L*L),
+            matvec  = self.Fu,
+            rmatvec = self.Ftu,
+            rmatmat = self.Ftu)
         if self.R==0:
             raise ValueError('Dimension of low-rank '
                 'subspace is R=0; This should never happen '
@@ -386,12 +392,12 @@ class DiagonalFourierLowrank:
         # these 1D convolutions. The following lines find
         # the nonempty rows, which we retain after the first
         # 1D FFT. 
-        use   = find(keep_frequencies.ravel()) # Used idxs in LxL array
-        use1d = any(keep_frequencies,axis=0)   # Indecies to use along L
+        use   = find(keep_freqs.ravel()) # Used idxs in LxL array
+        use1d = any(keep_freqs,axis=0)   # Indecies to use along L
         R1d   = sum(use1d)          # Number of 1D components
         # figure out which components in the retained 
         # rows/columns are actually used
-        usecut = find(keep_frequencies[:,use1d][use1d,:]) 
+        usecut = find(keep_freqs[:,use1d][use1d,:]) 
         # Indecies into cropped 2D
         
         # - Finally, we build the reduced-rank semi-
@@ -412,16 +418,13 @@ class DiagonalFourierLowrank:
         
         # Add white noise here so it doesn't affect subspace
         # selection
-        Kf = Kf + whitenoise
+        Kf += whitenoise
         self.Kf = Kf
         
         # Convolutions and preconditioner in low-rank space
-        K  = rtype(Kf[keep_frequencies])
-        Λ  = rtype(1/Kf[keep_frequencies])
-        M  = op(self.R,self.M_helper)
-        self.K = K
-        self.Λ = Λ
-        self.M = M
+        self.K = rtype(Kf[keep_freqs])
+        self.Λ = rtype(1/Kf[keep_freqs])
+        self.M = op(self.R,self.M_helper)
         
         # Provide some OK initial conditions, if requested
         self.μ_0 = μ
@@ -438,7 +441,7 @@ class DiagonalFourierLowrank:
         # Workaround: stash in tuple. 
         self.cached = (self.γn,self.y,self.bg,
                        self.L,self.R,
-                       self.keep_frequencies,
+                       self.keep_freqs,
                        self.F,self.Λ,self.h2e,self.M)    
 
     def Fu(self,u):
@@ -448,9 +451,9 @@ class DiagonalFourierLowrank:
         transpose of Ftu (below).
         '''
         L     = self.L
-        keep_frequencies = self.keep_frequencies
+        keep_freqs = self.keep_freqs
         return RI(fft2(rtype(u).reshape(L,L),
-                       norm='ortho')[keep_frequencies])
+                       norm='ortho')[keep_freqs])
     
     def Ftu(self,u):
         '''
@@ -459,9 +462,9 @@ class DiagonalFourierLowrank:
         of Fu(u).
         '''
         L     = self.L
-        keep_frequencies = self.keep_frequencies
+        keep_freqs = self.keep_freqs
         x = zeros((L,L)+u.shape[1:],dtype=rtype)
-        x[keep_frequencies,...] = u
+        x[keep_freqs,...] = u
         return RI(fft2(x,
                        norm='ortho',
                        axes=(0,1))
@@ -539,7 +542,7 @@ class DiagonalFourierLowrank:
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
             posterior_marginal_variances)
-        γn,y,initialmean,L,R,keep_frequencies,F,Λ,h2e,M = self.cached
+        γn,y,initialmean,L,R,keep_freqs,F,Λ,h2e,M = self.cached
         μ = F.T@μh
         return μ, _exp(μ + initialmean + v/2)
         
@@ -570,7 +573,7 @@ class DiagonalFourierLowrank:
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
             posterior_marginal_variances)
-        γn,y,initialmean,L,R,keep_frequencies,F,Λ,h2e,M = self.cached
+        γn,y,initialmean,L,R,keep_freqs,F,Λ,h2e,M = self.cached
         μ,λ= self.rates_from_lowrank(μh,v)
         q  = γn*λ
         x  = sqrt(q, dtype=rtype)[None,:]*h2e
@@ -611,7 +614,7 @@ class DiagonalFourierLowrank:
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
             posterior_marginal_variances)
-        γn,y,initialmean,L,R,keep_frequencies,F,Λ,h2e,M = self.cached
+        γn,y,initialmean,L,R,keep_freqs,F,Λ,h2e,M = self.cached
         μ,λ= self.rates_from_lowrank(μh,v)
         q  = γn*λ
         x  = sqrt(q, dtype=rtype)[None,:]*h2e
@@ -684,14 +687,14 @@ class DiagonalFourierLowrank:
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
             posterior_marginal_variances)
-        γn,y,initialmean,L,R,keep_frequencies,F,Λ,h2e,M = self.cached
+        γn,y,initialmean,L,R,keep_freqs,F,Λ,h2e,M = self.cached
         μ,λ= self.rates_from_lowrank(μh,v)
         q  = γn*λ
         x  = sqrt(q, dtype=rtype)[None,:]*h2e
         A  = chinv(diag(Λ) + x@x.T)
         
         #X  = zeros((L,L,R),dtype=rtype)
-        #X[keep_frequencies] = A.T
+        #X[keep_freqs] = A.T
         #DF = RI(fft2(X,axes=(0,1),
         #             norm='ortho')).reshape(L**2,R).T
         
@@ -729,16 +732,16 @@ class DiagonalFourierLowrank:
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
             posterior_marginal_variances)
-        γn,y,initialmean,L,R,keep_frequencies,F,Λ,h2e,M = self.cached
+        γn,y,initialmean,L,R,keep_freqs,F,Λ,h2e,M = self.cached
         μ,λ  =  self.rates_from_lowrank(μh,v)
         q    =  γn*λ
         x    =  sqrt(q, dtype=rtype)[None,:]*h2e
         C    =  chinv(diag(Λ) + x@x.T)
         nyλ  =  γn@(λ-y*(μ+self.bg)) #  n'(λ-y∘μ)
-        μΛμ  =  sum(μh**2*Λ)        #  μ'Λ₀μ
-        trΛΣ =  sum(C**2*Λ)         #  tr[Λ₀Σ]
-        ldΣz = -sum(log(Λ))         #  ln|Σ₀|
-        ldΣq =  2*sum(log(diag(C))) # -ln|Σ|
+        μΛμ  =  sum(μh**2*Λ)         #  μ'Λ₀μ
+        trΛΣ =  sum(C**2*Λ)          #  tr[Λ₀Σ]
+        ldΣz = -sum(log(Λ))          #  ln|Σ₀|
+        ldΣq =  2*sum(log(diag(C)))  # -ln|Σ|
         return nyλ + .5*(μΛμ + trΛΣ + ldΣz - ldΣq - R)
         
         
@@ -780,11 +783,40 @@ class DiagonalFourierLowrank:
         μh,v = self.check_arguments(
             lowrank_posterior_mean,
             posterior_marginal_variances)
-        γn,y,initialmean,L,R,keep_frequencies,F,Λ,h2e,M = self.cached
+        γn,y,initialmean,L,R,keep_freqs,F,Λ,h2e,M = self.cached
         μ,λ = self.rates_from_lowrank(μh,v)
+        
+        '''
+        Multiply the evidence at each location (λ) by the number of
+        visits to each location "n" as well as any dispersion correction
+        "γ". Compute this in advance to avoid recalculation within the
+        inner loop of `minres()`.
+        '''
         γnλ = γn*λ
+        
+        '''
+        The loss gradient for the low-rank frequency-space 
+        representation of the posterior mean-log-rate. This has two
+        contributions, one from the prior and one from the likeilhood. 
+        The prior contribution multiplies the current mean-log-rate
+        with the prior precision (inverse covariance). The likelihood
+        is the negative log Poisson likelihood in the spatial domain. 
+        '''
         J   = Λ*μh + F@(γnλ-γn*y)
+        
+        '''
+        The hessian-vector product operator for minres.
+        This has two parts, one from the prior, one from the likelihood.
+        The prior contribution is a convolution, which becomes pointwise
+        multiplication in our low-rank frequency space. The likelihood
+        contribution is an integral over the spatial domain. We need to
+        convert back to spatial coordinates, integrate against the
+        projected pseudopoints, then convert back to our low-rank space.
+        The semi-orthogonal operator F handles this. 
+        '''
         Hv  = op(R,lambda u:Λ*u + F@(γnλ*(F.T@u)))
+        # Hv  = Λ + h2e@(γnλ[:,None]*h2e.T)
+        
         return J,Hv,M
 
     
@@ -813,11 +845,12 @@ class DiagonalFourierLowrank:
             lowrank_posterior_mean,
             posterior_marginal_variances)
         J,Hv,M = self.JHvM(μh,v)
-        result = -minres(Hv,J,tol=self.mintol,M=M)[0]
+        result = minres(Hv,J,tol=self.mintol,M=M)[0]
+        
         if not np.all(np.isfinite(result)):
             raise ValueError('Encountered non-finite values'
                 ' in the result of mean_update')
-        return _precision(result)
+        return _precision(-result)
 
     
     def variance_update(
@@ -1082,25 +1115,6 @@ def _precision(x,copy=False):
     return (*map(_precision,x),)
 
 
-class CoordinateDescentResult(NamedTuple):
-    μh:np.ndarray
-    '''Posterior mean in low-rank spatial frequency subspace.'''
-    v:np.ndarray
-    '''Posterior marginal log-rate variances in each spatial bin.'''
-    loss:np.ndarray
-    '''Value of the loss function.'''
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
 def lgcpregress(
@@ -1204,6 +1218,42 @@ def lgcpregress(
         vλ*Fs**2,
         cv)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+############################################################
+Classes to organize return values from static functions
+"""
+
+class CoordinateDescentResult(NamedTuple):
+    μh:np.ndarray
+    '''Posterior mean in low-rank spatial frequency subspace.'''
+    v:np.ndarray
+    '''Posterior marginal log-rate variances in each spatial bin.'''
+    loss:np.ndarray
+    '''Value of the loss function.'''
+
+
 class LGCPResult(NamedTuple):
     data: object
     '''reference to dataset used to train the model'''
@@ -1217,7 +1267,7 @@ class LGCPResult(NamedTuple):
     '''posteior mean log-rate in low-rank frequency subspace'''
     delta_lograte: np.ndarray
     '''posterior mean log-rate in each spatial bin'''
-    mean_lograte: np.ndarray
+    mean_lograte : np.ndarray
     '''posterior mean log-rate in each spatial bin'''
     lograte_marginal_variance: np.ndarray
     '''marginal variance of posterior log-firing rate in each spatial bin'''
