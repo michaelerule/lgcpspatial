@@ -5,7 +5,7 @@ This manuscript has not yet been peer-reviewed. Do get in touch if you find erro
 
 Rule, M., Chaudhuri-Vayalambrone, P., Krstulovic, M., Bauza, M., Krupic, J., & O’Leary, T. (2023). Variational Log-Gaussian Point-Process Methods for Grid Cells. [bioRxiv](https://www.biorxiv.org/content/10.1101/2023.03.18.533177v2.abstract), 2023-03. [doi: https://doi.org/10.1101/2023.03.18.533177](https://doi.org/10.1101/2023.03.18.533177).
 
-![](https://github.com/michaelerule/lgcpspatial/blob/main/F4.large.png)
+![](https://github.com/michaelerule/lgcpspatial/blob/main/f5v1.png)
 
 ### Abstract
 
