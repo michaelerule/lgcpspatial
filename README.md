@@ -5,7 +5,7 @@ This manuscript has not yet been peer-reviewed. Do get in touch if you find erro
 
 Rule, M., Chaudhuri-Vayalambrone, P., Krstulovic, M., Bauza, M., Krupic, J., & O’Leary, T. (2023). Variational Log-Gaussian Point-Process Methods for Grid Cells. [bioRxiv](https://www.biorxiv.org/content/10.1101/2023.03.18.533177v2.abstract), 2023-03. [doi: https://doi.org/10.1101/2023.03.18.533177](https://doi.org/10.1101/2023.03.18.533177).
 
-![](https://github.com/michaelerule/lgcpspatial/blob/main/F4.large.png)
+![](https://github.com/michaelerule/lgcpspatial/blob/main/f5v1.png)
 
 ### Abstract
 
@@ -15,11 +15,11 @@ We present practical solutions to applying Gaussian-process methods to calculate
 
 This repository contains example implementations of log-Gaussian Cox process regressions for analyzing grid cells (and perhaps other periodic, densely sampled 2D spatial datasets).
 
- - `docs/`: Documentation for the python `lgcpspatial` package, [browsable as HTML here.](https://michaelerule.github.io/lgcpspatial/index.html). 
  - `example data/`: An example grid cell from [Krupic et al. (2018)](https://doi.org/10.1126/science.aao4960).
- - `lgcpspatial/`: An example implementation as a python package 
- - `tutorials/`: IPython notebooks demonstrating use of the `lgcpspatial` package. 
- - `matlab/`: A less-complete (but functional) Matlab implementation of the algorithm.
+ - `python/lgcp/`: An example implementation as a python package 
+ - `python/notebooks/`: IPython notebooks to reproduce the figures in the manuscript
+ - `matlab/`: A (less-complete) provisional Matlab implementation
+ - `old_versions/`: Previous iterations
 
 
 
