@@ -1,0 +1,284 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+"""
+from .util import *
+from .kern import *
+from .data import Dataset
+from numpy import *
+from numpy.random import randn
+"""
+
+import numpy as np
+from pylab import *
+from .util import *
+
+from scipy.sparse.linalg import minres,LinearOperator
+
+
+
+def coordinate_descent(μ,v,
+    meanupdate,
+    varupdate,
+    maxiter     = 40,
+    maxmeaniter = 40,
+    maxvariter  = 1,
+    tol         = 1e-5,
+    alpha       = 1.0,
+    verbose     = False):
+    say = print if verbose else lambda *a:None
+    for j in range(maxiter):
+        for i in range(maxmeaniter):
+            dμ = meanupdate(μ,v)
+            εμ = np.max(abs(dμ))
+            μ  = μ + dμ
+            say('μ iter %d, ε=%0.4e'%(i,εμ))
+            if εμ<tol: break
+        for i in range(maxvariter):
+            dv = varupdate(μ,v)
+            εv = np.max(abs(dv))
+            v  = v + alpha*dv
+            say('v iter %d, ε=%0.4e'%(i,εv))
+            if εv<tol: break
+        if εμ<tol and εv<tol: break
+    return μ,v
+
+
+def RI(x,rtype=np.float32):
+    return float32(real(x)+imag(x))
+
+
+def get_hartley_components(mask):
+    h = mask.shape    
+    D = len(h)
+    # Construct Fourier components as Π over 1D
+    s = {*arange(D)}
+    U = [np.any(mask,tuple([*(s-{i})])) for i in range(D)]
+    # FFT each ROW
+    ff = [fft(eye(L),axis=0,norm='ortho')[u] for L,u in zip(h,U)]
+    # Index lookup for kept components in each dimension
+    fi = [cumsum(u)-1 for u in U]
+    sl = [outerslice(D,d) for d in range(D)]
+    rr = []
+    for ii in int32(where(mask)).T:
+        ii = [ix[i] for i,ix in zip(ii,fi)]
+        fc = [fj[i] for i,fj in zip(ii,ff)]
+        r = array(fc[0],copy=True)[sl[0]]
+        for d in range(1,D):
+            r = r*fc[d][sl[d]]
+        rr.append(r)
+    rr = RI(rr)
+    sh = rr.shape
+    return rr.reshape(sh[0],int(np.prod(sh[1:])))
+    
+
+def lgcpnd(kf,N,K,z0f,zh0,vh0,eps=1e-5,mintol=1e-5,maxcomponents=1000,**opts):
+    '''
+    Args:
+        kf (ndarray): ND kernel Fourier transform, unused 
+            components set to zero.
+        N (ndarray): ND array of binned visit counts
+        K (ndarray): ND binned total spike countss
+        z0f (ndarray): prior log-rate mean
+        zh0: Initial guess for posterior mean log-rate
+        vh0: Initial guess for posterior log-rate marginal variance
+        eps (float, default 1e-3): Minimum prior eigenvalue 
+            (improves numerical conditioning)
+        mintol (float, default 1e-5): Tolerance for MINRES
+        **opts (dict): Options for ``coordinate_descent()``
+    Returns:
+        tuple: (InferResult,model)
+    '''
+    Y = sdiv(K,N)
+    SHAPE = N.shape
+    nmask = N>0     # Mask where observations exist
+    kept  = kf>0    # Mask for retained Fourier components
+    if sum(kept)>maxcomponents: raise ValueError((
+        '%d nonzero kernel Fourier components; This is a '
+        'lot. Ensure that excluded components are zeroed-'
+        'out in the provided kernel Fourier transform')%sum(kept))
+    def unmask(u,mask):
+        x = zeros(mask.shape,'f')
+        x[mask] = ravel(u)
+        return x
+    def maskin(u,mask):
+        return u.reshape(mask.shape)[mask]
+    ten = lambda x:float32(x).reshape(SHAPE)
+    So  = lambda u:ten(u)[nmask] #full→masked
+    St  = lambda u:unmask(u,nmask) #masked→full
+    n   = ravel(N) # visits and counts as vectors
+    y   = ravel(Y)
+    ny  = n*y
+    nm  = So(n) # Masked observations
+    ym  = So(y)
+    nym = So(ny)
+    # Operators between low-rank subspace and (masked)state
+    Gt  = lambda u:ravel(RI(fftn(unmask(u,kept),norm='ortho'))) #loD→mask
+    Go  = lambda u:ravel(RI(fftn(ten(u),norm='ortho')[kept])) #mask→loD
+    Ft  = lambda u:ravel(RI(fftn(unmask(u,kept),norm='ortho')[nmask])) #loD→mask
+    Fo  = lambda u:ravel(RI(fftn(St(u),norm='ortho')[kept])) #mask→loD
+    # Masked prior log-rate, log-mean guess
+    zhf,vhf = ravel(float32(zh0)),ravel(float32(vh0))
+    vh,z0,zh = So(vhf),So(z0f),So(zhf)
+    u0,uh = ravel(Go(z0f)),ravel(Go(zhf)) #  in low-D space
+    # Low-rank kernel, inverse, truncated Fourier components
+    kx = ifftn(kf,norm='ortho').real
+    Kh = ravel(maximum(Go(kx),eps))
+    Λh = 1/Kh
+    Gm = get_hartley_components(kept)
+    Fm = Gm[:,nmask.ravel()]
+    # Preconditioner and constant terms in loss
+    R  = size(Kh)
+    
+    Mu = lambda u:Kh*ravel(u)
+    M  = LinearOperator((R,R),Mu,Mu,dtype=np.float32)
+    ldΣz = -ssum(slog(Λh)) # ln|Σ₀|
+    ll0  = .5*(ldΣz-R)
+    def _nr(uh,vh):
+        return nm*sexp(Ft(uh) + z0 + vh*.5)
+    def loss(uh,vh):
+        z    = Ft(uh) + z0
+        r    = sexp(z + vh*.5)
+        nyr  =  nm@(r-ym*z)         #  n'(λ-y∘μ)
+        uΛu  =  ssum(uh**2*Λh)      #  μ'Λ₀μ
+        C    = _C(uh,vh)
+        trΛΣ =  ssum(C**2*Λh)       #  tr[Λ₀Σ]
+        ldΣq =  ssum(slog(diag(C))) # -ln|Σ|
+        return ll0 + nyr + .5*(uΛu + trΛΣ) - ldΣq
+    def meanupdate(uh,vh):
+        nr = _nr(uh,vh)
+        J  = Λh*uh + Fo(nr-nym)
+        Hu = lambda u: Λh*u + Fo(nr*(Ft(u)))
+        Hv = LinearOperator((R,R),Hu,Hu,dtype=np.float32)
+        return -float32(minres(Hv,J,tol=mintol,M=M)[0])
+    def _C(uh,vh): # Cholesky factor of covariance
+        x = sqrt(_nr(uh,vh))[None,:]*Fm
+        return chinv(diag(Λh) + x@x.T)
+    def varupdate(uh,vh):
+        return np.sum((Fm.T@_C(uh,vh))**2,1,'f')-vh
+    def unpack(uh,vh):
+        '''Unpack low-d mean, sparse marginal variance.'''
+        x = sqrt(_nr(uh,vh),dtype='f')[None,:]*Fm
+        C = chinv(diag(Λh) + x@x.T)
+        v = np.sum((Gm.T@C)**2,1,'f') # Full posterior log-rate variance
+        z = Gt(uh)        # full Δ mean-log-rate 
+        μ = z + z0f       # full posterior mean-log-rate
+        r = sexp(μ + v/2) # full posterior mean rate
+        return ten(z),ten(r),ten(v),ten(μ)
+    def sample(nsamples,uho=None,vho=None):
+        nonlocal uh,vh
+        if uho is None: uho = uh
+        if vho is None: vho = vh
+        du =_C(uho,vho)@float32(randn(R,nsamples))
+        u  = uho[:,None] + du
+        z  = zeros(SHAPE+(nsamples,))
+        z[kept,:] = u
+        z = RI(fftn(z,norm='ortho',axes=arange(len(SHAPE))))
+        return z + ten(z0f)[...,None]
+    uh = ravel(Go(zhf))
+    vh = So(vhf)
+    uh,vh = coordinate_descent(uh,vh,meanupdate,varupdate,**opts)
+    z,r,v,μ = unpack(uh,vh) 
+    # Full Δmean-log-rate and variances may be recycled as initial conditions
+    state = InferState(z,v) 
+    # Other useful information: 
+    # r: full posterior mean rate
+    # uh: low-rank Δ mean-log-rate
+    info  = InferInfo(r,uh,vh,μ) 
+    return InferResult(state, -loss(uh,vh), info), ClosureObject(locals())
+
+
+from typing import NamedTuple
+class InferState(NamedTuple):
+    '''full posterior log-rate'''
+    z:np.ndarray
+    '''full posterior log-variance'''
+    v:np.ndarray
+class InferInfo(NamedTuple):
+    '''posterior mean rate'''
+    r:np.ndarray
+    '''low-rank Δ posterior mean from prior mean (log rate)'''
+    uh:np.ndarray
+    '''Posterior log-rate variance (where observations exist)'''
+    vh:np.ndarray
+    '''Full posterior mean-log-rate in spatial domain'''
+    mu:np.ndarray
+class InferResult(NamedTuple):
+    '''Full log-rate and marginal log-variance'''
+    zv:InferState
+    '''Log-likelihood'''
+    ll:float
+    '''Additional information not used by grid_search'''
+    info:InferInfo
+class ClosureObject(dict):
+    def __getattr__(self, name):
+        return self[name]
+    
+
+def lgcp2d(kf,N,K,prior_mean,initial_guess=(None,None),**opts):
+    '''
+    Args:
+        kf (ndarray): 2D kernel Fourier transform, 
+            unused components set to zero.
+        N (ndarray): 2D array of binned visit counts
+        K (ndarray): 2D binned total spike countss
+        prior_mean (ndarray): prior log-rate mean
+        initial_guess (tuple, optional): Tuple of the initial 
+            posterior log-mean and posterior log-marginal-variances
+        **opts (dict): Keword arguments for ``lgcpnd()``
+    Returns:
+        tuple: (InferResult,model)
+    '''
+    N,K,kf = map(float32,(N,K,kf))
+    assert N.shape==K.shape==kf.shape==prior_mean.shape
+    # Priors z0, initial guess zh, masked & low-rank counterparts
+    z0f = ravel(float32(prior_mean))
+    # initial log-mean and marginal variance guesses
+    zh0,vh0 = (None,None) if initial_guess is None else initial_guess
+    if zh0 is None: zh0 = zeros(size(N),'f')
+    if vh0 is None: vh0 = zeros(size(N),'f') 
+    assert size(zh0)==size(vh0)==size(N)
+    return lgcpnd(kf,N,K,z0f,zh0,vh0,**opts)
+
+
+def lgcpheading(kf,N,K,prior_mean,initial_guess=(None,None),**opts):
+    '''
+    Args:
+        kf (ndarray): 3D kernel Fourier transform, 
+            unused components set to zero.
+        N (ndarray): heading×y×x 3D array of binned visit counts
+        K (ndarray): heading×y×x 3D binned total spike countss
+        prior_mean (ndarray): prior log-rate mean
+        initial_guess (tuple, optional): Tuple of the initial 
+            posterior log-mean and posterior log-marginal-variances
+        **opts (dict): Keword arguments for ``lgcpnd()``
+    Returns:
+        tuple: (InferResult,model)
+    '''
+    N,K,kf = map(float32,(N,K,kf))
+    assert N.shape==K.shape==kf.shape
+    D,H,W = N.shape
+    # Priors z0 and initial guesses zh, and their masked and low-rank counterparts
+    h0 = ones(D,'f') # No prior opinion on heading tuning
+    # prior log-rate
+    if   size(prior_mean)==H*W:   z0f = ravel(ndouter(h0,prior_mean)) 
+    elif size(prior_mean)==D*H*W: z0f = ravel(float32(prior_mean))
+    else: assert 0
+    # initial log-mean and marginal variance guesses
+    zh0,vh0 = (None,None) if initial_guess is None else initial_guess
+    if zh0 is None:        zhf = zeros(N.shape,'f')
+    elif size(zh0)==H*W:   zhf = ravel(ndouter(h0,zh0))
+    elif size(zh0)==D*H*W: zhf = ravel(float32(zh0))
+    else: assert 0
+    if vh0 is None:        vhf = zeros(N.shape,'f') 
+    elif size(vh0)==H*W:   vhf = ravel(ndouter(h0,vh0))
+    elif size(vh0)==D*H*W: vhf = ravel(float32(vh0))
+    else: assert 0
+    return lgcpnd(kf,N,K,z0f,zhf,vhf,**opts)
+
+
+
+
+
+
+
+

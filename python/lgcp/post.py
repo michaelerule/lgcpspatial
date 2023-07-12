@@ -1,0 +1,130 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+"""
+posterior.py: Subroutines for further analysis of the 
+posterior rate map returned from Gaussian process inference. 
+"""
+
+import numpy as np
+from pylab import *
+from .data import bin_spikes
+
+def findpeaks(q,height_thr=-inf,rclear=1):
+    '''
+    Find peaks in radius ``r`` neighborhood above ``height_thr``.
+    Args:
+        q (np.float32): 2D array of potential values.
+        height_thr (float): Exclude peaks shorter than this.
+        rclear (int): Radius of neighborhood for local maxima.
+    Returns:
+        np.bool: 2D boolean mask of pixels that are local maxima.
+    '''
+    H,W = q.shape[:2]
+    rclear = max(1.0,rclear)
+    # Add padding
+    rpad = max(1,int(np.ceil(rclear)))
+    Wpad = W+2*rpad
+    Hpad = H+2*rpad
+    qpad = zeros((Hpad,Wpad)+q.shape[2:],dtype=q.dtype)
+    qpad[rpad:-rpad,rpad:-rpad,...] = q[:,:,...]
+    # Only points above the threshold are candidate peaks
+    p = q>height_thr
+    # Mask away points that have a taller neighbor
+    Δ = range(-rpad,rpad+1)
+    limit = rclear**2
+    for i in Δ:
+        for j in Δ:
+            if i==j==0 or (i*i+j*j)>limit:continue
+            p &= q>qpad[i+rpad:H+i+rpad,j+rpad:W+j+rpad,...]
+    return p
+
+def interpolate_peaks(
+    z,
+    rclear         = 1,
+    height_thr     = None,
+    return_heights = False,
+    dither         = 1e-12
+    ):
+    '''
+    Interpolated peak locations.
+    
+    Parameters
+    ----------
+    z: np.ndarray
+        ``H×W×NSAMPLES`` array of sampled 2D grid-fields.
+    rclear: int; default 1
+        Radius (bins) for local maxima to count as peaks.
+    height_thr: float, optional
+        Minimum peak height; defaults to the 25th %ile.
+    return_heights: boolean; default False
+        Return peak heights?
+    
+    Returns
+    -------
+    peaks: tuple
+        ``(ix,iy)`` peak coordinates (if ``q`` is 2D), 
+        or ``(ix,iy,iz)`` if ``q`` is 3D (``iz`` is the 
+        sample number each peak belongs to).
+    heights: list
+        Peak heights, if ``return_heights=True``.
+    '''
+    z  = np.array(z)
+    dither = dither*np.max(abs(z))
+    z += np.random.randn(*z.shape)*dither
+    H,W  = z.shape[:2]
+    is3d = len(z.shape)==3
+    if not is3d: z = z.reshape(H,W,1)
+    if height_thr is None: 
+        height_thr=nanpercentile(z,25)
+    height_thr = max(height_thr, np.min(z)+6*dither)
+    peaks    = findpeaks(z,height_thr,rclear)
+    ry,rx,rz = where(peaks)
+    heights  = z[peaks]
+    # Use quadratic interpolation to localize peaks
+    rx0 = np.clip(rx-1,0,W-1)
+    rx2 = np.clip(rx+1,0,W-1)
+    ry0 = np.clip(ry-1,0,H-1)
+    ry2 = np.clip(ry+1,0,H-1)
+    s00 = z[ry0,rx0,rz]
+    s01 = z[ry0,rx ,rz]
+    s02 = z[ry0,rx2,rz]
+    s10 = z[ry ,rx0,rz]
+    s11 = z[ry ,rx ,rz]
+    s12 = z[ry ,rx2,rz]
+    s20 = z[ry2,rx0,rz]
+    s21 = z[ry2,rx ,rz]
+    s22 = z[ry2,rx2,rz]
+    dy  = (s21 - s01)/2
+    dx  = (s12 - s10)/2
+    dyy = s21+s01-2*s11
+    dxx = s12+s10-2*s11
+    dxy = (s22+s00-s20-s02)/4
+    det = 1/(dxx*dyy-dxy*dxy)
+    ix  = (rx-( dx*dyy-dy*dxy)*det + 0.5)/W
+    iy  = (ry-(-dx*dxy+dy*dxx)*det + 0.5)/H
+    bad = (ix<0) | (ix>1-1/W) | (iy<0) | (iy>1-1/H)
+    peaks = float32((iy,ix,rz) if is3d else (iy,ix))
+    order = argsort(-heights[~bad])
+    peaks = peaks[:,~bad][:,order]
+    heights = heights[~bad][order]
+    return (peaks, heights) if return_heights else peaks
+
+def peak_density(z,res,r=1,height_thr=None):
+    '''
+    Peak density histogram from peak samples ``z``.
+    Args:
+        z (ndarray, H×W×NSAMPLES): A 3D array of 2D grid field samples,
+        res (int>1): Upsampling factor.
+        r (int; default 1): Radius (bins) for local maxima to count as peaks.
+        height_thr (float, optional): Minimum peak height; defaults to the 25th %ile.
+    Returns:
+        np.float32: Array of peak densities.
+    '''
+    H,W = z.shape[:2]
+    # Get list of peak locations
+    iy,ix = interpolate_peaks(z,r,height_thr)[:2]
+    # Bin peaks on a spatial grid
+    d = bin_spikes(ix,iy,0*iy,(H*res,W*res))[0]
+    N = z.shape[2] if len(z.shape)>2 else 1
+    return d/N
+

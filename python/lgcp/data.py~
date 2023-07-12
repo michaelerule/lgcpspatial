@@ -1,0 +1,311 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+"""
+Routines for loading and preparing Krupic lab datasets
+Resolution for the camera used to record R1 is 350px/m;
+resolution for other rats (R11 and R18) was 338px/m
+Fs = 50.0 # Sample rate of data (samples/second)
+"""
+from numpy import *
+from scipy.io import loadmat
+from scipy.special import jn_zeros
+from .util import *
+from .plot import *
+from .sg   import *
+
+class Arena:
+    '''2D gridded experimental arena'''
+    def __init__(self,points,shape,margin=0.15,radius=0.0):
+        '''
+        Args:
+            points (tuple): (x,y) points in meters.
+            shape (tuple): (H,W) of grid.
+            margin (float, default 0.1): Padding fraction around data edges.
+            radius (float, default 0.0): Mask padding (bins).
+        '''
+        x,y = points
+        # Geometry of arena in meters
+        minx,maxx = nanmin(x),nanmax(x)
+        miny,maxy = nanmin(y),nanmax(y)
+        midx,midy = (minx+maxx)/2.0, (miny+maxy)/2.0;
+        w,h       = maxx-minx,maxy-miny
+        # Add padding
+        self.margin=margin
+        pad = max(w,h)*2*margin
+        w2 = w+pad
+        h2 = h+pad
+        aspect = w2/h2
+        # Grid dimensions
+        if isinstance(shape,int):
+            if aspect<1:
+                H,W = shape, int(round(shape*aspect))
+            else:
+                W,H = shape, int(round(shape/aspect))
+            shape = (H,W)
+        H,W = shape
+        self.shape = int32(shape)
+        self.H = H
+        self.W = W
+        self.ngrid = self.W*self.H
+        # Be exact! Account for integer rounding on H,W
+        wq = (w2/W)*(H/h2) # width if we match height
+        hq = (h2/H)*(W/w2) # height if we match width
+        if wq<=1:   w2 /= wq # Grid too wide
+        elif hq<=1: h2 /= hq # Grid too tall
+        else: assert 0
+        # Save scale information
+        self.width_m  = w2
+        self.height_m = h2
+        self.area_m   = w2*h2
+        self.meters_per_binx = w2/self.W
+        self.meters_per_biny = h2/self.H
+        self.bins_per_meterx = 1.0/self.meters_per_binx
+        self.bins_per_metery = 1.0/self.meters_per_biny
+        self.meters_per_bin = sqrt(self.area_m/self.ngrid)
+        self.bins_per_meter = 1.0/self.meters_per_bin
+        er1 = abs(self.meters_per_binx-self.meters_per_biny)
+        er2 = abs(self.bins_per_meterx-self.bins_per_metery)
+        if er1>1e-6 or er2>1e-6:
+            print('w (meters)',w2)
+            print('h (meters)',h2)
+            print('w/h',w2/h2)
+            print('W',W)
+            print('H',H)
+            print('W/H',W/H)
+            print('self.meters_per_binx',self.meters_per_binx)
+            print('self.meters_per_biny',self.meters_per_biny)
+            assert 0
+        # Calculate new bounding box 
+        x0,x1 = midx-w2/2, midx+w2/2
+        y0,y1 = midy-h2/2, midy+h2/2
+        self.x0 = x0
+        self.y0 = y0
+        self.x1 = x1
+        self.y1 = y1
+        self.origin = float32([x0,y0])
+        self.extent = (x0,x1,y0,y1)
+        self.wh     = float32([w2,h2])
+        self.aspect = w2/h2
+        if not (W-1)/H<=self.aspect<=(W+1)/H: raise ValueError((
+            'Data have aspect w/h=%f but W/H=%d/%H=%f;')%(self.aspect,W,H,W/H))
+        # Convert animal's path to [0,1] coordinates
+        self.nx=(x-x0)/w2
+        self.ny=(y-y0)/h2
+        self.binwh = self.wh/float32([W,H])
+        # Get convex hull to make a mask
+        hull = points_to_qhull(self.nx,self.ny)[0]
+        mask = qhull_to_mask(hull,W,H)
+        if radius>0: mask = extend_mask(mask, radius)
+        hull, perim = mask_to_qhull(mask)
+        self.perim   = perim
+        self.hull    = hull
+        self.mask    = mask
+        # Save perimeter in physical units
+        self.perim_m   = self.unit_to_meters(perim)
+    def unit_to_meters(self,p):
+        '''(x,y)∈[0,1]² coordinates to meters.'''
+        s = ndbroadcast(p)
+        return p*self.wh[s] + self.origin[s]
+    def unit_to_bins(self,p):
+        '''(x,y)∈[0,1]² coordinates to bins.'''
+        s = ndbroadcast(p)
+        return p*self.shape[::-1][s]
+    def meters_to_unit(self,p):
+        '''meters to (x,y)∈[0,1]² coordinates.'''
+        s = ndbroadcast(p)
+        return (p-self.origin[s])/self.wh[s]
+    def bins_to_unit(self,p):
+        '''bins to (x,y)∈[0,1]² coordinates.'''
+        s = ndbroadcast(p)
+        return p/self.shape[::-1][s]
+    def meters_to_bins(self,p):
+        '''(x,y) bins to meters'''
+        if isscalar(p): return p*self.bins_per_meter
+        return self.unit_to_bins(self.meters_to_unit(p))
+    def bins_to_meters(self,p):
+        '''(x,y) meters to bins'''
+        if isscalar(p): return p*self.meters_per_bin
+        return self.unit_to_meters(self.bins_to_unit(p))
+    def zgrid_meters(self,res=1):
+        '''Location of each bin center in meters'''
+        H,W = self.shape
+        x = linspace(self.x0,self.x1,W*res)
+        y = linspace(self.y0,self.y1,H*res)
+        z = y[:,None]*1j + x[None,:]
+        return z
+    def contains(self,p,unit='meter'):
+        if   unit=='meter': p = self.meters_to_unit(p)
+        elif unit=='unit' : p = float32(p)
+        elif unit=='bin'  : p = self.bins_to_unit(p)
+        else: assert 0
+        return is_in_hull(p,self.hull)
+    def distance_to_boundary(self, p):
+        # Signed distance to boundary (interior = positive)
+        if np.shape(p)==(2,): p=np.reshape(p,(2,1))
+        z  = self.zgrid_meters()
+        zp = p2c(p)
+        i  = self.contains(p)
+        N = p.shape[1]
+        D = zeros(N)
+        if sum( i)>0: D[ i]= np.min(pdist(z[~self.mask],zp[ i]),0)
+        if sum(~i)>0: D[~i]=-np.min(pdist(z[ self.mask],zp[~i]),0)
+        return D
+    def binto(self,xy,spikes=None,weights=None):
+        px,py = self.meters_to_unit(float32(xy).T).T
+        if spikes is None: spikes = zeros(len(px))
+        H,W = self.shape
+        return bin_spikes(px,py,spikes,self.shape,weights)
+    def imshow(self,im,q0=0,q1=100,domask=True,lw=5,color='w',**k):
+        immask = self.make_mask(*im.shape[:2])
+        if len(shape(im))==2:
+            if domask: im = im*nan_mask(immask)
+            a,b = nanpercentile(im,[q0,q1])
+            k   = {'vmin':a,'vmax':b}|k
+        else:
+            im = float32(im)
+            if domask: im = concatenate([im[...,:3],immask[...,None]],2)
+        i = imshow(im,extent=self.extent,**k)
+        noxyaxes()
+        if domask:plot(*self.perim_m.T,color=color,lw=lw)
+        ylim(ylim()[::-1])
+        return i
+    def make_mask(self,H,W):
+        x  = linspace(0,1,W)
+        y  = linspace(0,1,H)
+        zg = (x[None,:]+1j*y[:,None]).ravel()
+        return is_in_hull(c2p(zg),self.hull).reshape(H,W)
+    
+class Dataset:
+    '''Experimental data in Krupic data format.'''
+    def __init__(self,x,y,spikes):
+        '''
+        Args:
+            x (ndarray): 1D array of ``x`` position (meters).
+            y (ndarray): ``y`` position.
+            spikes (ndarray): Spike counts for each position sample.
+        '''
+        x,y = float32(x).ravel(), float32(y).ravel()
+        spikes = float32(spikes).ravel()
+        if not shape(x)==shape(y)==shape(spikes):
+            raise ValueError(
+            '(x,y,spikes) should be arrays with the same size.')
+        self.xy     = (x,y)
+        self.spikes = spikes
+    def from_file(fn):
+        '''Load a dataset from disk.'''
+        data    = loadmat(fn,squeeze_me=True)
+        for varname in (
+            'xy dir pos_sample_rate pixels_per_m '
+            'spikes_times spk_sample_rate').split():
+            if not varname in data: raise ValueError(
+                'No variable "%s" in file %s.'%(varname,fn))
+        xy_position_px       = data['xy']
+        head_direction_deg   = data['dir']
+        position_sample_rate = data['pos_sample_rate']
+        px_per_meter         = data['pixels_per_m']
+        spike_times_samples  = data['spikes_times']
+        spike_sample_rate    = data['spk_sample_rate']
+        if len(spike_times_samples)==0:
+            warnings.warn('The `spikes_times` variable '
+                'for file %s appears to be empty.'%fn)
+        # Convert units
+        dt                  = 1 / position_sample_rate
+        xy_position_meters  = xy_position_px / px_per_meter 
+        spike_times_seconds = spike_times_samples/ spike_sample_rate
+        NSPIKES             = len(spike_times_samples)
+        NSAMPLES            = len(head_direction_deg)
+        # Bin spikes with linear interpolation
+        it,ft  = divmod(spike_times_seconds/dt,1)
+        wt     = concatenate([1-ft,ft])
+        qt     = concatenate([it,it+1])
+        spikes = float32(histogram(qt,arange(NSAMPLES+1),density=0,weights=wt)[0])
+        # Repair defects in position tracking
+        px,py = xy_position_meters.T
+        zx,zy = patch_position_data(px,py,delta_threshold=dt)
+        # Build and return Dataset object
+        data = Dataset(zx,zy,spikes)
+        data.filename             = fn
+        data.xy_position_px       = xy_position_px
+        data.head_direction_deg   = head_direction_deg
+        data.position_sample_rate = position_sample_rate
+        data.px_per_meter         = px_per_meter
+        data.spike_times_samples  = spike_times_samples
+        data.spike_sample_rate    = spike_sample_rate
+        data.dt                   = dt
+        data.xy_position_meters   = xy_position_meters
+        data.spike_times_seconds  = spike_times_seconds
+        data.NSPIKES              = NSPIKES
+        data.NSAMPLES             = NSAMPLES
+        return data
+    shape = property(lambda self:self.arena.shape)
+    def prepare(
+        self,
+        shape         = 128,
+        P             = None,
+        spike_weights = None,
+        **kw
+        ):
+        self.arena = Arena(self.xy,shape,**kw)
+        N,K = self.arena.binto(self.xy,self.spikes,spike_weights,)
+        self.update_counts(N,K,P)
+        return self
+    def update_counts(self,N,K,P=None):
+        self.N = N # seconds/bin
+        self.K = K # spikes/bin
+        self.Y = float32(sdiv(K,N)) # spikes/s/bin
+        P,V,angle = self.heuristic_parameters(N,K,P)
+        sigma = P/pi/sqrt(2)
+        self.kderate    = kde(N,K,sigma)
+        self.prior_mean = slog(kde(N,K,sigma*5))
+        self.kdelograte = slog(self.kderate)-self.prior_mean
+        self.P = P
+        self.V = V
+        self.angle = angle
+    def heuristic_parameters(self,N,K,P=None):
+        if P is None:
+            λ = kde(N,K,2)*self.arena.mask
+            P = mean(racperiod(λ,self.arena.mask))
+        sigma = P/pi/sqrt(2)
+        kderate    = kde(N,K,sigma)
+        prior_mean = slog(kde(N,K,sigma*5))
+        kdelograte = slog(kderate)-prior_mean
+        V = var(kdelograte[self.arena.mask])
+        z = fftfreqn(self.shape,shift=True)@[1,1j]
+        r = abs(z)
+        h = np.angle(z)
+        r0 = P/(2*np.pi/jn_zeros(1,2)[-1] )
+        d = sqrt(2)/2 + 1e-9
+        m = (r>=(r0-d))&(r<=(r0+d))
+        c = fft_acorr(kderate)
+        h = np.angle(sum(c*m*exp(6j*h)))%(pi/3)
+        angle = h
+        return P,V,angle
+    def smoothed_position(self,Fl=2.0):
+        Fs = self.position_sample_rate
+        winlength = int(Fs/Fl*2)
+        xr,yr = self.xy_position_meters.T
+        x,y = patch_position_data(xr,yr)
+        sx = SGsmooth(x,winlength,Fl,Fs)
+        sy = SGsmooth(y,winlength,Fl,Fs)
+        return sx,sy
+    def smoothed_heading_angle(self,Fl=2.0):
+        Fs = self.position_sample_rate
+        winlength = int(Fs/Fl*2)
+        xr,yr = self.xy_position_meters.T
+        x,y = patch_position_data(xr,yr)
+        dx = SGdifferentiate(x,winlength,Fl,Fs)
+        dy = SGdifferentiate(y,winlength,Fl,Fs)
+        h  = angle(dx+1j*dy)
+        return h
+    def smoothed_head_direction(self,Fl=2.0):
+        # Smaller Y is "on top": Flip N/S
+        # Math convention x+iy = exp(iθ)
+        # ESWN = 0 ½π π 3/2π
+        # Note conj() to handle differing conventions
+        hd = conj(exp(1j*self.head_direction_deg*pi/180))
+        cd,sd = patch_position_data(*c2p(hd))
+        Fs = self.position_sample_rate
+        winlength = int(Fs/Fl*2)
+        cd = SGsmooth(cd,winlength,Fl,Fs)
+        sd = SGsmooth(sd,winlength,Fl,Fs)
+        return angle(cd + 1j*sd)

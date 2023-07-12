@@ -1,0 +1,868 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+"""
+``heading.py``: Subroutines used in ``example 5: heading dependence``.
+"""
+"""
+import warnings
+import numpy             as np
+import matplotlib        as mpl
+import matplotlib.pyplot as plt
+from numpy import *
+from collections import defaultdict
+from .util    import *
+from .plot    import *
+from .sg      import SGdifferentiate as ddt
+from .data    import bin_spikes, Arena
+from .infer   import *
+from .kern    import *
+from .post    import interpolate_peaks
+from .gridsearch  import grid_search
+
+def smoothed_heading_angle(px,py,Fs=50.0,Fl=2.0):
+    '''
+    Smoothed heading estimate from position data. 
+    
+    On a standard Cartesian plane, with the y axis
+    increasing from bottom to top, and the x axis 
+    increasing from left to right, the heading angles
+    are as follows: 
+
+    * 0   : rightwards (eastwards)
+    * π/2 : upwards    (northwards)
+    * π   : leftwards  (westwards)
+    * 3π/2: downwards  (southwards)
+    
+    For the Krupic lab datasets, the convention is
+    ***Smaller** ``y`` values correspond to "more north", 
+    i.e. the ``(x,y)`` coordinates should be interpreted
+    as image-like with the ``(0,0)`` coordinate in the 
+    upper left (northwest).
+    
+    For image-convention coordinates, angles are:
+    
+    * 0   : rightwards (eastwards)
+    * π/2 : downwards  (southwards)
+    * π   : leftwards  (westwards)
+    * 3π/2: upwards    (northwards)
+    
+    Parameters
+    ----------
+    px: float32
+        List of animal's location, x-coordinate
+    py: float32
+        List of animal's location, y-coordinate
+    Fs: float, default 50
+        Sampling rate of (px,py) position data
+    Fl: float, default 2.0
+        Low-pass cutoff frequency in Hz
+        
+    Returns
+    -------
+    heading_angle: np.float32
+        Smoothed heading angle 
+    '''
+    dx = ddt(px,int(Fs/Fl*4),Fl,Fs)
+    dy = ddt(py,int(Fs/Fl*4),Fl,Fs)
+    heading_angle  = angle(dx+1j*dy)
+    return heading_angle
+
+    
+def get_peaks_at_heading_angles(
+    result,
+    heading_angles,
+    threshold       = 10.0,
+    Fs              = 50.0,
+    Fl              = 2.0,
+    heading_angle   = None,
+    show_progress   = True,
+    rclear          = 0.45,
+    return_heights  = False,
+    return_models   = False,
+    return_fits     = False,
+    weight_function = 'cos'
+    ):
+    '''
+    Check for location shifts based on heading. Re-weight 
+    data based on cosine similarity to target heading angle.
+    
+    Parameters
+    ----------
+    data: lgcp.lgcp2d.LGCPResult
+        Prepared result returned by `lgcp2d.lgcpregress()`
+    heading_angles: iterable
+        Heading angles to check (degrees). 
+        (W,S,E,N) = (0°,90°,180°,270°)
+    
+    Other Parameters
+    ----------------
+    threshold: float ∈[0,100)
+        Percentile peaks must be above to be retained.
+    Fs: positive float; default 50.0
+        Sampling rate for position data
+    Fl: positive float; default 2.0
+        Low-frequency cutoff for smooothing position data
+    heading_angle: np.float32; default None
+        Heading angles from the experiment.
+        If ``None``, angles are recalvulated as 
+        ``smoothed_heading_angle(x,y,Fs,Fl)``.
+    show_progress: boolean; default True
+        Show progress bar
+    rclear: positive float; default 0.45
+        Neighborhood in which a peak must be a neighborhood
+        maximum.
+        This is in units of 
+        **fraction of the grid-cell period ``model.P``**.
+    return_heights: boolean; default False
+        Whether to return heights of peaks
+    return_models: boolean; default False
+        Whether to return a list of models at each angle.
+    return_fits: boolean; default False
+        Whether to return a list of model fits 
+        at each angle.
+    weight_function: str or function; default 'cos'
+        Function used to compute non-negative heading
+        weights as a function of the difference between
+        the animals current heading, and the reference
+        orientation. Can be ``'cos'`` for 
+        ``max(0,cos(Δθ))``, ``'cos2'`` for
+        ``max(0,cos(Δθ))²``, or a custom function. 
+    
+    Returns
+    -------
+    peaks: list
+        Length ``NANGLES`` list of peak locations for each 
+        heading angle. Each item is a ``2×NPEAKS`` array of 
+        ``(x,y)`` peak locations in normalized ``[0,1]²`` 
+        coordinates. These peaks are not matched up to any 
+        particular field-IDs.
+    heights: list
+        **Returned only if ``return_heights=True``;**
+        List of NPEAKS float32 arrays containing the
+        heights of the log-rates in ``peaks``.
+    models: list
+        **Returned only if ``return_models=True``;**
+        List of lgcp2d.DiagonalFourierLowrank model
+        objects for each angle. 
+    fits: list
+        **Returned only if ``return_fits=True``;**
+        List of tuples ``(μh,v,loss,rate)``
+        containing the low-rank posterior log-rate ``μh``,
+        the posterior marginal log-rate variances ``v``, 
+        the model evidence lower bound ``loss``
+        (up to constants), and the posterior mean rate
+        map ``rate``.
+    
+    '''
+    data   = result.data
+    model  = result.model
+    P  = model.scale
+    kv = model.K.full.V
+    k  = model.K.full.k
+    shape = model.K.shape
+    
+    rclear *= P
+    
+    px,py,spikes = data.arena.nx,data.arena.ny,data.spikes
+    arena = data.arena
+    
+    if heading_angle is None:
+        x,y = data.xy
+        heading_angle = smoothed_heading_angle(x,y,Fs,Fl)
+
+    peaks   = []        
+    heights = []
+    models  = []
+    fits    = []
+    μh,v  = None,None # propagate initial conditions 
+    
+    for phi in (progress_bar(heading_angles) \
+                if show_progress \
+                else heading_angles): 
+        
+        # Heading-weighted data binning
+        if weight_function=='cos':
+            sw  = maximum(0,cos(heading_angle-phi))
+        elif weight_function=='cos2':
+            sw  = maximum(0,cos(heading_angle-phi))**2
+        else:
+            sw  = weight_function(heading_angle-phi)
+        
+        # Prepare new model with reweighted data
+        data2 = data.reweighted(sw)
+        kern  = Kernel2DP(data.arena.shape,kv,P,k=k)
+        kern  = TruncatedKernel(kern)
+        hmodel = DiagonalFourierLowrank2D(kern,data2,
+            prior_mean   =data2.prior_mean,
+            lograte_guess=data2.lograte_guess)
+        
+        # Infer posterior mean rate
+        μh,v,l = coordinate_descent(hmodel,
+            μ0=μh,v0=v,tol=1e-3)
+        rate = exp(hmodel.K.F.T@μh+v/2).reshape(shape)
+
+        # Find peaks
+        thresh = nanpercentile(rate[arena.mask],threshold)
+        hpeaks, height = interpolate_peaks(
+            rate,
+            rclear = rclear,
+            height_thr = -inf,
+            return_heights = True)
+        hpeaks = arena.unit_to_meters(hpeaks)
+        
+        # Restrict to hull
+        ok = arena.contains(hpeaks)
+        hpeaks = hpeaks[:,ok]
+        height = height[ok]
+        
+        # Save
+        peaks.append(hpeaks)
+        heights.append(height)
+        models.append(model)
+        fits.append((μh,v,l,rate))
+    
+    result = (peaks,)
+    if return_heights: result += (heights,)
+    if return_models:  result += (models,)
+    if return_fits:    result += (fits,)
+    return result
+
+
+def match_peaks(peaks,maxd):
+    '''
+    Matching algorithm:
+    
+    * Assume q come from an array of angles on [0,2pi)
+    * Get distances between all adjacent angles
+    * Build directed graph joining fields of adjacent angles
+    * Greedy approach
+       * If you're my closest match, and I'm yours, pair up.
+       * Repeat until no more edges closer than ``maxd``
+    
+    Parameters
+    ----------
+    peaks: list
+        Length ``NANGLES`` list of ``2×NPEAKS`` ``np.float32`` 
+        arrays with (x,y) locations of peaks at each 
+        heading angle.
+    maxd: 
+        The maximum distance between peaks allowed when 
+        connecting them (in the same units as ``peaks``).
+    
+    Returns
+    -------
+    edges: list
+        A length ``NANGLES`` list of edge sets for 
+        each pair of headings.
+        Each list entry is a 2×NEDGES int32 array, which
+        contains pairs of indecies (a,b):
+        ``a`` is the index into peaks[i]
+        (the node source of this edge);
+        ``b`` is the index into ``peaks[(i+1)%Nφ]`` 
+        (the node target of this edge).
+    
+    '''
+    q  = [p2c(pk) for pk in peaks]
+    Nφ = len(q)
+    
+    # Sets of unused incoming and outgoing nodes
+    osets = [{*arange(len(qi))} for qi in q]
+    isets = [{*arange(len(qi))} for qi in q]
+    # Pairwise distances between all adjacent angles
+    D = [abs(q[i][:,None]-q[(i+1)%Nφ][None,:]) 
+         for i in range(Nφ)]
+    # Sets to hold edges as we build matches
+    edges = [set() for i in range(Nφ)]
+    for iter in range(50):
+        done = True
+        for i in range(Nφ):
+            d   = D[i] # out (source) -> in (target)
+            if prod(shape(d))==0: continue
+            done = False
+            # True node indecies of remaining distances
+            oId = int32(sorted(list(osets[i])))
+            iId = int32(sorted(list(isets[(i+1)%Nφ])))
+            # Get best matches from remaining unpaired nodes
+            no = argmin(d,axis=1) # best target per source
+            ni = argmin(d,axis=0) # best source per target
+            r  = arange(d.shape[0])
+            ok = (ni[no]==r) 
+            keep = ok & (np.min(d,axis=1)<=maxd)
+            # These are new edges
+            a,b = oId[r[ok]],iId[no[ok]]
+            edges[i] |= {*map(tuple,
+                zip(oId[r[keep]],iId[no[keep]]))}
+            # Remove the nodes we've used
+            ikeep = set(iId)-set(b)
+            okeep = set(oId)-set(a)
+            # Prune the distance matrix
+            isets[(i+1)%Nφ] = ikeep
+            osets[i]        = okeep
+            D[i] = d[[j in okeep for j in oId],:]\
+                    [:,[j in ikeep for j in iId]]
+        if done: break
+    
+    edges = [int32(sorted(list(ee))).T for ee in edges]
+    return edges
+
+
+def pair_points(z1,z2,connection_radius):
+    '''
+    Greedily associate nearest-neighbors between two
+    point sets ``z1`` and ``z2``, limiting matches to points closer
+    than ``connection_radius`` apart. 2D points are encoded as
+    complex numbers.
+    
+    Parameters
+    ----------
+    z1: iterable
+        iterable of 2D points encoded as complex numbers
+    z2: iterable
+        iterable of 2D points encoded as complex numbers
+    connection_radius: float
+        Maximum radius at which to allow connections. 
+        
+    Returns
+    -------
+    index1: int32
+        index into z1 of paired points
+    index2: int32
+        index into z2 of paired points
+    '''
+    z1 = c2p(complex64([*z1]))
+    z2 = c2p(complex64([*z2]))
+    return match_peaks([z1,z2],connection_radius)[0]
+
+
+def extract_as_paths(peaks,edges):
+    '''
+    Convert tracked (peaks,edges) to a list of 2D paths.
+    
+    Parameters
+    ----------
+    peaks: list 
+        Length ``NANGLES`` list of 2xNPEAKS np.float32 arrays 
+        containing (rx,ry) peak locations at a list of 
+        heading angles, as returned  by 
+        ``get_peaks_at_heading_angles()``.
+    edges: list
+        Length ``NANGLES`` list of edge sets for each pair of 
+        headings, as returned by ``match_peaks`` or 
+        ``link_peaks()``. Each list entry is a 2×NEDGES int32 
+        array. This contains pairs of indecies (a,b). For 
+        edge set i, index a is the index into peaks[i] (edge 
+        source) and index b is the index into 
+        peaks[(i+1)%Nφ] (edge target).
+        
+    Returns
+    -------
+    paths: list
+        Length ``N_COMPONENTS`` list of
+        ``NPOINTS`` x 2 path data for each connected
+        component
+    chains: list
+        Length ``N_COMPONENTS`` list of
+        chained node-information in format of (iphi,ipeak)
+    
+    '''
+    # Get components sharing edges
+    # Start by finding connected fields at nearby angles
+    # ``cc`` stores a list of sets of connected nodes.
+    # The node ID format is (angle #, point ID @ angle #)
+    # The point IDs are the same as the outgoing edge info #
+    # in the edges datastructure.
+    
+    Nphi = len(peaks)
+    cc   = []
+    for i0 in range(Nphi):
+        i1 = (i0+1)%Nphi
+        if len(edges[i0])==0 or len(edges[i1])==0:
+            # No peaks for one of the directions
+            continue
+        (a0,b0),(a1,b1) = edges[i0],edges[i1]
+        for e0,e1 in zip(*where(pdist(b0,a1)==0)):
+            cc.append({(i0,e0),(i1,e1)})
+
+    # Merge components sharing edges until all merged
+    while len(set.union(*map(set,cc)))!=sum([*map(len,cc)]):
+        Nc = len(cc)
+        for i in range(Nc):
+            if len(cc[i])<=0: continue
+            for j in range(i+1,Nc):
+                if len(cc[i]&cc[j])>0:
+                    cc[i]|=cc[j]
+                    cc[j]-=cc[i]
+        cc = [c for c in cc if len(c)]
+
+    chains = []
+    paths  = []
+    for ic,c in enumerate(cc):
+        if len(c)<Nphi//2: continue
+
+        # Pick up the chain 
+        links = {tuple(sorted([((a+iu)%Nphi,u) 
+                 for iu,u in enumerate(edges[a][:,b])])) 
+                 for a,b in c}
+        pluck = [*links][0]
+        links-= {pluck}
+        chain = list(pluck)
+        while len(links):
+            remove = None
+            match  = {chain[0],chain[-1]}
+            for link in links:
+                if {*link}&match:
+                    a,b = link
+                    if   a==chain[0 ]: chain = [b]+chain
+                    elif b==chain[ 0]: chain = [a]+chain
+                    elif a==chain[-1]: chain = chain+[b]
+                    elif b==chain[-1]: chain = chain+[a]
+                    remove = link
+                    break
+            links -= {remove}
+        
+        '''
+        ``chain`` is a list of tuples ``(iphi,ipeak)``
+        where a is ``iphi`` the angle index of the node
+        and ``ipeak`` is the peak index for the node
+        in the list if oeajs at ``iphi``
+        '''
+        path = []
+        for il,(iphi,ipeak) in enumerate(chain):
+            pp = peaks[iphi]
+            if ipeak>=pp.shape[1]:
+                print(
+                    'extract_as_paths(peaks,edges): error',
+                    file=sys.stderr)
+                print(
+                    'chain %d link %d'%(ic,il),
+                    '(iphi,ipeak) = (%d,%d)'%(iphi,ipeak),
+                    file=sys.stderr)
+                print(
+                    'len(peaks[iphi]): %s'%
+                    shape(peaks[iphi])[1],
+                    file=sys.stderr)
+                raise RuntimeError((
+                    'Edge index %d is out of bounds for '
+                    'peak list at angle %d, '
+                    'which has length %d')%(
+                    ipeak,
+                    iphi,
+                    shape(pp)[1])
+                )
+            path.append(pp[:,ipeak])
+        path = np.float32(path)
+                          
+        paths.append(path)
+        chains.append(chain)
+    return paths,chains
+
+
+
+from typing import NamedTuple
+class PathInfo(NamedTuple):
+    path: np.ndarray
+    centroid: np.ndarray
+
+def path_information(centroids, peaks, edges, maxd=inf):
+    Nphi = len(peaks)
+    paths, chains  = extract_as_paths(peaks, edges)
+    path_centroids = np.float32([np.nanmean(p,0) for p in paths])
+    path_regions   = assign_to_regions(centroids, path_centroids, maxd=maxd)
+    q = path_regions[path_regions>=0]
+    if len(q) != len({*q}):
+        uu,ct = np.unique(q,return_counts=True)
+        bad = uu[ct>1]
+        whichbad = [i for i,qi in enumerate(q) if qi in bad]
+        warnings.warn((
+            'Multiple paths %s all map to region(s) %s')%(
+            whichbad, bad))
+            
+    pathinfo = {}
+    for ipath, iregion in enumerate(path_regions):
+        iphis,ipeaks = map(np.int32,zip(*chains[ipath]))
+        path = np.full((Nphi,2),np.NaN,'f')
+        path[iphis] = paths[ipath]
+        pathinfo[iregion] = PathInfo(
+            path,
+            np.nanmean(path,0)
+        )
+    if -1 in pathinfo: del pathinfo[-1]
+    return pathinfo
+
+
+def link_peaks(
+        peaks,
+        maxd,
+        max_end_distance = None
+    ):
+    '''
+    Cleans up the result from ``match_peaks()``, removing 
+    any peaks that aren't tracked unambiguously over a range 
+    of heading angles. 
+    
+    Parameters
+    ----------
+    peaks: list
+        List of 2×NPEAKS arrays containing (x,y) locations
+        of identified peaks over a range of heading angles.
+    maxd: int
+        Maximum distance permitted between connected peaks 
+        at adjacent angles.
+    
+    Other Parameters
+    ----------------
+    max_end_distance: float
+        Maximum distance allowed between endpoints
+        of a tracked peak.
+    
+    Returns
+    -------
+    edges: list
+        A graph connecting peaks putatively associated with
+        the same grid field at different heading angles. 
+        The format is the same as the result 
+        returned by ``match_peaks``, but edges from peaks that
+        aren't tracked unambiguously over a range of heading 
+        angles have been removed.
+        This is a length ``NANGLES`` list of edge sets for 
+        each pair of headings.
+        Each list entry is a 2×NEDGES int32 array.
+        containing pairs of indecies (a,b):
+        * ``a`` is the index into peaks[i]
+        (the node source of this edge);
+        * ``b`` is the index into ``peaks[(i+1)%Nφ]`` 
+        (the node target of this edge).
+    
+    '''
+
+    edges = match_peaks(peaks,maxd)    
+    paths,chains = extract_as_paths(peaks,edges)
+        
+    if max_end_distance is None:
+        max_end_distance = maxd*2
+        
+    Nphi = len(peaks)
+    new_edges = set()
+    for chain in chains: 
+        
+        # Trim the distant ends to length
+        # - Convert to complex to simplify
+        # - Find centroid
+        # - Repeat until chain is the right length
+        #   - Remove whichever endpoint is furthest 
+        #     from the current centroid
+        z  = float32([peaks[i][:,j]
+            for (i,j) in chain])@[1,1j]
+        
+        μz = mean(z)
+        while len(chain)>Nphi+1 or abs(z[0]-z[-1])>max_end_distance:
+            a,b = [abs(peaks[i][:,j]@[1,1j]-μz) \
+                for i,j in [chain[0],chain[-1]]]
+            chain,z = (chain[1:],z[1:]) if a>b \
+                else (chain[:-1],z[:-1])
+            μz = mean(z)
+        
+        # Drop short chains
+        if len(chain)<Nphi//4: 
+            continue
+        
+        # Flip chains if needed so points are in sorted order
+        step = (chain[1][0] - chain[0][0] + Nphi)%Nphi
+        if step==Nphi-1: 
+            chain = chain[::-1]
+        else: 
+            assert step==1
+        
+        new_edges |= {*zip(chain[:-1],chain[1:])}
+
+    # Rebuild edge datastructure
+    edges2 = [[] for i in range(Nphi)]
+    for (iph0,px0),(iph1,px1) in sorted([*new_edges]):
+        edges2[iph0]+=[(px0,px1)]
+    edges = [int32(e).T for e in edges2]
+    
+    return edges
+
+
+def plot_tracked_peaks(
+    peaks,
+    edges,
+    perim=None,
+    compass=True,
+    color=riley,
+    origin='lower',
+    hideaxis=True,
+    compass_label_pad=15,
+    **kwargs):
+    '''
+    Plot connected grid fields. Use this with 
+    ``get_peaks_at_heading_angles()`` and ``link_peaks()``.
+    
+    **Angle conventions:**
+    
+    The indecies ``iφ ∈ {0,..,NANGLES-1}``into the length-
+    ``NANGLES`` arguments ``peaks`` and ``edges`` are assumed 
+    to correpond to equally-spaced angles, starting at 
+    ``φ=0``; that is, 
+    ``phi = linspace(0,2*pi,NANGLES+1)[:-1]``.
+    
+    
+    **Colors:**
+    
+    This is designed to be used with the ``riley`` 
+    colormap from ``lgcp.plot``. This map starts at 
+    mauve, continues through rust, olive, blue, before 
+    circling back to mauve. We use these color–direction
+    conventions: 
+    
+    * North: blue/azure/cyan
+    * South: red/rust
+    * East:  green/olive
+    * West:  purple/mauve/magenta
+    
+    For comatibility, then, the direction ordering
+    for the colormap parameter ``color`` should be
+    
+        {West, South, East, North}
+    
+    
+    **Axis orientation:**
+    
+    If the keyword argument ``origin`` is ``'lower'`` (the
+    default value), heading angles are interpreted as
+    the usual definition of polar coordinates on the
+    Cartesian plane. That is, we assume an axis where
+    ``(x,y)=(0,0)`` corresponds to the *lower left* 
+    (southwest) corner, and measure angles as staring
+    at ``0`` for "East", then increasing as we rotate
+    counter-clockwise:
+    
+     * 0   : rightwards (eastwards)
+     * π/2 : upwards    (northwards)
+     * π   : leftwards  (westwards)
+     * 3π/2: downwards  (southwards)
+    
+    If the keyword argument ``origin`` is ``'upper'``, use
+    image-coordinate conventions. This is the convention 
+    used in Krupic lab datasets and publications.
+    For image coordinates, ``(x,y)=(0,0)`` corresponds to the
+    top-left (northwest) corner. 
+    
+     * 0   : rightwards (eastwards)
+     * π/2 : downwards  (southwards)
+     * π   : leftwards  (westwards)
+     * 3π/2: upwards    (northwards)
+    
+    **Note:** Unlike ``matplotlib.imshow()``, using
+    ``oring='upper'`` will cause the y-axis to be flipped
+    so that smaller ``y`` values are at the top. 
+    
+    Parameters
+    ----------
+    peaks: list 
+        Length ``NANGLES`` list of 2xNPEAKS np.float32 arrays 
+        containing (rx,ry) peak locations at a list of 
+        heading angles, as returned  by 
+        ``get_peaks_at_heading_angles()``.
+    edges: list
+        Length ``NANGLES`` list of edge sets for each pair of 
+        headings, as returned by ``match_peaks`` or 
+        ``link_peaks()``. Each list entry is a 2×NEDGES int32 
+        array. This contains pairs of indecies (a,b). For 
+        edge set i, index a is the index into peaks[i] (edge 
+        source) and index b is the index into 
+        peaks[(i+1)%Nφ] (edge target).
+    
+    Other Parameters
+    ----------------
+    perim: np.float32
+        NPOINTS x 2 Array of (x,y) points of the arena 
+        perimeter to add to plot. Optional, default is None.
+    compass: bool
+        Draw colored compass rose if true
+    cmap_fn: matplotlib.colors.Colormap
+        colormap to use for heading angles
+        defaults to the custom ``riley`` circular color map.
+        Should be a callable :``[0,1]→(r,g,b,a)``
+        where color components ``rgba`` are floats in ``[0,1]``.
+    origin: str; default 'lower'
+        String in ``{'lower','upper'}`` (compare to 
+        ``matplotlib.imshow()``). 
+    hideaxis: boolean; default True
+        Hide the axis
+    compass_label_pad: int; default 15
+        Spacing of compass NSEW labels.
+    **kwargs:
+        Forwarded to ``plot()``
+    
+    '''
+    
+    # Argument validation
+    ori = str(origin).lower()[0]
+    if not ori in 'lu':
+        raise ValueError((
+            "The ``origin`` parameter should be 'lower' or "
+            "'upper'; hot '%s'")%origin)
+    origin = ori
+    
+    # look up color map string
+    if isinstance(color,str):
+        try:
+            color = matplotlib.colormaps.get_cmap(color)
+        except:
+            pass
+    
+    Nphi = len(peaks)
+    q = [[1,1j]@pk for pk in peaks]
+    
+    # Plot the boundary if given
+    if not perim is None:
+        plot(*perim.T,lw=2,color='w')
+        plot(*perim.T,lw=1,color='k')
+    
+    # Plot segments between each angle pair as a single
+    # NaN-delimited path (faster)
+    for i,ee in enumerate(edges):
+        # Skip angles with no edges
+        if len(ee)==0: continue
+        # Get (source, target) indecies of edges
+        ia,ib = ee
+        # Look up point positions
+        za,zb = q[i][ia],q[(i+1)%Nphi][ib]
+        # Generate NaN-delimited line-segment data
+        lines = ravel(array([za,zb,NaN*zeros(len(za))]).T)
+        # Pick color
+        if isinstance(color,matplotlib.colors.Colormap):
+            r = i/Nphi
+            '''
+            ### For ``origin='lower'``: 
+            
+            Color map order + conventions: 
+            * 0.00 West:  purple/mauve/magenta
+            * 0.25 South: red/rust
+            * 0.50 East:  green/olive
+            * 0.75 North: blue/azure/cyan
+            Angle order (r * 2π):
+            * 0   : rightwards (eastwards)
+            * π/2 : upwards    (northwards)
+            * π   : leftwards  (westwards)
+            * 3π/2: downwards  (southwards)
+            We need to re-map as this: 
+                0.00 → 0.50
+                0.25 → 0.75
+                0.50 → 0.00
+                0.75 → 0.25
+            This can be achieved by adding 0.5 and
+            taking modulo 1. 
+
+            ### For ``origin='upper'``:
+            
+            Angle order (r * 2π):
+            * 0   : rightwards (eastwards)
+            * π/2 : downwards  (southwards)
+            * π   : leftwards  (westwards)
+            * 3π/2: upwards    (northwards)
+
+            We need to re-map as this: 
+
+                0.00 → 0.50
+                0.25 → 0.25
+                0.50 → 0.00
+                0.75 → 0.75
+
+            This can be achieved by flipping q to 1-q,
+            then adding .5 and taking modulo 0
+            '''
+            if origin=='u': r = 1-r
+            c = color((r+.5)%1.0)
+        plot(real(lines),imag(lines),
+             **{'color':c,'lw':.6,**kwargs})
+    
+    force_aspect()
+    title('Tracked peaks',pad=0)
+    if hideaxis: 
+        axis('off')
+    
+    if not perim is None:
+        xyd = np.max(perim,0) - np.min(perim,0)
+        xy0 = np.max(perim,0)
+    else:
+        xy1 = np.max([np.max(p,1) for p in peaks],0)
+        xy0 = np.min([np.min(p,1) for p in peaks],0)
+        xyd = xy1 - xy0
+        xy0 = xy1
+    
+    # Flip axis first, draw_compass will notice this.
+    if origin=='u':
+        y0,y1 = sorted(ylim())
+        ylim(y1,y0)
+    
+    if compass:
+        draw_compass(
+            xy0   = p2c(xy0)+0.2*xyd[0] - .3j*xyd[1],
+            r     = mean(abs(xyd))*0.04,
+            delta = compass_label_pad,
+            cmap_fn = color)
+
+
+############################################################
+# color maps
+from .plot import *
+from .util import pdist
+angleNSEW = float32([pi/2,3*pi/2,pi,0])
+colorNSEW = float32([
+    [0.08,0.40,1.0], # North color
+    [0.92,0.60,0.0], # South color
+    [0.10,0.85,0.3], # East  color
+    [0.90,0.15,0.7]  # West  color
+])
+def hkern(h1,h2=None):
+    dh = h1 if h2 is None else pdist(h1,h2)
+    return maximum(0,cos(dh))**2
+def hdelta(h):
+    return (h+pi)%(2*pi)-pi
+def _makecm(name,rgb,bad=(1,1,1,0)):
+    c = mpl.colors.LinearSegmentedColormap.from_list(name,rgb)
+    c.set_bad(bad)
+    return c
+def makecmap(angleNSEW,colorNSEW,name):
+    N,S,E,W   = angleNSEW
+    d = sign(hdelta(N-E))
+    # θ must be WSEN for compass rose
+    D    = 24 # Number of heading directions
+    θ    = linspace(W,W-2*pi*d,D+1)[:-1][::-1]
+    w    = hkern(angleNSEW,θ)
+    rgb  = clip(colorNSEW.T@w,0,1)
+    rgb  = concatenate([rgb,rgb[:,:1]],1).T
+    return _makecm(name,rgb)
+def makemix():
+    x = linspace(0,1,100)
+    c2 = hue(x)
+    q = argmin([mean(abs(riley((x+d)%1)-c2)**2) for d in linspace(0,1,100)])
+    g = 0.5
+    rgb = .5*riley((x+g*(q/100))%1) + .5*hue((x-(1-g)*(q/100))%1)
+    rgb = concatenate([rgb,rgb[:1]],0)
+    return _makecm('mix',rgb)
+def preview_cmap(cmap,order='WSEN'):
+    figure(0,(4,.3),120,facecolor=(.65,)*4)
+    imshow(cmap([(linspace(0,1,360)-.125)%1]),aspect='auto')
+    nox(); noy();
+    xticks(linspace(0,2*pi,5)[:4]*360/(2*pi)+360*.125,order)
+    title(cmap.name,loc='left',fontweight='bold')
+    show()
+hue = makecmap(angleNSEW,colorNSEW,'hue1')
+WSENmix = makemix()
+from .util import unitscale
+
+#mpl.colors.LinearSegmentedColormap.from_list('q',[(0,0,0),BLACK,RUST,OCHRE,MOSS,TEAL,AZURE,MAUVE,BLACK,(0,0,0)])
+
+#ESWNRGB = int32(np.round(mix.reversed()((linspace(0,1,12)+.5)%1)[:,:3]*255)).T
+ESWNRGB = int32([[ 72, 160, 230, 234, 220, 203, 170, 101,  56,  31,  27,  72],
+       [194, 175, 155, 132,  93,  72,  75,  98, 128, 159, 193, 194],
+       [ 92,  42,  12,  51, 131, 180, 196, 222, 235, 200, 138,  92]])
+ESWNRGB = float32(ESWNRGB).T/255
+ESWNmix = mpl.colors.LinearSegmentedColormap.from_list('ESNWmix',ESWNRGB)
+ESWNmix.set_bad((1,1,1,0))
+
+"""
+
