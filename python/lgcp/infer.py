@@ -88,7 +88,7 @@ def lgcpnd(kf,N,K,z0f,zh0,vh0,eps=1e-5,mintol=1e-5,maxcomponents=1000,**opts):
     Returns:
         tuple: (InferResult,model)
     '''
-    Y = sdiv(K,N)
+    Y = sdiv(K,N)   # Empirical rate (pseudopoint rates)
     SHAPE = N.shape
     nmask = N>0     # Mask where observations exist
     kept  = kf>0    # Mask for retained Fourier components
@@ -105,21 +105,23 @@ def lgcpnd(kf,N,K,z0f,zh0,vh0,eps=1e-5,mintol=1e-5,maxcomponents=1000,**opts):
     ten = lambda x:float32(x).reshape(SHAPE)
     So  = lambda u:ten(u)[nmask] #full→masked
     St  = lambda u:unmask(u,nmask) #masked→full
-    n   = ravel(N) # visits and counts as vectors
-    y   = ravel(Y)
-    ny  = n*y
-    nm  = So(n) # Masked observations
-    ym  = So(y)
-    nym = So(ny)
+    n   = ravel(N) # visits as a vector
+    y   = ravel(Y) # rates as a vector
+    ny  = n*y      # same as ravel(K)
+    nm  = So(n)    # nonzero visit counts
+    ym  = So(y)    # rates at bins with nonzero visits
+    nym = So(ny)   # total counts at bins with nonzero visits
     # Operators between low-rank subspace and (masked)state
     Gt  = lambda u:ravel(RI(fftn(unmask(u,kept),norm='ortho'))) #loD→mask
     Go  = lambda u:ravel(RI(fftn(ten(u),norm='ortho')[kept])) #mask→loD
     Ft  = lambda u:ravel(RI(fftn(unmask(u,kept),norm='ortho')[nmask])) #loD→mask
     Fo  = lambda u:ravel(RI(fftn(St(u),norm='ortho')[kept])) #mask→loD
     # Masked prior log-rate, log-mean guess
-    zhf,vhf = ravel(float32(zh0)),ravel(float32(vh0))
-    vh,z0,zh = So(vhf),So(z0f),So(zhf)
-    u0,uh = ravel(Go(z0f)),ravel(Go(zhf)) #  in low-D space
+    zhf = ravel(float32(zh0)) # Initial Δ<ln(λ)> from the prior
+    uh  = ravel(Go(zhf))      # Δ<ln(λ)> in low-rank space
+    vhf = ravel(float32(vh0)) # Initial log-rate marginal variances, full spatial domain
+    vh  = So(vhf)             # log-rate marginal variances for bins with data
+    z0  = So(z0f)             # prior mean-log-rate in spatial domain bins with data
     # Low-rank kernel, inverse, truncated Fourier components
     kx = ifftn(kf,norm='ortho').real
     Kh = ravel(maximum(Go(kx),eps))
@@ -128,7 +130,6 @@ def lgcpnd(kf,N,K,z0f,zh0,vh0,eps=1e-5,mintol=1e-5,maxcomponents=1000,**opts):
     Fm = Gm[:,nmask.ravel()]
     # Preconditioner and constant terms in loss
     R  = size(Kh)
-    
     Mu = lambda u:Kh*ravel(u)
     M  = LinearOperator((R,R),Mu,Mu,dtype=np.float32)
     ldΣz = -ssum(slog(Λh)) # ln|Σ₀|
