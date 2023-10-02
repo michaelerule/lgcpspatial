@@ -1,9 +1,8 @@
-***Under construction; please check back later!*** 
-This manuscript has not yet been peer-reviewed. Do get in touch if you find errors, or if you notice places where I've failed to cite relevant prior work. 
-
 ## Variational Log-Gaussian Point-Process Methods for Grid Cells
 
-Rule, M., Chaudhuri-Vayalambrone, P., Krstulovic, M., Bauza, M., Krupic, J., & O’Leary, T. (2023). Variational Log-Gaussian Point-Process Methods for Grid Cells. [bioRxiv](https://www.biorxiv.org/content/10.1101/2023.03.18.533177v2.abstract), 2023-03. [doi: https://doi.org/10.1101/2023.03.18.533177](https://doi.org/10.1101/2023.03.18.533177).
+Rule, M. E., Chaudhuri-Vayalambrone, P., Krstulovic, M., Bauza, M., Krupic, J., & O'Leary, T. (2023). Variational log-Gaussian point-process methods for grid cells. Hippocampus, 1–17. [doi: https://doi.org/10.1002/hipo.23577](https://doi.org/10.1002/hipo.23577).
+
+This manuscript has been peer-reviewed and accepted, but the reference implementation contained in this repository has not been tested on all platforms; Please report any mistakes, bugs, or difficulties with installation that you encounter, including places were the documentation is inadequate.
 
 ![](https://github.com/michaelerule/lgcpspatial/blob/main/f5v1.png)
 
