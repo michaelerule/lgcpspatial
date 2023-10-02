@@ -1,4 +1,4 @@
-The reference implementation contained in this repository has not been tested on all platforms; Please report any mistakes, bugs, or difficulties with installation that you encounter, including places were the documentation is inadequate.*
+*The reference implementation contained in this repository has not been tested on all platforms; Please report any mistakes, bugs, or difficulties with installation that you encounter, including places were the documentation is inadequate.*
 
 ## Variational Log-Gaussian Point-Process Methods for Grid Cells
 
