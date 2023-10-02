@@ -1,10 +1,12 @@
-*The reference implementation contained in this repository has not been tested on all platforms; Please report any mistakes, bugs, or difficulties with installation that you encounter, including places were the documentation is inadequate.*
-
 ## Variational Log-Gaussian Point-Process Methods for Grid Cells
 
 Rule, M. E., Chaudhuri-Vayalambrone, P., Krstulovic, M., Bauza, M., Krupic, J., & O'Leary, T. (2023). Variational log-Gaussian point-process methods for grid cells. Hippocampus, 1–17. [doi: https://doi.org/10.1002/hipo.23577](https://doi.org/10.1002/hipo.23577).
 
 ![](https://github.com/michaelerule/lgcpspatial/blob/main/f5v1.png)
+
+*The reference implementation contained in this repository has not been tested on all platforms; Please report any mistakes, bugs, or difficulties with installation that you encounter, including places were the documentation is inadequate.* 
+
+The final snapshot of this repository approved during peer review is available at [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8398873.svg)](https://doi.org/10.5281/zenodo.8398873).
 
 ### Abstract
 
