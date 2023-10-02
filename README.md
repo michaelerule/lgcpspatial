@@ -2,7 +2,8 @@
 
 Rule, M. E., Chaudhuri-Vayalambrone, P., Krstulovic, M., Bauza, M., Krupic, J., & O'Leary, T. (2023). Variational log-Gaussian point-process methods for grid cells. Hippocampus, 1–17. [doi: https://doi.org/10.1002/hipo.23577](https://doi.org/10.1002/hipo.23577).
 
-This manuscript has been peer-reviewed and accepted, but the reference implementation contained in this repository has not been tested on all platforms; Please report any mistakes, bugs, or difficulties with installation that you encounter, including places were the documentation is inadequate.
+*This manuscript has been peer-reviewed and accepted, but the reference implementation contained in this repository has not been tested on all platforms; Please report any mistakes, bugs, or difficulties with installation that you encounter, including places were the documentation is inadequate.*
+
 
 ![](https://github.com/michaelerule/lgcpspatial/blob/main/f5v1.png)
 
