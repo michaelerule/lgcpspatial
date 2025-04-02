@@ -38,7 +38,9 @@ def grid_kernel(
     Parameters
     ----------
     P: float>0
-        Grid cell period in units of bins
+        Grid cell period in units of bins. This is converted
+        to a factor scale = 2π/P that multiplies the grid
+        indices to set the period. 
     W: int>1
         Grid width (or grid size, if ``H`` is not given)
         
@@ -70,6 +72,8 @@ def grid_kernel(
          - ``"parzen": Parzen window
          - ``"triangular": Triangular window
          - ``"gaussian": Gaussian window
+        A non-radially-symmetric Hann window will always be
+        applied to avoid ringing. 
     doblur: boolean; default True
         Low-pass filter the resulting kernel? 
     eps: positive float; default 1e-5
