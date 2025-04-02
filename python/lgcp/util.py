@@ -167,7 +167,7 @@ def blurkernel2D(V,W,H=None,normalize=False):
     xy = fftfreqn((H,W),True)
     k = np.exp(-0.5*np.einsum('hwd,dD,hwD->hw',xy,Λ,xy))
     if normalize: k /= np.sum(k)
-    return fftshift(k)
+    return ifftshift(k)
 def fftconvf(x,K):
     if x.shape!=K.shape and size(x)==size(K):
         x = x.reshape(K.shape)

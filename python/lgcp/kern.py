@@ -5,13 +5,13 @@ from scipy.special import j0
 
 def ensurePSD(kern,eps=0.0):
     assert eps>=0
-    return ifftn(np.maximum(eps,fft2(kern).real)).real
+    return ifftn(np.maximum(eps,fftn(kern).real)).real
 
 def grid_kernel(
     P,
     shape,
     style      = 'radial',
-    angle  = 0.0,
+    angle      = 0.0,
     doclip     = True,
     k          = 3,
     window     = 'square',
@@ -24,8 +24,8 @@ def grid_kernel(
     '''
     Generate a periodic grid kernel. 
     
-    To construct oriented kernels, set ``oriented=True`` 
-    and specify the orientation ``angle``.
+    To construct oriented kernels, use the "grid", "band",
+    or "square" style and specify the orientation ``angle``.
     To add anisotropy or skew, provide two basis vectors 
     ``e1`` and ``e2`` for the "horizontal" and "vertical" 
     components.
@@ -75,11 +75,11 @@ def grid_kernel(
         Basis vector for "vertical" direction.
     '''
     if isinstance(shape,int): shape = (shape,shape)
-    H,W = shape
+    H,W   = shape
     
     scale = 2*pi/P
     B     = np.linalg.pinv([[*ex],[*ey]])
-    pxy   = fftshift(zgrid(W,H))*(exp(1j*(angle))*scale)
+    pxy   = zgrid(W,H)*(exp(1j*angle)*scale)
     pxy   = p2c(np.einsum('ab,bwh->awh',B,c2p(pxy)))
     r     = abs(pxy)
 
@@ -100,10 +100,13 @@ def grid_kernel(
     elif style=='rbf':
         kern = exp(-0.25*(r)**2)
         doblur = False
-    else: raise ValueError('Style %s not implemented'%str(style))
+    else: 
+        raise ValueError('Style %s not implemented'%str(style))
     
     # Windowing to avoid ringing in FT
-    kern *= fftshift(outer(hanning(H),hanning(W)))
+    kern *= outer(hanning(H),hanning(W))
+    kern = ifftshift(kern)
+    r = ifftshift(r)
     # Local neighborhood window
     if doclip and not (k is None or window is None):
         cutoff = jn_zeros(0,k)[-1]#/scale
@@ -118,9 +121,10 @@ def grid_kernel(
             clip  = ifft2(fft2(disk)**2).real
         elif window=='square':
             clip  = r<cutoff
-        else: raise ValueError('Window %s not implemented'%str(window))
+        else: 
+            raise ValueError('Window %s not implemented'%str(window))
         kern *= clip
-    
+
     if doblur:
         kern = blur2d(kern,(P/pi)/sqrt(2))
     kern = kern/np.max(kern)
