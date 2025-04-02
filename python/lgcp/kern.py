@@ -26,7 +26,8 @@ def grid_kernel(
 
     The kernel is returned in the spatial domain, and
     shifted so that the (0,0) lag position is at array
-    location (0,0).
+    location (0,0). You can use ``fftshift`` to move the 
+    zero index back to position ``shape//2``.
     
     To construct oriented kernels, use the "grid", "band",
     or "square" style and specify the orientation ``angle``.
