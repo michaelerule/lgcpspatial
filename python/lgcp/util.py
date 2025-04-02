@@ -17,7 +17,7 @@ def p2c(p):
     return p[0]+1j*p[1]
 def c2p(z):
     z = np.complex64(z)
-    if np.any(np.isnan(z)): z[np.isnan(z)] = np.NaN*(1+1j)
+    if np.any(np.isnan(z)): z[np.isnan(z)] = np.nan*(1+1j)
     return np.array([z.real,z.imag])
 def pdist(x1,x2):
     x1,x2 = array(x1),array(x2)
@@ -77,7 +77,7 @@ def slog(x):
     return log(maximum(1e-10,x,dtype=float32),dtype=float32)
 def ssum(u,**kw):
     return np.nansum(u,dtype=float32,**kw)
-def smean(x,*args,default=NaN,**kwargs):
+def smean(x,*args,default=np.nan,**kwargs):
     if np.size(x)<1: return default
     return np.nanmean(x,*args,**kwargs)   
 def sdiv(A,B,fill=0.0,eps=1.0842022e-19,inf=1.8446743e+19):
@@ -284,11 +284,11 @@ def racpeak(a,upsample=6):
     '''First autocorrelogram peak at nonzero lag.'''
     a2 = fft_upsample_1D(a,upsample)
     peaks = find_peaks(a2)[0]
-    return min(peaks)/upsample if len(peaks) else NaN
+    return min(peaks)/upsample if len(peaks) else nan
 def ractrough(a,upsample=6):
     a2 = fft_upsample_1D(a,upsample)
     peaks = find_peaks(-a2)[0]
-    return min(peaks)/upsample if len(peaks) else NaN
+    return min(peaks)/upsample if len(peaks) else nan
 def fft_upsample_1D(x,factor=4,circular=False):
     '''Upsample 1D array using the FFT.'''
     assert np.all(np.isfinite(x))
@@ -360,7 +360,7 @@ def mask_to_qhull(mask):
 def nan_mask(mask,nanvalue=False,value=None):
     nanvalue = int(not(not nanvalue))
     if value is None: value = [1,0][nanvalue]
-    use = np.float32([[np.NaN,value],[value,np.NaN]])[nanvalue]
+    use = np.float32([[np.nan,value],[value,np.nan]])[nanvalue]
     return use[np.int32(mask)]
 def disk_kernel(W,H,R,u=10):
     '''
@@ -569,7 +569,7 @@ def get_edges(signal,pad_edges=True):
         if signal[0 ]: stops  = stops[1:]
         if signal[-1]: starts = starts[:-1]
     return array([array(starts), array(stops)])
-def interpolate_NaN(u):
+def interpolate_nan(u):
     u = array(u)
     for s,e in zip(*get_edges(~isfinite(u))):
         if s==0: 
@@ -585,8 +585,8 @@ def patch_position_data(px,py,delta_threshold=0.01):
     '''Interpolate across glitches in tracked position.'''
     pz = px + 1j*py
     bad = where(abs(diff(pz))>delta_threshold)[0]
-    pz[bad]=NaN
-    z = interpolate_NaN(pz)
+    pz[bad]=nan
+    z = interpolate_nan(pz)
     assert all(isfinite(z))
     return z.real,z.imag
 
