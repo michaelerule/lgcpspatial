@@ -20,6 +20,7 @@ def grid_kernel(
     eps        = 1e-9,
     ex         = (1,0),
     ey         = (0,1),
+    normalize  = True
     ):
     '''
     Generate a periodic grid kernel. 
@@ -72,8 +73,6 @@ def grid_kernel(
          - ``"parzen": Parzen window
          - ``"triangular": Triangular window
          - ``"gaussian": Gaussian window
-        A non-radially-symmetric Hann window will always be
-        applied to avoid ringing. 
     doblur: boolean; default True
         Low-pass filter the resulting kernel? 
     eps: positive float; default 1e-5
@@ -83,8 +82,12 @@ def grid_kernel(
     ey: 2-vector; default (0,1)
         Basis vector for "vertical" direction.
     '''
+    if 'none' in str(window).lower(): window = None
     if isinstance(shape,int): shape = (shape,shape)
     H,W   = shape
+
+    if P<2:
+        raise ValueError('Nyquist: P=%s cannot be <2 px'%P)
     
     scale = 2*pi/P
     B     = np.linalg.pinv([[*ex],[*ey]])
@@ -136,7 +139,8 @@ def grid_kernel(
 
     if doblur:
         kern = blur2d(kern,(P/pi)/sqrt(2))
-    kern = kern/np.max(kern)
+    if normalize:
+        kern = kern/np.max(kern)
     kern = ensurePSD(kern,eps)
     return kern
 
